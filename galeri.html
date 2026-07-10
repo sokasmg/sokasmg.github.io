@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri - Soka Gakkai Semarang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+        .soka-blue { background-color: #002F6C; flex: 1; }
+        .soka-yellow { background-color: #F9A825; flex: 1; }
+        .soka-red { background-color: #C62828; flex: 1; }
+
+        /* Sembunyikan scrollbar bawaan untuk estetika carousel */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-24">
+                <div class="flex items-center space-x-4">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai" class="h-16 w-16 object-contain">
+                    <div>
+                        <span class="text-2xl md:text-3xl font-black text-blue-950 block tracking-wide leading-none">Soka Gakkai</span>
+                        <span class="text-sm md:text-base font-bold text-gray-500 block uppercase tracking-widest mt-1">Semarang</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 font-semibold">
+                    <a href="index.html#beranda" class="text-gray-600 hover:text-blue-700 transition">Beranda</a>
+                    <a href="index.html#tentang" class="text-gray-600 hover:text-blue-700 transition">Tentang Kami</a>
+                    <a href="index.html#kontak" class="text-gray-600 hover:text-blue-700 transition">Kontak</a>
+                    <a href="#" class="text-blue-900 hover:text-blue-700 transition">Galeri</a>
+                </div>
+            </div>
+        </div>
+        <div class="soka-tricolor">
+            <div class="soka-blue"></div>
+            <div class="soka-yellow"></div>
+            <div class="soka-red"></div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-blue-950 mb-2">Galeri Foto</h1>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-500 max-w-md mx-auto">Dokumentasi kegiatan dan kebersamaan Soka Gakkai Semarang.</p>
+        </div>
+
+        <div class="relative w-full overflow-hidden bg-gray-100 py-8 shadow-inner">
+            <div id="gallery-container" class="flex space-x-4 overflow-x-auto px-4 no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing" style="white-space: nowrap;">
+                </div>
+        </div>
+    </main>
+
+    <div id="zoom-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-modal" class="absolute top-6 right-6 text-white hover:text-gray-300 focus:outline-none bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="max-w-4xl max-h-[85vh] p-4 flex items-center justify-center">
+            <img id="modal-img" src="" alt="Zoomed Photo" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300">
+        </div>
+    </div>
+
+    <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Organisasi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
+                        <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC OPTIMIZED -->
+    <script>
+        const container = document.getElementById('gallery-container');
+        const modal = document.getElementById('zoom-modal');
+        const modalImg = document.getElementById('modal-img');
+        const closeModal = document.getElementById('close-modal');
+
+        let scrollSpeed = 1; 
+        let autoScrollInterval = null;
+        let idleTimeout = null;
+        let isUserInteracting = false;
+
+        // ==========================================
+        // 1. OTOMATISASI DAN CEK FOTO (WILDCARD LOOP)
+        // ==========================================
+        
+        // Fungsi pembantu untuk mengecek apakah file gambar benar-benar ada di folder
+        function cekGambarExist(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);  // Gambar ditemukan
+                img.onerror = () => resolve(false); // Gambar tidak ditemukan (404)
+                img.src = src;
+            });
+        }
+
+        // Fungsi untuk men-generate list foto secara otomatis tanpa hardcode
+        async function dapatkanDaftarFoto() {
+            const listValid = [];
+            const batasMaksimal = 999;
+            const toleransiSela = 2; // Berhenti jika ada 2 nomor kosong berurutan (antisipasi sela nomor)
+            let jumlahKosongBerurutan = 0;
+
+            for (let i = 1; i <= batasMaksimal; i++) {
+                // Format angka menjadi 3 digit (001, 002, ... 016, ... 999)
+                const nomorFormat = String(i).padStart(3, '0');
+                const pathFoto = `images/foto${nomorFormat}.jpeg`;
+
+                const isExist = await cekGambarExist(pathFoto);
+
+                if (isExist) {
+                    listValid.push(pathFoto);
+                    jumlahKosongBerurutan = 0; // Reset counter jika foto ditemukan
+                } else {
+                    jumlahKosongBerurutan++;
+                    // Jika mendeteksi slot kosong berturut-turut, hentikan loop (efisiensi performa)
+                    if (jumlahKosongBerurutan >= toleransiSela) {
+                        break; 
+                    }
+                }
+            }
+            return listValid;
+        }
+
+        // ==========================================
+        // 2. RENDER FOTO & LOGIC INFINITE CLONE
+        // ==========================================
+        async function initGallery() {
+            // Tampilkan loading halus saat scanning
+            container.innerHTML = '<div class="text-gray-400 py-8 w-full text-center animate-pulse">Memuat galeri...</div>';
+            
+            const fotoList = await dapatkanDaftarFoto();
+
+            // Jika folder images benar-benar kosong
+            if(fotoList.length === 0) {
+                container.innerHTML = '<div class="text-gray-400 py-8 w-full text-center">Belum ada foto yang tersedia.</div>';
+                return;
+            }
+
+            // Bersihkan teks loading
+            container.innerHTML = '';
+
+            // Masukkan list asli, lalu kloning untuk efek unlimited looping kanan-kiri
+            renderImages(fotoList);
+            renderImages(fotoList);
+            renderImages(fotoList);
+
+            // Set posisi awal scroll di tengah-tengah agar loop mulus semenjak awal load
+            setTimeout(() => {
+                container.scrollLeft = container.scrollWidth / 3;
+            }, 100);
+
+            startAutoScroll();
+        }
+
+        function renderImages(list) {
+            list.forEach(src => {
+                const imgCard = document.createElement('div');
+                imgCard.className = "inline-block flex-shrink-0 w-72 h-48 md:w-96 md:h-64 bg-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] cursor-pointer";
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = "Dokumentasi Soka Gakkai Semarang";
+                img.className = "w-full h-full object-cover select-none pointer-events-none"; 
+                
+                imgCard.appendChild(img);
+                imgCard.addEventListener('click', () => openZoom(src));
+                
+                container.appendChild(imgCard);
+            });
+        }
+
+        // ==========================================
+        // 3. LOGIC AUTOSCROLL & LOOPING JAVASCRIPT
+        // ==========================================
+        function startAutoScroll() {
+            if (autoScrollInterval) return;
+            
+            autoScrollInterval = setInterval(() => {
+                if (isUserInteracting) return;
+
+                container.scrollLeft += scrollSpeed;
+
+                if (container.scrollLeft >= (container.scrollWidth * 2) / 3) {
+                    container.style.scrollBehavior = 'auto'; 
+                    container.scrollLeft = container.scrollWidth / 3;
+                    container.style.scrollBehavior = 'smooth'; 
+                }
+            }, 20); 
+        }
+
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+
+        function resetIdleTimer() {
+            isUserInteracting = true;
+            stopAutoScroll();
+            clearTimeout(idleTimeout);
+
+            idleTimeout = setTimeout(() => {
+                isUserInteracting = false;
+                startAutoScroll();
+            }, 2000); // Aktif kembali setelah 2 detik diam
+        }
+
+        container.addEventListener('scroll', () => {
+            if (container.scrollLeft <= 10) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = container.scrollWidth / 3;
+                container.style.scrollBehavior = 'smooth';
+            } else if (container.scrollLeft >= (container.scrollWidth * 2) / 3) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = container.scrollWidth / 3;
+                container.style.scrollBehavior = 'smooth';
+            }
+            if(isUserInteracting) resetIdleTimer();
+        });
+
+        container.addEventListener('mousedown', () => isUserInteracting = true);
+        container.addEventListener('mousemove', () => { if(isUserInteracting) resetIdleTimer(); });
+        container.addEventListener('touchstart', () => isUserInteracting = true);
+        container.addEventListener('touchmove', () => resetIdleTimer());
+
+        // Fitur drag mouse manual (klik-tahan geser)
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            resetIdleTimer();
+        });
+        window.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        container.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 1.5; 
+            container.scrollLeft = scrollLeft - walk;
+            resetIdleTimer();
+        });
+
+        // ==========================================
+        // 4. MODAL ZOOM LOGIC
+        // ==========================================
+        function openZoom(src) {
+            stopAutoScroll();
+            clearTimeout(idleTimeout);
+            isUserInteracting = true;
+
+            modalImg.src = src;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalImg.classList.remove('scale-95');
+                modalImg.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeZoom() {
+            modalImg.classList.remove('scale-100');
+            modalImg.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            resetIdleTimer();
+        }
+
+        closeModal.addEventListener('click', closeZoom);
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeZoom(); 
+        });
+
+        // Jalankan inisialisasi saat window dimuat
+        window.onload = initGallery;
+    </script>
+</body>
+</html>
