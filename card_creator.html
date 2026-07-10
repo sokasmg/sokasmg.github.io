@@ -12,13 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@500;700&family=Caveat:wght@600&family=Comfortaa:wght@600&family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
     
     <style>
-        /* Font Bawaan Sebelumnya */
+        /* Font Bawaan */
         .font-inter { font-family: 'Inter', sans-serif; }
         .font-playfair { font-family: 'Playfair Display', serif; }
         .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-cinzel { font-family: 'Cinzel', serif; }
         
-        /* Tambahan Font Baru */
+        /* Tambahan Font */
         .font-caveat { font-family: 'Caveat', cursive; }
         .font-comfortaa { font-family: 'Comfortaa', cursive; }
         .font-dmserif { font-family: 'DM Serif Display', serif; }
@@ -59,7 +59,16 @@
             
             <!-- PANEL KONTROL (KIRI) -->
             <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-6">
-                <h2 class="text-lg font-bold text-gray-900 border-b pb-3">Pengaturan Kartu</h2>
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h2 class="text-lg font-bold text-gray-900">Pengaturan Kartu</h2>
+                    <!-- TOMBOL RANDOMIZER -->
+                    <button onclick="randomizeSettings()" class="inline-flex items-center space-x-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.213 6H16" />
+                        </svg>
+                        <span>Desain Acak</span>
+                    </button>
+                </div>
                 
                 <!-- Kategori & Pilih Kutipan -->
                 <div>
@@ -94,28 +103,25 @@
                     <!-- Warna Background -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Warna Latar Belakang</label>
-                        <!-- Grid disesuaikan jadi grid-cols-5 agar muat rapi -->
                         <div class="grid grid-cols-5 gap-2.5">
-                            <!-- Warna Bold Asli -->
-                            <button onclick="changeBg('#002F6C', 'text-white')" class="w-9 h-9 rounded-full bg-[#002F6C] border border-black/10 hover:scale-110 transition shadow-sm" title="Soka Blue"></button>
-                            <button onclick="changeBg('#C62828', 'text-white')" class="w-9 h-9 rounded-full bg-[#C62828] border border-black/10 hover:scale-110 transition shadow-sm" title="Soka Red"></button>
-                            <button onclick="changeBg('#ffffff', 'text-gray-800')" class="w-9 h-9 rounded-full bg-white border border-gray-300 hover:scale-110 transition shadow-sm" title="Pure White"></button>
-                            <button onclick="changeBg('#111827', 'text-gray-100')" class="w-9 h-9 rounded-full bg-gray-900 border border-black/10 hover:scale-110 transition shadow-sm" title="Dark Mode"></button>
-                            <button onclick="changeBg('#FDFBF7', 'text-amber-950')" class="w-9 h-9 rounded-full bg-[#FDFBF7] border border-amber-200 hover:scale-110 transition shadow-sm" title="Cream Vintage"></button>
+                            <button onclick="selectBgButton(0, '#002F6C', 'text-white')" class="bg-btn w-9 h-9 rounded-full bg-[#002F6C] border-2 border-transparent hover:scale-110 transition shadow-sm" title="Soka Blue"></button>
+                            <button onclick="selectBgButton(1, '#C62828', 'text-white')" class="bg-btn w-9 h-9 rounded-full bg-[#C62828] border-2 border-transparent hover:scale-110 transition shadow-sm" title="Soka Red"></button>
+                            <button onclick="selectBgButton(2, '#ffffff', 'text-gray-800')" class="bg-btn w-9 h-9 rounded-full bg-white border border-gray-300 hover:scale-110 transition shadow-sm" title="Pure White"></button>
+                            <button onclick="selectBgButton(3, '#111827', 'text-gray-100')" class="bg-btn w-9 h-9 rounded-full bg-gray-900 border-2 border-transparent hover:scale-110 transition shadow-sm" title="Dark Mode"></button>
+                            <button onclick="selectBgButton(4, '#FDFBF7', 'text-amber-950')" class="bg-btn w-9 h-9 rounded-full bg-[#FDFBF7] border border-amber-200 hover:scale-110 transition shadow-sm" title="Cream Vintage"></button>
                             
-                            <!-- 5 Pilihan Warna Pastel Baru -->
-                            <button onclick="changeBg('#E2ECE9', 'text-emerald-950')" class="w-9 h-9 rounded-full bg-[#E2ECE9] border border-emerald-200/60 hover:scale-110 transition shadow-sm" title="Pastel Sage Green"></button>
-                            <button onclick="changeBg('#F3E1E1', 'text-rose-950')" class="w-9 h-9 rounded-full bg-[#F3E1E1] border border-rose-200/60 hover:scale-110 transition shadow-sm" title="Pastel Dusty Rose"></button>
-                            <button onclick="changeBg('#E1EBF5', 'text-blue-950')" class="w-9 h-9 rounded-full bg-[#E1EBF5] border border-blue-200/60 hover:scale-110 transition shadow-sm" title="Pastel Ocean Blue"></button>
-                            <button onclick="changeBg('#EAE6F3', 'text-purple-950')" class="w-9 h-9 rounded-full bg-[#EAE6F3] border border-purple-200/60 hover:scale-110 transition shadow-sm" title="Pastel Soft Lavender"></button>
-                            <button onclick="changeBg('#F5EFE6', 'text-stone-800')" class="w-9 h-9 rounded-full bg-[#F5EFE6] border border-stone-300/60 hover:scale-110 transition shadow-sm" title="Pastel Warm Sand"></button>
+                            <button onclick="selectBgButton(5, '#E2ECE9', 'text-emerald-950')" class="bg-btn w-9 h-9 rounded-full bg-[#E2ECE9] border border-emerald-200/60 hover:scale-110 transition shadow-sm" title="Pastel Sage Green"></button>
+                            <button onclick="selectBgButton(6, '#F3E1E1', 'text-rose-950')" class="bg-btn w-9 h-9 rounded-full bg-[#F3E1E1] border border-rose-200/60 hover:scale-110 transition shadow-sm" title="Pastel Dusty Rose"></button>
+                            <button onclick="selectBgButton(7, '#E1EBF5', 'text-blue-950')" class="bg-btn w-9 h-9 rounded-full bg-[#E1EBF5] border border-blue-200/60 hover:scale-110 transition shadow-sm" title="Pastel Ocean Blue"></button>
+                            <button onclick="selectBgButton(8, '#EAE6F3', 'text-purple-950')" class="bg-btn w-9 h-9 rounded-full bg-[#EAE6F3] border border-purple-200/60 hover:scale-110 transition shadow-sm" title="Pastel Soft Lavender"></button>
+                            <button onclick="selectBgButton(9, '#F5EFE6', 'text-stone-800')" class="bg-btn w-9 h-9 rounded-full bg-[#F5EFE6] border border-stone-300/60 hover:scale-110 transition shadow-sm" title="Pastel Warm Sand"></button>
                         </div>
                     </div>
 
                     <!-- Pilihan Font -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Gaya Tulisan (Font)</label>
-                        <select id="font-select" onchange="changeFont()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                        <select id="font-select" onchange="changeFont()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
                             <optgroup label="Serif (Formal & Elegan)">
                                 <option value="font-playfair">Elegant Serif (Playfair)</option>
                                 <option value="font-dmserif">Classic Bold Serif (DM Serif)</option>
@@ -131,6 +137,15 @@
                                 <option value="font-caveat">Aesthetic Handwriting (Caveat)</option>
                             </optgroup>
                         </select>
+                    </div>
+
+                    <!-- PENGATUR UKURAN FONT SLIDER -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Ukuran Teks Isi</label>
+                            <span id="font-size-val" class="text-xs font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded">18px</span>
+                        </div>
+                        <input type="range" id="font-size-slider" min="12" max="28" value="18" oninput="changeFontSize(this.value)" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900">
                     </div>
 
                     <!-- Aksesoris Tambahan -->
@@ -176,8 +191,9 @@
                     <div id="preview-quote-start" class="text-5xl opacity-20 font-serif leading-none select-none -mb-4">“</div>
 
                     <!-- Tengah: Isi Teks Utama -->
-                    <div class="my-auto text-center px-4">
-                        <p id="preview-text" class="text-base md:text-lg font-medium leading-relaxed italic font-playfair">
+                    <div class="my-auto text-center px-4 w-full overflow-hidden">
+                        <!-- Gaya ukuran font diatur inline style dari nilai default slider -->
+                        <p id="preview-text" style="font-size: 18px;" class="font-medium leading-relaxed italic font-playfair break-words">
                             Memuat teks...
                         </p>
                         <p id="preview-author" class="text-xs font-bold tracking-wider uppercase mt-6 opacity-80">
@@ -189,7 +205,6 @@
                     <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4">”</div>
 
                     <!-- Watermark Identitas Komunitas -->
-                    <!-- Ditambahkan border murni CSS pengganti transparansi agar tidak bug saat convert html2canvas -->
                     <div id="preview-watermark" class="text-center text-[10px] font-bold tracking-widest uppercase border-t pt-2 border-white/20 opacity-40">
                         Soka Gakkai Semarang
                     </div>
@@ -202,7 +217,7 @@
                     </div>
                 </div>
                 
-                <p class="text-xs text-gray-500 mt-4 text-center">💡 Gambar yang diunduh akan memiliki resolusi tajam berkali lipat tanpa pecah.</p>
+                <p class="text-xs text-gray-500 mt-4 text-center">💡 Pojok gambar hasil unduhan otomatis siku rapi (1:1) tanpa noda bercak putih.</p>
             </div>
 
         </div>
@@ -213,12 +228,25 @@
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
 
-        // Variabel penampung data cloud
         let quoteList = [];
         let goshoList = [];
         let currentActiveSource = 'bimbingan';
+        
+        // Data Palet Warna terstruktur untuk sistem tombol aktif & randomizer
+        const bgPalettes = [
+            { bg: '#002F6C', text: 'text-white' },
+            { bg: '#C62828', text: 'text-white' },
+            { bg: '#ffffff', text: 'text-gray-800' },
+            { bg: '#111827', text: 'text-gray-100' },
+            { bg: '#FDFBF7', text: 'text-amber-950' },
+            { bg: '#E2ECE9', text: 'text-emerald-950' },
+            { bg: '#F3E1E1', text: 'text-rose-950' },
+            { bg: '#E1EBF5', text: 'text-blue-950' },
+            { bg: '#EAE6F3', text: 'text-purple-950' },
+            { bg: '#F5EFE6', text: 'text-stone-800' }
+        ];
+        let currentBgIndex = 0;
 
-        // Fungsi pembaca CSV (Mengamankan tanda koma di dalam kalimat)
         function parseCSV(text) {
             const result = [];
             let row = ["", ""];
@@ -263,9 +291,9 @@
             return result;
         }
 
-        // Sedot data Google Sheets saat halaman pertama kali dibuka
         document.addEventListener('DOMContentLoaded', () => {
             loadQuotesFromSheets();
+            updateBgButtonUI();
         });
 
         async function loadQuotesFromSheets() {
@@ -337,8 +365,9 @@
             document.getElementById('preview-author').innerText = "— " + prefix + document.getElementById('custom-author').value;
         }
 
-        // Fungsi mengubah background warna canvas preview (Dioptimalkan sinkronisasi garis pembatas bawah)
-        function changeBg(bgColor, textColorClass) {
+        // Fungsi pemilihan warna terintegrasi indikator aktif
+        function selectBgButton(index, bgColor, textColorClass) {
+            currentBgIndex = index;
             const canvas = document.getElementById('capture-area');
             const watermark = document.getElementById('preview-watermark');
             
@@ -346,30 +375,45 @@
             canvas.classList.add(textColorClass);
             canvas.style.backgroundColor = bgColor;
 
-            // Menyesuaikan warna border garis watermark bawah agar fleksibel dengan tema terang/gelap
             if(textColorClass.includes('white') || textColorClass.includes('gray-100')) {
                 watermark.style.borderTopColor = "rgba(255, 255, 255, 0.2)";
             } else {
                 watermark.style.borderTopColor = "rgba(0, 0, 0, 0.15)";
             }
+            updateBgButtonUI();
         }
 
-        // Fungsi mengubah jenis Font tulisan
+        function updateBgButtonUI() {
+            const buttons = document.querySelectorAll('.bg-btn');
+            buttons.forEach((btn, idx) => {
+                if(idx === currentBgIndex) {
+                    btn.classList.add('border-black', 'scale-110', 'ring-2', 'ring-offset-2', 'ring-blue-900');
+                } else {
+                    btn.classList.remove('border-black', 'scale-110', 'ring-2', 'ring-offset-2', 'ring-blue-900');
+                }
+            });
+        }
+
+        // Mengubah jenis Font tulisan
         function changeFont() {
             const fontSelected = document.getElementById('font-select').value;
             const textPreview = document.getElementById('preview-text');
             
-            textPreview.className = "text-base md:text-lg font-medium leading-relaxed italic";
+            textPreview.classList.remove('font-playfair', 'font-inter', 'font-jakarta', 'font-cinzel', 'font-caveat', 'font-comfortaa', 'font-dmserif', 'font-montserrat', 'text-2xl', 'md:text-3xl');
             textPreview.classList.add(fontSelected);
 
-            // Penyesuaian khusus ukuran & gaya jika user memilih font handwriting Caveat agar tetap terbaca seimbang
             if(fontSelected === 'font-caveat') {
-                textPreview.classList.remove('italic');
-                textPreview.classList.add('text-2xl', 'md:text-3xl');
+                textPreview.classList.add('text-2xl');
             }
         }
 
-        // Fungsi toggle aksesoris (garis warna & petik)
+        // FUNGSI PENGUBAH UKURAN FONT DINAMIS
+        function changeFontSize(size) {
+            document.getElementById('font-size-val').innerText = size + "px";
+            document.getElementById('preview-text').style.fontSize = size + "px";
+        }
+
+        // Toggle aksesoris
         function toggleAcc() {
             const showTricolor = document.getElementById('acc-tricolor').checked;
             const showQuotes = document.getElementById('acc-quotes').checked;
@@ -381,19 +425,57 @@
             document.getElementById('preview-quote-end').style.opacity = showQuotes ? '0.2' : '0';
         }
 
-        // PROSES UTAMA: DOWNLOAD HTML KE JPEG
+        // FUNGSI UTAMA RANDOMIZER (ACAK SETTINGAN)
+        function randomizeSettings() {
+            // 1. Acak Warna Latar Belakang
+            const randomBgIdx = Math.floor(Math.random() * bgPalettes.length);
+            const chosenPalette = bgPalettes[randomBgIdx];
+            selectBgButton(randomBgIdx, chosenPalette.bg, chosenPalette.text);
+
+            // 2. Acak Font dari opsi dropdown yang ada
+            const fontSelect = document.getElementById('font-select');
+            const fontOptions = fontSelect.querySelectorAll('option');
+            const randomFontIdx = Math.floor(Math.random() * fontOptions.length);
+            fontSelect.value = fontOptions[randomFontIdx].value;
+            changeFont();
+
+            // 3. Acak Ukuran Font (Rentang aman 15px - 22px untuk kestabilan visual)
+            const randomSize = Math.floor(Math.random() * (22 - 15 + 1)) + 15;
+            document.getElementById('font-size-slider').value = randomSize;
+            changeFontSize(randomSize);
+
+            // 4. Acak Aksesoris Dekorasi (Garis & Petik)
+            const checkTricolor = document.getElementById('acc-tricolor');
+            const checkQuotes = document.getElementById('acc-quotes');
+            checkTricolor.checked = Math.random() > 0.2; // 80% peluang aktif
+            checkQuotes.checked = Math.random() > 0.2;
+            toggleAcc();
+        }
+
+        // PROSES UTAMA: DOWNLOAD HTML KE JPEG (SUDUT FIX SIKU-SIKU)
         function downloadCard() {
             const captureArea = document.getElementById('capture-area');
+            
+            // Trik Jitu: Sembunyikan efek rounded sementara waktu saat sistem memotret elemen
+            captureArea.classList.remove('rounded-lg');
+            
             html2canvas(captureArea, {
                 scale: 3, 
                 useCORS: true,
-                logging: false
+                logging: false,
+                backgroundColor: null // Mencegah munculnya background putih di area luar foto
             }).then(canvas => {
-                const image = canvas.toDataURL("image/jpeg", 0.9);
+                // Kembalikan efek melengkung di website live preview setelah potret selesai
+                captureArea.classList.add('rounded-lg');
+
+                const image = canvas.toDataURL("image/jpeg", 0.95);
                 const link = document.createElement('a');
                 link.download = `Soka_Quote_${Date.now()}.jpg`;
                 link.href = image;
                 link.click();
+            }).catch(err => {
+                captureArea.classList.add('rounded-lg');
+                console.error("Gagal memproses gambar:", err);
             });
         }
     </script>
