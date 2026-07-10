@@ -443,26 +443,44 @@
             document.getElementById('soka-quote').innerText = selectedQuote.text;
             document.getElementById('soka-author').innerText = selectedQuote.author;
         }
-        // Logika Slider Banner Fading Otomatis
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.banner-slide');
-        const slideInterval = 5000; // 5000 ms = 5 detik per gambar
+        // Ambil semua elemen slide banner
+const slides = document.querySelectorAll('.banner-slide');
+let currentSlide = 0;
+const slideInterval = 5000; // Ganti gambar setiap 5 detik
 
-        function nextSlide() {
-            // Ubah gambar saat ini menjadi tidak terlihat
-            slides[currentSlide].classList.remove('opacity-40');
-            slides[currentSlide].classList.add('opacity-0');
-            
-            // Pindah ke indeks gambar berikutnya (berputar kembali ke 0 jika sudah di akhir)
-            currentSlide = (currentSlide + 1) % slides.length;
-            
-            // Tampilkan gambar baru dengan memudarkannya masuk
-            slides[currentSlide].classList.remove('opacity-0');
-            slides[currentSlide].classList.add('opacity-40');
+// FUNGSI 1: Memuat gambar 2-6 secara diam-diam setelah web selesai loading keseluruhan
+window.addEventListener('load', () => {
+    slides.forEach((slide) => {
+        // Ambil nilai dari data-src
+        const lazySrc = slide.getAttribute('data-src');
+        if (lazySrc) {
+            // Pindahkan ke src asli agar browser mulai men-download di background
+            slide.setAttribute('src', lazySrc);
+            // Hapus data-src yang sudah tidak terpakai
+            slide.removeAttribute('data-src');
         }
+    });
 
-        // Jalankan fungsi otomatis setiap 5 detik
-        setInterval(nextSlide, slideInterval);
+    # Mulai jalankan slider otomatis HANYA SETELAH gambar sisa selesai diaktifkan kodenya
+    setInterval(nextSlide, slideInterval);
+});
+
+// FUNGSI 2: Logika transisi memudar (Fading)
+function nextSlide() {
+    // Pastikan gambar target sudah memiliki atribut src (sudah siap/termuat)
+    if (!slides[(currentSlide + 1) % slides.length].getAttribute('src')) return;
+
+    // Sembunyikan gambar saat ini
+    slides[currentSlide].classList.remove('opacity-40');
+    slides[currentSlide].classList.add('opacity-0');
+    
+    // Pindah ke indeks berikutnya
+    currentSlide = (currentSlide + 1) % slides.length;
+    
+    // Tampilkan gambar baru
+    slides[currentSlide].classList.remove('opacity-0');
+    slides[currentSlide].classList.add('opacity-40');
+}
 
         // Jalankan fungsi saat halaman selesai dimuat sepenuhnya
         window.addEventListener('DOMContentLoaded', setQuoteOfTheDay);
