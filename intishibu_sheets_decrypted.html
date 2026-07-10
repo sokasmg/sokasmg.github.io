@@ -6,24 +6,33 @@
     <title>Viewer Database Anggota Shibu v2.5 - Berdasarkan Keluarga</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+        /* CSS Khusus Cetak dan Kontrol Tampilan */
         .overflow-x-auto {
             overflow-x: auto;
+        }
+        @media (max-width: 767px) {
+            .hide-on-mobile {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body class="bg-gray-100 font-sans p-4 md:p-6">
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div class="max-w-7xl mx-auto space-y-4 md:space-y-6">
         
-        <div id="monitorHeader" class="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
+        <div id="monitorHeader" class="bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Database Anggota Shibu Semarang v2.5</h1>
-                    <p class="text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga) — Mode Viewer</p>
-                    <p class="text-xs text-gray-400">by Didi Chung 2026</p>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Database Anggota Shibu Semarang v2.5</h1>
+                    <p class="text-xs md:text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
+                    <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026 (Viewer Mode)</p>
                 </div>
-                <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                    <button onclick="printData()" class="w-full md:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs text-center">
+                <div class="w-full sm:w-auto">
+                    <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 1.252a1.125 1.125 0 0 1-1.107 1.328H7.218a1.125 1.125 0 0 1-1.107-1.328L6.34 18m11.32 0t-.115-.723m0 0a3.24 3.24 0 0 0-3.138-2.736H9.533a3.24 3.24 0 0 0-3.138 2.736m11.32 0H6.34M18 7.5h.008v.008H18V7.5Z" />
+                        </svg>
                         Print / Cetak (Landscape)
                     </button>
                 </div>
@@ -49,7 +58,7 @@
             </div>
         </div>
 
-        <div id="filterContainer" class="bg-white p-5 rounded-xl shadow-sm space-y-4">
+        <div id="filterContainer" class="bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
                 <div>
                     <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
@@ -99,34 +108,36 @@
                 </div>
             </div>
 
-            <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-6 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
+            <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
                 <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
-                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                    <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                    Calon
-                </label>
-                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                    <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                    Luar Kota/LN
-                </label>
-                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                    <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                    Taiten
-                </label>
-                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                    <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                    Meninggal
-                </label>
+                <div class="flex flex-wrap gap-x-4 gap-y-2">
+                    <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                        <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                        Calon
+                    </label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                        <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                        Luar Kota/LN
+                    </label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                        <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                        Taiten
+                    </label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                        <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                        Meninggal
+                    </label>
+                </div>
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-semibold text-gray-700">Struktur & Daftar Anggota</h3>
+                <h3 class="font-semibold text-gray-700 text-sm md:text-base">Struktur & Daftar Anggota</h3>
                 <span id="totalData" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">Total: 0 Orang</span>
             </div>
             
-            <div class="hidden md:block overflow-x-auto">
+            <div class="overflow-x-auto hidden md:block">
                 <table class="w-full text-left text-sm text-gray-600 border-collapse">
                     <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
                         <tr>
@@ -148,11 +159,11 @@
                 </table>
             </div>
 
-            <div id="memberCardContainer" class="block md:hidden p-4 space-y-4 bg-gray-50/50"></div>
+            <div id="memberCardContainer" class="block md:hidden p-4 space-y-3 bg-gray-50/50"></div>
 
-            <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50">
+            <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col items-center gap-4 bg-gray-50 w-full">
                 <span id="pageInfo" class="text-xs text-gray-500">Menampilkan 0 - 0 dari 0 data</span>
-                <div class="inline-flex rounded-md shadow-xs gap-1" id="paginationButtons"></div>
+                <div class="flex flex-wrap justify-center gap-1.5 max-w-full" id="paginationButtons"></div>
             </div>
         </div>
     </div>
@@ -164,7 +175,7 @@
 
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
 
-        // LOAD DATA DARICLOUD
+        // AUTOLOAD: Sinkronisasi data realtime dari Cloud
         document.addEventListener("DOMContentLoaded", function() {
             fetch(APPS_SCRIPT_URL) 
                 .then(response => {
@@ -391,7 +402,6 @@
                 finalOrderedList.push(head);
 
                 let familyMembers = filteredRaw.filter(m => m.parentId === head.id);
-                
                 familyMembers.sort((a, b) => {
                     const scoreA = getFamilyPriority(a.hubungan);
                     const scoreB = getFamilyPriority(b.hubungan);
@@ -428,7 +438,7 @@
             document.getElementById('totalData').innerText = `Total Hasil: ${processedData.length} Records`;
 
             if (processedData.length === 0) {
-                const emptyHTML = `<div class="p-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</div>`;
+                const emptyHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data anggota yang cocok dengan filter.</div>`;
                 tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
                 cardContainer.innerHTML = emptyHTML;
                 document.getElementById('pageInfo').innerText = "Menampilkan 0 - 0 dari 0 data";
@@ -446,12 +456,11 @@
             paginatedItems.forEach((member, index) => {
                 const currentJabatan = member.jabatan || 'Anggota';
                 const currentStatus = member.status || 'Aktif';
-                
-                // 1. RENDER DESKTOP (TABEL)
-                const row = document.createElement('tr');
-                row.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
 
-                row.innerHTML = `
+                // --- GENERATE LAYOUT TABEL (UNTUK LAPTOP / TABLET) ---
+                const tr = document.createElement('tr');
+                tr.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
+                tr.innerHTML = `
                     <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
                     <td class="px-4 py-3">
                         <div class="flex items-center">
@@ -471,38 +480,37 @@
                     <td class="px-4 py-3">${member.tahunLahir}</td>
                     <td class="px-4 py-3 text-xs ${member.isChildRender ? 'text-amber-800 font-medium' : ''}">${member.hubungan}</td>
                     <td class="px-4 py-3 text-xs">${member.telepon}</td>
-                    <td class="px-4 py-3 text-xs whitespace-normal break-words">${member.alamat}</td>
-                    <td class="px-4 py-3 text-xs whitespace-normal break-words">${member.keterangan}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.alamat}">${member.alamat}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.keterangan}">${member.keterangan}</td>
                 `;
-                tbody.appendChild(row);
+                tbody.appendChild(tr);
 
-                // 2. RENDER MOBILE (CARD MODEL)
+                // --- GENERATE LAYOUT CARD (OPTIMAL UNTUK HP / PONSEL) ---
                 const card = document.createElement('div');
-                card.className = `p-4 rounded-xl shadow-xs border bg-white ${member.isChildRender ? 'border-amber-200 bg-amber-50/20 ml-4' : 'border-gray-200'}`;
-                
+                card.className = `p-4 rounded-xl shadow-xs border transition flex flex-col gap-2.5 ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'}`;
                 card.innerHTML = `
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <div class="flex items-center gap-1">
-                            ${member.isChildRender ? '<span class="text-amber-500 font-bold mr-1">↳</span>' : ''}
-                            <h4 class="text-sm font-bold text-gray-900">${member.nama}</h4>
-                            <span class="text-xs font-mono text-gray-400">#${startIndex + index + 1}</span>
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="flex items-center gap-1.5">
+                            ${member.isChildRender ? '<span class="text-amber-500 font-bold">↳</span>' : ''}
+                            <h4 class="font-bold text-gray-900 text-base">${member.nama}</h4>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getStatusClass(currentStatus)}">${currentStatus}</span>
+                        <span class="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">#${startIndex + index + 1}</span>
                     </div>
-                    
-                    <div class="flex flex-wrap gap-1.5 mb-3">
+
+                    <div class="flex flex-wrap gap-1.5">
                         <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-purple-100 text-purple-800">${member.chiku}</span>
                         <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span>
                         <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs text-gray-600 border-t border-gray-100 pt-2.5">
-                        <div><span class="block text-[10px] font-medium text-gray-400 uppercase">Gohonzon</span><span class="font-medium text-gray-800">${member.gohonzon}</span></div>
-                        <div><span class="block text-[10px] font-medium text-gray-400 uppercase">Thn Lahir</span><span class="font-medium text-gray-800">${member.tahunLahir}</span></div>
-                        <div class="col-span-2"><span class="block text-[10px] font-medium text-gray-400 uppercase">Hub. Keluarga</span><span class="font-medium ${member.isChildRender ? 'text-amber-800 font-semibold' : 'text-gray-800'}">${member.hubungan}</span></div>
-                        <div class="col-span-2"><span class="block text-[10px] font-medium text-gray-400 uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="text-blue-600 font-medium">${member.telepon}</a></div>
-                        <div class="col-span-2"><span class="block text-[10px] font-medium text-gray-400 uppercase">Alamat</span><span class="text-gray-700 text-xs">${member.alamat}</span></div>
-                        <div class="col-span-2"><span class="block text-[10px] font-medium text-gray-400 uppercase">Keterangan</span><span class="text-gray-700 text-xs italic">${member.keterangan}</span></div>
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs border-t border-gray-100 pt-2.5 text-gray-600">
+                        <div><span class="text-gray-400 block text-[10px] uppercase">Gohonzon</span><span class="font-medium">${member.gohonzon}</span></div>
+                        <div><span class="text-gray-400 block text-[10px] uppercase">Thn Lahir</span><span class="font-medium">${member.tahunLahir}</span></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Hub. Keluarga</span><span class="font-medium text-amber-900">${member.hubungan}</span></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="font-medium text-blue-600 underline">${member.telepon}</a></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat}</p></div>
+                        <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan}</p></div>
                     </div>
                 `;
                 cardContainer.appendChild(card);
@@ -515,11 +523,18 @@
         function renderPaginationControls(totalPages) {
             const container = document.getElementById('paginationButtons');
             container.innerHTML = '';
+            
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.innerText = i;
-                btn.className = `px-3 py-1 text-sm font-medium rounded-md border cursor-pointer transition ${i === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`;
-                btn.onclick = () => { currentPage = i; renderTable(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+                // Ditambahkan kelas minimum-width dan padding agar nyaman disentuh jari di layar ponsel tanpa bertumpuk
+                btn.className = `min-w-[36px] h-9 px-2 text-sm font-medium rounded-md border cursor-pointer transition flex items-center justify-center ${i === currentPage ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`;
+                btn.onclick = () => { 
+                    currentPage = i; 
+                    renderTable(); 
+                    // Otomatis scroll kembali ke area list agar user hp tidak bingung setelah ganti page
+                    document.getElementById('filterContainer').scrollIntoView({ behavior: 'smooth' });
+                };
                 container.appendChild(btn);
             }
         }
@@ -554,14 +569,20 @@
 
         function printData() {
             const processedData = buildStructuredData(true);
-            if (processedData.length === 0) { alert("Tidak ada data untuk dicetak."); return; }
+            if (processedData.length === 0) {
+                alert("Tidak ada data untuk dicetak.");
+                return;
+            }
 
             let printStats = { bapak: 0, ibu: 0, pemuda: 0, pemudi: 0, anak: 0, total: 0 };
+            
             processedData.forEach(m => {
                 const bagianKey = m.bagian ? m.bagian.toLowerCase() : '';
                 const statusKey = m.status ? m.status.toLowerCase() : 'aktif';
                 const jabatanKey = m.jabatan ? m.jabatan.toLowerCase() : '';
+
                 const isKondisiKhusus = (statusKey === 'tidak aktif' || statusKey === 'luar kota/ln' || statusKey === 'taiten' || statusKey === 'meninggal' || jabatanKey === 'calon');
+
                 if (!isKondisiKhusus && printStats.hasOwnProperty(bagianKey)) {
                     printStats[bagianKey]++;
                     printStats.total++;
@@ -574,8 +595,13 @@
             const statusVal = document.getElementById('statusFilter').value;
             const searchVal = document.getElementById('searchFilter').value;
 
-            let dynamicTitle = (bagianVal ? ` ${bagianVal}` : '') + (chikuVal ? ` Chiku ${chikuVal}` : '');
-            dynamicTitle = dynamicTitle ? "Daftar Anggota" + dynamicTitle : "Daftar Anggota Shibu Semarang";
+            let bagianTeks = bagianVal ? ` ${bagianVal}` : '';
+            let chikuTeks = chikuVal ? ` Chiku ${chikuVal}` : '';
+            
+            let dynamicTitle = "Daftar Anggota" + bagianTeks + chikuTeks;
+            if (!chikuVal && !bagianVal) {
+                dynamicTitle = "Daftar Anggota Shibu Semarang";
+            }
 
             let subTitleParts = [];
             if (jabatanVal) subTitleParts.push(`Jabatan: ${jabatanVal.replace('_', ' & ')}`);
@@ -585,7 +611,10 @@
 
             let tableRowsHtml = '';
             processedData.forEach((member, index) => {
+                const currentJabatan = member.jabatan || 'Anggota';
+                const currentStatus = member.status || 'Aktif';
                 const fontStyle = member.isChildRender ? 'font-weight: normal; color: #000000;' : 'font-weight: bold; color: #000000;';
+
                 tableRowsHtml += `
                     <tr style="background-color: #ffffff; ${fontStyle}">
                         <td style="text-align:center; font-family: monospace; font-size:10px;">${index + 1}</td>
@@ -597,8 +626,8 @@
                         </td>
                         <td>${member.chiku}</td>
                         <td>${member.bagian}</td>
-                        <td>${member.jabatan || 'Anggota'}</td>
-                        <td>${member.status || 'Aktif'}</td>
+                        <td>${currentJabatan}</td>
+                        <td>${currentStatus}</td>
                         <td>${member.gohonzon}</td>
                         <td style="text-align:center;">${member.tahunLahir}</td>
                         <td>${member.hubungan}</td>
@@ -616,24 +645,29 @@
                     <title>${dynamicTitle}</title>
                     <style>
                         @page { size: landscape; margin: 10mm; }
-                        body { font-family: system-ui, -apple-system, sans-serif; color: #000; margin: 0; padding: 0; }
-                        .print-header { border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 12px; }
-                        .print-header h1 { margin: 0; font-size: 18px; }
-                        .print-header p { margin: 3px 0 0 0; font-size: 11px; }
+                        @media print {
+                            html, body { width: 100%; font-family: system-ui, -apple-system, sans-serif; background: #fff; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        }
+                        body { font-family: system-ui, -apple-system, sans-serif; color: #000000; margin: 0; padding: 0; background: #ffffff; }
+                        .print-header { border-bottom: 2px solid #000000; padding-bottom: 6px; margin-bottom: 12px; }
+                        .print-header h1 { margin: 0; font-size: 18px; color: #000000; }
+                        .print-header p { margin: 3px 0 0 0; font-size: 11px; color: #000000; }
                         .stat-box-container { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11px; }
-                        .stat-box-container td { border: 1px solid #000; padding: 4px 8px; background-color: #fafafa; width: 16.66%; }
-                        .stat-label { font-weight: bold; text-transform: uppercase; font-size: 9px; color: #333; display: block; }
+                        .stat-box-container td { border: 1px solid #000000; padding: 4px 8px; text-align: left; background-color: #fafafa; width: 16.66%; }
+                        .stat-label { font-weight: bold; text-transform: uppercase; font-size: 9px; color: #333333; display: block; margin-bottom: 1px; }
                         .stat-value { font-size: 14px; font-weight: bold; }
                         table.data-table { width: 100%; border-collapse: collapse; font-size: 9px; }
-                        th { border: 1px solid #000; padding: 5px 3px; text-align: left; background: #fff; font-weight: bold; }
-                        td { border: 1px solid #000; padding: 4px 3px; vertical-align: middle; }
+                        thead { display: table-header-group; }
+                        tr { break-inside: avoid; page-break-inside: avoid; }
+                        th { background-color: #ffffff; color: #000000; font-weight: bold; text-transform: uppercase; font-size: 9px; border: 1px solid #000000; padding: 5px 3px; text-align: left; }
+                        td { border: 1px solid #000000; padding: 4px 3px; vertical-align: middle; color: #000000; }
                     </style>
                 </head>
                 <body>
                     <div class="print-header">
                         <h1>${dynamicTitle}</h1>
                         <p>${dynamicSub}</p>
-                        <p style="font-size:9px; margin-top:1px;">Sistem Database Shibu | Generated by Didi Chung 2026</p>
+                        <p style="font-size:9px; color:#000000; margin-top:1px;">Sistem Database Shibu | Generated by Didi Chung 2026</p>
                     </div>
                     <table class="stat-box-container">
                         <tr>
@@ -642,7 +676,7 @@
                             <td><span class="stat-label">Pemuda</span><span class="stat-value">${printStats.pemuda} <span style="font-size:10px; font-weight:normal;">Org</span></span></td>
                             <td><span class="stat-label">Pemudi</span><span class="stat-value">${printStats.pemudi} <span style="font-size:10px; font-weight:normal;">Org</span></span></td>
                             <td><span class="stat-label">Anak</span><span class="stat-value">${printStats.anak} <span style="font-size:10px; font-weight:normal;">Org</span></span></td>
-                            <td style="background-color: #f0f0f0; border-left: 2px solid #000;"><span class="stat-label">TOTAL AKTIF</span><span class="stat-value">${printStats.total} <span style="font-size:10px; font-weight:normal;">Org</span></span></td>
+                            <td style="background-color: #f0f0f0; border-left: 2px solid #000;"><span class="stat-label" style="color:#000;">TOTAL AKTIF</span><span class="stat-value" style="color:#000;">${printStats.total} <span style="font-size:10px; font-weight:normal;">Org</span></span></td>
                         </tr>
                     </table>
                     <table class="data-table">
@@ -664,7 +698,9 @@
                         </thead>
                         <tbody>${tableRowsHtml}</tbody>
                     </table>
-                    <script>setTimeout(function() { window.focus(); window.print(); }, 500);<\/script>
+                    <script>
+                        setTimeout(function() { window.focus(); window.print(); }, 500);
+                    <\/script>
                 </body>
                 </html>
             `);
