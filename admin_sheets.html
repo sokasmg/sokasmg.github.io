@@ -4,49 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Anggota Shibu v2.5 - Berdasarkan Keluarga</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         /* CSS khusus layar monitor agar tampilan rapi */
-        @media screen {
-            .overflow-x-auto {
-                overflow-x: auto;
-            }
-        }
-        /* CSS khusus saat dicetak/print agar rapi tanpa elemen UI */
-        @media print {
-            body {
-                background-color: white !important;
-                padding: 0 !important;
-            }
-            #monitorHeader, #memberModal, .no-print {
-                display: none !important;
-            }
-            .max-w-7xl {
-                max-w: 100% !important;
-                width: 100% !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            table {
-                page-break-inside: auto;
-                width: 100% !important;
-                border-collapse: collapse !important;
-            }
-            tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
-            th, td {
-                padding: 4px 6px !important;
-                font-size: 10px !important;
-                border: 1px solid #9ca3af !important;
-                color: black !important;
-            }
-            th {
-                background-color: #e5e7eb !important;
-                color: black !important;
-            }
+        .overflow-x-auto {
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -54,67 +16,161 @@
 
     <div class="max-w-7xl mx-auto space-y-6">
         
-        <div id="monitorHeader" class="bg-white p-6 rounded-xl shadow-md flex flex-col gap-6">
-            
+        <div id="monitorHeader" class="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Database Anggota Shibu Semarang v2.5</h1>
                     <p class="text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
-                    <p class="text-xs text-gray-400 mt-1">by Didi Chung 2026</p>
+                    <p class="text-xs text-gray-400">by Didi Chung 2026</p>
                 </div>
-                <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                    <button onclick="openModal()" class="flex-1 md:flex-none bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Tambah KK Baru / Anggota Mandiri
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="printData()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
+                        Print / Cetak (Landscape)
                     </button>
-                    <button onclick="saveDataToGitHub()" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                        </svg>
-                        Simpan Perubahan Database
+                    <button onclick="exportJSON()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
+                        Export JSON
                     </button>
-                    <button onclick="printDatabase()" class="w-full md:w-auto bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4" />
-                        </svg>
-                        Cetak Laporan
-                    </button>
+                    <label class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer text-center">
+                        Import JSON
+                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
+                    </label>
+                    <button onclick="saveToGitHubWorkflow()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+    </svg>
+    Simpan ke Cloud
+</button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-inner">
-                    <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Jiwa (Shibu)</p>
-                    <p id="statTotal" class="text-2xl font-bold text-gray-700 mt-1">0</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
+                <div id="box-tanahmas" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                    <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Tanah Mas</h4>
+                    <div id="stat-tanahmas" class="text-xs text-gray-600 space-y-1"></div>
                 </div>
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 shadow-inner">
-                    <p class="text-xs font-medium text-blue-500 uppercase tracking-wider">Bagian (B/I/P/W/A)</p>
-                    <p id="statBagian" class="text-sm font-semibold text-blue-700 mt-1 leading-relaxed">B:0 | I:0 | P:0<br>W:0 | A:0</p>
+                <div id="box-gajahmada" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                    <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Gajah Mada</h4>
+                    <div id="stat-gajahmada" class="text-xs text-gray-600 space-y-1"></div>
                 </div>
-                <div class="bg-amber-50 p-4 rounded-lg border border-amber-100 shadow-inner">
-                    <p class="text-xs font-medium text-amber-500 uppercase tracking-wider">Pembagian Chiku</p>
-                    <p id="statChiku" class="text-xs font-medium text-amber-700 mt-1 leading-relaxed">TM:0 | BL:0 | Candi:0<br>Timur:0 | Salatiga:0</p>
+                <div id="box-majapahit" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                    <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Majapahit</h4>
+                    <div id="stat-majapahit" class="text-xs text-gray-600 space-y-1"></div>
                 </div>
-                <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100 shadow-inner">
-                    <p class="text-xs font-medium text-emerald-500 uppercase tracking-wider font-bold">Status Keaktifan</p>
-                    <p id="statStatus" class="text-sm font-semibold text-emerald-700 mt-1">Aktif: 0<br>Tidak Aktif: 0</p>
-                </div>
-                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 shadow-inner">
-                    <p class="text-xs font-medium text-purple-500 uppercase tracking-wider font-bold">Kepemilikan Gohonzon</p>
-                    <p id="statGohonzon" class="text-sm font-semibold text-purple-700 mt-1">Sendiri: 0<br>Keluarga: 0</p>
+                <div id="box-total" class="p-3.5 bg-blue-50 rounded-xl border border-blue-100 shadow-2xs">
+                    <h4 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2 pb-1 border-b border-blue-200">Grand Total Shibu</h4>
+                    <div id="stat-shibu-total" class="text-xs text-gray-700 space-y-1"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-4 border-t border-gray-100">
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-gray-500">Cari Nama / Alamat / Keterangan</label>
-                    <input type="text" id="searchName" oninput="handleFilterChange()" placeholder="Ketik kata kunci pencarian..." class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+        <div id="memberFormContainer" class="bg-white p-6 rounded-xl shadow-sm">
+            <div onclick="toggleAddForm()" class="flex justify-between items-center cursor-pointer select-none">
+                <h2 class="text-lg font-semibold text-gray-800">Tambah Anggota Baru</h2>
+                <span id="collapseIcon" class="text-gray-500 text-sm font-bold bg-gray-100 px-2.5 py-1 rounded-lg transition-transform duration-200">▼ Buka Form</span>
+            </div>
+            
+            <form id="memberForm" onsubmit="saveMember(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 hidden transition-all duration-300">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Nama Lengkap</label>
+                    <input type="text" id="nama" required class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-gray-500">Filter Bagian</label>
-                    <select id="filterBagian" onchange="handleFilterChange()" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Tahun Lahir</label>
+                    <input type="number" id="tahunLahir" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contoh: 1990">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Bagian</label>
+                    <select id="bagian" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Bapak">Bapak</option>
+                        <option value="Ibu">Ibu</option>
+                        <option value="Pemuda">Pemuda</option>
+                        <option value="Pemudi">Pemudi</option>
+                        <option value="Anak">Anak</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Chiku</label>
+                    <select id="chiku" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Tanah Mas">Tanah Mas</option>
+                        <option value="Gajah Mada">Gajah Mada</option>
+                        <option value="Majapahit">Majapahit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Jabatan</label>
+                    <select id="jabatan" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Anggota">Anggota</option>
+                        <option value="Inti">Inti</option>
+                        <option value="Pimpinan">Pimpinan</option>
+                        <option value="Calon">Calon</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Status Keberadaan</label>
+                    <select id="status" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Tidak Aktif">Tidak Aktif</option>
+                        <option value="Luar Kota/LN">Luar Kota/LN</option>
+                        <option value="Meninggal">Meninggal</option>
+                        <option value="Taiten">Taiten</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Gohonzon</label>
+                    <select id="gohonzon" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleFamilyConnector('add')">
+                        <option value="Sendiri">Sendiri (Punya Altar/Kepala)</option>
+                        <option value="Keluarga">Keluarga (Menumpang)</option>
+                        <option value="-">Belum Ada / Non</option>
+                    </select>
+                </div>
+                
+                <div id="familyLinkContainer" class="hidden">
+                    <label class="block text-xs font-medium text-amber-700 mb-1">Menumpang di Hubungan Keluarga Siapa?</label>
+                    <select id="keluargaDari" class="w-full border border-amber-300 bg-amber-50 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Hubungan Keluarga</label>
+                    <input type="text" id="hubungan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Misal: Kepala Keluarga, Istri, Anak ke-1">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">No. Telepon</label>
+                    <input type="text" id="telepon" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Alamat</label>
+                    <input type="text" id="alamat" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan</label>
+                    <input type="text" id="keterangan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="md:col-span-4 flex justify-end gap-2 mt-2">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg text-sm font-medium cursor-pointer transition">
+                        Tambah Anggota
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="filterContainer" class="bg-white p-5 rounded-xl shadow-sm space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
+                    <input type="text" id="searchFilter" oninput="currentPage=1; renderTable();" placeholder="Ketik untuk mencari..." class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Filter Chiku</label>
+                    <select id="chikuFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Chiku</option>
+                        <option value="Tanah Mas">Tanah Mas</option>
+                        <option value="Gajah Mada">Gajah Mada</option>
+                        <option value="Majapahit">Majapahit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Filter Bagian</label>
+                    <select id="bagianFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Semua Bagian</option>
                         <option value="Bapak">Bapak</option>
                         <option value="Ibu">Ibu</option>
@@ -123,243 +179,238 @@
                         <option value="Anak">Anak</option>
                     </select>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-gray-500">Filter Chiku</label>
-                    <select id="filterChiku" onchange="handleFilterChange()" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                        <option value="">Semua Chiku</option>
-                        <option value="Tanah Mas">Tanah Mas</option>
-                        <option value="Bulu">Bulu</option>
-                        <option value="Candi">Candi</option>
-                        <option value="Semarang Timur">Semarang Timur</option>
-                        <option value="Salatiga">Salatiga</option>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Filter Jabatan</label>
+                    <select id="jabatanFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Jabatan</option>
+                        <option value="Pimpinan_Inti">Pimpinan & Inti (Gabungan)</option>
+                        <option value="Pimpinan">Pimpinan</option>
+                        <option value="Inti">Inti</option>
+                        <option value="Anggota">Anggota</option>
+                        <option value="Calon">Calon</option>
                     </select>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-gray-500">Filter Status Keaktifan</label>
-                    <select id="filterStatus" onchange="handleFilterChange()" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Filter Status</label>
+                    <select id="statusFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Semua Status</option>
                         <option value="Aktif">Aktif</option>
                         <option value="Tidak Aktif">Tidak Aktif</option>
+                        <option value="Luar Kota/LN">Luar Kota/LN</option>
+                        <option value="Meninggal">Meninggal</option>
+                        <option value="Taiten">Taiten</option>
                     </select>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-semibold text-gray-500">Bersihkan & Total Tampilan</label>
-                    <div class="flex items-center gap-2 h-full w-full">
-                        <button onclick="resetFilters()" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg text-sm transition-all cursor-pointer text-center">
-                            Clear Filter
-                        </button>
-                        <div class="w-1/2 bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-bold text-center border border-gray-600 shadow-sm" id="filteredCount">
-                            0 / 0
-                        </div>
-                    </div>
-                </div>
+            </div>
+
+            <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-6 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
+                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Calon
+                </label>
+                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Luar Kota/LN
+                </label>
+                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Taiten
+                </label>
+                <label class="inline-flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Meninggal
+                </label>
             </div>
         </div>
 
-        <div id="loadingIndicator" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl flex items-center justify-center gap-3 font-medium shadow-sm transition-all">
-            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span id="loadingText">Sedang mengunduh database terbaru dari Google Sheets... Mohon tunggu...</span>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-            <div class="overflow-x-auto w-full">
-                <table class="w-full text-left border-collapse min-w-[1200px]">
-                    <thead>
-                        <tr class="bg-gray-800 text-white text-xs font-semibold tracking-wider uppercase border-b border-gray-700">
-                            <th class="py-3.5 px-4 text-center w-12">No</th>
-                            <th class="py-3.5 px-4 w-56">Nama Lengkap</th>
-                            <th class="py-3.5 px-4 w-32">Chiku</th>
-                            <th class="py-3.5 px-4 w-20 text-center">Bagian</th>
-                            <th class="py-3.5 px-4 w-24 text-center">Jabatan</th>
-                            <th class="py-3.5 px-4 w-24 text-center">Status</th>
-                            <th class="py-3.5 px-4 w-24 text-center">Gohonzon</th>
-                            <th class="py-3.5 px-4 w-16 text-center">Lahir</th>
-                            <th class="py-3.5 px-4 w-32">Hubungan Keluarga</th>
-                            <th class="py-3.5 px-4 w-36">No Telepon / WA</th>
-                            <th class="py-3.5 px-4 w-72">Alamat Rumah</th>
-                            <th class="py-3.5 px-4">Keterangan</th>
-                            <th class="py-3.5 px-4 text-center w-32 no-print">Aksi Admin</th>
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-semibold text-gray-700">Struktur & Daftar Anggota</h3>
+                <span id="totalData" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">Total: 0 Orang</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-600 border-collapse">
+                    <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 w-12 text-center">No</th>
+                            <th class="px-4 py-3 min-w-[180px]">Nama Anggota</th>
+                            <th class="px-4 py-3">Chiku</th>
+                            <th class="px-4 py-3">Bagian</th>
+                            <th class="px-4 py-3">Jabatan</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Gohonzon</th>
+                            <th class="px-4 py-3">Lahir</th>
+                            <th class="px-4 py-3">Hubungan</th>
+                            <th class="px-4 py-3">Telepon</th>
+                            <th class="px-4 py-3 min-w-[150px]">Alamat</th>
+                            <th class="px-4 py-3 min-w-[150px]">Keterangan</th>
+                            <th class="px-4 py-3 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="memberTableBody" class="text-sm divide-y divide-gray-100">
-                        </tbody>
+                    <tbody id="memberTableBody" class="divide-y divide-gray-100"></tbody>
                 </table>
             </div>
 
-            <div id="paginationPanel" class="no-print bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
-                <div class="text-xs text-gray-500 font-medium">
-                    Menampilkan <span id="pageStart" class="font-bold text-gray-700">0</span> - <span id="pageEnd" class="font-bold text-gray-700">0</span> dari <span id="pageTotalFiltered" class="font-bold text-gray-700">0</span> KK Utama/Mandiri hasil filter
-                </div>
-                <div class="flex items-center gap-1">
-                    <button onclick="changePage(-1)" id="btnPrev" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed">
-                        Sebelumnya
-                    </button>
-                    <div id="pageNumbers" class="flex items-center gap-1">
-                        </div>
-                    <button onclick="changePage(1)" id="btnNext" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed">
-                        Selanjutnya
-                    </button>
-                </div>
+            <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50">
+                <span id="pageInfo" class="text-xs text-gray-500">Menampilkan 0 - 0 dari 0 data</span>
+                <div class="inline-flex rounded-md shadow-xs gap-1" id="paginationButtons"></div>
             </div>
         </div>
-
     </div>
 
-    <div id="memberModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-xs">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-150">
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 id="modalTitle" class="text-lg font-bold text-gray-800">Tambah Anggota Baru</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-semibold focus:outline-none cursor-pointer">&times;</button>
+    <div id="editModal" class="fixed inset-0 bg-black/50 items-center justify-center hidden z-50 p-4">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-100 mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Edit Data Anggota</h2>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl cursor-pointer p-1">&times;</button>
             </div>
-            <div class="p-6 overflow-y-auto space-y-4">
-                <input type="hidden" id="formId">
-                <input type="hidden" id="formParentId">
+            
+            <form id="editMemberForm" onsubmit="saveEditMember(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="hidden" id="editModalIndex">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Nama Lengkap</label>
+                    <input type="text" id="edit_nama" required class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Tahun Lahir</label>
+                    <input type="number" id="edit_tahunLahir" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Bagian</label>
+                    <select id="edit_bagian" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Bapak">Bapak</option>
+                        <option value="Ibu">Ibu</option>
+                        <option value="Pemuda">Pemuda</option>
+                        <option value="Pemudi">Pemudi</option>
+                        <option value="Anak">Anak</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Chiku</label>
+                    <select id="edit_chiku" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Tanah Mas">Tanah Mas</option>
+                        <option value="Gajah Mada">Gajah Mada</option>
+                        <option value="Majapahit">Majapahit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Jabatan</label>
+                    <select id="edit_jabatan" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Anggota">Anggota</option>
+                        <option value="Inti">Inti</option>
+                        <option value="Pimpinan">Pimpinan</option>
+                        <option value="Calon">Calon</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Status Keberadaan</label>
+                    <select id="edit_status" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Tidak Aktif">Tidak Aktif</option>
+                        <option value="Luar Kota/LN">Luar Kota/LN</option>
+                        <option value="Meninggal">Meninggal</option>
+                        <option value="Taiten">Taiten</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Gohonzon</label>
+                    <select id="edit_gohonzon" required class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="toggleFamilyConnector('edit')">
+                        <option value="Sendiri">Sendiri (Punya Altar/Kepala)</option>
+                        <option value="Keluarga">Keluarga (Menumpang)</option>
+                        <option value="-">Belum Ada / Non</option>
+                    </select>
+                </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Nama Lengkap <span class="text-red-500">*</span></label>
-                        <input type="text" id="formNama" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Tahun Lahir</label>
-                        <input type="text" id="formTahunLahir" placeholder="Contoh: 1995 atau -" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
-                    </div>
+                <div id="edit_familyLinkContainer" class="hidden">
+                    <label class="block text-xs font-medium text-amber-700 mb-1">Menumpang di Hubungan Keluarga Siapa?</label>
+                    <select id="edit_keluargaDari" class="w-full border border-amber-300 bg-amber-50 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Bagian <span class="text-red-500">*</span></label>
-                        <select id="formBagian" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                            <option value="Bapak">Bapak</option>
-                            <option value="Ibu">Ibu</option>
-                            <option value="Pemuda">Pemuda</option>
-                            <option value="Pemudi">Pemudi</option>
-                            <option value="Anak">Anak</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Chiku <span class="text-red-500">*</span></label>
-                        <select id="formChiku" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                            <option value="Tanah Mas">Tanah Mas</option>
-                            <option value="Bulu">Bulu</option>
-                            <option value="Candi">Candi</option>
-                            <option value="Semarang Timur">Semarang Timur</option>
-                            <option value="Salatiga">Salatiga</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Jabatan <span class="text-red-500">*</span></label>
-                        <select id="formJabatan" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                            <option value="Anggota">Anggota</option>
-                            <option value="Calon">Calon</option>
-                            <option value="Inti">Inti</option>
-                            <option value="Pimpinan">Pimpinan</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Status <span class="text-red-500">*</span></label>
-                        <select id="formStatus" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Tidak Aktif">Tidak Aktif</option>
-                        </select>
-                    </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Hubungan Keluarga</label>
+                    <input type="text" id="edit_hubungan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Kepemilikan Gohonzon <span class="text-red-500">*</span></label>
-                        <select id="formGohonzon" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white cursor-pointer transition-all">
-                            <option value="Sendiri">Sendiri (Punya KK Sendiri di SGI)</option>
-                            <option value="Keluarga">Keluarga (Ikut KK Orang Lain / Orang Tua)</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Hubungan Hub. Keluarga / KK <span class="text-red-500">*</span></label>
-                        <input type="text" id="formHubungan" placeholder="Contoh: Suami, Istri, Anak ke-1, Mandiri" required class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
-                    </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">No. Telepon</label>
+                    <input type="text" id="edit_telepon" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Nomor Telepon / WA</label>
-                    <input type="text" id="formTelepon" placeholder="Contoh: 08123456789 atau -" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Alamat</label>
+                    <input type="text" id="edit_alamat" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Alamat Rumah Lengkap</label>
-                    <textarea id="formAlamat" rows="2" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all resize-none"></textarea>
+                <div class="md:col-span-4">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Keterangan</label>
+                    <input type="text" id="edit_keterangan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-gray-600 uppercase tracking-wider">Keterangan Tambahan</label>
-                    <input type="text" id="formKeterangan" placeholder="Isi - jika tidak ada" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                <div class="md:col-span-4 flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
+                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg text-sm font-medium cursor-pointer transition">
+                        Batal
+                    </button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg text-sm font-medium cursor-pointer transition">
+                        Simpan Perubahan
+                    </button>
                 </div>
-            </div>
-            <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-2 bg-gray-50">
-                <button onclick="closeModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg text-sm transition-all cursor-pointer">Batal</button>
-                <button onclick="submitForm()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-all cursor-pointer">Simpan Perubahan</button>
-            </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // ========================================================
-        // KONEKSI WEB API GOOGLE SHEETS (REPLACE REKAYASA GITHUB)
-        // ========================================================
+        // 1. Inisialisasi awal (Tetap biarkan bawaan asli Anda)
+        let members = [];
+        let currentPage = 1;
+        const rowsPerPage = 15;
+
+        // =========================================================================
+        // URL KONEKSI GOOGLE SHEETS & KEY (Silakan sesuaikan jika URL berbeda)
+        // =========================================================================
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
         const SECRET_KEY = "SokaSemarang2026"; 
 
-        // VARIABEL STATE GLOBAL UTAMA
-        let allMembers = [];
-        let currentPage = 1;
-        const rowsPerPage = 10; // Tetap menggunakan 10 Kepala Keluarga per halaman sesuai pagination asli
+        // 2. KODE AUTOLOAD BARU: Mengambil database realtime langsung dari Google Sheets
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch(APPS_SCRIPT_URL) 
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Gagal menerima respons dari Google Sheets Cloud.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        members = data;
+                        // Simpan ke localstorage sebagai backup internal sistem Anda
+                        localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+                        renderTable();   // Gambar ulang tabel menggunakan fungsi render asli Anda
+                        console.log("Sukses sinkronisasi data langsung dari Google Sheets Cloud!");
+                    }
+                })
+                .catch(error => {
+                    console.warn("Gagal mengambil data cloud, mencoba backup lokal:", error.message);
+                    // JIKA cloud gagal diakses, gunakan backup localstorage agar web tidak blank
+                    members = JSON.parse(localStorage.getItem('shibuMembersTree')) || [];
+                    renderTable();
+                });
+        });
 
-        // ASISTEN INDIKATOR PROSES LOADING
-        function showLoading(msg) {
-            if(msg) document.getElementById('loadingText').innerText = msg;
-            document.getElementById('loadingIndicator').classList.remove('hidden');
-        }
-        function hideLoading() {
-            document.getElementById('loadingIndicator').classList.add('hidden');
-        }
+        // 3. KODE SIMPAN BARU: Menyinkronkan seluruh perubahan data langsung ke Google Sheets
+        async function saveToGitHubWorkflow() {
+            // Catatan: Nama fungsi tetap disamakan agar Anda tidak perlu mengubah tag <button> di HTML Anda.
 
-        // 1. INPUT/OUTPUT: MEMBACA CLOUD DATA DARI GOOGLE SHEETS
-        async function loadData() {
-            showLoading("Sedang mengunduh database terbaru dari Google Sheets... Mohon tunggu...");
-            try {
-                const response = await fetch(APPS_SCRIPT_URL);
-                if (!response.ok) throw new Error("Gagal menerima respons balik dari server Google Apps Script.");
-                
-                allMembers = await response.json();
-                
-                // Safety net pencegahan tipe abnormal
-                if (!Array.isArray(allMembers)) {
-                    allMembers = [];
-                }
-                
-                currentPage = 1;
-                renderTable();
-            } catch (error) {
-                console.error(error);
-                alert("Sistem gagal memuat data anggota cloud: " + error.message);
-                allMembers = [];
-                renderTable();
-            } finally {
-                hideLoading();
+            if (!members || members.length === 0) {
+                alert("Tidak ada data untuk disimpan.");
+                return;
             }
-        }
 
-        // Pemicu otomatis begitu berkas admin selesai termuat di web browser
-        window.addEventListener('DOMContentLoaded', loadData);
+            // Mengubah tombol menjadi status loading (menggunakan logika asli Anda)
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Menyimpan ke Google Sheets...";
+            btn.disabled = true;
 
-        // 2. INPUT/OUTPUT: MENYIMPAN MATRIKS PERUBAHAN KE CLOUD GOOGLE SHEETS
-        async function saveDataToGitHub() { 
-            // Nama fungsi dibiarkan 'saveDataToGitHub' agar tombol layout asli tidak patah
-            showLoading("Sedang menyinkronkan seluruh perubahan data ke Google Sheets... Jangan tutup browser...");
-            
             try {
+                // Kirim data terupdate ke Google Apps Script menggunakan metode POST
                 const response = await fetch(`${APPS_SCRIPT_URL}?token=${SECRET_KEY}`, {
                     method: "POST",
                     mode: "cors",
@@ -368,453 +419,787 @@
                     },
                     body: JSON.stringify({
                         action: "saveAll",
-                        data: allMembers
+                        data: members
                     })
                 });
 
+                if (!response.ok) throw new Error("Server Google Sheets tidak merespons dengan baik.");
+
                 const result = await response.json();
-                
                 if (result.status === "success") {
-                    alert("Sukses! Semua penyesuaian data anggota telah terkunci aman di dalam file Google Sheets.");
+                    alert("Mantap! Semua penyesuaian data anggota sukses disimpan langsung ke Google Sheets Cloud.");
                 } else {
-                    alert("Akses ditolak server Google: " + result.message);
+                    alert("Gagal menyimpan: " + (result.message || "Akses ditolak cloud."));
                 }
             } catch (error) {
-                console.error(error);
-                alert("Terjadi masalah kegagalan transmisi jaringan saat mencoba mengunci database.");
+                console.error("Error Google Sheets API:", error);
+                alert("Terjadi kesalahan koneksi atau jaringan saat mencoba menyimpan ke Google Sheets.");
             } finally {
-                hideLoading();
+                // Mengembalikan tombol ke tampilan semula
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+        
+        function toggleAddForm() {
+            const form = document.getElementById('memberForm');
+            const icon = document.getElementById('collapseIcon');
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                icon.innerText = '▲ Tutup Form';
+            } else {
+                form.classList.add('hidden');
+                icon.innerText = '▼ Buka Form';
             }
         }
 
-        // FUNGSI KOMPUTASI KOTAK STATISTIK ASLI (PRESERVED)
-        function updateStats() {
-            document.getElementById('statTotal').innerText = allMembers.length;
+        function updateStatistics() {
+            const createStatStructure = () => ({
+                bapak: 0, ibu: 0, pemuda: 0, pemudi: 0, anak: 0, total: 0,
+                pimpinan: 0, inti: 0, anggota: 0,
+                tidakaktif: 0, luarkota: 0, calon: 0, taiten: 0, meninggal: 0
+            });
+            
+            let stats = {
+                'Tanah Mas': createStatStructure(),
+                'Gajah Mada': createStatStructure(),
+                'Majapahit': createStatStructure()
+            };
+            let grandTotalShibu = createStatStructure();
 
-            let bapak = 0, ibu = 0, pemuda = 0, pemudi = 0, anak = 0;
-            let tm = 0, bulu = 0, candi = 0, timur = 0, salatiga = 0;
-            let aktif = 0, tAktif = 0;
-            let sendiri = 0, keluarga = 0;
+            const activeFilteredData = members; 
 
-            allMembers.forEach(m => {
-                if(m.bagian === 'Bapak') bapak++;
-                else if(m.bagian === 'Ibu') ibu++;
-                else if(m.bagian === 'Pemuda') pemuda++;
-                else if(m.bagian === 'Pemudi') pemudi++;
-                else if(m.bagian === 'Anak') anak++;
+            activeFilteredData.forEach(m => {
+                const bagianKey = m.bagian ? m.bagian.toLowerCase() : '';
+                const chikuKey = m.chiku;
+                const jabatanKey = m.jabatan ? m.jabatan.toLowerCase() : '';
+                const statusKey = m.status ? m.status.toLowerCase() : 'aktif';
 
-                if(m.chiku === 'Tanah Mas') tm++;
-                else if(m.chiku === 'Bulu') bulu++;
-                else if(m.chiku === 'Candi') candi++;
-                else if(m.chiku === 'Semarang Timur') timur++;
-                else if(m.chiku === 'Salatiga') salatiga++;
+                let currentChiku = stats[chikuKey];
 
-                if(m.status === 'Aktif') aktif++;
-                else tAktif++;
+                const processMetrics = (targetObj) => {
+                    const isTidakAktif = (statusKey === 'tidak aktif');
+                    const isLuarKotaAtauLN = (statusKey === 'luar kota/ln');
+                    const isCalon = (jabatanKey === 'calon');
+                    const isTaiten = (statusKey === 'taiten');
+                    const isMeninggal = (statusKey === 'meninggal');
+                    
+                    const isKondisiKhusus = (isTidakAktif || isLuarKotaAtauLN || isTaiten || isMeninggal || isCalon);
 
-                if(m.gohonzon === 'Sendiri') sendiri++;
-                else keluarga++;
+                    if (isTidakAktif) targetObj.tidakaktif++;
+                    if (isLuarKotaAtauLN) targetObj.luarkota++;
+                    if (isCalon) targetObj.calon++;
+                    if (isTaiten) targetObj.taiten++;
+                    if (isMeninggal) targetObj.meninggal++;
+
+                    if (!isKondisiKhusus) {
+                        if (targetObj.hasOwnProperty(bagianKey)) {
+                            targetObj[bagianKey]++;
+                            targetObj.total++;
+                        }
+                        if (jabatanKey === 'pimpinan') targetObj.pimpinan++;
+                        if (jabatanKey === 'inti') targetObj.inti++;
+                        if (jabatanKey === 'anggota') targetObj.anggota++;
+                    } else {
+                        if (jabatanKey === 'pimpinan') targetObj.pimpinan++;
+                        if (jabatanKey === 'inti') targetObj.inti++;
+                    }
+                };
+
+                if (currentChiku) processMetrics(currentChiku);
+                processMetrics(grandTotalShibu);
             });
 
-            document.getElementById('statBagian').innerHTML = `B:${bapak} | I:${ibu} | P:${pemuda}<br>W:${pemudi} | A:${anak}`;
-            document.getElementById('statChiku').innerHTML = `TM:${tm} | BL:${bulu} | Candi:${candi}<br>Timur:${timur} | Salatiga:${salatiga}`;
-            document.getElementById('statStatus').innerHTML = `Aktif: ${aktif}<br>Tidak Aktif: ${tAktif}`;
-            document.getElementById('statGohonzon').innerHTML = `Sendiri: ${sendiri}<br>Keluarga: ${keluarga}`;
+            const renderBoxHTML = (obj, isGrandTotal = false) => {
+                const borderStyle = isGrandTotal ? 'border-blue-200' : 'border-purple-200/60';
+                const textStyle = isGrandTotal ? 'text-blue-900' : 'text-purple-900';
+                return `
+                    <div class="space-y-0.5">
+                        <div class="flex justify-between"><span>Bapak: ${obj.bapak}</span> <span>Ibu: ${obj.ibu}</span></div>
+                        <div class="flex justify-between"><span>Pemuda: ${obj.pemuda}</span> <span>Pemudi: ${obj.pemudi}</span></div>
+                        <div class="flex justify-between"><span>Anak: ${obj.anak}</span></div>
+                        <div class="flex justify-between font-bold border-t ${borderStyle} mt-1 pt-0.5 ${textStyle}">
+                            <span>TOTAL AKTIF:</span> <span>${obj.total} Org</span>
+                        </div>
+                    </div>
+                    <div class="border-t ${borderStyle} mt-1.5 pt-1 space-y-0.5 text-gray-700">
+                        <div class="flex justify-between"><span>Pimpinan:</span> <span class="font-semibold">${obj.pimpinan}</span></div>
+                        <div class="flex justify-between"><span>Inti:</span> <span class="font-semibold">${obj.inti}</span></div>
+                        <div class="flex justify-between"><span>Anggota:</span> <span class="font-semibold text-blue-600">${obj.anggota}</span></div>
+                    </div>
+                    <div class="border-t ${borderStyle} mt-1.5 pt-1 space-y-0.5 text-[11px]">
+                        <div class="flex justify-between text-rose-700"><span>Tidak Aktif: ${obj.tidakaktif}</span> <span class="text-indigo-600">Luar Kota/LN: ${obj.luarkota}</span></div>
+                        <div class="flex justify-between text-teal-700"><span>Calon: ${obj.calon}</span> <span class="text-amber-700">Taiten: ${obj.taiten}</span></div>
+                        <div class="flex justify-between text-red-600"><span>Meninggal:</span> <span class="font-semibold">${obj.meninggal}</span></div>
+                    </div>
+                `;
+            };
+
+            document.getElementById('stat-tanahmas').innerHTML = renderBoxHTML(stats['Tanah Mas'], false);
+            document.getElementById('stat-gajahmada').innerHTML = renderBoxHTML(stats['Gajah Mada'], false);
+            document.getElementById('stat-majapahit').innerHTML = renderBoxHTML(stats['Majapahit'], false);
+            document.getElementById('stat-shibu-total').innerHTML = renderBoxHTML(grandTotalShibu, true);
         }
 
-        // LOGIKA FILTER DAN SUSUNAN HIRARKI POHON JAVASCRIPT ASLI
-        function handleFilterChange() {
-            currentPage = 1;
+        // REVISI LOGIKA: Membuka drop-down untuk semua orang yang bertindak sebagai Mandiri / Kepala Grup (tidak punya parentId)
+        function toggleFamilyConnector(type) {
+            const suffix = type === 'edit' ? 'edit_' : '';
+            const gohonzonValue = document.getElementById(suffix + 'gohonzon').value;
+            const container = document.getElementById(suffix + 'familyLinkContainer');
+            const selectLink = document.getElementById(suffix + 'keluargaDari');
+            const currentModalIndex = type === 'edit' ? document.getElementById('editModalIndex').value : null;
+
+            if (gohonzonValue === 'Keluarga') {
+                container.classList.remove('hidden');
+                selectLink.innerHTML = '<option value="">-- Pilih Kepala Urusan Rumah/Suami --</option>';
+                
+                members.forEach((m, idx) => {
+                    // Mencegah memilih diri sendiri saat mode edit
+                    if (type === 'edit' && parseInt(currentModalIndex) === idx) return;
+                    
+                    // Siapa pun yang tidak menumpang ke orang lain (parentId kosong) bisa dijadikan tujuan menumpang
+                    if (!m.parentId) {
+                        selectLink.innerHTML += `<option value="${m.id}">${m.nama} (${m.chiku} - Hub: ${m.hubungan || '-'})</option>`;
+                    }
+                });
+            } else {
+                container.classList.add('hidden');
+                selectLink.innerHTML = '';
+            }
+        }
+
+        function saveMember(e) {
+            e.preventDefault();
+            const gohonzonVal = document.getElementById('gohonzon').value;
+            const keluargaDariVal = document.getElementById('keluargaDari').value;
+
+            const memberData = {
+                id: "ID-" + Date.now(),
+                nama: document.getElementById('nama').value,
+                tahunLahir: document.getElementById('tahunLahir').value || '-',
+                bagian: document.getElementById('bagian').value,
+                chiku: document.getElementById('chiku').value,
+                jabatan: document.getElementById('jabatan').value,
+                status: document.getElementById('status').value,
+                gohonzon: gohonzonVal,
+                parentId: gohonzonVal === 'Keluarga' ? keluargaDariVal : null,
+                hubungan: document.getElementById('hubungan').value || '-',
+                telepon: document.getElementById('telepon').value || '-',
+                alamat: document.getElementById('alamat').value || '-',
+                keterangan: document.getElementById('keterangan').value || '-'
+            };
+
+            members.push(memberData);
+            updateStorage();
+            document.getElementById('memberForm').reset();
+            toggleFamilyConnector('add');
             renderTable();
+        }
+
+        function editMember(globalIndex) {
+            const member = members[globalIndex];
+            document.getElementById('editModalIndex').value = globalIndex;
+            document.getElementById('edit_nama').value = member.nama;
+            document.getElementById('edit_tahunLahir').value = member.tahunLahir === '-' ? '' : member.tahunLahir;
+            document.getElementById('edit_bagian').value = member.bagian;
+            document.getElementById('edit_chiku').value = member.chiku;
+            document.getElementById('edit_jabatan').value = member.jabatan || 'Anggota';
+            document.getElementById('edit_status').value = member.status || 'Aktif';
+            document.getElementById('edit_gohonzon').value = member.gohonzon;
+            
+            toggleFamilyConnector('edit');
+            if (member.gohonzon === 'Keluarga') {
+                document.getElementById('edit_keluargaDari').value = member.parentId || '';
+            }
+
+            document.getElementById('edit_hubungan').value = member.hubungan === '-' ? '' : member.hubungan;
+            document.getElementById('edit_telepon').value = member.telepon === '-' ? '' : member.telepon;
+            document.getElementById('edit_alamat').value = member.alamat === '-' ? '' : member.alamat;
+            document.getElementById('edit_keterangan').value = member.keterangan === '-' ? '' : member.keterangan;
+
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('editMemberForm').reset();
+        }
+
+        function saveEditMember(e) {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('editModalIndex').value);
+            const gohonzonVal = document.getElementById('edit_gohonzon').value;
+            const keluargaDariVal = document.getElementById('edit_keluargaDari').value;
+
+            members[idx] = {
+                id: members[idx].id,
+                nama: document.getElementById('edit_nama').value,
+                tahunLahir: document.getElementById('edit_tahunLahir').value || '-',
+                bagian: document.getElementById('edit_bagian').value,
+                chiku: document.getElementById('edit_chiku').value,
+                jabatan: document.getElementById('edit_jabatan').value,
+                status: document.getElementById('edit_status').value,
+                gohonzon: gohonzonVal,
+                parentId: gohonzonVal === 'Keluarga' ? keluargaDariVal : null,
+                hubungan: document.getElementById('edit_hubungan').value || '-',
+                telepon: document.getElementById('edit_telepon').value || '-',
+                alamat: document.getElementById('edit_alamat').value || '-',
+                keterangan: document.getElementById('edit_keterangan').value || '-'
+            };
+
+            updateStorage();
+            closeEditModal();
+            renderTable();
+        }
+
+        function buildStructuredData(isForStatsCompute = false) {
+            const searchKeyword = document.getElementById('searchFilter').value.toLowerCase();
+            const chikuFilter = document.getElementById('chikuFilter').value;
+            const bagianFilter = document.getElementById('bagianFilter').value;
+            const jabatanFilter = document.getElementById('jabatanFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const showCalon = document.getElementById('showCalon').checked;
+            const showLuarKota = document.getElementById('showLuarKota').checked;
+            const showTaiten = document.getElementById('showTaiten').checked;
+            const showMeninggal = document.getElementById('showMeninggal').checked;
+
+            let filteredRaw = members.filter(m => {
+                const currentJabatan = m.jabatan || 'Anggota';
+                const currentStatus = m.status || 'Aktif';
+
+                if (!isForStatsCompute) {
+                    if (!showCalon && currentJabatan.toLowerCase() === 'calon') return false;
+                    if (!showLuarKota && currentStatus.toLowerCase() === 'luar kota/ln') return false;
+                    if (!showTaiten && currentStatus.toLowerCase() === 'taiten') return false;
+                    if (!showMeninggal && currentStatus.toLowerCase() === 'meninggal') return false;
+                }
+
+                const matchSearch = m.nama.toLowerCase().includes(searchKeyword) || 
+                                    m.alamat.toLowerCase().includes(searchKeyword) || 
+                                    m.keterangan.toLowerCase().includes(searchKeyword);
+                const matchChiku = chikuFilter === "" || m.chiku === chikuFilter;
+                const matchBagian = bagianFilter === "" || m.bagian === bagianFilter;
+                
+                let matchJabatan = false;
+                if (jabatanFilter === "") {
+                    matchJabatan = true;
+                } else if (jabatanFilter === "Pimpinan_Inti") {
+                    matchJabatan = currentJabatan === "Pimpinan" || currentJabatan === "Inti";
+                } else {
+                    matchJabatan = currentJabatan === jabatanFilter;
+                }
+
+                const matchStatus = statusFilter === "" || currentStatus === statusFilter;
+                return matchSearch && matchChiku && matchBagian && matchJabatan && matchStatus;
+            });
+
+            filteredRaw.sort((a, b) => {
+                const ketA = a.keterangan.toLowerCase();
+                const ketB = b.keterangan.toLowerCase();
+                const jabA = a.jabatan || 'Anggota';
+                const jabB = b.jabatan || 'Anggota';
+
+                function getHierarchyScore(member, jabatan, ket) {
+    if (jabatan === 'Pimpinan') {
+        const isShibu = ket.includes('shibu');
+        const isChiku = ket.includes('chiku');
+        const isWakil = ket.includes('wakil');
+        const hasWordIbu = /\bibu\b/.test(ket);
+        
+        // Memisahkan Sayap Utama (Bapak/Ibu) dengan Sayap Muda (Pemuda/Pemudi)
+        const isSayapUtama = ket.includes('bapak') || hasWordIbu;
+        const isSayapMuda = ket.includes('pemuda') || ket.includes('pemudi');
+
+        if (isShibu) {
+            if (!isSayapUtama && !isSayapMuda) {
+                if (isWakil) return 190; // Wakil Ketua Shibu Utama
+                return 200;              // Ketua Shibu Utama
+            }
+            if (isSayapUtama) {
+                if (isWakil) return 180; // Wakil Bapak/Ibu Shibu (Agus Kurniadi akan dapat nilai ini)
+                return 185;              // Ketua Bapak/Ibu Shibu
+            }
+            if (isSayapMuda) {
+                if (isWakil) return 165; // Wakil Pemuda/Pemudi Shibu (Andreas akan turun ke nilai ini)
+                return 170;              // Ketua Pemuda/Pemudi Shibu
+            }
+        }
+        
+        if (isChiku) {
+            if (!isSayapUtama && !isSayapMuda) {
+                if (isWakil) return 155;
+                return 160;
+            }
+            if (isSayapUtama) {
+                if (isWakil) return 145;
+                return 150;
+            }
+            if (isSayapMuda) {
+                if (isWakil) return 130;
+                return 135;
+            }
+        }
+        return 120; 
+    }
+    if (jabatan === 'Inti') return 10;
+    if (jabatan === 'Anggota') return 5;
+    return 1; 
+}
+
+                const scoreA = getHierarchyScore(a, jabA, ketA);
+                const scoreB = getHierarchyScore(b, jabB, ketB);
+
+                if (scoreA !== scoreB) return scoreB - scoreA;
+                if (a.chiku !== b.chiku) return a.chiku.localeCompare(b.chiku);
+                return a.nama.localeCompare(b.nama);
+            });
+
+            // REVISI STRUKTUR HIRARKI: Head members adalah mereka yang TIDAK MENUMPANG ke siapa-siapa (tidak peduli isi status Gohonzon-nya)
+            // ==================== KODE BARU (SILAKAN REPLACE) ====================
+let finalOrderedList = [];
+let headMembers = filteredRaw.filter(m => !m.parentId);
+
+// Pembantu fungsi bobot hierarki hubungan dalam keluarga
+const getFamilyPriority = (hubungan) => {
+    if (!hubungan) return 99;
+    const hubLower = hubungan.toLowerCase();
+    
+    // Suami atau Istri mendapat prioritas utama tepat di bawah kepala keluarga
+    if (hubLower === 'suami' || hubLower === 'istri') return 1;
+    if (hubLower.includes('anak')) return 2;
+    if (hubLower.includes('cucu')) return 3;
+    return 4; // Lainnya
+};
+
+headMembers.forEach(head => {
+    head.isChildRender = false;
+    finalOrderedList.push(head);
+
+    // Ambil data anggota keluarga inti
+    let familyMembers = filteredRaw.filter(m => m.parentId === head.id);
+    
+    // URUTKAN: Pasangan (Suami/Istri) naik ke atas sebelum Anak-anak
+    familyMembers.sort((a, b) => {
+        const scoreA = getFamilyPriority(a.hubungan);
+        const scoreB = getFamilyPriority(b.hubungan);
+        
+        if (scoreA !== scoreB) {
+            return scoreA - scoreB;
+        }
+        // Jika sama-sama anak (Anak ke-1, Anak ke-2), urutkan secara alfabetis/angka agar rapi
+        return a.hubungan.localeCompare(b.hubungan, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    // Masukkan ke daftar tampilan setelah diurutkan
+    familyMembers.forEach(child => {
+        child.isChildRender = true;
+        finalOrderedList.push(child);
+    });
+});
+
+            filteredRaw.forEach(m => {
+                if (!finalOrderedList.find(x => x.id === m.id)) {
+                    m.isChildRender = false;
+                    finalOrderedList.push(m);
+                }
+            });
+
+            return finalOrderedList;
         }
 
         function renderTable() {
-            updateStats();
+            updateStatistics();
 
-            const searchKeyword = document.getElementById('searchName').value.toLowerCase().trim();
-            const filterBagian = document.getElementById('filterBagian').value;
-            const filterChiku = document.getElementById('filterChiku').value;
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            // Pisahkan silsilah Root Parent (Kepala Keluarga / Mandiri)
-            const parents = allMembers.filter(m => !m.parentId);
-            
-            // Evaluasi filter terhadap Kepala Keluarga
-            const filteredParents = parents.filter(p => {
-                const matchesSearch = !searchKeyword || 
-                                      p.nama.toLowerCase().includes(searchKeyword) || 
-                                      (p.alamat && p.alamat.toLowerCase().includes(searchKeyword)) ||
-                                      (p.keterangan && p.keterangan.toLowerCase().includes(searchKeyword));
-                const matchesBagian = !filterBagian || p.bagian === filterBagian;
-                const matchesChiku = !filterChiku || p.chiku === filterChiku;
-                const matchesStatus = !filterStatus || p.status === filterStatus;
-
-                // Jika Kepala Keluarga tidak cocok, periksa apakah ada Anggota Keluarga di bawahnya yang cocok
-                if (!(matchesSearch && matchesBagian && matchesChiku && matchesStatus)) {
-                    const children = allMembers.filter(m => m.parentId === p.id);
-                    return children.some(c => {
-                        const cSearch = !searchKeyword || 
-                                        c.nama.toLowerCase().includes(searchKeyword) || 
-                                        (c.alamat && c.alamat.toLowerCase().includes(searchKeyword)) ||
-                                        (c.keterangan && c.keterangan.toLowerCase().includes(searchKeyword));
-                        const cBagian = !filterBagian || c.bagian === filterBagian;
-                        const cChiku = !filterChiku || c.chiku === filterChiku;
-                        const cStatus = !filterStatus || c.status === filterStatus;
-                        return cSearch && cBagian && cChiku && cStatus;
-                    });
-                }
-                return true;
-            });
-
-            const totalFilteredParents = filteredParents.length;
-            document.getElementById('filteredCount').innerText = `${totalFilteredParents} / ${parents.length}`;
-
-            // KOMPUTASI PAGINATION HALAMAN ASLI
-            const totalPages = Math.ceil(totalFilteredParents / rowsPerPage) || 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = Math.min(startIndex + rowsPerPage, totalFilteredParents);
-
-            document.getElementById('pageStart').innerText = totalFilteredParents === 0 ? 0 : startIndex + 1;
-            document.getElementById('pageEnd').innerText = endIndex;
-            document.getElementById('pageTotalFiltered').innerText = totalFilteredParents;
-
-            // RENDER BLOK NOMOR HALAMAN PAGINATION ASLI
-            const pageNumbersDiv = document.getElementById('pageNumbers');
-            pageNumbersDiv.innerHTML = '';
-            
-            for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.innerText = i;
-                btn.onclick = () => { currentPage = i; renderTable(); };
-                if (i === currentPage) {
-                    btn.className = "bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs";
-                } else {
-                    btn.className = "bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-gray-50 transition-all shadow-2xs cursor-pointer";
-                }
-                pageNumbersDiv.appendChild(btn);
-            }
-
-            document.getElementById('btnPrev').disabled = currentPage === 1;
-            document.getElementById('btnNext').disabled = currentPage === totalPages;
-
-            // PROSES INJEKSI DATA KE BADAN TABEL HTML ASLI
             const tbody = document.getElementById('memberTableBody');
             tbody.innerHTML = '';
 
-            if (totalFilteredParents === 0) {
-                tbody.innerHTML = `<tr><td colspan="13" class="py-8 text-center text-gray-400 font-medium bg-gray-50/50">Tidak ada baris data anggota yang cocok dengan filter pencarian Anda.</td></tr>`;
+            const processedData = buildStructuredData(false);
+            document.getElementById('totalData').innerText = `Total Hasil: ${processedData.length} Records`;
+
+            if (processedData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="13" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
+                document.getElementById('pageInfo').innerText = "Menampilkan 0 - 0 dari 0 data";
+                document.getElementById('paginationButtons').innerHTML = '';
                 return;
             }
 
-            const parentsToShow = filteredParents.slice(startIndex, startIndex + rowsPerPage);
-            let globalNumber = startIndex + 1;
+            const totalPages = Math.ceil(processedData.length / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
 
-            parentsToShow.forEach(parent => {
-                // Render baris Kepala Keluarga Utama
-                renderRow(parent, globalNumber++, false, tbody);
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, processedData.length);
+            const paginatedItems = processedData.slice(startIndex, endIndex);
 
-                // Tarik dan urutkan anak buah di dalam lingkup KK tersebut
-                const children = allMembers.filter(m => m.parentId === parent.id);
-                children.forEach(child => {
-                    renderRow(child, "", true, tbody);
-                });
+            paginatedItems.forEach((member, index) => {
+                const globalIndex = members.findIndex(m => m.id === member.id);
+                const row = document.createElement('tr');
+                
+                if (member.isChildRender) {
+                    row.className = "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600";
+                } else {
+                    row.className = "bg-white hover:bg-gray-50 transition font-medium";
+                }
+
+                const currentJabatan = member.jabatan || 'Anggota';
+                const currentStatus = member.status || 'Aktif';
+
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center">
+                            ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}
+                            <span class="${member.isChildRender ? 'text-gray-700 font-normal' : 'text-gray-900 font-bold'}">${member.nama}</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">${member.chiku}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span></td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-0.5 rounded text-xs font-medium ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                            ${member.gohonzon}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">${member.tahunLahir}</td>
+                    <td class="px-4 py-3 text-xs ${member.isChildRender ? 'text-amber-800 font-medium' : ''}">${member.hubungan}</td>
+                    <td class="px-4 py-3 text-xs">${member.telepon}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.alamat}">${member.alamat}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.keterangan}">${member.keterangan}</td>
+                    <td class="px-4 py-3 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="editMember(${globalIndex})" class="text-blue-600 hover:text-blue-900 font-medium text-xs px-2 py-1 rounded border border-blue-200 hover:bg-blue-50 cursor-pointer">Edit</button>
+                        <button onclick="deleteMember(${globalIndex})" class="text-red-600 hover:text-red-900 font-medium text-xs px-2 py-1 rounded border border-red-200 hover:bg-red-50 cursor-pointer">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
             });
+
+            document.getElementById('pageInfo').innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
+            renderPaginationControls(totalPages);
         }
 
-        function renderRow(member, displayNo, isChild, tbody) {
-            const rowClass = isChild 
-                ? "bg-gray-50/60 hover:bg-gray-100/80 transition-colors" 
-                : "bg-white hover:bg-gray-50/80 font-semibold text-gray-900 border-t-2 border-gray-200 transition-colors";
-
-            const nameContent = isChild
-                ? `<div class="flex items-center gap-2 pl-4 text-gray-600 font-normal">
-                    <svg class="h-3.5 w-3.5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    <span>${member.nama}</span>
-                   </div>`
-                : `<div class="text-blue-900 font-bold">${member.nama}</div>`;
-
-            let bagianColor = "bg-gray-100 text-gray-800";
-            if(member.bagian === 'Bapak') bagianColor = "bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-sm font-medium";
-            else if(member.bagian === 'Ibu') bagianColor = "bg-rose-100 text-rose-800 text-xs px-2.5 py-0.5 rounded-sm font-medium";
-            else if(member.bagian === 'Pemuda') bagianColor = "bg-cyan-100 text-cyan-800 text-xs px-2.5 py-0.5 rounded-sm font-medium";
-            else if(member.bagian === 'Pemudi') bagianColor = "bg-purple-100 text-purple-800 text-xs px-2.5 py-0.5 rounded-sm font-medium";
-            else if(member.bagian === 'Anak') bagianColor = "bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-sm font-medium";
-
-            const statusColor = member.status === 'Aktif' 
-                ? "bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold" 
-                : "bg-gray-200 text-gray-600 text-xs px-2.5 py-0.5 rounded-full font-normal";
-
-            const tr = document.createElement('tr');
-            tr.className = rowClass;
-            tr.innerHTML = `
-                <td class="py-3.5 px-4 text-center text-xs font-medium text-gray-400">${displayNo}</td>
-                <td class="py-3.5 px-4">${nameContent}</td>
-                <td class="py-3.5 px-4 text-gray-600 font-medium">${member.chiku}</td>
-                <td class="py-3.5 px-4 text-center"><span class="${bagianColor}">${member.bagian}</span></td>
-                <td class="py-3.5 px-4 text-center text-xs font-medium text-gray-500">${member.jabatan}</td>
-                <td class="py-3.5 px-4 text-center"><span class="${statusColor}">${member.status}</span></td>
-                <td class="py-3.5 px-4 text-center text-xs text-gray-600 font-medium">${member.gohonzon}</td>
-                <td class="py-3.5 px-4 text-center text-xs text-gray-500">${member.tahunLahir || '-'}</td>
-                <td class="py-3.5 px-4 text-xs ${isChild ? 'text-gray-500 font-normal' : 'text-blue-700 font-bold'}">${member.hubungan}</td>
-                <td class="py-3.5 px-4 text-xs font-mono text-gray-600">${member.telepon || '-'}</td>
-                <td class="py-3.5 px-4 text-xs text-gray-500 max-w-xs truncate" title="${member.alamat || ''}">${member.alamat || '-'}</td>
-                <td class="py-3.5 px-4 text-xs text-gray-400 max-w-xs truncate" title="${member.keterangan || ''}">${member.keterangan || '-'}</td>
-                <td class="py-3.5 px-4 text-center no-print">
-                    <div class="flex items-center justify-center gap-1">
-                        <button onclick="editMember('${member.id}')" class="text-blue-600 hover:text-blue-800 text-xs font-semibold px-2 py-1 bg-blue-50 border border-blue-200 hover:border-blue-300 rounded-md transition-colors cursor-pointer">Edit</button>
-                        ${!isChild ? `<button onclick="addChild('${member.id}')" class="text-emerald-600 hover:text-emerald-800 text-xs font-semibold px-2 py-1 bg-emerald-50 border border-emerald-200 hover:border-emerald-300 rounded-md transition-colors cursor-pointer">+Anak</button>` : ''}
-                        <button onclick="deleteMember('${member.id}')" class="text-red-500 hover:text-red-700 text-xs font-semibold px-2 py-1 bg-red-50 border border-red-100 hover:border-red-200 rounded-md transition-colors cursor-pointer">Hapus</button>
-                    </div>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        // KENDALI PAGINATION INTERAKTIF
-        function changePage(direction) {
-            currentPage += direction;
-            renderTable();
-        }
-
-        function resetFilters() {
-            document.getElementById('searchName').value = '';
-            document.getElementById('filterBagian').value = '';
-            document.getElementById('filterChiku').value = '';
-            document.getElementById('filterStatus').value = '';
-            currentPage = 1;
-            renderTable();
-        }
-
-        // MANAJEMEN POPUP MODAL FORM DATA ASLI
-        function openModal(title = "Tambah KK Baru / Anggota Mandiri") {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('memberModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('memberModal').classList.add('hidden');
-            document.getElementById('formId').value = '';
-            document.getElementById('formParentId').value = '';
-            document.getElementById('formNama').value = '';
-            document.getElementById('formTahunLahir').value = '';
-            document.getElementById('formHubungan').value = '';
-            document.getElementById('formTelepon').value = '';
-            document.getElementById('formAlamat').value = '';
-            document.getElementById('formKeterangan').value = '';
-            document.getElementById('formBagian').value = 'Bapak';
-            document.getElementById('formChiku').value = 'Tanah Mas';
-            document.getElementById('formJabatan').value = 'Anggota';
-            document.getElementById('formStatus').value = 'Aktif';
-            document.getElementById('formGohonzon').value = 'Sendiri';
-        }
-
-        // AKSI INTERAKSI ADMIN: MENAMBAH STRUKTUR ANAK CABANG KK (CHILD)
-        function addChild(parentId) {
-            closeModal();
-            const parent = allMembers.find(m => m.id === parentId);
-            document.getElementById('formParentId').value = parentId;
-            
-            if(parent) {
-                document.getElementById('formChiku').value = parent.chiku;
-                document.getElementById('formAlamat').value = parent.alamat || '';
+        function renderPaginationControls(totalPages) {
+            const container = document.getElementById('paginationButtons');
+            container.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `px-3 py-1 text-sm font-medium rounded-md border cursor-pointer transition ${i === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`;
+                btn.onclick = () => { currentPage = i; renderTable(); };
+                container.appendChild(btn);
             }
-            
-            document.getElementById('formGohonzon').value = 'Keluarga';
-            document.getElementById('formHubungan').value = 'Istri / Anak ke-';
-            openModal(`Tambah Anggota Keluarga Baru untuk KK: ${parent.nama}`);
         }
 
-        // AKSI INTERAKSI ADMIN: MEMBUKA EDITOR DATA LAMA
-        function editMember(id) {
-            closeModal();
-            const member = allMembers.find(m => m.id === id);
-            if (!member) return;
-
-            document.getElementById('formId').value = member.id;
-            document.getElementById('formParentId').value = member.parentId || '';
-            document.getElementById('formNama').value = member.nama;
-            document.getElementById('formTahunLahir').value = member.tahunLahir || '';
-            document.getElementById('formBagian').value = member.bagian;
-            document.getElementById('formChiku').value = member.chiku;
-            document.getElementById('formJabatan').value = member.jabatan;
-            document.getElementById('formStatus').value = member.status;
-            document.getElementById('formGohonzon').value = member.gohonzon;
-            document.getElementById('formHubungan').value = member.hubungan;
-            document.getElementById('formTelepon').value = member.telepon || '';
-            document.getElementById('formAlamat').value = member.alamat || '';
-            document.getElementById('formKeterangan').value = member.keterangan || '';
-
-            openModal(`Edit Data Anggota: ${member.nama}`);
-        }
-
-        // VALIDASI & SUBMIT INPUT FORMULIR KE MATRIKS MEMORI
-        function submitForm() {
-            const nama = document.getElementById('formNama').value.trim();
-            if (!nama) {
-                alert("Kesalahan: Input Nama Lengkap wajib diisi!");
-                return;
-            }
-
-            const id = document.getElementById('formId').value;
-            const parentId = document.getElementById('formParentId').value || null;
-
-            const memberData = {
-                id: id || "ID-" + Date.now(), 
-                nama: nama,
-                tahunLahir: document.getElementById('formTahunLahir').value.trim() || "-",
-                bagian: document.getElementById('formBagian').value,
-                chiku: document.getElementById('formChiku').value,
-                jabatan: document.getElementById('formJabatan').value,
-                status: document.getElementById('formStatus').value,
-                gohonzon: document.getElementById('formGohonzon').value,
-                parentId: parentId,
-                hubungan: document.getElementById('formHubungan').value.trim() || "Mandiri",
-                telepon: document.getElementById('formTelepon').value.trim() || "-",
-                alamat: document.getElementById('formAlamat').value.trim() || "-",
-                keterangan: document.getElementById('formKeterangan').value.trim() || "-"
-            };
-
-            if (id) {
-                const index = allMembers.findIndex(m => m.id === id);
-                if (index !== -1) allMembers[index] = memberData;
-            } else {
-                allMembers.push(memberData);
-            }
-
-            closeModal();
-            renderTable();
-            alert("Berhasil diperbarui di tabel monitor lokal! Mohon tekan tombol hijau 'Simpan Perubahan Database' di atas agar perubahan Anda terunggah permanen ke cloud Google Sheets.");
-        }
-
-        // AKSI INTERAKSI ADMIN: MENGHAPUS ELEMEN DATA
-        function deleteMember(id) {
-            const member = allMembers.find(m => m.id === id);
-            if (!member) return;
-
-            const hasChildren = allMembers.some(m => m.parentId === id);
-            let msg = `Apakah Anda yakin ingin menghapus data "${member.nama}"?`;
-            if (hasChildren && !member.parentId) {
-                msg = `PERINGATAN KERAS: "${member.nama}" adalah Kepala Keluarga.\nMenghapus baris ini akan melepaskan ikatan hirarki anggota keluarga di bawahnya!\n\nApakah Anda tetap setuju menghapus?`;
-            }
-
-            if (confirm(msg)) {
-                allMembers = allMembers.filter(m => m.id !== id);
-                allMembers.forEach(m => {
-                    if (m.parentId === id) m.parentId = null;
+        function deleteMember(globalIndex) {
+            const target = members[globalIndex];
+            if (confirm(`Apakah Anda yakin menghapus "${target.nama}"?`)) {
+                members.forEach(m => {
+                    if (m.parentId === target.id) m.parentId = null;
                 });
+                members.splice(globalIndex, 1);
+                updateStorage();
                 renderTable();
             }
         }
 
-        // 3. INPUT/OUTPUT: FUNGSI CETAK LAPORAN WINDOWS PRINT ASLI 100% UNTUNGGAL (PRESERVED)
-        function printDatabase() {
-            const printWindow = window.open('', '_blank');
+        function updateStorage() {
+            localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+        }
+
+        function getBagianClass(bagian) {
+            switch(bagian) {
+                case 'Bapak': return 'bg-blue-100 text-blue-800';
+                case 'Ibu': return 'bg-pink-100 text-pink-800';
+                case 'Pemuda': return 'bg-emerald-100 text-emerald-800';
+                case 'Pemudi': return 'bg-amber-100 text-amber-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        function getJabatanClass(jabatan) {
+            switch(jabatan) {
+                case 'Pimpinan': return 'bg-red-100 text-red-800 font-bold';
+                case 'Inti': return 'bg-indigo-100 text-indigo-800 font-semibold';
+                case 'Calon': return 'bg-teal-100 text-teal-800 font-medium';
+                default: return 'bg-slate-100 text-slate-600';
+            }
+        }
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Aktif': return 'bg-emerald-100 text-emerald-800';
+                case 'Tidak Aktif': return 'bg-rose-100 text-rose-800';
+                case 'Luar Kota/LN': return 'bg-sky-100 text-sky-800';
+                case 'Meninggal': return 'bg-neutral-200 text-neutral-700';
+                case 'Taiten': return 'bg-amber-100 text-amber-700';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function exportJSON() {
+            if (members.length === 0) { alert("Tidak ada data untuk diekspor."); return; }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(members, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `database_shibu_tree_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        members = importedData;
+                        updateStorage();
+                        renderTable();
+                        alert("Data hirarki berhasil diimport!");
+                    }
+                } catch (err) { alert("Gagal membaca file JSON."); }
+            };
+            reader.readAsText(file);
+            document.getElementById('importFile').value = '';
+        }
+
+        function printData() {
+            const processedData = buildStructuredData(true);
+            if (processedData.length === 0) {
+                alert("Tidak ada data untuk dicetak.");
+                return;
+            }
+
+            let printStats = { bapak: 0, ibu: 0, pemuda: 0, pemudi: 0, anak: 0, total: 0 };
             
-            let rowsHtml = "";
-            let pNo = 1;
+            processedData.forEach(m => {
+                const bagianKey = m.bagian ? m.bagian.toLowerCase() : '';
+                const statusKey = m.status ? m.status.toLowerCase() : 'aktif';
+                const jabatanKey = m.jabatan ? m.jabatan.toLowerCase() : '';
 
-            const searchKeyword = document.getElementById('searchName').value.toLowerCase().trim();
-            const filterBagian = document.getElementById('filterBagian').value;
-            const filterChiku = document.getElementById('filterChiku').value;
-            const filterStatus = document.getElementById('filterStatus').value;
+                const isKondisiKhusus = (statusKey === 'tidak aktif' || statusKey === 'luar kota/ln' || statusKey === 'taiten' || statusKey === 'meninggal' || jabatanKey === 'calon');
 
-            const parents = allMembers.filter(m => !m.parentId);
-            const filteredParents = parents.filter(p => {
-                const matchesSearch = !searchKeyword || p.nama.toLowerCase().includes(searchKeyword) || (p.alamat && p.alamat.toLowerCase().includes(searchKeyword)) || (p.keterangan && p.keterangan.toLowerCase().includes(searchKeyword));
-                const matchesBagian = !filterBagian || p.bagian === filterBagian;
-                const matchesChiku = !filterChiku || p.chiku === filterChiku;
-                const matchesStatus = !filterStatus || p.status === filterStatus;
-                if (!(matchesSearch && matchesBagian && matchesChiku && matchesStatus)) {
-                    const children = allMembers.filter(m => m.parentId === p.id);
-                    return children.some(c => {
-                        return (!searchKeyword || c.nama.toLowerCase().includes(searchKeyword) || (c.alamat && c.alamat.toLowerCase().includes(searchKeyword)) || (c.keterangan && c.keterangan.toLowerCase().includes(searchKeyword))) &&
-                               (!filterBagian || c.bagian === filterBagian) && (!filterChiku || c.chiku === filterChiku) && (!filterStatus || c.status === filterStatus);
-                    });
+                if (!isKondisiKhusus && printStats.hasOwnProperty(bagianKey)) {
+                    printStats[bagianKey]++;
+                    printStats.total++;
                 }
-                return true;
             });
 
-            filteredParents.forEach(parent => {
-                // Baris Bapak Kepala Keluarga
-                rowsHtml += `
-                    <tr style="background-color: #ffffff; border-top: 1.5px solid #9ca3af; font-size: 11px; font-weight: bold;">
-                        <td style="text-align:center; color: #4b5563;">${pNo++}</td>
-                        <td style="color: #1e3a8a; padding-left: 4px;">${parent.nama}</td>
-                        <td>${parent.chiku}</td>
-                        <td style="text-align:center;">${parent.bagian}</td>
-                        <td style="text-align:center; color: #4b5563;">${parent.jabatan}</td>
-                        <td style="text-align:center;">${parent.status}</td>
-                        <td style="text-align:center;">${parent.gohonzon}</td>
-                        <td style="text-align:center; color: #4b5563;">${parent.tahunLahir || '-'}</td>
-                        <td style="color: #1d4ed8;">${parent.hubungan}</td>
-                        <td style="font-family: monospace;">${parent.telepon || '-'}</td>
-                        <td style="font-size: 10px; color: #4b5563;">${parent.alamat || '-'}</td>
-                        <td style="font-size: 10px; color: #6b7280;">${parent.keterangan || '-'}</td>
+            const chikuVal = document.getElementById('chikuFilter').value;
+            const bagianVal = document.getElementById('bagianFilter').value;
+            const jabatanVal = document.getElementById('jabatanFilter').value;
+            const statusVal = document.getElementById('statusFilter').value;
+            const searchVal = document.getElementById('searchFilter').value;
+
+            let bagianTeks = bagianVal ? ` ${bagianVal}` : '';
+            let chikuTeks = chikuVal ? ` Chiku ${chikuVal}` : '';
+            
+            let dynamicTitle = "Daftar Anggota" + bagianTeks + chikuTeks;
+            if (!chikuVal && !bagianVal) {
+                dynamicTitle = "Daftar Anggota Shibu Semarang";
+            }
+
+            let subTitleParts = [];
+            if (jabatanVal) subTitleParts.push(`Jabatan: ${jabatanVal.replace('_', ' & ')}`);
+            if (statusVal) subTitleParts.push(`Status: ${statusVal}`);
+            if (searchVal) subTitleParts.push(`Kata Kunci: "${searchVal}"`);
+            let dynamicSub = subTitleParts.length > 0 ? subTitleParts.join(' | ') : "Laporan Database Hirarki";
+
+            let tableRowsHtml = '';
+            processedData.forEach((member, index) => {
+                const currentJabatan = member.jabatan || 'Anggota';
+                const currentStatus = member.status || 'Aktif';
+                
+                const fontStyle = member.isChildRender ? 'font-weight: normal; color: #000000;' : 'font-weight: bold; color: #000000;';
+
+                tableRowsHtml += `
+                    <tr style="background-color: #ffffff; ${fontStyle}">
+                        <td style="text-align:center; font-family: monospace; font-size:10px;">${index + 1}</td>
+                        <td>
+                            <div style="display:flex; align-items:center;">
+                                ${member.isChildRender ? '<span style="color:#000000; margin-right:4px; margin-left:8px;">↳</span>' : ''}
+                                <span>${member.nama}</span>
+                            </div>
+                        </td>
+                        <td>${member.chiku}</td>
+                        <td>${member.bagian}</td>
+                        <td>${currentJabatan}</td>
+                        <td>${currentStatus}</td>
+                        <td>${member.gohonzon}</td>
+                        <td style="text-align:center;">${member.tahunLahir}</td>
+                        <td>${member.hubungan}</td>
+                        <td style="font-size:10px;">${member.telepon}</td>
+                        <td style="font-size:10px; max-width:180px; word-wrap:break-word;">${member.alamat}</td>
+                        <td style="font-size:10px; max-width:180px; word-wrap:break-word;">${member.keterangan}</td>
                     </tr>
                 `;
-
-                // Baris Anggota-Anggota Keluarga Cabangnya
-                const children = allMembers.filter(m => m.parentId === parent.id);
-                children.forEach(child => {
-                    rowsHtml += `
-                        <tr style="background-color: #f9fafb; font-size: 11px;">
-                            <td style="text-align:center; color: #9ca3af;"></td>
-                            <td style="color: #4b5563; padding-left: 16px;">↳ ${child.nama}</td>
-                            <td style="color: #4b5563;">${child.chiku}</td>
-                            <td style="text-align:center; color: #4b5563;">${child.bagian}</td>
-                            <td style="text-align:center; color: #6b7280;">${child.jabatan}</td>
-                            <td style="text-align:center; color: #4b5563;">${child.status}</td>
-                            <td style="text-align:center; color: #4b5563;">${child.gohonzon}</td>
-                            <td style="text-align:center; color: #6b7280;">${child.tahunLahir || '-'}</td>
-                            <td style="color: #4b5563; font-style: italic;">${child.hubungan}</td>
-                            <td style="font-family: monospace; color: #4b5563;">${child.telepon || '-'}</td>
-                            <td style="font-size: 10px; color: #6b7280;">${child.alamat || '-'}</td>
-                            <td style="font-size: 10px; color: #888888;">${child.keterangan || '-'}</td>
-                        </tr>
-                    `;
-                });
             });
 
+            const printWindow = window.open('', '_blank', 'width=1100,height=850');
+            
             printWindow.document.write(`
-                <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Cetak Database Anggota Shibu Semarang</title>
+                    <title>${dynamicTitle}</title>
                     <style>
-                        body { font-family: sans-serif; margin: 20px; color: #111827; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                        th { background-color: #374151; color: white; padding: 8px; font-size: 11px; text-transform: uppercase; border: 1px solid #374151; }
-                        td { padding: 6px; border: 1px solid #e5e7eb; }
-                        h2 { margin-bottom: 2px; color: #111827; }
-                        p { margin-top: 0; font-size: 12px; color: #6b7280; }
+                        @page {
+                            size: landscape;
+                            margin: 10mm;
+                        }
+                        
+                        @media print {
+                            html, body {
+                                width: 100%;
+                                font-family: system-ui, -apple-system, sans-serif;
+                                background: #fff;
+                                color: #000;
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }
+                        }
+
+                        body {
+                            font-family: system-ui, -apple-system, sans-serif;
+                            color: #000000;
+                            margin: 0;
+                            padding: 0;
+                            background: #ffffff;
+                        }
+                        .print-header {
+                            border-bottom: 2px solid #000000;
+                            padding-bottom: 6px;
+                            margin-bottom: 12px;
+                        }
+                        .print-header h1 {
+                            margin: 0;
+                            font-size: 18px;
+                            color: #000000;
+                        }
+                        .print-header p {
+                            margin: 3px 0 0 0;
+                            font-size: 11px;
+                            color: #000000;
+                        }
+                        
+                        .stat-box-container {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 15px;
+                            font-size: 11px;
+                        }
+                        .stat-box-container td {
+                            border: 1px solid #000000;
+                            padding: 4px 8px;
+                            text-align: left;
+                            background-color: #fafafa;
+                            width: 16.66%;
+                        }
+                        .stat-label {
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            font-size: 9px;
+                            color: #333333;
+                            display: block;
+                            margin-bottom: 1px;
+                        }
+                        .stat-value {
+                            font-size: 14px;
+                            font-weight: bold;
+                        }
+
+                        table.data-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 9px;
+                        }
+                        thead {
+                            display: table-header-group;
+                        }
+                        tr {
+                            break-inside: avoid;
+                            page-break-inside: avoid;
+                        }
+                        th {
+                            background-color: #ffffff;
+                            color: #000000;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            font-size: 9px;
+                            border: 1px solid #000000;
+                            padding: 5px 3px;
+                            text-align: left;
+                        }
+                        td.data-cell {
+                            border: 1px solid #000000;
+                            padding: 4px 3px;
+                            vertical-align: middle;
+                            color: #000000;
+                        }
                     </style>
                 </head>
                 <body>
-                    <h2>Database Anggota Shibu Semarang</h2>
-                    <p>Laporan Hirarki Soka Gakkai Indonesia - Semarang | Dicetak otomatis pada: ${new Date().toLocaleDateString('id-ID')}</p>
-                    <table>
+                    <div class="print-header">
+                        <h1>${dynamicTitle}</h1>
+                        <p>${dynamicSub}</p>
+                        <p style="font-size:9px; color:#000000; margin-top:1px;">Sistem Database Shibu | Generated by Didi Chung 2026</p>
+                    </div>
+
+                    <table class="stat-box-container">
+                        <tr>
+                            <td>
+                                <span class="stat-label">Bapak</span>
+                                <span class="stat-value">${printStats.bapak} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                            <td>
+                                <span class="stat-label">Ibu</span>
+                                <span class="stat-value">${printStats.ibu} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                            <td>
+                                <span class="stat-label">Pemuda</span>
+                                <span class="stat-value">${printStats.pemuda} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                            <td>
+                                <span class="stat-label">Pemudi</span>
+                                <span class="stat-value">${printStats.pemudi} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                            <td>
+                                <span class="stat-label">Anak</span>
+                                <span class="stat-value">${printStats.anak} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                            <td style="background-color: #f0f0f0; border-left: 2px solid #000;">
+                                <span class="stat-label" style="color:#000;">TOTAL AKTIF</span>
+                                <span class="stat-value" style="color:#000;">${printStats.total} <span style="font-size:10px; font-weight:normal;">Org</span></span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th style="width: 30px; text-align:center;">No</th>
-                                <th style="width: 150px;">Nama Anggota</th>
-                                <th style="width: 80px;">Chiku</th>
-                                <th style="width: 50px; text-align:center;">Bagian</th>
-                                <th style="width: 60px; text-align:center;">Jabatan</th>
-                                <th style="width: 60px; text-align:center;">Status</th>
-                                <th style="width: 60px; text-align:center;">Gohonzon</th>
-                                <th style="width: 40px; text-align:center;">Lahir</th>
-                                <th style="width: 80px;">Hubungan</th>
-                                <th style="width: 90px;">No Telepon</th>
-                                <th>Alamat Rumah</th>
+                                <th style="width: 25px; text-align:center;">No</th>
+                                <th style="width: 130px;">Nama Anggota</th>
+                                <th style="width: 65px;">Chiku</th>
+                                <th style="width: 45px;">Bagian</th>
+                                <th style="width: 50px;">Jabatan</th>
+                                <th style="width: 55px;">Status</th>
+                                <th style="width: 50px;">Gohonzon</th>
+                                <th style="width: 30px; text-align:center;">Lahir</th>
+                                <th style="width: 65px;">Hubungan</th>
+                                <th style="width: 75px;">Telepon</th>
+                                <th>Alamat</th>
                                 <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${rowsHtml}
+                            ${tableRowsHtml}
                         </tbody>
                     </table>
+
                     <script>
                         setTimeout(function() {
                             window.focus();
@@ -824,8 +1209,11 @@
                 </body>
                 </html>
             `);
+
             printWindow.document.close();
         }
+
+        renderTable();
     </script>
 </body>
 </html>
