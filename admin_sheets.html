@@ -280,7 +280,7 @@
                 alert("Gagal memuat data anggota: " + error.message);
                 allMembers = [];
                 renderTable();
-            } finaly {
+            } finally {
                 hideLoading();
             }
         }
@@ -316,7 +316,7 @@
             } catch (error) {
                 console.error(error);
                 alert("Terjadi kesalahan jaringan saat mencoba menyimpan data.");
-            } finaly {
+            } finally {
                 hideLoading();
             }
         }
