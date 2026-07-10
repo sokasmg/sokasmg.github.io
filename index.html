@@ -111,34 +111,32 @@
     </section>
     
         <!-- SECTION QUOTE OF THE DAY -->
-    <section class="py-12 bg-gray-50 border-b border-gray-100">
-        <div class="max-w-3xl mx-auto px-6 text-center">
-            <!-- Label Kecil -->
-            <span class="text-xs font-bold uppercase tracking-widest text-blue-600 block mb-3">Renungan Hari Ini</span>
-            
-            <!-- Tempat Quote Muncul -->
-            <div class="relative inline-block">
-                <!-- Tanda Kutip Dekoratif Besar -->
-                <span class="absolute -top-6 -left-8 text-6xl text-gray-200 font-serif pointer-events-none">“</span>
-                
-                <p id="soka-quote" class="text-xl md:text-2xl font-medium text-gray-700 italic leading-relaxed relative z-10 transition-opacity duration-500 opacity-100">
-                    <!-- Teks quote akan diisi otomatis oleh JavaScript -->
-                    Memuat kutipan hari ini...
+        <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
+        <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
+        <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
+        
+        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+            <p class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4">Renungan Hari Ini</p>
+            <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
+                </blockquote>
+            <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
                 </p>
-                
-                <span class="absolute -bottom-12 -right-8 text-6xl text-gray-200 font-serif pointer-events-none">”</span>
-            </div>
-            
-            <!-- Tempat Penulis/Sumber -->
-            <p id="soka-author" class="text-sm font-bold text-blue-950 mt-4 tracking-wide uppercase">
-                <!-- Nama penulis akan diisi oleh JavaScript -->
-            </p>
-            
-            <!-- Garis Aksen Mini Tricolor -->
-            <div class="flex justify-center space-x-1 w-16 mx-auto mt-6">
-                <span class="w-4 h-[3px] bg-[#002F6C] rounded-full"></span>
-                <span class="w-4 h-[3px] bg-[#F9A825] rounded-full"></span>
-                <span class="w-4 h-[3px] bg-[#C62828] rounded-full"></span>
+
+            <div class="flex justify-center items-center space-x-4">
+                <button onclick="shareToWhatsApp()" class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full font-semibold shadow transition transform hover:scale-105">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+                    </svg>
+                    <span>Bagikan ke WA</span>
+                </button>
+
+                <button onclick="copyQuote()" class="inline-flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white text-sm px-4 py-2 rounded-full font-semibold border border-white border-opacity-30 shadow transition transform hover:scale-105">
+                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span id="copy-text">Salin Kutipan</span>
+                </button>
             </div>
         </div>
     </section>
@@ -443,6 +441,44 @@
             document.getElementById('soka-quote').innerText = selectedQuote.text;
             document.getElementById('soka-author').innerText = selectedQuote.author;
         }
+
+        // Fungsi untuk membagikan kutipan langsung ke WhatsApp
+        function shareToWhatsApp() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            
+            // Format teks pesan WhatsApp dengan cetak tebal dan miring
+            const textMessage = `*Renungan Hari Ini - Soka Gakkai Semarang*\n\n_" ${quote} "_\n\n*— ${author}*`;
+            
+            # Buat URL WhatsApp Share (encodeURIComponent agar format spasi dan enter aman)
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
+            
+            // Buka tab atau aplikasi WhatsApp baru
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Fungsi untuk menyalin kutipan ke clipboard HP/Laptop pengunjung
+        function copyQuote() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const btnText = document.getElementById('copy-text');
+            
+            const textToCopy = `"${quote}" — ${author}`;
+            
+            // Perintah menyalin teks ke sistem clipboard
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Efek umpan balik visual setelah berhasil disalin
+                btnText.innerText = "Tersalin!";
+                
+                // Kembalikan teks tombol menjadi semula setelah 2 detik
+                setTimeout(() => {
+                    btnText.innerText = "Salin Kutipan";
+                }, 2000);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+        
         // Ambil semua elemen slide banner
 const slides = document.querySelectorAll('.banner-slide');
 let currentSlide = 0;
