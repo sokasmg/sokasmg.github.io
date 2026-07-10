@@ -59,19 +59,14 @@
     </nav>
 
     <!-- HERO BANNER SECTION -->
-        <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
-        
+    <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 w-full h-full">
-        <img src="banner.webp" 
-         alt="Banner 1" 
-         fetchpriority="high"
-         class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
-
-        <img data-src="banner2.webp" alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
-        <img data-src="banner3.webp" alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
-        <img data-src="banner4.webp" alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
-        <img data-src="banner5.webp" alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
-        <img data-src="banner6.webp" alt="Banner 6" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img src="banner.webp" alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner2.webp" alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner3.webp" alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner4.webp" alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner5.webp" alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner6.webp" alt="Banner 6" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
         </div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -95,7 +90,6 @@
             <h2 class="text-3xl font-bold text-blue-950 mb-2">
                 Tentang Kami
             </h2>
-            <!-- Aksen Garis Bendera Soka di bawah judul -->
             <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
                 <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
@@ -110,17 +104,21 @@
         </div>
     </section>
     
-        <!-- SECTION QUOTE OF THE DAY -->
-        <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
+    <!-- SECTION QUOTE OF THE DAY -->
+    <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
         <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
         <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
         
         <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
             <p class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4">Renungan Hari Ini</p>
+            <!-- ID soka-quote ditaruh di sini agar dibaca JS -->
             <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
-                </blockquote>
+                Memuat kutipan hari ini...
+            </blockquote>
+            <!-- ID soka-author ditaruh di sini agar dibaca JS -->
             <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
-                </p>
+                -
+            </p>
 
             <div class="flex justify-center items-center space-x-4">
                 <button onclick="shareToWhatsApp()" class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full font-semibold shadow transition transform hover:scale-105">
@@ -185,8 +183,6 @@
         <div class="soka-yellow"></div>
         <div class="soka-red"></div>
     </div>
-    
-    
 
     <!-- KONTAK SECTION -->
     <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
@@ -195,7 +191,6 @@
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">
                     Hubungi Kami
                 </h2>
-                <!-- Aksen Garis Bendera Soka di bawah judul -->
                 <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
                     <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
@@ -205,12 +200,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- Info Alamat -->
                 <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-[#002F6C] flex flex-col justify-between">
                     <div>
                         <h3 class="text-xl font-bold text-blue-950 mb-6">Informasi Kontak</h3>
-                        
-                        <!-- Alamat -->
                         <div class="flex items-start space-x-4 mb-6">
                             <div class="bg-blue-50 p-3 rounded-lg text-blue-900 mt-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,7 +217,6 @@
                             </div>
                         </div>
 
-                        <!-- Email -->
                         <div class="flex items-start space-x-4">
                             <div class="bg-red-50 p-3 rounded-lg text-red-700 mt-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -240,295 +231,166 @@
                     </div>
                 </div>
 
-                <!-- Google Maps Placeholder / Ilustrasi -->
                 <div class="bg-white p-4 rounded-2xl shadow-md h-64 md:h-auto min-h-[250px] flex items-center justify-center border-t-4 border-[#C62828]">
-                    <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;"> <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" 
-        class="absolute top-0 left-0 w-full h-full border-0" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-</div>
+                    <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;"> 
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-<footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div>
-                <h4 class="text-white font-bold mb-4">Organisasi</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
-                    <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
-                    <li><a href="https://www.sokagakkai.jp" target="_blank" class="hover:text-yellow-500 transition">Sokagakkai Japan</a></li>
-                    <li><a href="https://www.sgi-usa.org" target="_blank" class="hover:text-yellow-500 transition">SGI-USA</a></li>
-                </ul>
+    <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Organisasi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
+                        <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                        <li><a href="https://www.sokagakkai.jp" target="_blank" class="hover:text-yellow-500 transition">Sokagakkai Japan</a></li>
+                        <li><a href="https://www.sgi-usa.org" target="_blank" class="hover:text-yellow-500 transition">SGI-USA</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://wwww.worldtribune.org" target="_blank" class="hover:text-yellow-500 transition">World Tribune</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
+                        <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                        <li><a href="https://sism.edu.my" target="_blank" class="hover:text-yellow-500 transition">Soka International School Malaysia</a></li>
+                        <li><a href="https://www.sokapreschool.org" target="_blank" class="hover:text-yellow-500 transition">Soka Preschool</a></li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
-                    <li><a href="https://wwww.worldtribune.org" target="_blank" class="hover:text-yellow-500 transition">World Tribune</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
-                    <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
-                    <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
-                    <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
-                    <li><a href="https://sism.edu.my" target="_blank" class="hover:text-yellow-500 transition">Soka International School Malaysia</a></li>
-                    <li><a href="https://www.sokapreschool.org" target="_blank" class="hover:text-yellow-500 transition">Soka Preschool</a></li>
-                </ul>
+            
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
             </div>
         </div>
-        
-        <div class="text-center text-sm border-t border-blue-900 pt-8">
-            <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <script>
         // Daftar 31 kutipan inspiratif (Satu kutipan unik untuk setiap hari dalam sebulan)
         const quoteList = [
-            {
-                text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Kunci dari kebahagiaan bukanlah ketiadaan masalah, melainkan kekuatan batin yang tumbuh saat kita berani menghadapi dan melampaui masalah tersebut.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Jika kamu menyalakan lampu bagi orang lain, hal itu juga akan menerangi jalanmu sendiri.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Keberanian adalah modal terbesar untuk membuka pintu gerbang kebahagiaan dan perdamaian di dalam lingkungan tempat kita hidup.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Suatu hari yang diisi dengan rasa syukur dan tindakan nyata bernilai jauh lebih besar daripada kehidupan seratus tahun yang dilewati dengan keluhan.",
-                author: "Tsunesaburo Makiguchi"
-            },
-            {
-                text: "Hanya orang yang pernah merasakan penderitaan mendalam yang mampu memahami makna sejati dari empati, kehangatan, dan kedamaian.",
-                author: "Josei Toda"
-            },
-            {
-                text: "Masa depan tidak ditentukan oleh apa yang terjadi kemarin atau hari ini, melainkan oleh tekad kuat yang kita bangun di dalam hati saat ini.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Kekayaan hati jauh lebih berharga daripada kekayaan istana maupun harta benda yang kasat mata.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Kebahagiaan sejati bukanlah sesuatu yang kita kejar di luar sana, melainkan mata air kekuatan yang kita gali dari dalam diri sendiri.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Tujuan utama pendidikan adalah untuk membahagiakan murid, memicu rasa ingin tahu mereka, dan membangun karakter kemanusiaan yang luhur.",
-                author: "Tsunesaburo Makiguchi"
-            },
-            {
-                text: "Di mana ada ketulusan untuk mendengarkan dan merangkul sesama, di situlah benih-benih perdamaian sejati mulai bertumbuh.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Kesulitan dan rintangan hidup bukanlah tanda kekalahan, melainkan batu asahan yang akan membuat kilau karakter kita menjadi semakin cemerlang.",
-                author: "Josei Toda"
-            },
-            {
-                text: "Mereka yang terus melangkah maju dengan harapan di hatinya, sekecil apa pun langkah itu, tidak akan pernah bisa dikalahkan oleh keadaan.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Kata-kata yang lahir dari ketulusan hati memiliki kekuatan spiritual untuk menembus dinding prasangka dan menggerakkan jiwa orang lain.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Menjadi pemenang yang sejati berarti mampu menaklukkan kelemahan, kemalasan, dan rasa takut yang ada di dalam diri sendiri setiap harinya.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Kebaikan yang kita lakukan kepada lingkungan sekitar hari ini adalah investasi kedamaian yang akan kita tuai di masa depan.",
-                author: "Tsunesaburo Makiguchi"
-            },
-            {
-                text: "Dialog yang hangat dan didasari rasa saling menghormati adalah jembatan paling kokoh untuk menyatukan perbedaan di tengah masyarakat.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Meskipun badai kehidupan datang menerpa dengan dahsyat, teguhkanlah hati seperti gunung yang tidak tergoyahkan oleh angin.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Pemuda adalah pilar dan pembawa obor masa depan. Di tangan pemuda yang berkarakter, kedamaian dunia dapat diwujudkan.",
-                author: "Josei Toda"
-            },
-            {
-                text: "Kebahagiaan yang sesungguhnya adalah ketika kita bisa mengupayakan kebahagiaan orang lain sekaligus kebahagiaan diri sendiri secara bersamaan.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Jangan pernah meremehkan satu tindakan kecil kebaikan, karena riak kecil di dalam kolam bisa menciptakan gelombang perubahan yang besar.",
-                author: "Tsunesaburo Makiguchi"
-            },
-            {
-                text: "Persahabatan yang tulus dan didasari rasa saling mendukung adalah salah satu harta paling berharga yang bisa dimiliki manusia dalam hidup ini.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Satu lentera kecil di dalam ruangan yang gelap gulita mampu mengusir kegelapan yang telah bertahan selama ribuan tahun.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Ketika kita mengubah cara pandang dan sikap internal kita, maka lingkungan di sekitar kita secara perlahan juga akan mulai berubah.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Kehidupan yang bermakna bukanlah kehidupan yang bebas dari masalah, melainkan kehidupan yang didedikasikan demi kemaslahatan orang banyak.",
-                author: "Josei Toda"
-            },
-            {
-                text: "Pendidikan sejati harus melahirkan individu-individu yang berani membela kebenaran, keadilan, dan menghargai martabat kehidupan.",
-                author: "Tsunesaburo Makiguchi"
-            },
-            {
-                text: "Di mana pun kamu berada saat ini, jadilah seperti bunga teratai yang mekar dengan indah dan bersih meskipun tumbuh di air yang berlumpur.",
-                author: "Nichiren Daishonin"
-            },
-            {
-                text: "Harapan adalah fajar yang mengusir malam. Selama kita tidak memadamkan api harapan di dalam hati, jalan keluar akan selalu terbuka.",
-                author: "Daisaku Ikeda"
-            },
-            {
-                text: "Ikatan komunitas yang kuat dibangun di atas fondasi kepercayaan, rasa saling menghargai, dan gotong royong yang konsisten.",
-                author: "Josei Toda"
-            },
-            {
-                text: "Hari ini adalah lembaran baru. Mari kita isi dengan semangat belajar yang tinggi, ketulusan bertindak, dan senyuman yang membawa kedamaian.",
-                author: "Daisaku Ikeda"
-            }
+            { text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.", author: "Daisaku Ikeda" },
+            { text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.", author: "Nichiren Daishonin" },
+            { text: "Kunci dari kebahagiaan bukanlah ketiadaan masalah, melainkan kekuatan batin yang tumbuh saat kita berani menghadapi dan melampaui masalah tersebut.", author: "Daisaku Ikeda" },
+            { text: "Jika kamu menyalakan lampu bagi orang lain, hal itu juga akan menerangi jalanmu sendiri.", author: "Nichiren Daishonin" },
+            { text: "Keberanian adalah modal terbesar untuk membuka pintu gerbang kebahagiaan dan perdamaian di dalam lingkungan tempat kita hidup.", author: "Daisaku Ikeda" },
+            { text: "Suatu hari yang diisi dengan rasa syukur dan tindakan nyata bernilai jauh lebih besar daripada kehidupan serahun yang dilewati dengan keluhan.", author: "Tsunesaburo Makiguchi" },
+            { text: "Hanya orang yang pernah merasakan penderitaan mendalam yang mampu memahami makna sejati dari empati, kehangatan, dan kedamaian.", author: "Josei Toda" },
+            { text: "Masa depan tidak ditentukan oleh apa yang terjadi kemarin atau hari ini, melainkan oleh tekad kuat yang kita bangun di dalam hati saat ini.", author: "Daisaku Ikeda" },
+            { text: "Kekayaan hati jauh lebih berharga daripada kekayaan istana maupun harta benda yang kasat mata.", author: "Nichiren Daishonin" },
+            { text: "Kebahagiaan sejati bukanlah sesuatu yang kita kejar di luar sana, melainkan mata air kekuatan yang kita gali dari dalam diri sendiri.", author: "Daisaku Ikeda" },
+            { text: "Tujuan utama pendidikan adalah untuk membahagiakan murid, memicu rasa ingin tahu mereka, dan membangun karakter kemanusiaan yang luhur.", author: "Tsunesaburo Makiguchi" },
+            { text: "Di mana ada ketulusan untuk mendengarkan dan merangkul sesama, di situlah benih-benih perdamaian sejati mulai bertumbuh.", author: "Daisaku Ikeda" },
+            { text: "Kesulitan dan rintangan hidup bukanlah tanda kekalahan, melainkan batu asahan yang akan membuat kilau karakter kita menjadi semakin cemerlang.", author: "Josei Toda" },
+            { text: "Mereka yang terus melangkah maju dengan harapan di hatinya, sekecil apa pun langkah itu, tidak akan pernah bisa dikalahkan oleh keadaan.", author: "Daisaku Ikeda" },
+            { text: "Kata-kata yang lahir dari ketulusan hati memiliki kekuatan spiritual untuk menembus dinding prasangka dan menggerakkan jiwa orang lain.", author: "Nichiren Daishonin" },
+            { text: "Menjadi pemenang yang sejati berarti mampu menaklukkan kelemahan, kemalasan, dan rasa takut yang ada di dalam diri sendiri setiap harinya.", author: "Daisaku Ikeda" },
+            { text: "Kebaikan yang kita lakukan kepada lingkungan sekitar hari ini adalah investasi kedamaian yang akan kita tuai di masa depan.", author: "Tsunesaburo Makiguchi" },
+            { text: "Dialog yang hangat dan didasari rasa saling menghormati adalah jembatan paling kokoh untuk menyatukan perbedaan di tengah masyarakat.", author: "Daisaku Ikeda" },
+            { text: "Meskipun badai kehidupan datang menerpa dengan dahsyat, teguhkanlah hati seperti gunung yang tidak tergoyahkan oleh angin.", author: "Nichiren Daishonin" },
+            { text: "Pemuda adalah pilar dan pembawa obor masa depan. Di tangan pemuda yang berkarakter, kedamaian dunia dapat diwujudkan.", author: "Josei Toda" },
+            { text: "Kebahagiaan yang sesungguhnya adalah ketika kita bisa mengupayakan kebahagiaan orang lain sekaligus kebahagiaan diri sendiri secara bersamaan.", author: "Daisaku Ikeda" },
+            { text: "Jangan pernah meremehkan satu tindakan kecil kebaikan, karena riak kecil di dalam kolam bisa menciptakan gelombang perubahan yang besar.", author: "Tsunesaburo Makiguchi" },
+            { text: "Persahabatan yang tulus dan didasari rasa saling mendukung adalah salah satu harta paling berharga yang bisa dimiliki manusia dalam hidup ini.", author: "Daisaku Ikeda" },
+            { text: "Satu lentera kecil di dalam ruangan yang gelap gulita mampu mengusir kegelapan yang telah bertahan selama ribuan tahun.", author: "Nichiren Daishonin" },
+            { text: "Ketika kita mengubah cara pandang dan sikap internal kita, maka lingkungan di sekitar kita secara perlahan juga akan mulai berubah.", author: "Daisaku Ikeda" },
+            { text: "Kehidupan yang bermakna bukanlah kehidupan yang bebas dari masalah, melainkan kehidupan yang didedikasikan demi kemaslahatan orang banyak.", author: "Josei Toda" },
+            { text: "Pendidikan sejati harus melahirkan individu-individu yang berani membela kebenaran, keadilan, dan menghargai martabat kehidupan.", author: "Tsunesaburo Makiguchi" },
+            { text: "Di mana pun kamu berada saat ini, jadilah seperti bunga teratai yang mekar dengan indah dan bersih meskipun tumbuh di air yang berlumpur.", author: "Nichiren Daishonin" },
+            { text: "Harapan adalah fajar yang mengusir malam. Selama kita tidak memadamkan api harapan di dalam hati, jalan keluar akan selalu terbuka.", author: "Daisaku Ikeda" },
+            { text: "Ikatan komunitas yang kuat dibangun di atas fondasi kepercayaan, rasa saling menghargai, dan gotong royong yang konsisten.", author: "Josei Toda" },
+            { text: "Hari ini adalah lembaran baru. Mari kita isi dengan semangat belajar yang tinggi, ketulusan bertindak, dan senyuman yang membawa kedamaian.", author: "Daisaku Ikeda" }
         ];
 
         function setQuoteOfTheDay() {
             const today = new Date();
-            // Menggunakan fungsi matematika agar indeks quote terkunci berdasarkan tanggal hari ini saja
             const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-            
-            // Menggunakan modulus (%) 31 agar indeks selalu berputar rapi di dalam 31 data di atas
             const quoteIndex = dateSeed % quoteList.length;
             
             const selectedQuote = quoteList[quoteIndex];
             document.getElementById('soka-quote').innerText = selectedQuote.text;
-            document.getElementById('soka-author').innerText = selectedQuote.author;
+            document.getElementById('soka-author').innerText = "— " + selectedQuote.author;
         }
 
-        // Fungsi untuk membagikan kutipan langsung ke WhatsApp
         function shareToWhatsApp() {
             const quote = document.getElementById('soka-quote').innerText;
             const author = document.getElementById('soka-author').innerText;
-            
-            // Format teks pesan WhatsApp dengan cetak tebal dan miring
-            const textMessage = `*Renungan Hari Ini - Soka Gakkai Semarang*\n\n_" ${quote} "_\n\n*— ${author}*`;
-            
-            # Buat URL WhatsApp Share (encodeURIComponent agar format spasi dan enter aman)
+            const textMessage = `*Renungan Hari Ini - Soka Gakkai Semarang*\n\n_" ${quote} "_\n\n*${author}*`;
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
-            
-            // Buka tab atau aplikasi WhatsApp baru
             window.open(whatsappUrl, '_blank');
         }
 
-        // Fungsi untuk menyalin kutipan ke clipboard HP/Laptop pengunjung
         function copyQuote() {
             const quote = document.getElementById('soka-quote').innerText;
             const author = document.getElementById('soka-author').innerText;
             const btnText = document.getElementById('copy-text');
+            const textToCopy = `"${quote}" ${author}`;
             
-            const textToCopy = `"${quote}" — ${author}`;
-            
-            // Perintah menyalin teks ke sistem clipboard
             navigator.clipboard.writeText(textToCopy).then(() => {
-                // Efek umpan balik visual setelah berhasil disalin
                 btnText.innerText = "Tersalin!";
-                
-                // Kembalikan teks tombol menjadi semula setelah 2 detik
-                setTimeout(() => {
-                    btnText.innerText = "Salin Kutipan";
-                }, 2000);
+                setTimeout(() => { btnText.innerText = "Salin Kutipan"; }, 2000);
             }).catch(err => {
                 console.error('Gagal menyalin teks: ', err);
             });
         }
         
-        // Ambil semua elemen slide banner
-const slides = document.querySelectorAll('.banner-slide');
-let currentSlide = 0;
-const slideInterval = 5000; // Ganti gambar setiap 5 detik
-let sliderTimer = null;
+        // Logika Banner Slider Fading
+        const slides = document.querySelectorAll('.banner-slide');
+        let currentSlide = 0;
+        const slideInterval = 5000;
+        let sliderTimer = null;
 
-// FUNGSI 1: Memuat gambar 2-6 setelah struktur HTML utama selesai dibaca browser (Lebih cepat & aman)
-document.addEventListener('DOMContentLoaded', () => {
-    slides.forEach((slide) => {
-        // Ambil nilai dari data-src
-        const lazySrc = slide.getAttribute('data-src');
-        if (lazySrc) {
-            // Pindahkan ke src asli agar browser mulai men-download di background
-            slide.setAttribute('src', lazySrc);
-            // Hapus data-src yang sudah tidak terpakai
-            slide.removeAttribute('data-src');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pasang teks kutipan hari ini tepat saat HTML siap dibaca
+            setQuoteOfTheDay();
+
+            // Pindahkan data-src ke src untuk preload banner 2-6
+            slides.forEach((slide) => {
+                const lazySrc = slide.getAttribute('data-src');
+                if (lazySrc) {
+                    slide.setAttribute('src', lazySrc);
+                    slide.removeAttribute('data-src');
+                }
+            });
+
+            // Mulai jalankan slider otomatis
+            sliderTimer = setInterval(nextSlide, slideInterval);
+        });
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            
+            if (!slides[nextIndex].complete || slides[nextIndex].naturalWidth === 0) {
+                return; 
+            }
+
+            slides[currentSlide].classList.remove('opacity-40');
+            slides[currentSlide].classList.add('opacity-0');
+            
+            currentSlide = nextIndex;
+            
+            slides[currentSlide].classList.remove('opacity-0');
+            slides[currentSlide].classList.add('opacity-40');
         }
-    });
-
-    // Mulai jalankan slider otomatis dengan aman
-    sliderTimer = setInterval(nextSlide, slideInterval);
-});
-
-// FUNGSI 2: Logika transisi memudar (Fading)
-function nextSlide() {
-    // Cari tahu indeks gambar berikutnya
-    const nextIndex = (currentSlide + 1) % slides.length;
-    
-    // PENGAMAN: Jika gambar berikutnya ternyata BELUM selesai di-download oleh browser, 
-    // jangan lakukan transisi dulu agar tidak lompat/putus-putus.
-    if (!slides[nextIndex].complete || slides[nextIndex].naturalWidth === 0) {
-        return; 
-    }
-
-    // Sembunyikan gambar saat ini (kembali ke transparan)
-    slides[currentSlide].classList.remove('opacity-40');
-    slides[currentSlide].classList.add('opacity-0');
-    
-    // Pindah indeks ke gambar berikutnya
-    currentSlide = nextIndex;
-    
-    // Tampilkan gambar baru (memudar masuk)
-    slides[currentSlide].classList.remove('opacity-0');
-    slides[currentSlide].classList.add('opacity-40');
-}
-
-        // Jalankan fungsi saat halaman selesai dimuat sepenuhnya
-        window.addEventListener('DOMContentLoaded', setQuoteOfTheDay);
     </script>
-
-
 </body>
 </html>
