@@ -366,23 +366,42 @@
         // Variabel global untuk menyimpan status tab aktif
         let activeTab = 'bimbingan';
 
+                // Fungsi utama menampilkan kutipan dengan logika berbeda untuk tiap tab
         function setQuoteOfTheDay() {
+            // 1. Proteksi jika data belum selesai disedot dari Google Sheets
+            if (quoteList.length === 0 || goshoList.length === 0) return;
+
             const today = new Date();
-            const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-            
-            // Ambil indeks berdasarkan array aktif saat ini
-            const currentList = activeTab === 'bimbingan' ? quoteList : goshoList;
-            const quoteIndex = dateSeed % currentList.length;
-            const selectedItem = currentList[quoteIndex];
-            
-            // Render tulisan ke layar HTML
-            document.getElementById('soka-quote').innerText = selectedItem.text;
-            
-            // Format penulisan author khusus pembeda Gosho dan Bimbingan umum
-            if (activeTab === 'gosho') {
-                document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
-            } else {
+            const currentDay = today.getDate(); // Angka tanggal hari ini (1 - 31)
+
+            let selectedItem = {};
+
+            if (activeTab === 'bimbingan') {
+                // LOGIKA BEBAS (BIMBINGAN): Berputar otomatis berdasarkan hitungan hari
+                // Mau diisi 30, 50, atau 100 baris di Google Sheets bebas, tidak akan error
+                const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
+                const quoteIndex = dateSeed % quoteList.length;
+                selectedItem = quoteList[quoteIndex];
+                
+                // Tampilkan ke HTML
+                document.getElementById('soka-quote').innerText = selectedItem.text;
                 document.getElementById('soka-author').innerText = "— " + selectedItem.author;
+
+            } else {
+                // LOGIKA KUNCI TANGGAL (GOSHO): Sesuai Kalender Meja Altar
+                // Tanggal 1 mengambil baris 1 (index 0), Tanggal 31 mengambil baris 31 (index 30)
+                let targetIndex = currentDay - 1;
+
+                // Antisipasi jika bulan pendek (misal tanggal 29-31 di Februari) atau baris terhapus
+                if (targetIndex >= goshoList.length) {
+                    targetIndex = goshoList.length - 1; 
+                }
+
+                selectedItem = goshoList[targetIndex];
+                
+                // Tampilkan ke HTML dengan tambahan teks "Gosho:"
+                document.getElementById('soka-quote').innerText = selectedItem.text;
+                document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
             }
         }
 
