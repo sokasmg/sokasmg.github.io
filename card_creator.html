@@ -9,13 +9,20 @@
     <!-- html2canvas CDN untuk convert HTML ke Image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Google Fonts untuk variasi font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@500;700&family=Caveat:wght@600&family=Comfortaa:wght@600&family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
     
     <style>
+        /* Font Bawaan Sebelumnya */
         .font-inter { font-family: 'Inter', sans-serif; }
         .font-playfair { font-family: 'Playfair Display', serif; }
         .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-cinzel { font-family: 'Cinzel', serif; }
+        
+        /* Tambahan Font Baru */
+        .font-caveat { font-family: 'Caveat', cursive; }
+        .font-comfortaa { font-family: 'Comfortaa', cursive; }
+        .font-dmserif { font-family: 'DM Serif Display', serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
         
         /* Paksa kontainer preview selalu 1:1 */
         .aspect-square-canvas {
@@ -87,12 +94,21 @@
                     <!-- Warna Background -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Warna Latar Belakang</label>
-                        <div class="grid grid-cols-5 gap-2">
-                            <button onclick="changeBg('#002F6C', 'text-white')" class="w-8 h-8 rounded-full bg-[#002F6C] border-2 border-transparent hover:scale-105 transition" title="Soka Blue"></button>
-                            <button onclick="changeBg('#C62828', 'text-white')" class="w-8 h-8 rounded-full bg-[#C62828] border-2 border-transparent hover:scale-105 transition" title="Soka Red"></button>
-                            <button onclick="changeBg('#ffffff', 'text-gray-800')" class="w-8 h-8 rounded-full bg-white border border-gray-300 hover:scale-105 transition" title="Pure White"></button>
-                            <button onclick="changeBg('#FDFBF7', 'text-amber-950')" class="w-8 h-8 rounded-full bg-[#FDFBF7] border border-amber-200 hover:scale-105 transition" title="Cream Vintage"></button>
-                            <button onclick="changeBg('#111827', 'text-gray-100')" class="w-8 h-8 rounded-full bg-gray-900 border-2 border-transparent hover:scale-105 transition" title="Dark Mode"></button>
+                        <!-- Grid disesuaikan jadi grid-cols-5 agar muat rapi -->
+                        <div class="grid grid-cols-5 gap-2.5">
+                            <!-- Warna Bold Asli -->
+                            <button onclick="changeBg('#002F6C', 'text-white')" class="w-9 h-9 rounded-full bg-[#002F6C] border border-black/10 hover:scale-110 transition shadow-sm" title="Soka Blue"></button>
+                            <button onclick="changeBg('#C62828', 'text-white')" class="w-9 h-9 rounded-full bg-[#C62828] border border-black/10 hover:scale-110 transition shadow-sm" title="Soka Red"></button>
+                            <button onclick="changeBg('#ffffff', 'text-gray-800')" class="w-9 h-9 rounded-full bg-white border border-gray-300 hover:scale-110 transition shadow-sm" title="Pure White"></button>
+                            <button onclick="changeBg('#111827', 'text-gray-100')" class="w-9 h-9 rounded-full bg-gray-900 border border-black/10 hover:scale-110 transition shadow-sm" title="Dark Mode"></button>
+                            <button onclick="changeBg('#FDFBF7', 'text-amber-950')" class="w-9 h-9 rounded-full bg-[#FDFBF7] border border-amber-200 hover:scale-110 transition shadow-sm" title="Cream Vintage"></button>
+                            
+                            <!-- 5 Pilihan Warna Pastel Baru -->
+                            <button onclick="changeBg('#E2ECE9', 'text-emerald-950')" class="w-9 h-9 rounded-full bg-[#E2ECE9] border border-emerald-200/60 hover:scale-110 transition shadow-sm" title="Pastel Sage Green"></button>
+                            <button onclick="changeBg('#F3E1E1', 'text-rose-950')" class="w-9 h-9 rounded-full bg-[#F3E1E1] border border-rose-200/60 hover:scale-110 transition shadow-sm" title="Pastel Dusty Rose"></button>
+                            <button onclick="changeBg('#E1EBF5', 'text-blue-950')" class="w-9 h-9 rounded-full bg-[#E1EBF5] border border-blue-200/60 hover:scale-110 transition shadow-sm" title="Pastel Ocean Blue"></button>
+                            <button onclick="changeBg('#EAE6F3', 'text-purple-950')" class="w-9 h-9 rounded-full bg-[#EAE6F3] border border-purple-200/60 hover:scale-110 transition shadow-sm" title="Pastel Soft Lavender"></button>
+                            <button onclick="changeBg('#F5EFE6', 'text-stone-800')" class="w-9 h-9 rounded-full bg-[#F5EFE6] border border-stone-300/60 hover:scale-110 transition shadow-sm" title="Pastel Warm Sand"></button>
                         </div>
                     </div>
 
@@ -100,10 +116,20 @@
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Gaya Tulisan (Font)</label>
                         <select id="font-select" onchange="changeFont()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
-                            <option value="font-playfair">Elegant Serif (Playfair)</option>
-                            <option value="font-inter">Modern Minimalist (Inter)</option>
-                            <option value="font-jakarta">Clean Corporate (Jakarta)</option>
-                            <option value="font-cinzel">Classic Royal (Cinzel)</option>
+                            <optgroup label="Serif (Formal & Elegan)">
+                                <option value="font-playfair">Elegant Serif (Playfair)</option>
+                                <option value="font-dmserif">Classic Bold Serif (DM Serif)</option>
+                                <option value="font-cinzel">Classic Royal (Cinzel)</option>
+                            </optgroup>
+                            <optgroup label="Sans-Serif (Modern & Bersih)">
+                                <option value="font-inter">Modern Minimalist (Inter)</option>
+                                <option value="font-jakarta">Clean Corporate (Jakarta)</option>
+                                <option value="font-montserrat">Editorial Medium (Montserrat)</option>
+                                <option value="font-comfortaa">Soft Rounded (Comfortaa)</option>
+                            </optgroup>
+                            <optgroup label="Kreatif / Handwriting">
+                                <option value="font-caveat">Aesthetic Handwriting (Caveat)</option>
+                            </optgroup>
                         </select>
                     </div>
 
@@ -163,7 +189,8 @@
                     <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4">”</div>
 
                     <!-- Watermark Identitas Komunitas -->
-                    <div class="text-center text-[10px] opacity-40 font-bold tracking-widest uppercase border-t border-white border-opacity-10 pt-2">
+                    <!-- Ditambahkan border murni CSS pengganti transparansi agar tidak bug saat convert html2canvas -->
+                    <div id="preview-watermark" class="text-center text-[10px] font-bold tracking-widest uppercase border-t pt-2 border-white/20 opacity-40">
                         Soka Gakkai Semarang
                     </div>
 
@@ -251,7 +278,6 @@
                 quoteList = parseCSV(resBimbingan);
                 goshoList = parseCSV(resGosho);
 
-                // Render isi dropdown setelah data terkumpul
                 renderDropdownOptions();
                 loadSelectedQuote();
             } catch (error) {
@@ -273,7 +299,6 @@
             list.forEach((item, index) => {
                 const option = document.createElement('option');
                 option.value = index;
-                // Potong teks panjang untuk display di select option
                 option.text = `${index + 1}. ${item.text.substring(0, 45)}...`;
                 selectEl.appendChild(option);
             });
@@ -301,7 +326,6 @@
             
             if(list[index]) {
                 document.getElementById('custom-text').value = list[index].text;
-                // Hilangkan auto-prefix "Gosho:" di sini karena nanti bisa disunting manual oleh user
                 document.getElementById('custom-author').value = list[index].author;
                 updatePreview();
             }
@@ -313,20 +337,36 @@
             document.getElementById('preview-author').innerText = "— " + prefix + document.getElementById('custom-author').value;
         }
 
-        // Fungsi mengubah background warna canvas preview
+        // Fungsi mengubah background warna canvas preview (Dioptimalkan sinkronisasi garis pembatas bawah)
         function changeBg(bgColor, textColorClass) {
             const canvas = document.getElementById('capture-area');
-            canvas.classList.remove('text-white', 'text-gray-800', 'text-amber-950', 'text-gray-100');
+            const watermark = document.getElementById('preview-watermark');
+            
+            canvas.className = "aspect-square-canvas flex flex-col justify-between p-10 relative overflow-hidden shadow-2xl rounded-lg transition-colors duration-300";
             canvas.classList.add(textColorClass);
             canvas.style.backgroundColor = bgColor;
+
+            // Menyesuaikan warna border garis watermark bawah agar fleksibel dengan tema terang/gelap
+            if(textColorClass.includes('white') || textColorClass.includes('gray-100')) {
+                watermark.style.borderTopColor = "rgba(255, 255, 255, 0.2)";
+            } else {
+                watermark.style.borderTopColor = "rgba(0, 0, 0, 0.15)";
+            }
         }
 
         // Fungsi mengubah jenis Font tulisan
         function changeFont() {
             const fontSelected = document.getElementById('font-select').value;
             const textPreview = document.getElementById('preview-text');
-            textPreview.classList.remove('font-playfair', 'font-inter', 'font-jakarta', 'font-cinzel');
+            
+            textPreview.className = "text-base md:text-lg font-medium leading-relaxed italic";
             textPreview.classList.add(fontSelected);
+
+            // Penyesuaian khusus ukuran & gaya jika user memilih font handwriting Caveat agar tetap terbaca seimbang
+            if(fontSelected === 'font-caveat') {
+                textPreview.classList.remove('italic');
+                textPreview.classList.add('text-2xl', 'md:text-3xl');
+            }
         }
 
         // Fungsi toggle aksesoris (garis warna & petik)
