@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soka Gakkai Semarang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+        .soka-blue { background-color: #002F6C; flex: 1; }
+        .soka-yellow { background-color: #F9A825; flex: 1; }
+        .soka-red { background-color: #C62828; flex: 1; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-24">
+                <div class="flex items-center space-x-4">
+                    <!-- LOGO -->
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai" class="h-16 w-16 object-contain">
+                    <div>
+                        <!-- Ukuran teks diperbesar -->
+                        <span class="text-2xl md:text-3xl font-black text-blue-950 block tracking-wide leading-none">Soka Gakkai</span>
+                        <span class="text-sm md:text-base font-bold text-gray-500 block uppercase tracking-widest mt-1">Semarang</span>
+                    </div>
+                </div>
+                <!-- Nav Links -->
+                <div class="hidden md:flex items-center space-x-8 font-semibold">
+                    <a href="#beranda" class="text-blue-900 hover:text-blue-700 transition">Beranda</a>
+                    <a href="#tentang" class="text-gray-600 hover:text-blue-700 transition">Tentang Kami</a>
+                    <a href="#kontak" class="text-gray-600 hover:text-blue-700 transition">Kontak</a>
+                </div>
+            </div>
+        </div>
+        <!-- Aksen Bendera Soka di bawah Navbar -->
+        <div class="soka-tricolor">
+            <div class="soka-blue"></div>
+            <div class="soka-yellow"></div>
+            <div class="soka-red"></div>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER SECTION -->
+    <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
+        <!-- GAMBAR BANNER -->
+        <img src="banner.png" alt="Banner Soka Gakkai Semarang" class="absolute inset-0 w-full h-full object-cover opacity-40">
+        
+        <!-- Overlay Konten Banner -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-md">
+                Selamat Datang di Soka Gakkai Semarang
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">
+                Membangun kedamaian, budaya, dan pendidikan berdasarkan nilai-nilai kemanusiaan yang luhur.
+            </p>
+            <!-- Tombol Utama dengan kombinasi warna Bendera Soka -->
+            <div class="inline-flex rounded-full overflow-hidden p-[3px] bg-gradient-to-r from-[#002F6C] via-[#F9A825] to-[#C62828] shadow-lg transform hover:scale-105 transition">
+                <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">
+                    Pelajari Lebih Lanjut
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- TENTANG KAMI SECTION -->
+    <section id="tentang" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Tentang Kami
+            </h2>
+            <!-- Aksen Garis Bendera Soka di bawah judul -->
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme.
+            </p>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Kami percaya bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.
+            </p>
+        </div>
+    </section>
+
+    <!-- KATA MUTIARA / SEPARATOR DENGAN AKSEN BENDERA -->
+    <div class="soka-tricolor">
+        <div class="soka-blue"></div>
+        <div class="soka-yellow"></div>
+        <div class="soka-red"></div>
+    </div>
+
+    <!-- KONTAK SECTION -->
+    <section id="kontak" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                    Hubungi Kami
+                </h2>
+                <!-- Aksen Garis Bendera Soka di bawah judul -->
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+                <p class="text-gray-500">Silakan kunjungi atau hubungi kami untuk informasi lebih lanjut</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Info Alamat -->
+                <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-[#002F6C] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-950 mb-6">Informasi Kontak</h3>
+                        
+                        <!-- Alamat -->
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-blue-50 p-3 rounded-lg text-blue-900 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Alamat</h4>
+                                <p class="text-gray-600 mt-1">Jl. Pandean Lamper II no. 1, Semarang, Jawa Tengah</p>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-red-50 p-3 rounded-lg text-red-700 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Email</h4>
+                                <a href="mailto:sokasmg@gmail.com" class="text-blue-700 hover:underline mt-1 block font-medium">sokasmg@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps Placeholder / Ilustrasi -->
+                <div class="bg-white p-4 rounded-2xl shadow-md h-64 md:h-auto min-h-[250px] flex items-center justify-center border-t-4 border-[#C62828]">
+                    <div class="text-center text-gray-400 p-6">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-blue-950 text-gray-400 py-8 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
