@@ -100,7 +100,41 @@
             </p>
         </div>
     </section>
+    
+        <!-- SECTION QUOTE OF THE DAY -->
+    <section class="py-12 bg-gray-50 border-b border-gray-100">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <!-- Label Kecil -->
+            <span class="text-xs font-bold uppercase tracking-widest text-blue-600 block mb-3">Renungan Hari Ini</span>
+            
+            <!-- Tempat Quote Muncul -->
+            <div class="relative inline-block">
+                <!-- Tanda Kutip Dekoratif Besar -->
+                <span class="absolute -top-6 -left-8 text-6xl text-gray-200 font-serif pointer-events-none">“</span>
+                
+                <p id="soka-quote" class="text-xl md:text-2xl font-medium text-gray-700 italic leading-relaxed relative z-10 transition-opacity duration-500 opacity-100">
+                    <!-- Teks quote akan diisi otomatis oleh JavaScript -->
+                    Memuat kutipan hari ini...
+                </p>
+                
+                <span class="absolute -bottom-12 -right-8 text-6xl text-gray-200 font-serif pointer-events-none">”</span>
+            </div>
+            
+            <!-- Tempat Penulis/Sumber -->
+            <p id="soka-author" class="text-sm font-bold text-blue-950 mt-4 tracking-wide uppercase">
+                <!-- Nama penulis akan diisi oleh JavaScript -->
+            </p>
+            
+            <!-- Garis Aksen Mini Tricolor -->
+            <div class="flex justify-center space-x-1 w-16 mx-auto mt-6">
+                <span class="w-4 h-[3px] bg-[#002F6C] rounded-full"></span>
+                <span class="w-4 h-[3px] bg-[#F9A825] rounded-full"></span>
+                <span class="w-4 h-[3px] bg-[#C62828] rounded-full"></span>
+            </div>
+        </div>
+    </section>
 
+   <!-- SECTION JADWAL-->
     <section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-blue-950 mb-2">
@@ -252,6 +286,152 @@
         </div>
     </div>
 </footer>
+
+    <script>
+        // Daftar 31 kutipan inspiratif (Satu kutipan unik untuk setiap hari dalam sebulan)
+        const quoteList = [
+            {
+                text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Kunci dari kebahagiaan bukanlah ketiadaan masalah, melainkan kekuatan batin yang tumbuh saat kita berani menghadapi dan melampaui masalah tersebut.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Jika kamu menyalakan lampu bagi orang lain, hal itu juga akan menerangi jalanmu sendiri.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Keberanian adalah modal terbesar untuk membuka pintu gerbang kebahagiaan dan perdamaian di dalam lingkungan tempat kita hidup.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Suatu hari yang diisi dengan rasa syukur dan tindakan nyata bernilai jauh lebih besar daripada kehidupan seratus tahun yang dilewati dengan keluhan.",
+                author: "Tsunesaburo Makiguchi"
+            },
+            {
+                text: "Hanya orang yang pernah merasakan penderitaan mendalam yang mampu memahami makna sejati dari empati, kehangatan, dan kedamaian.",
+                author: "Josei Toda"
+            },
+            {
+                text: "Masa depan tidak ditentukan oleh apa yang terjadi kemarin atau hari ini, melainkan oleh tekad kuat yang kita bangun di dalam hati saat ini.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Kekayaan hati jauh lebih berharga daripada kekayaan istana maupun harta benda yang kasat mata.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Kebahagiaan sejati bukanlah sesuatu yang kita kejar di luar sana, melainkan mata air kekuatan yang kita gali dari dalam diri sendiri.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Tujuan utama pendidikan adalah untuk membahagiakan murid, memicu rasa ingin tahu mereka, dan membangun karakter kemanusiaan yang luhur.",
+                author: "Tsunesaburo Makiguchi"
+            },
+            {
+                text: "Di mana ada ketulusan untuk mendengarkan dan merangkul sesama, di situlah benih-benih perdamaian sejati mulai bertumbuh.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Kesulitan dan rintangan hidup bukanlah tanda kekalahan, melainkan batu asahan yang akan membuat kilau karakter kita menjadi semakin cemerlang.",
+                author: "Josei Toda"
+            },
+            {
+                text: "Mereka yang terus melangkah maju dengan harapan di hatinya, sekecil apa pun langkah itu, tidak akan pernah bisa dikalahkan oleh keadaan.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Kata-kata yang lahir dari ketulusan hati memiliki kekuatan spiritual untuk menembus dinding prasangka dan menggerakkan jiwa orang lain.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Menjadi pemenang yang sejati berarti mampu menaklukkan kelemahan, kemalasan, dan rasa takut yang ada di dalam diri sendiri setiap harinya.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Kebaikan yang kita lakukan kepada lingkungan sekitar hari ini adalah investasi kedamaian yang akan kita tuai di masa depan.",
+                author: "Tsunesaburo Makiguchi"
+            },
+            {
+                text: "Dialog yang hangat dan didasari rasa saling menghormati adalah jembatan paling kokoh untuk menyatukan perbedaan di tengah masyarakat.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Meskipun badai kehidupan datang menerpa dengan dahsyat, teguhkanlah hati seperti gunung yang tidak tergoyahkan oleh angin.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Pemuda adalah pilar dan pembawa obor masa depan. Di tangan pemuda yang berkarakter, kedamaian dunia dapat diwujudkan.",
+                author: "Josei Toda"
+            },
+            {
+                text: "Kebahagiaan yang sesungguhnya adalah ketika kita bisa mengupayakan kebahagiaan orang lain sekaligus kebahagiaan diri sendiri secara bersamaan.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Jangan pernah meremehkan satu tindakan kecil kebaikan, karena riak kecil di dalam kolam bisa menciptakan gelombang perubahan yang besar.",
+                author: "Tsunesaburo Makiguchi"
+            },
+            {
+                text: "Persahabatan yang tulus dan didasari rasa saling mendukung adalah salah satu harta paling berharga yang bisa dimiliki manusia dalam hidup ini.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Satu lentera kecil di dalam ruangan yang gelap gulita mampu mengusir kegelapan yang telah bertahan selama ribuan tahun.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Ketika kita mengubah cara pandang dan sikap internal kita, maka lingkungan di sekitar kita secara perlahan juga akan mulai berubah.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Kehidupan yang bermakna bukanlah kehidupan yang bebas dari masalah, melainkan kehidupan yang didedikasikan demi kemaslahatan orang banyak.",
+                author: "Josei Toda"
+            },
+            {
+                text: "Pendidikan sejati harus melahirkan individu-individu yang berani membela kebenaran, keadilan, dan menghargai martabat kehidupan.",
+                author: "Tsunesaburo Makiguchi"
+            },
+            {
+                text: "Di mana pun kamu berada saat ini, jadilah seperti bunga teratai yang mekar dengan indah dan bersih meskipun tumbuh di air yang berlumpur.",
+                author: "Nichiren Daishonin"
+            },
+            {
+                text: "Harapan adalah fajar yang mengusir malam. Selama kita tidak memadamkan api harapan di dalam hati, jalan keluar akan selalu terbuka.",
+                author: "Daisaku Ikeda"
+            },
+            {
+                text: "Ikatan komunitas yang kuat dibangun di atas fondasi kepercayaan, rasa saling menghargai, dan gotong royong yang konsisten.",
+                author: "Josei Toda"
+            },
+            {
+                text: "Hari ini adalah lembaran baru. Mari kita isi dengan semangat belajar yang tinggi, ketulusan bertindak, dan senyuman yang membawa kedamaian.",
+                author: "Daisaku Ikeda"
+            }
+        ];
+
+        function setQuoteOfTheDay() {
+            const today = new Date();
+            // Menggunakan fungsi matematika agar indeks quote terkunci berdasarkan tanggal hari ini saja
+            const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            
+            // Menggunakan modulus (%) 31 agar indeks selalu berputar rapi di dalam 31 data di atas
+            const quoteIndex = dateSeed % quoteList.length;
+            
+            const selectedQuote = quoteList[quoteIndex];
+            document.getElementById('soka-quote').innerText = selectedQuote.text;
+            document.getElementById('soka-author').innerText = selectedQuote.author;
+        }
+
+        // Jalankan fungsi saat halaman selesai dimuat sepenuhnya
+        window.addEventListener('DOMContentLoaded', setQuoteOfTheDay);
+    </script>
 
 
 </body>
