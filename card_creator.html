@@ -64,7 +64,7 @@
                     
                     <label class="block text-sm font-bold text-gray-700 mb-2">2. Pilih Judul/Kutipan</label>
                     <select id="quote-select" onchange="loadSelectedQuote()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 block">
-                        <!-- Diisi otomatis lewat JS -->
+                        <option>Memuat data dari Google Sheets...</option>
                     </select>
                 </div>
 
@@ -182,35 +182,94 @@
     </main>
 
     <script>
-        // Copy database quote dari file index utama agar sinkron
-        const quoteList = [
-            { text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.", author: "Daisaku Ikeda" },
-            { text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.", author: "Nichiren Daishonin" },
-            { text: "Kunci dari kebahagiaan bukanlah ketiadaan masalah, melainkan kekuatan batin yang tumbuh saat kita berani menghadapi dan melampaui masalah tersebut.", author: "Daisaku Ikeda" },
-            { text: "Jika kamu menyalakan lampu bagi orang lain, hal itu juga akan menerangi jalanmu sendiri.", author: "Nichiren Daishonin" },
-            { text: "Keberanian adalah modal terbesar untuk membuka pintu gerbang kebahagiaan dan perdamaian di dalam lingkungan tempat kita hidup.", author: "Daisaku Ikeda" }
-        ];
+        // === KONFIGURASI LINK GOOGLE SHEETS ===
+        const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+        const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
 
-        const goshoList = [
-            { text: "Nam-myoho-renge-kyo bagaikan raungan singa. Penyakit apapun juga tidak dapat membahayakannya.", author: "Surat balasan kepada Kyo O Dono" },
-            { text: "Kalau timbul kejahatan besar, maka kebaikan besar pasti datang. Karena negara ini telah dipenuhi dengan pemfitnahan hukum yang besar, maka hukum kebenaran agung pasti akan tersebar luas.", author: "Surat kejahatan besar dan kebaikan besar" },
-            { text: "Perkuatlah hati kepercayaan hari demi hari, bulan demi bulan. Kalau ada hati yang lengah sedikit pun, maka iblis akan mengambil kesempatan.", author: "Surat perihal penganiayaan arif bijaksana" },
-            { text: "Strategi Hokekyo jauh lebih unggul dari segala strategi lainnya. Hendaknya dipertahankan dengan baik.", author: "Surat balasan kepada Shijo Kingo Dono" }
-        ];
-
+        // Variabel penampung data cloud
+        let quoteList = [];
+        let goshoList = [];
         let currentActiveSource = 'bimbingan';
 
-        // Inisialisasi awal saat halaman dibuka
+        // Fungsi pembaca CSV (Mengamankan tanda koma di dalam kalimat)
+        function parseCSV(text) {
+            const result = [];
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+            const cleanText = text.replace(/\r/g, "");
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
+            }
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
+                }
+            }
+            return result;
+        }
+
+        // Sedot data Google Sheets saat halaman pertama kali dibuka
         document.addEventListener('DOMContentLoaded', () => {
-            renderDropdownOptions();
-            loadSelectedQuote();
+            loadQuotesFromSheets();
         });
+
+        async function loadQuotesFromSheets() {
+            try {
+                const [resBimbingan, resGosho] = await Promise.all([
+                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+                    fetch(CSV_URL_GOSHO).then(res => res.text())
+                ]);
+
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+
+                // Render isi dropdown setelah data terkumpul
+                renderDropdownOptions();
+                loadSelectedQuote();
+            } catch (error) {
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                document.getElementById('quote-select').innerHTML = '<option>Gagal memuat data dari cloud.</option>';
+            }
+        }
 
         function renderDropdownOptions() {
             const selectEl = document.getElementById('quote-select');
             selectEl.innerHTML = '';
             const list = currentActiveSource === 'bimbingan' ? quoteList : goshoList;
             
+            if (list.length === 0) {
+                selectEl.innerHTML = '<option>Tidak ada data ditemukan.</option>';
+                return;
+            }
+
             list.forEach((item, index) => {
                 const option = document.createElement('option');
                 option.value = index;
@@ -242,21 +301,21 @@
             
             if(list[index]) {
                 document.getElementById('custom-text').value = list[index].text;
-                document.getElementById('custom-author').value = (currentActiveSource === 'gosho' ? 'Gosho: ' : '') + list[index].author;
+                // Hilangkan auto-prefix "Gosho:" di sini karena nanti bisa disunting manual oleh user
+                document.getElementById('custom-author').value = list[index].author;
                 updatePreview();
             }
         }
 
         function updatePreview() {
+            const prefix = currentActiveSource === 'gosho' ? 'Gosho: ' : '';
             document.getElementById('preview-text').innerText = document.getElementById('custom-text').value;
-            document.getElementById('preview-author').innerText = "— " + document.getElementById('custom-author').value;
+            document.getElementById('preview-author').innerText = "— " + prefix + document.getElementById('custom-author').value;
         }
 
         // Fungsi mengubah background warna canvas preview
         function changeBg(bgColor, textColorClass) {
             const canvas = document.getElementById('capture-area');
-            
-            // Bersihkan class teks lama
             canvas.classList.remove('text-white', 'text-gray-800', 'text-amber-950', 'text-gray-100');
             canvas.classList.add(textColorClass);
             canvas.style.backgroundColor = bgColor;
@@ -266,8 +325,6 @@
         function changeFont() {
             const fontSelected = document.getElementById('font-select').value;
             const textPreview = document.getElementById('preview-text');
-            
-            // Reset class font bawaan
             textPreview.classList.remove('font-playfair', 'font-inter', 'font-jakarta', 'font-cinzel');
             textPreview.classList.add(fontSelected);
         }
@@ -287,8 +344,6 @@
         // PROSES UTAMA: DOWNLOAD HTML KE JPEG
         function downloadCard() {
             const captureArea = document.getElementById('capture-area');
-            
-            // Menggunakan skala tinggi (scale: 3) agar hasil gambar super tajam/HD saat didownload
             html2canvas(captureArea, {
                 scale: 3, 
                 useCORS: true,
@@ -296,8 +351,6 @@
             }).then(canvas => {
                 const image = canvas.toDataURL("image/jpeg", 0.9);
                 const link = document.createElement('a');
-                
-                // Judul file otomatis berdasarkan waktu unduh
                 link.download = `Soka_Quote_${Date.now()}.jpg`;
                 link.href = image;
                 link.click();
