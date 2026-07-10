@@ -447,9 +447,10 @@
 const slides = document.querySelectorAll('.banner-slide');
 let currentSlide = 0;
 const slideInterval = 5000; // Ganti gambar setiap 5 detik
+let sliderTimer = null;
 
-// FUNGSI 1: Memuat gambar 2-6 secara diam-diam setelah web selesai loading keseluruhan
-window.addEventListener('load', () => {
+// FUNGSI 1: Memuat gambar 2-6 setelah struktur HTML utama selesai dibaca browser (Lebih cepat & aman)
+document.addEventListener('DOMContentLoaded', () => {
     slides.forEach((slide) => {
         // Ambil nilai dari data-src
         const lazySrc = slide.getAttribute('data-src');
@@ -461,23 +462,29 @@ window.addEventListener('load', () => {
         }
     });
 
-    # Mulai jalankan slider otomatis HANYA SETELAH gambar sisa selesai diaktifkan kodenya
-    setInterval(nextSlide, slideInterval);
+    // Mulai jalankan slider otomatis dengan aman
+    sliderTimer = setInterval(nextSlide, slideInterval);
 });
 
 // FUNGSI 2: Logika transisi memudar (Fading)
 function nextSlide() {
-    // Pastikan gambar target sudah memiliki atribut src (sudah siap/termuat)
-    if (!slides[(currentSlide + 1) % slides.length].getAttribute('src')) return;
+    // Cari tahu indeks gambar berikutnya
+    const nextIndex = (currentSlide + 1) % slides.length;
+    
+    // PENGAMAN: Jika gambar berikutnya ternyata BELUM selesai di-download oleh browser, 
+    // jangan lakukan transisi dulu agar tidak lompat/putus-putus.
+    if (!slides[nextIndex].complete || slides[nextIndex].naturalWidth === 0) {
+        return; 
+    }
 
-    // Sembunyikan gambar saat ini
+    // Sembunyikan gambar saat ini (kembali ke transparan)
     slides[currentSlide].classList.remove('opacity-40');
     slides[currentSlide].classList.add('opacity-0');
     
-    // Pindah ke indeks berikutnya
-    currentSlide = (currentSlide + 1) % slides.length;
+    // Pindah indeks ke gambar berikutnya
+    currentSlide = nextIndex;
     
-    // Tampilkan gambar baru
+    // Tampilkan gambar baru (memudar masuk)
     slides[currentSlide].classList.remove('opacity-0');
     slides[currentSlide].classList.add('opacity-40');
 }
