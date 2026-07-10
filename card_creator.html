@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soka Quote Card Creator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2canvas CDN untuk convert HTML ke Image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Google Fonts untuk variasi font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        
+        /* Paksa kontainer preview selalu 1:1 */
+        .aspect-square-canvas {
+            width: 500px;
+            height: 500px;
+        }
+        @media (max-width: 640px) {
+            .aspect-square-canvas {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1 / 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 py-4 px-6 mb-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-xl font-black text-blue-950 tracking-wide">Soka Card Creator</span>
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">Rasio 1:1</span>
+            </div>
+            <a href="index.html" class="text-sm font-semibold text-gray-600 hover:text-blue-900 flex items-center gap-1">
+                ← Kembali ke Beranda
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-6xl mx-auto px-4 pb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- PANEL KONTROL (KIRI) -->
+            <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-6">
+                <h2 class="text-lg font-bold text-gray-900 border-b pb-3">Pengaturan Kartu</h2>
+                
+                <!-- Kategori & Pilih Kutipan -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">1. Jenis Sumber</label>
+                    <div class="flex bg-gray-100 p-1 rounded-lg mb-3">
+                        <button onclick="changeSource('bimbingan')" id="src-bimbingan" class="w-full py-2 text-xs font-bold rounded-md bg-white text-blue-950 shadow-sm transition">Bimbingan</button>
+                        <button onclick="changeSource('gosho')" id="src-gosho" class="w-full py-2 text-xs font-bold rounded-md text-gray-500 hover:text-gray-900 transition">Gosho</button>
+                    </div>
+                    
+                    <label class="block text-sm font-bold text-gray-700 mb-2">2. Pilih Judul/Kutipan</label>
+                    <select id="quote-select" onchange="loadSelectedQuote()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 block">
+                        <!-- Diisi otomatis lewat JS -->
+                    </select>
+                </div>
+
+                <!-- Custom Text Edit -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Edit Teks Manual (Opsional)</label>
+                    <textarea id="custom-text" oninput="updatePreview()" rows="3" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500 block" placeholder="Sesuaikan teks isi kartu..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Edit Tokoh / Sumber Gosho</label>
+                    <input type="text" id="custom-author" oninput="updatePreview()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500 block">
+                </div>
+
+                <hr>
+
+                <!-- Desain & Gaya -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-gray-900">Kustomisasi Desain</h3>
+                    
+                    <!-- Warna Background -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Warna Latar Belakang</label>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button onclick="changeBg('#002F6C', 'text-white')" class="w-8 h-8 rounded-full bg-[#002F6C] border-2 border-transparent hover:scale-105 transition" title="Soka Blue"></button>
+                            <button onclick="changeBg('#C62828', 'text-white')" class="w-8 h-8 rounded-full bg-[#C62828] border-2 border-transparent hover:scale-105 transition" title="Soka Red"></button>
+                            <button onclick="changeBg('#ffffff', 'text-gray-800')" class="w-8 h-8 rounded-full bg-white border border-gray-300 hover:scale-105 transition" title="Pure White"></button>
+                            <button onclick="changeBg('#FDFBF7', 'text-amber-950')" class="w-8 h-8 rounded-full bg-[#FDFBF7] border border-amber-200 hover:scale-105 transition" title="Cream Vintage"></button>
+                            <button onclick="changeBg('#111827', 'text-gray-100')" class="w-8 h-8 rounded-full bg-gray-900 border-2 border-transparent hover:scale-105 transition" title="Dark Mode"></button>
+                        </div>
+                    </div>
+
+                    <!-- Pilihan Font -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Gaya Tulisan (Font)</label>
+                        <select id="font-select" onchange="changeFont()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                            <option value="font-playfair">Elegant Serif (Playfair)</option>
+                            <option value="font-inter">Modern Minimalist (Inter)</option>
+                            <option value="font-jakarta">Clean Corporate (Jakarta)</option>
+                            <option value="font-cinzel">Classic Royal (Cinzel)</option>
+                        </select>
+                    </div>
+
+                    <!-- Aksesoris Tambahan -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Aksesoris/Dekorasi</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center text-sm font-medium text-gray-700 cursor-pointer">
+                                <input type="checkbox" id="acc-tricolor" onchange="toggleAcc()" checked class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2">
+                                Garis Triwarna Soka (Atas-Bawah)
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700 cursor-pointer">
+                                <input type="checkbox" id="acc-quotes" onchange="toggleAcc()" checked class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2">
+                                Tanda Kutip Dekoratif (“ ”)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Cetak / Unduh -->
+                <button onclick="downloadCard()" class="w-full bg-gradient-to-r from-blue-900 to-indigo-950 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:from-blue-800 hover:to-indigo-900 transition flex items-center justify-center gap-2 mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Unduh Gambar JPEG
+                </button>
+            </div>
+
+            <!-- LIVE PREVIEW CANVAS (KANAN) -->
+            <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Live Preview (Hasil Cetak)</span>
+                
+                <!-- Wadah Utama yang di-convert ke Image -->
+                <div id="capture-area" class="aspect-square-canvas bg-[#002F6C] text-white flex flex-col justify-between p-10 relative overflow-hidden shadow-2xl rounded-lg transition-colors duration-300">
+                    
+                    <!-- Aksesoris Triwarna Atas -->
+                    <div id="preview-tricolor-top" class="absolute top-0 left-0 right-0 h-2 flex">
+                        <div class="bg-[#002F6C] flex-1"></div>
+                        <div class="bg-[#F9A825] flex-1"></div>
+                        <div class="bg-[#C62828] flex-1"></div>
+                    </div>
+
+                    <!-- Tanda Kutip Atas -->
+                    <div id="preview-quote-start" class="text-5xl opacity-20 font-serif leading-none select-none -mb-4">“</div>
+
+                    <!-- Tengah: Isi Teks Utama -->
+                    <div class="my-auto text-center px-4">
+                        <p id="preview-text" class="text-base md:text-lg font-medium leading-relaxed italic font-playfair">
+                            Memuat teks...
+                        </p>
+                        <p id="preview-author" class="text-xs font-bold tracking-wider uppercase mt-6 opacity-80">
+                            -
+                        </p>
+                    </div>
+
+                    <!-- Tanda Kutip Bawah -->
+                    <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4">”</div>
+
+                    <!-- Watermark Identitas Komunitas -->
+                    <div class="text-center text-[10px] opacity-40 font-bold tracking-widest uppercase border-t border-white border-opacity-10 pt-2">
+                        Soka Gakkai Semarang
+                    </div>
+
+                    <!-- Aksesoris Triwarna Bawah -->
+                    <div id="preview-tricolor-bottom" class="absolute bottom-0 left-0 right-0 h-2 flex">
+                        <div class="bg-[#002F6C] flex-1"></div>
+                        <div class="bg-[#F9A825] flex-1"></div>
+                        <div class="bg-[#C62828] flex-1"></div>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-gray-500 mt-4 text-center">💡 Gambar yang diunduh akan memiliki resolusi tajam berkali lipat tanpa pecah.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Copy database quote dari file index utama agar sinkron
+        const quoteList = [
+            { text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.", author: "Daisaku Ikeda" },
+            { text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.", author: "Nichiren Daishonin" },
+            { text: "Kunci dari kebahagiaan bukanlah ketiadaan masalah, melainkan kekuatan batin yang tumbuh saat kita berani menghadapi dan melampaui masalah tersebut.", author: "Daisaku Ikeda" },
+            { text: "Jika kamu menyalakan lampu bagi orang lain, hal itu juga akan menerangi jalanmu sendiri.", author: "Nichiren Daishonin" },
+            { text: "Keberanian adalah modal terbesar untuk membuka pintu gerbang kebahagiaan dan perdamaian di dalam lingkungan tempat kita hidup.", author: "Daisaku Ikeda" }
+        ];
+
+        const goshoList = [
+            { text: "Nam-myoho-renge-kyo bagaikan raungan singa. Penyakit apapun juga tidak dapat membahayakannya.", author: "Surat balasan kepada Kyo O Dono" },
+            { text: "Kalau timbul kejahatan besar, maka kebaikan besar pasti datang. Karena negara ini telah dipenuhi dengan pemfitnahan hukum yang besar, maka hukum kebenaran agung pasti akan tersebar luas.", author: "Surat kejahatan besar dan kebaikan besar" },
+            { text: "Perkuatlah hati kepercayaan hari demi hari, bulan demi bulan. Kalau ada hati yang lengah sedikit pun, maka iblis akan mengambil kesempatan.", author: "Surat perihal penganiayaan arif bijaksana" },
+            { text: "Strategi Hokekyo jauh lebih unggul dari segala strategi lainnya. Hendaknya dipertahankan dengan baik.", author: "Surat balasan kepada Shijo Kingo Dono" }
+        ];
+
+        let currentActiveSource = 'bimbingan';
+
+        // Inisialisasi awal saat halaman dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDropdownOptions();
+            loadSelectedQuote();
+        });
+
+        function renderDropdownOptions() {
+            const selectEl = document.getElementById('quote-select');
+            selectEl.innerHTML = '';
+            const list = currentActiveSource === 'bimbingan' ? quoteList : goshoList;
+            
+            list.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                // Potong teks panjang untuk display di select option
+                option.text = `${index + 1}. ${item.text.substring(0, 45)}...`;
+                selectEl.appendChild(option);
+            });
+        }
+
+        function changeSource(type) {
+            currentActiveSource = type;
+            const btnBimbingan = document.getElementById('src-bimbingan');
+            const btnGosho = document.getElementById('src-gosho');
+            
+            if(type === 'bimbingan') {
+                btnBimbingan.className = "w-full py-2 text-xs font-bold rounded-md bg-white text-blue-950 shadow-sm transition";
+                btnGosho.className = "w-full py-2 text-xs font-bold rounded-md text-gray-500 hover:text-gray-900 transition";
+            } else {
+                btnGosho.className = "w-full py-2 text-xs font-bold rounded-md bg-white text-blue-950 shadow-sm transition";
+                btnBimbingan.className = "w-full py-2 text-xs font-bold rounded-md text-gray-500 hover:text-gray-900 transition";
+            }
+            renderDropdownOptions();
+            loadSelectedQuote();
+        }
+
+        function loadSelectedQuote() {
+            const index = document.getElementById('quote-select').value;
+            const list = currentActiveSource === 'bimbingan' ? quoteList : goshoList;
+            
+            if(list[index]) {
+                document.getElementById('custom-text').value = list[index].text;
+                document.getElementById('custom-author').value = (currentActiveSource === 'gosho' ? 'Gosho: ' : '') + list[index].author;
+                updatePreview();
+            }
+        }
+
+        function updatePreview() {
+            document.getElementById('preview-text').innerText = document.getElementById('custom-text').value;
+            document.getElementById('preview-author').innerText = "— " + document.getElementById('custom-author').value;
+        }
+
+        // Fungsi mengubah background warna canvas preview
+        function changeBg(bgColor, textColorClass) {
+            const canvas = document.getElementById('capture-area');
+            
+            // Bersihkan class teks lama
+            canvas.classList.remove('text-white', 'text-gray-800', 'text-amber-950', 'text-gray-100');
+            canvas.classList.add(textColorClass);
+            canvas.style.backgroundColor = bgColor;
+        }
+
+        // Fungsi mengubah jenis Font tulisan
+        function changeFont() {
+            const fontSelected = document.getElementById('font-select').value;
+            const textPreview = document.getElementById('preview-text');
+            
+            // Reset class font bawaan
+            textPreview.classList.remove('font-playfair', 'font-inter', 'font-jakarta', 'font-cinzel');
+            textPreview.classList.add(fontSelected);
+        }
+
+        // Fungsi toggle aksesoris (garis warna & petik)
+        function toggleAcc() {
+            const showTricolor = document.getElementById('acc-tricolor').checked;
+            const showQuotes = document.getElementById('acc-quotes').checked;
+            
+            document.getElementById('preview-tricolor-top').style.display = showTricolor ? 'flex' : 'none';
+            document.getElementById('preview-tricolor-bottom').style.display = showTricolor ? 'flex' : 'none';
+            
+            document.getElementById('preview-quote-start').style.opacity = showQuotes ? '0.2' : '0';
+            document.getElementById('preview-quote-end').style.opacity = showQuotes ? '0.2' : '0';
+        }
+
+        // PROSES UTAMA: DOWNLOAD HTML KE JPEG
+        function downloadCard() {
+            const captureArea = document.getElementById('capture-area');
+            
+            // Menggunakan skala tinggi (scale: 3) agar hasil gambar super tajam/HD saat didownload
+            html2canvas(captureArea, {
+                scale: 3, 
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const image = canvas.toDataURL("image/jpeg", 0.9);
+                const link = document.createElement('a');
+                
+                // Judul file otomatis berdasarkan waktu unduh
+                link.download = `Soka_Quote_${Date.now()}.jpg`;
+                link.href = image;
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
