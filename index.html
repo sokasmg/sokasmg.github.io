@@ -104,18 +104,25 @@
         </div>
     </section>
     
-    <!-- SECTION QUOTE OF THE DAY -->
+    <!-- SECTION QUOTE OF THE DAY (DENGAN MODEL TAB MODERN) -->
     <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
         <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
         <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
         
         <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <p class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4">Renungan Hari Ini</p>
-            <!-- ID soka-quote ditaruh di sini agar dibaca JS -->
+            <!-- Sistem Tombol Tab Pengubah Konten -->
+            <div class="inline-flex bg-white bg-opacity-10 p-1.5 rounded-full mb-8 border border-white border-opacity-10">
+                <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">
+                    Bimbingan Hari Ini
+                </button>
+                <button id="tab-gosho" onclick="switchTab('gosho')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400">
+                    Gosho Hari Ini
+                </button>
+            </div>
+
             <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
-                Memuat kutipan hari ini...
+                Memuat kutipan...
             </blockquote>
-            <!-- ID soka-author ditaruh di sini agar dibaca JS -->
             <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
                 -
             </p>
@@ -286,7 +293,7 @@
     </footer>
 
     <script>
-        // Daftar 31 kutipan inspiratif (Satu kutipan unik untuk setiap hari dalam sebulan)
+        // Array 1: Daftar 31 Bimbingan Umum/Kutipan Inspiratif
         const quoteList = [
             { text: "Transformasi positif dalam diri satu individu (revolusi manusia) akan mampu membantu mengubah sandaran bagi takdir sebuah negara, bahkan lebih jauh lagi, seluruh umat manusia.", author: "Daisaku Ikeda" },
             { text: "Musim dingin pasti berlalu dan berganti menjadi musim semi. Tidak pernah ada sejarah di mana musim dingin bertahan selamanya.", author: "Nichiren Daishonin" },
@@ -321,20 +328,93 @@
             { text: "Hari ini adalah lembaran baru. Mari kita isi dengan semangat belajar yang tinggi, ketulusan bertindak, dan senyuman yang membawa kedamaian.", author: "Daisaku Ikeda" }
         ];
 
+        // Array 2: Daftar 31 Gosho Harian (Sesuai List Anda)
+        const goshoList = [
+            { text: "Saya beserta murid-murid saya walaupun menghadapi berbagai penganiayaan, jika tidak timbul keraguan, maka pasti mencapai dunia Buddha. Janganlah mencurigai para dewa tidak memberikan perlindungan, janganlah mengeluh kehidupan sekarang yang belum mendapatkan ketenteraman. Walaupun siang malam saya mengajarkan hal ini kepada murid-murid saya, tetapi karena timbul keraguan, semuanya mundur dari hati kepercayaan. Sangat disayangkan bahwa kebiasaan orang bodoh adalah justru pada saat genting melupakan hal yang telah dijanjikan.", author: "Nichiren Daishonin" },
+            { text: "Nam-myoho-renge-kyo bagaikan raungan singa. Penyakit apapun juga tidak dapat membahayakannya.", author: "Surat balasan kepada Kyo O Dono" },
+            { text: "Tiada kegembiraan dan kenikmatan sesungguhnya selain menyembah dan mempertahankan Hokekyo. Yang dikatakan “masa sekarang aman dan tenteram, kehidupan mendatang dilahirkan di tempat baik\" adalah hal ini. Namun demikian, janganlah mundur ketika penganiayaan kemasyarakatan terus bermunculan. Bagi orang bijaksana dan orang arif bijaksana, hal demikian adalah tak terhindarkan. Hendaknya bersama-sama istri anda meminum arak, dan menyebut Nam-myoho-renge-kyo. Ketika menderita, terimalah penderitaan seadanya. Ketika bergembira, nikmatilah kegembiraan sewajarnya. Baik penderitaan maupun kegembiraan hendaknya dengan satu hati menyebut Nam-myoho-renge-kyo.", author: "Surat balasan kepada Shijo Kingo Dono" },
+            { text: "Kalau timbul kejahatan besar, maka kebaikan besar pasti datang. Karena negara ini telah dipenuhi dengan pemfitnahan hukum yang besar, maka hukum kebenaran agung pasti akan tersebar luas. Apa yang perlu anda sekalian keluh-kesahkan!", author: "Surat kejahatan besar dan kebaikan besar" },
+            { text: "Haruslah giat dan rajin melaksanakan kedua jalan dari pelaksanaan dan belajar. Tanpa pelaksanaan dan belajar, maka Hukum Buddha akan lenyap. Saya sendiri melaksanakan, dan juga berkali-kali mengajarkannya kepada orang lain. Pelaksanaan dan belajar timbul dari hati kepercayaan. Jika sanggup, sampaikanlah kepada orang lain walaupun hanya satu kata ataupun satu kalimat.", author: "Shoho Jisso sho" },
+            { text: "Perkuatlah hati kepercayaan hari demi hari, bulan demi bulan. Kalau ada hati yang lengah sedikit pun, maka iblis akan mengambil kesempatan.", author: "Surat perihal penganiayaan arif bijaksana" },
+            { text: "Yang dimaksud orang arif bijaksana adalah tidak menjalankan Hukum Buddha di luar hukum kemasyarakatan. Orang yang dapat memahami dengan baik seluruh hukum yang mengatur kemasyarakatan disebut sebagai orang arif bijaksana.", author: "Surat pengurangan kalpa" },
+            { text: "Pelaksana Hokekyo haruslah tidak mundur dalam hati kepercayaan, tidak bermuka dua, dan menyerahkan seluruh jiwa raganya kepada Hokekyo. Kalau melaksanakan pertapaan sesuai dengan petuah emas Sang Buddha, maka tidak hanya kehidupan mendatang, bahkan dalam kehidupan ini pun akan melenyapkan malapetaka dan memperpanjang usia serta memperoleh akibat imbalan agung yang luar biasa. Begitu pun keinginan agung kosenrufu pasti akan tercapai.", author: "Surat lampiran Sutra Doa" },
+            { text: "Doa yang belum terkabulkan adalah bagaikan busurnya kuat, namun tali busurnya lemah. Begitupun sama seperti orang yang mempergunakan pedang dan golok besar adalah seorang pengecut. Janganlah menyalahkan hal ini pada Hokekyo.", author: "Perihal Istana Raja" },
+            { text: "Kalau di dalam ichinen mencurahkan jerih payah ratusan juta kalpa dalam melaksanakan pertapaan Buddha, maka di dalam sekejap jiwa, Trikaya yang dimiliki sejak asal muasal yang tidak dibuat-buat akan timbul secara terus-menerus. Yang dikatakan dengan Nam-myoho-renge-kyo adalah pelaksanaan tulus dan berkelangsungan.", author: "Satu hal penting satu kalimat satu bab dari 28 bab" },
+            { text: "Bagaikan cermin kotor, jika diasah maka akan berkilauan seperti permata. Jiwa sesat yang gelap di dalam ichinen sekarang ini adalah cermin yang belum diasah. Kalau diasah, maka pasti akan menjadi cermin terang dari kesadaran Buddha. Bangkitkanlah hati kepercayaan yang dalam dan asahlah jiwa setiap pagi dan sore dengan rajin. Bagaimanakah cara mengasahnya? Yang dimaksud dengan mengasah tidak lain hanyalah menyembah dengan menyebut Nam-myoho-renge-kyo.", author: "Surat pencapaian kesadaran Buddha seumur hidup" },
+            { text: "Walaupun badan berbeda, jika hatinya sama (itai doshin), maka hal apapun dapat dicapai. Sebaliknya, walau badannya sama tapi hati berbeda (dotai ishin), maka hal apapun takkan tercapai. Tiga ribu lebih sutra non-Buddhis dapat menjadi bukti dari hal ini. Kaisar Yin Cou yang berpasukan tujuh ratus ribu tentara kalah dalam pertempuran, adalah dikarenakan semua tentara yang berbadan sama tapi hati berbeda. Sebaliknya, kaisar Cou Wu yang hanya berpasukan delapan ratus orang menang dalam peperangan, adalah dikarenakan tentaranya yang berbeda badan tapi memiliki hati yang sama.", author: "Perihal Itai Doshin" },
+            { text: "Strategi Hokekyo jauh lebih unggul dari segala strategi lainnya. Hendaknya dipertahankan dengan baik.", author: "Surat balasan kepada Shijo Kingo Dono" },
+            { text: "Pelaksana Hokekyo, baik pria maupun wanita, semuanya adalah Buddha. Hawa nafsu adalah kesadaran, hidup mati adalah nirwana. Sekarang, Nichiren dan murid-muridnya yang menyebut Nam-myoho-renge-kyo, adalah orang-orang yang tinggal bersama Buddha. Maha Guru Dengyo mengatakan 'setiap pagi bangun bersama Buddha, setiap malam beristirahat bersama Buddha, setiap saat mencapai jalanan agung, setiap saat mewujudkan hakekat sesungguhnya'", author: "Ongi Kuden" },
+            { text: "Jika langit cerah maka bumi pun terang Orang yang memahami Hokekyo dengan sendirinya akan memahami hukum kemasyarakatan.", author: "Kanjin no Honzon sho" },
+            { text: "Lalat hijau yang menghinggap di ekor kuda yang gagah, dapat menempuh perjalanan sejauh ribuan kilometer. Tanaman jalar yang melilit di puncak pohon Cemara, dapat tumbuh setinggi puluhan meter.", author: "Rissho Ankoku Ron" },
+            { text: "Budi ayah ibu sebenarnya tidak perlu hingga kini baru dibicarakan. Terlebih lagi budi ibu yang menembus hati nurani, sangat dirasakan bernilai, agung dan luhur.", author: "Surat balasan kepada Nyonya Gyobu Zaimon nojo" },
+            { text: "Jika maitri karuna Nichiren sungguh-sungguh agung dan luas, maka Nam-myoho-renge-kyo pasti akan tersebar-luas selama puluhan ribu tahun hingga kekal abadi. Memiliki kurnia kebajikan yang membuka kebutaan seluruh umat manusia Jepang, dan menutup jalan menuju neraka penderitaan yang tak terputus-putus. Kurnia kebajikan ini melampaui Dengyo dan Tien Tai, bahkan mengungguli Nagarjuna dan Kasyapa. Pertapaan selama ratusan tahun di surga takkan mengungguli kurnia kebajikan pertapaan selama satu hari di dunia saha.", author: "Surat membalas budi" },
+            { text: "Orang yang percaya pada Hokekyo adalah bagaikan musim dingin. Musim dingin pasti akan berubah menjadi musim semi. Sejak dahulu kala belum pernah terdengar maupun terlihat kejadian datangnya musim gugur setelah berakhirnya musim dingin. Juga belum pernah terdengar bahwa orang yang percaya pada Hokekyo akan menjadi manusia awam selamanya. Dalam sutra dikatakan 'jika ada orang yang mendengarkan Dharma, maka tidak ada satu pun yang tidak mencapai kesadaran Buddha'.", author: "Surat berita kepada Myoichi Ama Gozen" },
+            { text: "Jika hati manusia kotor, maka tanah air pun menjadi kotor. Sebaliknya, jika hati manusia bersih, maka tanah air pun akan menjadi bersih. Yang disebut sebagai tanah suci maupun tanah kotor tidaklah berbeda. Ini semata-mata tergantung pada hati umat manusia, apakah terdapat kebaikan ataupun kejahatan!", author: "Surat pencapaian kesadaran Buddha seumur hidup" },
+            { text: "Orang arif bijaksana tidak melanggar delapan angin. Yang disebut dengan delapan angin adalah keuntungan, kemalangan, kritikan, kehormatan, pujian, ejekan, penderitaan, dan kegembiraan. Maksudnya adalah tidak bergembira karena keuntungan, tidak mengeluh atas kemalangan, dan lain sebagainya. Orang demikian baru dapat dikatakan sebagai orang arif bijaksana. Orang yang tidak melanggar delapan angin ini pasti mendapatkan perlindungan dari para dewa.", author: "Surat balasan kepada Shijo Kingo Dono" },
+            { text: "Harta badan lebih unggul dari pada harta gudang. Namun demikian, harta jiwa lebih unggul dari pada harta badan.", author: "Surat Kaisar Sushun" },
+            { text: "Walau banyak orang telah mendengar sutra ini, namun ketika berhadapan dengan penderitaan besar, hanya sedikit saja yang ingat dan tidak lupa untuk tetap mempertahankan ajaran yang pernah didengar. Menerima adalah mudah, mempertahankan adalah sulit. Namun demikian, pencapaian kesadaran Buddha terletak pada mempertahankan hati kepercayaan. Orang yang mempertahankan sutra ini haruslah mempertahankannya dengan persiapan hati bahwa pasti akan menghadapi penderitaan.", author: "Surat balasan kepada Shijo Kingo Dono" },
+            { text: "Myo bermakna hidup kembali. Hidup kembali bermakna sadar dan bangkit kembali.", author: "Surat Daimoku dari Hokekyo" },
+            { text: "Segalanya hanya tergantung pada hati kepercayaan. Pedang tajam pun sama sekali tidak berguna jika dipegang oleh orang yang tidak berkeberanian. Pedang Hokekyo adalah untuk dipergunakan oleh orang berhati kepercayaan kuat dan berkeberanian, bagaikan harimau yang tumbuh sayapnya.", author: "Surat balasan kepada Kyo O Dono" },
+            { text: "Karma ada dua jenis, yakni karma tetap dan karma tidak tetap. Jika bertobat dengan sungguh-sungguh, maka karma tetap sekalipun dapat dihapuskan. Apalagi karma tidak tetap, sudah sewajarnya dapat diperpanjang!", author: "Surat karma tetap dapat diperpanjang" },
+            { text: "Karena Hukum Buddha telah sedemikian diputar-balikkan, maka masyarakat pun timbul kekeruhan dan kekacauan. Hukum Buddha bagaikan badan, masyarakat bagaikan bayangan. Jika badannya bengkok, maka bayangannya pun akan bengkok.", author: "Perihal sulit dan mudahnya antara berbagai sutra dan Hokekyo" },
+            { text: "Sakura adalah Sakura, Prem adalah Prem, Persik adalah Persik, dan Aprikot adalah Aprikot. Masing-masing tidak mengubah badan pokoknya, mewujudkan Trikaya yang tidak dibuat-buat. Justru karena mencakupi seluruhnya, sehingga bermakna sebagai isi (ryo). Sekarang, Nichiren dan murid-muridnya yang menyebut Nam-myoho-renge-kyo, kesemuanya adalah majikan dari Trikaya yang tidak dibuat-buat.", author: "Ongi Kuden" },
+            { text: "Yang dimaksud dengan 'Oleh karena hukumnya gaib, maka orang yang mempertahankan hukum ini pun menjadi mulia. Oleh karena orangnya mulia maka tempat tinggalnya pun menjadi agung', adalah hal ini. Di dalam Bab Kekuatan Gaib dikatakan, 'Seandainya di dalam hutan, di bawah pohon, di dalam kuil..... dan mewujudkan nirwana'. Ketika seseorang mencapai tingkatan ini, maka seluruh dosa karma muasal langsung terhapuskan, dan kejahatan tiga karma akan berubah menjadi tiga kebajikan.", author: "Surat balasan kepada Nanjo Dono" },
+            { text: "Bunga berkembang kemudian menjadi buah, bulan sabit akan menjadi bulan purnama. Lampu yang ditambah minyak akan bertambah terang cahayanya. Rumput dan pohon yang mendapatkan air hujan akan bertumbuh lebih subur. Sama halnya, manusia yang meningkatkan akar kebaikan pasti akan berkembang.", author: "Surat balasan kepada Ueno Dono" },
+            { text: "Rembulan terbit dari balik gunung dan menyinari gunung itu. Malapetaka keluar dari mulut dan membahayakan diri. Kebahagiaan diwujudkan dari hati dan menghiasi dirinya.", author: "Surat Mushimochi" }
+        ];
+
+        // Variabel global untuk menyimpan status tab aktif
+        let activeTab = 'bimbingan';
+
         function setQuoteOfTheDay() {
             const today = new Date();
             const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-            const quoteIndex = dateSeed % quoteList.length;
             
-            const selectedQuote = quoteList[quoteIndex];
-            document.getElementById('soka-quote').innerText = selectedQuote.text;
-            document.getElementById('soka-author').innerText = "— " + selectedQuote.author;
+            // Ambil indeks berdasarkan array aktif saat ini
+            const currentList = activeTab === 'bimbingan' ? quoteList : goshoList;
+            const quoteIndex = dateSeed % currentList.length;
+            const selectedItem = currentList[quoteIndex];
+            
+            // Render tulisan ke layar HTML
+            document.getElementById('soka-quote').innerText = selectedItem.text;
+            
+            // Format penulisan author khusus pembeda Gosho dan Bimbingan umum
+            if (activeTab === 'gosho') {
+                document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
+            } else {
+                document.getElementById('soka-author').innerText = "— " + selectedItem.author;
+            }
+        }
+
+        // Fungsi pengendali klik tombol Tab
+        function switchTab(tabName) {
+            activeTab = tabName;
+            
+            const btnBimbingan = document.getElementById('tab-bimbingan');
+            const btnGosho = document.getElementById('tab-gosho');
+            
+            if (tabName === 'bimbingan') {
+                // Beri warna kuning menyala pada tab bimbingan, redupkan tab gosho
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            } else {
+                // Beri warna kuning menyala pada tab gosho, redupkan tab bimbingan
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            }
+            
+            // Perbarui teks isi sesuai tab terpilih secara real-time
+            setQuoteOfTheDay();
         }
 
         function shareToWhatsApp() {
             const quote = document.getElementById('soka-quote').innerText;
             const author = document.getElementById('soka-author').innerText;
-            const textMessage = `*Renungan Hari Ini - Soka Gakkai Semarang*\n\n_" ${quote} "_\n\n*${author}*`;
+            
+            // Penyesuaian judul pesan teks WA berdasarkan tab yang sedang aktif saat diklik
+            const titleHeader = activeTab === 'bimbingan' ? '*Bimbingan Hari Ini - Soka Gakkai Semarang*' : '*Gosho Hari Ini - Soka Gakkai Semarang*';
+            
+            const textMessage = `${titleHeader}\n\n_" ${quote} "_\n\n*${author}*`;
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
             window.open(whatsappUrl, '_blank');
         }
