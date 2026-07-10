@@ -293,7 +293,7 @@
     </footer>
 
     <script>
-        // === KONFIGURASI LINK GOOGLE SHEETS (Ganti dengan link CSV hasil Publish to Web Anda) ===
+        // === KONFIGURASI LINK GOOGLE SHEETS ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
 
@@ -302,21 +302,58 @@
         let goshoList = [];
         let activeTab = 'bimbingan';
 
-        // Fungsi memproses teks CSV menjadi Array Object JavaScript
+        // Fungsi canggih pembaca CSV: Sangat aman membaca koma dan enter di dalam teks kutipan
         function parseCSV(text) {
-            const lines = text.split("\n");
             const result = [];
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+
+            // Bersihkan sisa spasi Windows (\r)
+            const cleanText = text.replace(/\r/g, "");
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        // Antisipasi double quotes di dalam teks ("")
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        // Toggle status jika bertemu tanda kutip bungkus
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    // Pindah kolom jika koma berada di luar tanda kutip pembungkus
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    // Pindah baris data jika enter berada di luar tanda kutip pembungkus
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    
+                    // Simpan hasil baris data jika bukan baris judul (header) atau data kosong
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    
+                    // Reset status untuk baris selanjutnya
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
+            }
             
-            // i = 1 untuk melewati baris header (text, author)
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                
-                // Regex aman untuk memisahkan koma walau ada koma di dalam tanda kutip ""
-                const matches = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(",");
-                if (matches.length >= 2) {
-                    const txt = matches[0].replace(/^"|"$/g, '').trim();
-                    const aut = matches[1].replace(/^"|"$/g, '').trim();
-                    result.push({ text: txt, author: aut });
+            // Masukkan sisa baris terakhir jika ada data menggantung di paling bawah
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
                 }
             }
             return result;
@@ -344,37 +381,31 @@
 
         // Fungsi utama menampilkan kutipan (Logika sudah dipisah antara Bimbingan & Gosho)
         function setQuoteOfTheDay() {
-            // Proteksi jika data belum siap disedot
             if (quoteList.length === 0 || goshoList.length === 0) return;
 
             const today = new Date();
-            const currentDay = today.getDate(); // Angka tanggal hari ini (1 - 31)
+            const currentDay = today.getDate(); 
             let selectedItem = {};
 
             if (activeTab === 'bimbingan') {
-                // LOGIKA BEBAS (BIMBINGAN): Berputar otomatis berdasarkan hitungan hari (Sequential Rolling)
-                // Jumlah baris di Google Sheets bebas, sistem otomatis membagi tanpa error.
+                // LOGIKA BEBAS (BIMBINGAN): Berputar otomatis harian berdasarkan total baris di sheet
                 const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
                 const quoteIndex = dateSeed % quoteList.length;
                 selectedItem = quoteList[quoteIndex];
                 
-                // Tampilkan ke HTML
                 document.getElementById('soka-quote').innerText = selectedItem.text;
                 document.getElementById('soka-author').innerText = "— " + selectedItem.author;
 
             } else {
-                // LOGIKA KUNCI TANGGAL (GOSHO): Sesuai Kalender Meja Altar
-                // Tanggal 1 = Baris 2 di Sheets (Index 0), Tanggal 31 = Baris 32 di Sheets (Index 30)
+                // LOGIKA KUNCI TANGGAL (GOSHO): Dikunci pas sesuai tanggal kalender altar (1 - 31)
                 let targetIndex = currentDay - 1;
 
-                // Antisipasi bulan pendek (misal tanggal 30-31 di Februari) agar tidak error blank
                 if (targetIndex >= goshoList.length) {
                     targetIndex = goshoList.length - 1; 
                 }
 
                 selectedItem = goshoList[targetIndex];
                 
-                // Tampilkan ke HTML dengan penanda khusus Gosho
                 document.getElementById('soka-quote').innerText = selectedItem.text;
                 document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
             }
@@ -430,7 +461,6 @@
         const slideInterval = 5000;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Jalankan fungsi sedot data Google Sheets saat web dibuka
             loadQuotesFromSheets();
 
             slides.forEach((slide) => {
