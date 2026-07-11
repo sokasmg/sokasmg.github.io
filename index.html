@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soka Gakkai Indonesia - Semarang</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Smooth scrolling */
@@ -20,11 +19,19 @@
         .soka-blue { background-color: #002F6C; flex: 1; }
         .soka-yellow { background-color: #F9A825; flex: 1; }
         .soka-red { background-color: #C62828; flex: 1; }
+
+        /* Kelas untuk memperbesar font dasar seluruh website saat toggle aktif */
+        body.text-large {
+            font-size: 1.25rem;
+        }
+        body.text-large h1 { font-size: 2.5rem !important; }
+        body.text-large h2 { font-size: 2rem !important; }
+        body.text-large p { font-size: 1.25rem !important; }
+        body.text-large blockquote { font-size: 1.5rem !important; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <!-- NAVBAR -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 md:h-24">
@@ -44,11 +51,14 @@
             </div>
         </div>
 
-        <div class="md:hidden bg-gray-50 border-t border-gray-100 flex justify-around py-3 text-xs font-bold uppercase tracking-wider">
+        <div class="md:hidden bg-gray-50 border-t border-gray-100 flex justify-around items-center py-3 text-xs font-bold uppercase tracking-wider">
             <a href="#beranda" class="text-blue-900 px-1 py-1">Beranda</a>
             <a href="#tentang" class="text-gray-600 px-1 py-1">Tentang</a>
             <a href="#kontak" class="text-gray-600 px-1 py-1">Kontak</a>
             <a href="galeri.html" class="text-blue-900 bg-blue-50 rounded px-2.5 py-1 border border-blue-200">Galeri</a>
+            <button id="btn-toggle-text" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm">
+                A+
+            </button>
         </div>
 
         <div class="soka-tricolor">
@@ -58,7 +68,6 @@
         </div>
     </nav>
 
-    <!-- HERO BANNER SECTION -->
     <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 w-full h-full">
             <img src="banner.webp" alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
@@ -84,7 +93,6 @@
         </div>
     </div>
 
-    <!-- TENTANG KAMI SECTION -->
     <section id="tentang" class="py-20 bg-white scroll-mt-24">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-blue-950 mb-2">
@@ -104,13 +112,11 @@
         </div>
     </section>
     
-    <!-- SECTION QUOTE OF THE DAY (DENGAN MODEL TAB MODERN) -->
     <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
         <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
         <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
         
         <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <!-- Sistem Tombol Tab Pengubah Konten -->
             <div class="inline-flex bg-white bg-opacity-10 p-1.5 rounded-full mb-8 border border-white border-opacity-10">
                 <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">
                     Bimbingan Hari Ini
@@ -136,19 +142,16 @@
                 </button>
 
                 <a href="card_creator.html" class="inline-flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white text-sm px-4 py-2 rounded-full font-semibold border border-white border-opacity-30 shadow transition transform hover:scale-105">
-    <!-- Ikon Kuas/Kreatif menggantikan ikon salin -->
-    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" />
-    </svg>
-    <span>Buat Gambar Kartu</span>
-</a>
-
+                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" />
+                    </svg>
+                    <span>Buat Gambar Kartu</span>
+                </a>
             </div>
         </div>
     </section>
 
-   <!-- SECTION JADWAL-->
-    <section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100">
+   <section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-blue-950 mb-2">
                 Jadwal Kegiatan Bulanan
@@ -185,15 +188,13 @@
         </div>
     </section>
 
-    <!-- KATA MUTIARA / SEPARATOR DENGAN AKSEN BENDERA -->
     <div class="soka-tricolor">
         <div class="soka-blue"></div>
         <div class="soka-yellow"></div>
         <div class="soka-red"></div>
     </div>
 
-        <!-- SECTION Q&A / FAQ -->
-    <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
+        <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
@@ -204,14 +205,12 @@
                 </div>
             </div>
             
-            <!-- Wadah Elemen Q&A yang ditarik dari Google Sheets -->
             <div id="qa-container" class="space-y-4 max-w-3xl mx-auto">
                 <p class="text-center text-gray-500 italic">Memuat tanya jawab...</p>
             </div>
         </div>
     </section>
 
-    <!-- KONTAK SECTION -->
     <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-12">
@@ -267,7 +266,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -358,7 +356,7 @@
                     
                     // Simpan hasil baris data jika bukan baris judul (header) atau data kosong
                     if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") {
-                    result.push({ text: row[0], author: row[1] || "Anonim" });
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
                     }
                     
                     // Reset status untuk baris selanjutnya
@@ -381,83 +379,83 @@
         }
 
         // Variabel penampung data Q&A global
-let qaList = [];
+        let qaList = [];
 
-async function loadQuotesFromSheets() {
-    document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
-    try {
-        // Kita tambahkan fetch untuk CSV_URL_QA di dalam Promise.all
-        const [resBimbingan, resGosho, resQA] = await Promise.all([
-            fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
-            fetch(CSV_URL_GOSHO).then(res => res.text()),
-            fetch(CSV_URL_QA).then(res => res.text())
-        ]);
+        async function loadQuotesFromSheets() {
+            document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
+            try {
+                // Kita tambahkan fetch untuk CSV_URL_QA di dalam Promise.all
+                const [resBimbingan, resGosho, resQA] = await Promise.all([
+                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+                    fetch(CSV_URL_GOSHO).then(res => res.text()),
+                    fetch(CSV_URL_QA).then(res => res.text())
+                ]);
 
-        quoteList = parseCSV(resBimbingan);
-        goshoList = parseCSV(resGosho);
-        
-        // Memakai parser CSV bawaan Anda yang sudah aman dari tanda koma/enter!
-        qaList = parseCSV(resQA); 
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+                
+                // Memakai parser CSV bawaan Anda yang sudah aman dari tanda koma/enter!
+                qaList = parseCSV(resQA); 
 
-        // Tampilkan data kutipan harian
-        setQuoteOfTheDay();
-        
-        // Panggil fungsi untuk merender Q&A ke halaman web
-        renderQASearch();
-    } catch (error) {
-        console.error("Gagal mengambil data kalender atau Q&A:", error);
-        document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
-        document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
-    }
-}
+                // Tampilkan data kutipan harian
+                setQuoteOfTheDay();
+                
+                // Panggil fungsi untuk merender Q&A ke halaman web
+                renderQASearch();
+            } catch (error) {
+                console.error("Gagal mengambil data kalender atau Q&A:", error);
+                document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
+                document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
+            }
+        }
 
-function renderQASearch() {
-    const container = document.getElementById('qa-container');
-    if (qaList.length === 0) {
-        container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
-        return;
-    }
+        function renderQASearch() {
+            const container = document.getElementById('qa-container');
+            if (qaList.length === 0) {
+                container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
+                return;
+            }
 
-    container.innerHTML = ""; // Bersihkan teks "Memuat..."
+            container.innerHTML = ""; // Bersihkan teks "Memuat..."
 
-    qaList.forEach((item, index) => {
-        // item.text otomatis berisi Kolom A (Question)
-        // item.author otomatis berisi Kolom B (Answer) karena fungsi parseCSV Anda membagi 2 kolom.
-        const question = item.text;
-        const answer = item.author;
+            qaList.forEach((item, index) => {
+                // item.text otomatis berisi Kolom A (Question)
+                // item.author otomatis berisi Kolom B (Answer) karena fungsi parseCSV Anda membagi 2 kolom.
+                const question = item.text;
+                const answer = item.author;
 
-        // Membuat element HTML Accordion item menggunakan Tailwind
-        const qaItem = document.createElement('div');
-        qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+                // Membuat element HTML Accordion item menggunakan Tailwind
+                const qaItem = document.createElement('div');
+                qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
 
-        qaItem.innerHTML = `
-            <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
-                <span>${question}</span>
-                <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
-                ${answer}
-            </div>
-        `;
-        container.appendChild(qaItem);
-    });
-}
+                qaItem.innerHTML = `
+                    <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
+                        <span>${question}</span>
+                        <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
+                        ${answer}
+                    </div>
+                `;
+                container.appendChild(qaItem);
+            });
+        }
 
-// Fungsi animasi buka tutup accordion sederhana
-function toggleAccordion(index) {
-    const answerDiv = document.getElementById(`ans-${index}`);
-    const icon = document.getElementById(`icon-${index}`);
-    
-    if (answerDiv.classList.contains('hidden')) {
-        answerDiv.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-    } else {
-        answerDiv.classList.add('hidden');
-        icon.classList.remove('rotate-180');
-    }
-}
+        // Fungsi animasi buka tutup accordion sederhana
+        function toggleAccordion(index) {
+            const answerDiv = document.getElementById(`ans-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (answerDiv.classList.contains('hidden')) {
+                answerDiv.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                answerDiv.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
         
         // Fungsi utama menampilkan kutipan (Logika sudah dipisah antara Bimbingan & Gosho)
         function setQuoteOfTheDay() {
@@ -563,6 +561,22 @@ function toggleAccordion(index) {
             currentSlide = nextIndex;
             slides[currentSlide].classList.remove('opacity-0');
             slides[currentSlide].classList.add('opacity-40');
+        }
+
+        // Fungsi untuk Mengubah Ukuran Teks (Toggle Text Size Mobile)
+        function toggleTextSize() {
+            const bodyEl = document.body;
+            const btnToggle = document.getElementById('btn-toggle-text');
+            
+            if (bodyEl.classList.contains('text-large')) {
+                bodyEl.classList.remove('text-large');
+                btnToggle.innerText = "A+";
+                btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
+            } else {
+                bodyEl.classList.add('text-large');
+                btnToggle.innerText = "A-";
+                btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
+            }
         }
     </script>
      
