@@ -1065,20 +1065,33 @@ window.addEventListener('load', () => {
                 const currentUser = localStorage.getItem('soka_user_name');
                 
                 chats.forEach(c => {
-                    const isMe = c.nama === currentUser;
-                    const chatBubble = document.createElement('div');
-                    
-                    // Bubble chat styling mirip WhatsApp (Kanan hijau jika kita, kiri putih jika anggota lain)
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-                    }`;
-                    
-                    chatBubble.innerHTML = `
-                        <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-                    `;
-                    body.appendChild(chatBubble);
-                });
+    const isMe = c.nama === currentUser;
+    const chatBubble = document.createElement('div');
+    
+    // Bubble chat styling mirip WhatsApp
+    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+    }`;
+    
+    // --- FORMAT TIMESTAMP AGAR LEBIH RAPI (Jam:Menit) ---
+    let waktuTampil = "";
+    if (c.timestamp) {
+        const dateObj = new Date(c.timestamp);
+        // Mengambil jam dan menit, misalnya "19:45"
+        const jam = String(dateObj.getHours()).padStart(2, '0');
+        const menit = String(dateObj.getMinutes()).padStart(2, '0');
+        waktuTampil = `${jam}:${menit}`;
+    }
+    
+    chatBubble.innerHTML = `
+        <div class="flex justify-between items-center gap-4 mb-0.5">
+            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
+            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
+        </div>
+        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+    `;
+    body.appendChild(chatBubble);
+});
                 
                 // Auto scroll ke bawah
                 body.scrollTop = body.scrollHeight;
