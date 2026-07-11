@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soka Gakkai Indonesia - Semarang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+        .soka-blue { background-color: #002F6C; flex: 1; }
+        .soka-yellow { background-color: #F9A825; flex: 1; }
+        .soka-red { background-color: #C62828; flex: 1; }
+
+        /* Kelas untuk memperbesar font dasar seluruh website saat toggle aktif */
+        body.text-large {
+            font-size: 1.25rem;
+        }
+        body.text-large h1 { font-size: 2.5rem !important; }
+        body.text-large h2 { font-size: 2rem !important; }
+        body.text-large p { font-size: 1.25rem !important; }
+        body.text-large blockquote { font-size: 1.5rem !important; }
+        /* Memaksa jawaban Q&A dan seluruh link di footer ikut membesar secara proporsional */
+        body.text-large #qa-container div[id^="ans-"] { font-size: 1.25rem !important; }
+        body.text-large footer a { font-size: 1.1rem !important; }
+        body.text-large footer h4 { font-size: 1.3rem !important; }
+        
+        /* Animasi fade in untuk modal */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 md:h-24">
+                <div class="flex items-center space-x-3 md:space-x-4">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai" class="h-12 w-12 md:h-16 md:w-16 object-contain">
+                    <div>
+                        <span class="text-xl md:text-3xl font-black text-blue-950 block tracking-wide leading-none">Soka Gakkai Indonesia</span>
+                        <span class="text-xs md:text-base font-bold text-gray-500 block uppercase tracking-widest mt-1">Semarang (Jawa Tengah)</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 font-semibold">
+                    <a href="#beranda" class="text-blue-900 hover:text-blue-700 transition">Beranda</a>
+                    <a href="#tentang" class="text-gray-600 hover:text-blue-700 transition">Tentang Kami</a>
+                    <a href="#kontak" class="text-gray-600 hover:text-blue-700 transition">Kontak</a>
+                    <a id="nav-galeri-desktop" href="galeri.html" class="text-blue-900 hover:text-blue-700 transition hidden">Galeri</a>
+                    
+                    <div class="flex items-center space-x-4 border-l border-gray-200 pl-4">
+                        <span id="user-greeting-desktop" class="text-sm font-bold text-blue-950 hidden"></span>
+                        <button id="btn-auth-desktop" onclick="openLoginModal()" class="bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition">
+                            Login Anggota
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden bg-gray-50 border-t border-gray-100 flex flex-col space-y-2 py-3 px-4">
+            <div class="flex justify-around items-center text-xs font-bold uppercase tracking-wider w-full">
+                <a href="#beranda" class="text-blue-900 px-1 py-1">Beranda</a>
+                <a href="#tentang" class="text-gray-600 px-1 py-1">Tentang</a>
+                <a href="#kontak" class="text-gray-600 px-1 py-1">Kontak</a>
+                <a id="nav-galeri-mobile" href="galeri.html" class="text-blue-900 bg-blue-50 rounded px-2.5 py-1 border border-blue-200 hidden">Galeri</a>
+                <button id="btn-toggle-text" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm">
+                    A+
+                </button>
+            </div>
+            <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-200 text-xs mt-1 shadow-sm">
+                <span id="user-greeting-mobile" class="font-bold text-gray-500 italic">Menu Khusus Anggota:</span>
+                <button id="btn-auth-mobile" onclick="openLoginModal()" class="bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition">
+                    Login
+                </button>
+            </div>
+        </div>
+
+        <div class="soka-tricolor">
+            <div class="soka-blue"></div>
+            <div class="soka-yellow"></div>
+            <div class="soka-red"></div>
+        </div>
+    </nav>
+
+    <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 w-full h-full">
+            <img src="banner.webp" alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner2.webp" alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner3.webp" alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner4.webp" alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner5.webp" alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner6.webp" alt="Banner 6" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+        </div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-md">
+                Selamat Datang di Soka Gakkai Semarang
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">
+                Membangun perdamaian, pendidikan, dan dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.
+            </p>
+            <div class="inline-flex rounded-full overflow-hidden p-[3px] bg-gradient-to-r from-[#002F6C] via-[#F9A825] to-[#C62828] shadow-lg transform hover:scale-105 transition">
+                <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">
+                    Pelajari Lebih Lanjut
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <section id="tentang" class="py-20 bg-white scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Tentang Kami
+            </h2>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.
+            </p>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Kami believe bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.
+            </p>
+        </div>
+    </section>
+    
+    <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
+        <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
+        <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
+        
+        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+            <div class="inline-flex bg-white bg-opacity-10 p-1.5 rounded-full mb-8 border border-white border-opacity-10">
+                <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">
+                    Bimbingan Hari Ini
+                </button>
+                <button id="tab-gosho" onclick="switchTab('gosho')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400">
+                    Gosho Hari Ini
+                </button>
+            </div>
+
+            <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
+                Memuat kutipan...
+            </blockquote>
+            <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
+                -
+            </p>
+
+            <div class="flex justify-center items-center space-x-4">
+                <button onclick="shareToWhatsApp()" class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full font-semibold shadow transition transform hover:scale-105">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+                    </svg>
+                    <span>Bagikan ke WA</span>
+                </button>
+
+                <a id="btn-card-creator" href="card_creator.html" class="inline-flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white text-sm px-4 py-2 rounded-full font-semibold border border-white border-opacity-30 shadow transition transform hover:scale-105 hidden">
+                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" />
+                    </svg>
+                    <span>Buat Gambar Kartu</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+   <section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100 hidden">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Jadwal Kegiatan Bulanan
+            </h2>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-600 max-w-xl mx-auto mb-8">
+                Mari bergabung bersama kami dalam kegiatan diskusi, doa bersama, dan kegiatan komunitas lainnya. Berikut adalah jadwal terbaru bulan ini:
+            </p>
+
+            <div class="bg-white p-4 rounded-2xl shadow-lg max-w-2xl mx-auto border border-gray-100">
+                <a href="jadwal.jpeg" target="_blank" title="Klik untuk memperbesar gambar" class="block group relative overflow-hidden rounded-xl cursor-zoom-in">
+                    <img src="jadwal.jpeg" alt="Jadwal Kegiatan Soka Gakkai Semarang" class="w-full h-auto transition duration-300 group-hover:scale-102">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white font-medium gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                        Klik untuk memperbesar
+                    </div>
+                </a>
+            </div>
+
+            <div class="mt-6">
+                <a href="jadwal.jpeg" download class="inline-flex items-center space-x-2 bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-800 transition shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Unduh Gambar Jadwal</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="soka-tricolor">
+        <div class="soka-blue"></div>
+        <div class="soka-yellow"></div>
+        <div class="soka-red"></div>
+    </div>
+
+<section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">Kegiatan Terakhir</h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+                <p class="text-gray-500 text-sm md:text-base">Dokumentasi momen dan kebersamaan dalam aktivitas komunitas kami.</p>
+            </div>
+            
+            <div class="relative max-w-5xl mx-auto group">
+                <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2 scroll-smooth" style="-ms-overflow-style: none; scrollbar-width: none;">
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="kegiatan1.jpg" alt="Kegiatan 1" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="kegiatan2.jpg" alt="Kegiatan 2" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="kegiatan3.jpg" alt="Kegiatan 3" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="kegiatan4.jpg" alt="Kegiatan 4" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="kegiatan5.jpg" alt="Kegiatan 5" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="gallery-modal" class="fixed inset-0 bg-black/95 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
+        <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">&times;</button>
+        <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+    </div>
+  
+        <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+            </div>
+            
+            <div id="qa-container" class="space-y-4 max-w-3xl mx-auto">
+                <p class="text-center text-gray-500 italic">Memuat tanya jawab...</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                    Hubungi Kami
+                </h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+                <p class="text-gray-500">Silakan kunjungi atau hubungi kami untuk informasi lebih lanjut</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-[#002F6C] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-950 mb-6">Informasi Kontak</h3>
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-blue-50 p-3 rounded-lg text-blue-900 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Alamat</h4>
+                                <p class="text-gray-600 mt-1">Jl. Pandean Lamper II no. 1, Kecamatan Semarang Selatan, Kota Semarang, Jawa Tengah 50242</p>
+                                <p class="text-gray-600 mt-1">(024) 8315358</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-red-50 p-3 rounded-lg text-red-700 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Email</h4>
+                                <a href="mailto:sokasmg@gmail.com" class="text-blue-700 hover:underline mt-1 block font-medium">sokasmg@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl shadow-md h-64 md:h-auto min-h-[250px] flex items-center justify-center border-t-4 border-[#C62828]">
+                    <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;"> 
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Organisasi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
+                        <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                        <li><a href="https://www.sokagakkai.jp" target="_blank" class="hover:text-yellow-500 transition">Sokagakkai Japan</a></li>
+                        <li><a href="https://www.sgi-usa.org" target="_blank" class="hover:text-yellow-500 transition">SGI-USA</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://wwww.worldtribune.org" target="_blank" class="hover:text-yellow-500 transition">World Tribune</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
+                        <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                        <li><a href="https://sism.edu.my" target="_blank" class="hover:text-yellow-500 transition">Soka International School Malaysia</a></li>
+                        <li><a href="https://www.sokapreschool.org" target="_blank" class="hover:text-yellow-500 transition">Soka Preschool</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="login-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fade-in">
+            <h3 class="text-xl font-bold text-blue-950 mb-2">Verifikasi Anggota</h3>
+            <p class="text-sm text-gray-500 mb-4">Masukkan nomor ponsel Anda yang terdaftar untuk membuka fitur internal organisasi.</p>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
+                <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
+                <p id="login-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
+            </div>
+            
+            <div class="flex space-x-3 justify-end">
+                <button onclick="closeLoginModal()" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700">Batal</button>
+                <button id="btn-submit-login" onclick="processLogin()" class="bg-blue-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition flex items-center justify-center">
+                    Verifikasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
+document.addEventListener('touchmove', function (event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+// Mencegah zoom melalui ketukan ganda cepat (Double Tap to Zoom)
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// Mencegah zoom di komputer menggunakan tombol pintasan (Ctrl + / Ctrl - / Ctrl + Scroll)
+document.addEventListener('keydown', function (event) {
+    if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '=' || event.key === '0')) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('wheel', function (event) {
+    if (event.ctrlKey) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+        // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
+        const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+        const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
+        const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
+        
+        // PUSAT KONTROL URL WEB APP (Gantilah jika Anda melakukan New Deployment di Apps Script)
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
+        
+        // Variabel penampung data dari cloud
+        let quoteList = [];
+        let goshoList = [];
+        let qaList = [];
+        let activeTab = 'bimbingan';
+
+        // Fungsi pembaca CSV: Aman membaca koma dan enter di dalam teks kutipan
+        function parseCSV(text) {
+            const result = [];
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+
+            const cleanText = text.replace(/\r/g, "");
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
+            }
+            
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
+                }
+            }
+            return result;
+        }
+
+        async function loadQuotesFromSheets() {
+            document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
+            try {
+                const [resBimbingan, resGosho, resQA] = await Promise.all([
+                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+                    fetch(CSV_URL_GOSHO).then(res => res.text()),
+                    fetch(CSV_URL_QA).then(res => res.text())
+                ]);
+
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+                qaList = parseCSV(resQA); 
+
+                setQuoteOfTheDay();
+                renderQASearch();
+            } catch (error) {
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
+                document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
+            }
+        }
+
+        function renderQASearch() {
+            const container = document.getElementById('qa-container');
+            if (qaList.length === 0) {
+                container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+
+            qaList.forEach((item, index) => {
+                const question = item.text;
+                const answer = item.author;
+
+                const qaItem = document.createElement('div');
+                qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+
+                qaItem.innerHTML = `
+                    <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
+                        <span>${question}</span>
+                        <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
+                        ${answer}
+                    </div>
+                `;
+                container.appendChild(qaItem);
+            });
+        }
+
+        function toggleAccordion(index) {
+            const answerDiv = document.getElementById(`ans-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (answerDiv.classList.contains('hidden')) {
+                answerDiv.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                answerDiv.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+        
+        function setQuoteOfTheDay() {
+            if (quoteList.length === 0 || goshoList.length === 0) return;
+
+            const today = new Date();
+            const currentDay = today.getDate(); 
+            let selectedItem = {};
+
+            if (activeTab === 'bimbingan') {
+                const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
+                const quoteIndex = dateSeed % quoteList.length;
+                selectedItem = quoteList[quoteIndex];
+                
+                document.getElementById('soka-quote').innerText = selectedItem.text;
+                document.getElementById('soka-author').innerText = "— " + selectedItem.author;
+            } else {
+                let targetIndex = currentDay - 1;
+                if (targetIndex >= goshoList.length) {
+                    targetIndex = goshoList.length - 1; 
+                }
+                selectedItem = goshoList[targetIndex];
+                
+                document.getElementById('soka-quote').innerText = selectedItem.text;
+                document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
+            }
+        }
+
+        function switchTab(tabName) {
+            activeTab = tabName;
+            
+            const btnBimbingan = document.getElementById('tab-bimbingan');
+            const btnGosho = document.getElementById('tab-gosho');
+            
+            if (tabName === 'bimbingan') {
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            } else {
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            }
+            
+            setQuoteOfTheDay();
+        }
+
+        function shareToWhatsApp() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const titleHeader = activeTab === 'bimbingan' ? '*Bimbingan Hari Ini - Soka Gakkai Semarang*' : '*Gosho Hari Ini - Soka Gakkai Semarang*';
+            
+            const textMessage = `${titleHeader}\n\n_" ${quote} "_\n\n*${author}*`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function copyQuote() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const btnText = document.getElementById('copy-text');
+            const textToCopy = `"${quote}" ${author}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                btnText.innerText = "Tersalin!";
+                setTimeout(() => { btnText.innerText = "Salin Kutipan"; }, 2000);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+        
+        // Logika Banner Slider Otomatis (Fading)
+        const slides = document.querySelectorAll('.banner-slide');
+        let currentSlide = 0;
+        const slideInterval = 5000;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuotesFromSheets();
+            checkLoginStatus(); 
+
+            slides.forEach((slide) => {
+                const lazySrc = slide.getAttribute('data-src');
+                if (lazySrc) {
+                    slide.setAttribute('src', lazySrc);
+                    slide.removeAttribute('data-src');
+                }
+            });
+
+            setInterval(nextSlide, slideInterval);
+        });
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            if (!slides[nextIndex].complete || slides[nextIndex].naturalWidth === 0) return; 
+
+            slides[currentSlide].classList.remove('opacity-40');
+            slides[currentSlide].classList.add('opacity-0');
+            currentSlide = nextIndex;
+            slides[currentSlide].classList.remove('opacity-0');
+            slides[currentSlide].classList.add('opacity-40');
+        }
+
+        function toggleTextSize() {
+            const bodyEl = document.body;
+            const btnToggle = document.getElementById('btn-toggle-text');
+            
+            if (bodyEl.classList.contains('text-large')) {
+                bodyEl.classList.remove('text-large');
+                btnToggle.innerText = "A+";
+                btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
+            } else {
+                bodyEl.classList.add('text-large');
+                btnToggle.innerText = "A-";
+                btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
+            }
+        }
+
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
+        function checkLoginStatus() {
+    const savedName = localStorage.getItem('soka_user_name');
+    const savedJabatan = localStorage.getItem('soka_user_jabatan'); // <-- Ambil data jabatan
+    
+    const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
+    const navGaleriMobile = document.getElementById('nav-galeri-mobile');
+    const sectionJadwal = document.getElementById('jadwal');
+    const btnCardCreator = document.getElementById('btn-card-creator');
+    
+    const greetingDesktop = document.getElementById('user-greeting-desktop');
+    const btnAuthDesktop = document.getElementById('btn-auth-desktop');
+    const greetingMobile = document.getElementById('user-greeting-mobile');
+    const btnAuthMobile = document.getElementById('btn-auth-mobile');
+
+    // Element Floating Button Baru
+    const floatingBtn = document.getElementById('floating-admin-btn');
+    const floatingLink = document.getElementById('floating-btn-link');
+    const floatingText = document.getElementById('floating-btn-text');
+
+    if (savedName) {
+        if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
+        if (sectionJadwal) sectionJadwal.classList.remove('hidden');
+        if (btnCardCreator) btnCardCreator.classList.remove('hidden');
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
+            greetingDesktop.classList.remove('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Logout";
+            btnAuthDesktop.onclick = processLogout;
+            btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = `Halo, ${savedName}`;
+            greetingMobile.className = "font-black text-blue-950";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Keluar";
+            btnAuthMobile.onclick = processLogout;
+            btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
+        }
+
+        // --- LOGIKA KONTROL FLOATING BUTTON BERDASARKAN JABATAN ---
+        if (floatingBtn && floatingLink && floatingText) {
+            if (savedJabatan === "Pimpinan") {
+                floatingLink.href = "intishibu.html";
+                floatingText.innerText = "Menu Pimpinan";
+                floatingBtn.classList.remove('hidden');
+            } else if (savedJabatan === "Pimpinan (Admin)") {
+                floatingLink.href = "admin.html";
+                floatingText.innerText = "Menu Admin";
+                floatingBtn.classList.remove('hidden');
+            } else {
+                // Anggota, Inti, Calon tidak melihat tombol ini
+                floatingBtn.classList.add('hidden');
+            }
+        }
+
+    } else {
+        if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
+        if (sectionJadwal) sectionJadwal.classList.add('hidden');
+        if (btnCardCreator) btnCardCreator.classList.add('hidden');
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = "";
+            greetingDesktop.classList.add('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Login Anggota";
+            btnAuthDesktop.onclick = openLoginModal;
+            btnAuthDesktop.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = "Menu Khautan Anggota:";
+            greetingMobile.className = "font-bold text-gray-500 italic";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Login";
+            btnAuthMobile.onclick = openLoginModal;
+            btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
+        }
+
+        // Sembunyikan floating button jika tidak sedang login
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+    }
+}
+
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-error-msg').classList.add('hidden');
+            document.getElementById('input-phone').value = "";
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        async function processLogin() {
+    const phoneInput = document.getElementById('input-phone').value.trim();
+    const errorMsg = document.getElementById('login-error-msg');
+    const btnSubmit = document.getElementById('btn-submit-login');
+    
+    if (!phoneInput) {
+        errorMsg.innerText = "Nomor ponsel tidak boleh kosong.";
+        errorMsg.classList.remove('hidden');
+        return;
+    }
+    
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "Memverifikasi...";
+    errorMsg.classList.add('hidden');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ phone: phoneInput })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            localStorage.setItem('soka_user_name', result.nama);
+            localStorage.setItem('soka_user_jabatan', result.jabatan || ""); // <-- TAMBAHKAN INI (Menyimpan jabatan dari Sheets)
+            closeLoginModal();
+            checkLoginStatus(); 
+        } else {
+            errorMsg.innerText = result.message || "Nomor tidak dikenali.";
+            errorMsg.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error("Authentication Error:", error);
+        errorMsg.innerText = "Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.";
+        errorMsg.classList.remove('hidden');
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Verifikasi";
+    }
+}
+
+function processLogout() {
+    if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
+        localStorage.removeItem('soka_user_name');
+        localStorage.removeItem('soka_user_jabatan'); // <-- TAMBAHKAN INI (Menghapus jabatan saat logout)
+        checkLoginStatus(); 
+    }
+}
+
+// === LOGIKA SLIDER KEGIATAN TERAKHIR ===
+        const slider = document.getElementById('gallery-slider');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let autoScrollTimer;
+        let autoScrollInterval;
+        let scrollDirection = 1; // 1 = kanan, -1 = kiri
+
+        // Fungsi Auto Scroll Berkelanjutan secara Halus
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                if (isDown) return;
+                
+                // Cek batas kanan/kiri untuk membalik arah scroll
+                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                if (slider.scrollLeft >= maxScrollLeft - 1) {
+                    scrollDirection = -1;
+                } else if (slider.scrollLeft <= 0) {
+                    scrollDirection = 1;
+                }
+                
+                slider.scrollLeft += scrollDirection * 1; // Sesuaikan angka untuk kecepatan
+            }, 20); // Interval 20ms menghasilkan pergerakan yang mulus
+        }
+
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+            clearTimeout(autoScrollTimer);
+        }
+
+        // Manajemen Jeda Input 2 Detik
+        function resetAutoScrollTimer() {
+            stopAutoScroll();
+            autoScrollTimer = setTimeout(() => {
+                startAutoScroll();
+            }, 2000); // 2 detik terhitung sejak input terakhir selesai
+        }
+
+        // Event Listeners untuk Drag Mouse & Touch Screen
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.remove('scroll-smooth'); // Matikan smooth scroll bawaan saat di-drag agar responsif
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            stopAutoScroll();
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            if (isDown) {
+                isDown = false;
+                resetAutoScrollTimer();
+            }
+        });
+
+        slider.addEventListener('mouseup', (e) => {
+            // Deteksi jika hanya klik biasa (bukan drag jauh) untuk memicu zoom
+            const endX = e.pageX - slider.offsetLeft;
+            if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+                openGalleryModal(e.target.src);
+            }
+            isDown = false;
+            resetAutoScrollTimer();
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5; // Kecepatan sensitivitas drag
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Dukungan untuk Layar Sentuh (Mobile/Tablet)
+        slider.addEventListener('touchstart', (e) => {
+            isDown = true;
+            slider.classList.remove('scroll-smooth');
+            startX = e.touches[0].pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            stopAutoScroll();
+        });
+
+        slider.addEventListener('touchend', (e) => {
+            isDown = false;
+            resetAutoScrollTimer();
+        });
+
+        slider.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            const x = e.touches[0].pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Jalankan auto-scroll pertama kali saat halaman siap
+        slider.addEventListener('DOMContentLoaded', () => {
+            // Menghindari konflik dengan script DOMContentLoaded bawaan Anda, kita inject ke antrean saja
+        });
+        // Pemicu langsung karena ditaruh di script bawah
+        setTimeout(startAutoScroll, 1000);
+
+        // === FUNGSI MODAL ZOOM GAMBAR ===
+        function openGalleryModal(imgSrc) {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modalImg.src = imgSrc;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalImg.classList.remove('scale-95');
+            }, 10);
+            stopAutoScroll();
+        }
+
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modal.classList.add('opacity-0');
+            modalImg.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                resetAutoScrollTimer();
+            }, 300);
+        }
+      
+    </script>
+     <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
+    <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        <span id="floating-btn-text">Menu Khusus</span>
+    </a>
+</div>
+
+</body>
+</html>
