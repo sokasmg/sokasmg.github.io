@@ -247,7 +247,7 @@
   <section id="pengalaman-section" class="py-12 bg-white">
       <section id="pengalaman-section" class="py-12 bg-white">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Pengalaman Kemenangan Iman</h2>
+            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Cerita Kemenangan</h2>
             <div class="soka-tricolor mb-8">
                 <div class="soka-blue"></div>
                 <div class="soka-yellow"></div>
@@ -1137,6 +1137,7 @@
             setupInfiniteScroll();
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
+            loadPengalamanAnggota();
         });
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
@@ -1281,6 +1282,74 @@
                 btn.disabled = false;
                 input.disabled = false;
             }
+        }
+
+                // ... (ini adalah batas akhir dari kode-kode javascript lama Anda) ...
+
+        // ==================== KODE PENGALAMAN ANGGOTA (BARU) ====================
+        const PENGALAMAN_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/URl_SPREADSHEET_ANDA/pub?gid=GID_HALAMAN_PENGALAMAN&output=csv";
+
+        async function loadPengalamanAnggota() {
+            try {
+                const response = await fetch(PENGALAMAN_SHEET_URL);
+                const data = await response.text();
+                
+                // Parsing baris CSV (memisahkan berdasarkan enter baris baru)
+                const rows = data.split("\n").map(row => {
+                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                });
+
+                const container = document.getElementById('pengalaman-container');
+                container.innerHTML = ""; 
+
+                // Lewati baris pertama (header), lalu balik urutannya agar yang paling baru diinput muncul pertama
+                const activeRows = rows.slice(1).filter(r => r[0] && r[1]).reverse();
+                const dataDitampilkan = activeRows.slice(0, 3);
+
+                if (dataDitampilkan.length === 0) {
+                    container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada cerita pengalaman.</p>`;
+                    return;
+                }
+
+                dataDitampilkan.forEach((row) => {
+                    const nama = row[0].replace(/"/g, "").trim();
+                    const isiCerita = row[1].replace(/"/g, "").trim();
+                    
+                    // Membuat preview 120 karakter pertama
+                    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+                    const fotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+
+                    const cardHtml = `
+                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+                            <div>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="${fotoUrl}" alt="${nama}" class="w-12 h-12 rounded-full object-cover border-2 border-[#F9A825]">
+                                    <h3 class="text-lg font-semibold text-gray-800">${nama}</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
+                                    ${previewCerita}
+                                </p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button onclick="bukaDetailPengalaman('${nama}', \`${isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" class="text-sm font-medium text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                                    Lanjut baca...
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', cardHtml);
+                });
+
+            } catch (error) {
+                console.error("Gagal memuat pengalaman:", error);
+                document.getElementById('pengalaman-container').innerHTML = 
+                    `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita pengalaman.</p>`;
+            }
+        }
+
+        function bukaDetailPengalaman(nama, isiLengkap) {
+            // Untuk sementara menggunakan alert bawaan browser, Anda bisa menggantinya dengan custom modal nanti
+            alert(`Pengalaman dari: ${nama}\n\n${isiLengkap}`);
         }
     </script>
 </body>
