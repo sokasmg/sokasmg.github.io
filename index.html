@@ -316,7 +316,8 @@
         // === KONFIGURASI LINK GOOGLE SHEETS ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
-
+        const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
+        
         // Variabel penampung data dari cloud
         let quoteList = [];
         let goshoList = [];
@@ -379,26 +380,85 @@
             return result;
         }
 
-        // Fungsi menyedot data dari Google Sheets secara parallel
-        async function loadQuotesFromSheets() {
-            document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
-            try {
-                const [resBimbingan, resGosho] = await Promise.all([
-                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
-                    fetch(CSV_URL_GOSHO).then(res => res.text())
-                ]);
+        // Variabel penampung data Q&A global
+let qaList = [];
 
-                quoteList = parseCSV(resBimbingan);
-                goshoList = parseCSV(resGosho);
+async function loadQuotesFromSheets() {
+    document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
+    try {
+        // Kita tambahkan fetch untuk CSV_URL_QA di dalam Promise.all
+        const [resBimbingan, resGosho, resQA] = await Promise.all([
+            fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+            fetch(CSV_URL_GOSHO).then(res => res.text()),
+            fetch(CSV_URL_QA).then(res => res.text())
+        ]);
 
-                // Tampilkan data setelah berhasil disedot
-                setQuoteOfTheDay();
-            } catch (error) {
-                console.error("Gagal mengambil data kalender:", error);
-                document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
-            }
-        }
+        quoteList = parseCSV(resBimbingan);
+        goshoList = parseCSV(resGosho);
+        
+        // Memakai parser CSV bawaan Anda yang sudah aman dari tanda koma/enter!
+        qaList = parseCSV(resQA); 
 
+        // Tampilkan data kutipan harian
+        setQuoteOfTheDay();
+        
+        // Panggil fungsi untuk merender Q&A ke halaman web
+        renderQASearch();
+    } catch (error) {
+        console.error("Gagal mengambil data kalender atau Q&A:", error);
+        document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
+        document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
+    }
+}
+
+function renderQASearch() {
+    const container = document.getElementById('qa-container');
+    if (qaList.length === 0) {
+        container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
+        return;
+    }
+
+    container.innerHTML = ""; // Bersihkan teks "Memuat..."
+
+    qaList.forEach((item, index) => {
+        // item.text otomatis berisi Kolom A (Question)
+        // item.author otomatis berisi Kolom B (Answer) karena fungsi parseCSV Anda membagi 2 kolom.
+        const question = item.text;
+        const answer = item.author;
+
+        // Membuat element HTML Accordion item menggunakan Tailwind
+        const qaItem = document.createElement('div');
+        qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+
+        qaItem.innerHTML = `
+            <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
+                <span>${question}</span>
+                <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
+                ${answer}
+            </div>
+        `;
+        container.appendChild(qaItem);
+    });
+}
+
+// Fungsi animasi buka tutup accordion sederhana
+function toggleAccordion(index) {
+    const answerDiv = document.getElementById(`ans-${index}`);
+    const icon = document.getElementById(`icon-${index}`);
+    
+    if (answerDiv.classList.contains('hidden')) {
+        answerDiv.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+    } else {
+        answerDiv.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    }
+}
+        
         // Fungsi utama menampilkan kutipan (Logika sudah dipisah antara Bimbingan & Gosho)
         function setQuoteOfTheDay() {
             if (quoteList.length === 0 || goshoList.length === 0) return;
