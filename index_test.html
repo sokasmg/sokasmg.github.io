@@ -236,28 +236,28 @@
             
             <div class="relative max-w-5xl mx-auto group">
                 <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2" style="-ms-overflow-style: none; scrollbar-width: none;">
-    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-        <img src="kegiatan1.jpeg" alt="Kegiatan 1" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-    </div>
-    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-        <img src="kegiatan2.jpeg" alt="Kegiatan 2" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-    </div>
-    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-        <img src="kegiatan3.jpeg" alt="Kegiatan 3" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-    </div>
-    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-        <img src="kegiatan4.jpeg" alt="Kegiatan 4" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-    </div>
-    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-        <img src="kegiatan5.jpeg" alt="Kegiatan 5" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-    </div>
-</div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img data-random-gallery src="" alt="Kegiatan 1" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img data-random-gallery src="" alt="Kegiatan 2" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img data-random-gallery src="" alt="Kegiatan 3" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img data-random-gallery src="" alt="Kegiatan 4" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img data-random-gallery src="" alt="Kegiatan 5" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <div id="gallery-modal" class="fixed inset-0 bg-black/95 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
-        <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">&times;</button>
+        <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">×</button>
         <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
   
@@ -834,6 +834,16 @@ function processLogout() {
         let autoScrollInterval;
         let originalWidth = 0;
 
+        // Fungsi Tambahan untuk Pengacakan Sumber Gambar Terlebih Dahulu
+        function randomizeGalleryImages() {
+            const galleryImages = slider.querySelectorAll('img[data-random-gallery]');
+            galleryImages.forEach(img => {
+                // Menghasilkan angka acak dari 100 sampai 999 (format fotoXXX)
+                const randomNum = Math.floor(Math.random() * 900) + 100;
+                img.src = `images/foto${randomNum}.webp`;
+            });
+        }
+
         // Prosedur kloning untuk efek Infinite Loop Murni
         function setupInfiniteScroll() {
             const items = Array.from(slider.children);
@@ -942,6 +952,7 @@ function processLogout() {
 
         // Inisialisasi awal saat dokumen selesai dimuat
         window.addEventListener('load', () => {
+            randomizeGalleryImages(); // Jalankan pengacakan gambar sebelum melakukan kloning
             setupInfiniteScroll();
             setTimeout(startAutoScroll, 1000);
         });
