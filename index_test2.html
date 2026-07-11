@@ -132,8 +132,7 @@
                 <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
             </div>
             <p class="text-gray-600 leading-relaxed text-lg mb-6">
-                Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.
-            </p>
+                Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.</p>
             <p class="text-gray-600 leading-relaxed text-lg">
                 Kami percaya bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.
             </p>
@@ -222,7 +221,7 @@
         <div class="soka-red"></div>
     </div>
 
-<section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
+    <section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">Kegiatan Kami</h2>
@@ -245,7 +244,7 @@
         <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
   
-        <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
+    <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
@@ -364,11 +363,17 @@
     <div id="login-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fade-in">
             <h3 class="text-xl font-bold text-blue-950 mb-2">Verifikasi Anggota</h3>
-            <p class="text-sm text-gray-500 mb-4">Masukkan nomor ponsel Anda yang terdaftar untuk membuka fitur internal organisasi.</p>
+            <p class="text-sm text-gray-500 mb-4">Masukkan nomor ponsel terdaftar dan PIN Keamanan Anda.</p>
             
-            <div class="mb-4">
-                <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
-                <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
+            <div class="space-y-4 mb-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
+                    <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">PIN Keamanan (6 Digit)</label>
+                    <input type="password" id="input-login-pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Kosongkan jika baru pertama kali login" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium text-center tracking-widest font-bold">
+                </div>
                 <p id="login-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
             </div>
             
@@ -405,8 +410,9 @@
                 <p id="pin-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
             </div>
             
-            <div class="flex justify-end">
-                <button id="btn-submit-pin" onclick="processCreatePin()" class="bg-red-600 text-white w-full py-3 rounded-xl font-bold hover:bg-red-700 transition flex items-center justify-center shadow-lg">
+            <div class="flex justify-end space-x-3">
+                <button onclick="closePinSetupModal()" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700">Batal</button>
+                <button id="btn-submit-pin" onclick="processCreatePin()" class="bg-red-600 text-white px-5 py-3 rounded-xl font-bold hover:bg-red-700 transition flex items-center justify-center shadow-lg flex-1">
                     Simpan & Aktifkan PIN
                 </button>
             </div>
@@ -505,7 +511,7 @@
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         
-        // PUSAT KONTROL URL WEB APP (Gantilah jika Anda melakukan New Deployment di Apps Script)
+        // PUSAT KONTROL URL WEB APP
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
         
         // Variabel penampung data dari cloud
@@ -514,7 +520,7 @@
         let qaList = [];
         let activeTab = 'bimbingan';
 
-        // Fungsi pembaca CSV: Aman membaca koma dan enter di dalam teks kutipan
+        // Fungsi pembaca CSV
         function parseCSV(text) {
             const result = [];
             let row = ["", ""];
@@ -682,20 +688,6 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        function copyQuote() {
-            const quote = document.getElementById('soka-quote').innerText;
-            const author = document.getElementById('soka-author').innerText;
-            const btnText = document.getElementById('copy-text');
-            const textToCopy = `"${quote}" ${author}`;
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                btnText.innerText = "Tersalin!";
-                setTimeout(() => { btnText.innerText = "Salin Kutipan"; }, 2000);
-            }).catch(err => {
-                console.error('Gagal menyalin teks: ', err);
-            });
-        }
-        
         // Logika Banner Slider Otomatis (Fading)
         const slides = document.querySelectorAll('.banner-slide');
         let currentSlide = 0;
@@ -742,11 +734,11 @@
             }
         }
 
-        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA (DIPERBARUI) ---
         function checkLoginStatus() {
             const savedName = localStorage.getItem('soka_user_name');
             const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
-            const savedPinStatus = localStorage.getItem('soka_user_pin_status'); // Pendeteksi status pin
+            const savedPinStatus = localStorage.getItem('soka_user_pin_status'); 
             
             const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
             const navGaleriMobile = document.getElementById('nav-galeri-mobile');
@@ -758,15 +750,11 @@
             const greetingMobile = document.getElementById('user-greeting-mobile');
             const btnAuthMobile = document.getElementById('btn-auth-mobile');
 
-            // Element Floating Button Bawaan
             const floatingBtn = document.getElementById('floating-admin-btn');
             const floatingLink = document.getElementById('floating-btn-link');
             const floatingText = document.getElementById('floating-btn-text');
 
-            // Element Floating Chat Baru
             const floatingChatBtn = document.getElementById('floating-chat-btn');
-            
-            // Element Floating Warning PIN Baru
             const floatingPinWarningBtn = document.getElementById('floating-pin-warning-btn');
 
             if (savedName) {
@@ -796,7 +784,6 @@
                     btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
                 }
 
-                // --- LOGIKA KONTROL FLOATING BUTTON BERDASARKAN JABATAN ---
                 if (floatingBtn && floatingLink && floatingText) {
                     if (savedJabatan === "Pimpinan") {
                         floatingLink.href = "intishibu.html";
@@ -811,7 +798,7 @@
                     }
                 }
 
-                // --- LOGIKA KONTROL FLOATING PING WARNING ---
+                // --- TOMBOL MERAH BERDENYUT TETAP DI SINI SELAMA STATUS PIN KOSONG ---
                 if (savedPinStatus === "kosong") {
                     floatingPinWarningBtn.classList.remove('hidden');
                 } else {
@@ -855,6 +842,7 @@
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-error-msg').classList.add('hidden');
             document.getElementById('input-phone').value = "";
+            document.getElementById('input-login-pin').value = "";
         }
 
         function closeLoginModal() {
@@ -872,8 +860,10 @@
             document.getElementById('pin-setup-modal').classList.add('hidden');
         }
 
+        // --- PROSES LOGIN MULTI-INPUT (PONSEL & PIN) ---
         async function processLogin() {
             const phoneInput = document.getElementById('input-phone').value.trim();
+            const pinInput = document.getElementById('input-login-pin').value.trim();
             const errorMsg = document.getElementById('login-error-msg');
             const btnSubmit = document.getElementById('btn-submit-login');
             
@@ -892,7 +882,10 @@
                     method: 'POST',
                     mode: 'cors',
                     headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ phone: phoneInput })
+                    body: JSON.stringify({ 
+                        phone: phoneInput,
+                        pin: pinInput 
+                    })
                 });
                 
                 const result = await response.json();
@@ -900,18 +893,16 @@
                 if (result.status === "success") {
                     localStorage.setItem('soka_user_name', result.nama);
                     localStorage.setItem('soka_user_jabatan', result.jabatan || ""); 
-                    localStorage.setItem('soka_user_phone', phoneInput); // Simpan nomor telepon untuk referensi update PIN
-                    localStorage.setItem('soka_user_pin_status', result.pinStatus || ""); // Tangkap status pin dari server
+                    localStorage.setItem('soka_user_phone', phoneInput); 
+                    localStorage.setItem('soka_user_pin_status', result.pinStatus || ""); 
                     
                     closeLoginModal();
                     checkLoginStatus(); 
 
-                    // Jika pin masih kosong, langsung pancing pop-up modal setup pin terbuka
-                    if (result.pinStatus === "kosong") {
-                        openPinSetupModal();
-                    }
+                    // KOREKSI UTAMA: Pengguna baru dibiarkan masuk langsung. 
+                    // Tidak memancing modal setup pin terbuka otomatis.
                 } else {
-                    errorMsg.innerText = result.message || "Nomor tidak dikenali.";
+                    errorMsg.innerText = result.message || "Nomor tidak dikenali atau PIN salah.";
                     errorMsg.classList.remove('hidden');
                 }
             } catch (error) {
@@ -932,7 +923,6 @@
             const btnSubmit = document.getElementById('btn-submit-pin');
             const savedPhone = localStorage.getItem('soka_user_phone');
 
-            // Validasi format angka 6 digit murni
             const isNumeric = /^\d+$/.test(newPin);
 
             if (!newPin || newPin.length !== 6 || !isNumeric) {
@@ -967,9 +957,9 @@
 
                 if (result.status === "success") {
                     alert("PIN Keamanan berhasil diaktifkan! Identitas akun Anda sekarang terkunci aman.");
-                    localStorage.setItem('soka_user_pin_status', "aman"); // Perbarui status pin lokal
+                    localStorage.setItem('soka_user_pin_status', "aman"); 
                     closePinSetupModal();
-                    checkLoginStatus(); // Sembunyikan floating button merah tanda seru
+                    checkLoginStatus(); 
                 } else {
                     errorMsg.innerText = result.message || "Gagal mengaktifkan PIN.";
                     errorMsg.classList.remove('hidden');
@@ -1153,13 +1143,11 @@
             modalImg.classList.add('scale-95');
             setTimeout(() => {
                 modal.classList.add('hidden');
-                resetAutoScrollTimer();
+                startAutoScroll();
             }, 300);
         }
 
-        // =========================================================================
-        // === OPERASIONAL OPERASI MINI CHAT BOX (WA STYLE) ===
-        // =========================================================================
+        // === MINI CHAT BOX OPERASIONAL ===
         function toggleChatWindow() {
             const chatWin = document.getElementById('chat-window');
             chatWin.classList.toggle('hidden');
@@ -1171,8 +1159,6 @@
         function updateCharCount() {
             const input = document.getElementById('input-chat-msg');
             const counter = document.getElementById('char-counter');
-            
-            // Penguncian/pemotongan keras jika melebihi 160 huruf
             if (input.value.length > 160) {
                 input.value = input.value.substring(0, 160);
             }
@@ -1211,12 +1197,10 @@
                     const isMe = c.nama === currentUser;
                     const chatBubble = document.createElement('div');
                     
-                    // Bubble chat styling mirip WhatsApp
                     chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
                         isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
                     }`;
                     
-                    // --- FORMAT TIMESTAMP AGAR LEBIH RAPI (Jam:Menit) ---
                     let waktuTampil = "";
                     if (c.timestamp) {
                         const dateObj = new Date(c.timestamp);
@@ -1235,7 +1219,6 @@
                     body.appendChild(chatBubble);
                 });
                 
-                // Auto scroll ke bawah
                 body.scrollTop = body.scrollHeight;
                 
             } catch (error) {
@@ -1250,7 +1233,6 @@
             const msg = input.value.trim();
             const myName = localStorage.getItem('soka_user_name');
             
-            // Validasi string kosong atau lewat dari 160 huruf sebelum kirim
             if (!msg || msg.length > 160) return;
             
             btn.disabled = true;
@@ -1279,7 +1261,7 @@
             } catch (e) {
                 console.error(e);
                 alert("Gangguan koneksi internet ke Google Cloud.");
-            } finally {
+            } military {
                 btn.disabled = false;
                 input.disabled = false;
             }
