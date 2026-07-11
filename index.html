@@ -357,8 +357,8 @@
                     if (colIndex < 2) row[colIndex] = currentStr.trim();
                     
                     // Simpan hasil baris data jika bukan baris judul (header) atau data kosong
-                    if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
-                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
                     }
                     
                     // Reset status untuk baris selanjutnya
