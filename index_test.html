@@ -1301,11 +1301,10 @@
         // ==================== KODE PENGALAMAN ANGGOTA (DIPERBAIKI TOTAL) ====================
         async function loadPengalamanAnggota() {
             try {
-                // Memanggil variabel URL yang benar (CSV_URL_PENGALAMAN)
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parsing CSV anti-eror (aman dari tanda koma dan tanda kutip ganda di dalam cerita)
+                // Parsing CSV anti-eror
                 const rows = data.split("\r\n").filter(row => row.trim() !== "").map(row => {
                     let result = [];
                     let insideQuote = false;
@@ -1328,8 +1327,8 @@
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Lewati header (baris 0), filter baris valid, lalu balik urutan (terbaru di atas)
-                const activeRows = rows.slice(1).filter(r => r[0] && r[1]).reverse();
+                // Lewati header (baris 0), filter baris valid, balik urutan (terbaru di atas)
+                const activeRows = rows.slice(1).filter(r => r[0] && r[5]).reverse();
                 const dataDitampilkan = activeRows.slice(0, 3);
 
                 if (dataDitampilkan.length === 0) {
@@ -1339,24 +1338,34 @@
 
                 dataDitampilkan.forEach((row) => {
                     const nama = row[0].replace(/"/g, "").trim();
-                    const isiCerita = row[1].replace(/"/g, "").trim();
+                    const judul = row[1] ? row[1].replace(/"/g, "").trim() : "Cerita Kemenangan";
+                    const fotoProfil = row[2] ? row[2].replace(/"/g, "").trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+                    const fotoModal1 = row[3] ? row[3].replace(/"/g, "").trim() : "";
+                    const fotoModal2 = row[4] ? row[4].replace(/"/g, "").trim() : "";
+                    const isiCerita = row[5].replace(/"/g, "").trim();
                     
                     const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
-                    const fotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+
+                    // Mengamankan string teks agar tidak merusak fungsi onclick JavaScript
+                    const safeIsiCerita = isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$');
+                    const safeJudul = judul.replace(/`/g, '\\`').replace(/\$/g, '\\$');
 
                     const cardHtml = `
                         <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
                             <div>
                                 <div class="flex items-center space-x-4 mb-4">
-                                    <img src="${fotoUrl}" alt="${nama}" class="w-12 h-12 rounded-full object-cover border-2 border-[#F9A825]">
-                                    <h3 class="text-lg font-semibold text-gray-800">${nama}</h3>
+                                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
+                                    <div>
+                                        <h3 class="text-base font-bold text-gray-900 leading-tight">${nama}</h3>
+                                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider">${judul}</p>
+                                    </div>
                                 </div>
                                 <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
                                     ${previewCerita}
                                 </p>
                             </div>
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="bukaDetailPengalaman('${nama}', \`${isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" class="text-sm font-medium text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                                <button onclick="bukaDetailPengalaman('${nama}', \`${safeJudul}\`, \`${safeIsiCerita}\`, '${fotoModal1}', '${fotoModal2}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
                                     Lanjut baca...
                                 </button>
                             </div>
@@ -1372,14 +1381,34 @@
             }
         }
 
-        // Fungsi Membuka Modal Detail Cerita
-        function bukaDetailPengalaman(nama, isiLengkap) {
+        // Fungsi Membuka Modal Detail Cerita (Sudah Mendukung Grid Foto Tambahan)
+        function bukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2) {
             const modal = document.getElementById('modal-pengalaman');
             const modalNama = document.getElementById('modal-pengalaman-nama');
             const modalCerita = document.getElementById('modal-pengalaman-cerita');
             
-            modalNama.innerText = "Pengalaman Iman: " + nama;
-            modalCerita.innerText = isiLengkap;
+            modalNama.innerHTML = `<div>
+                <span class="block text-xs uppercase text-[#F9A825] tracking-widest font-bold font-sans">${judul}</span>
+                <span class="text-xl font-black text-[#002F6C]">Pengalaman Iman: ${nama}</span>
+            </div>`;
+            
+            // Generate HTML untuk foto tambahan di dalam modal jika URL-nya tersedia
+            let fotoHTML = "";
+            if (foto1 || foto2) {
+                fotoHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 mt-2">`;
+                if (foto1) {
+                    fotoHTML += `<img src="${foto1}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 1" onerror="this.style.display='none'">`;
+                }
+                if (foto2) {
+                    fotoHTML += `<img src="${foto2}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 2" onerror="this.style.display='none'">`;
+                }
+                fotoHTML += `</div>`;
+            }
+
+            modalCerita.innerHTML = `
+                ${fotoHTML}
+                <p class="text-gray-700 leading-relaxed font-medium mt-2">${isiLengkap}</p>
+            `;
             
             modal.classList.remove('hidden');
             setTimeout(() => {
