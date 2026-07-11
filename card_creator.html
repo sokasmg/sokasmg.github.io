@@ -223,15 +223,18 @@
                     <div id="preview-quote-start" class="text-5xl opacity-20 font-serif leading-none select-none -mb-4 z-10">“</div>
 
                     <!-- Tengah: Isi Teks Utama -->
-                    <div class="my-auto text-center px-4 w-full overflow-hidden z-10">
-                        <!-- Gaya ukuran font diatur inline style dari nilai default slider -->
-                        <p id="preview-text" style="font-size: 18px;" class="font-medium leading-relaxed italic font-playfair break-words">
-                            Memuat teks...
-                        </p>
-                        <p id="preview-author" class="text-xs font-bold tracking-wider uppercase mt-6 opacity-80">
-                            -
-                        </p>
-                    </div>
+                    <div class="flex-1 flex flex-col justify-center items-center px-4 w-full z-10">
+    <!-- Menggunakan padding bawah ekstra agar teks tidak menempel ke tepi bawah -->
+    <div class="w-full text-center pb-4"> 
+        <!-- Gaya ukuran font diatur inline style dari nilai default slider -->
+        <p id="preview-text" style="font-size: 18px;" class="font-medium leading-relaxed italic font-playfair break-words">
+            Memuat teks...
+        </p>
+        <p id="preview-author" class="text-xs font-bold tracking-wider uppercase mt-5 opacity-80 block clear-both">
+            -
+        </p>
+    </div>
+</div>
 
                     <!-- Tanda Kutip Bawah -->
                     <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4 z-10">”</div>
