@@ -359,6 +359,36 @@
     </div>
 
     <script>
+        // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
+document.addEventListener('touchmove', function (event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+// Mencegah zoom melalui ketukan ganda cepat (Double Tap to Zoom)
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// Mencegah zoom di komputer menggunakan tombol pintasan (Ctrl + / Ctrl - / Ctrl + Scroll)
+document.addEventListener('keydown', function (event) {
+    if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '=' || event.key === '0')) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('wheel', function (event) {
+    if (event.ctrlKey) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
         // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
