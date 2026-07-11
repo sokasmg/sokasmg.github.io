@@ -633,70 +633,96 @@ document.addEventListener('wheel', function (event) {
 
         // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
         function checkLoginStatus() {
-            const savedName = localStorage.getItem('soka_user_name');
-            
-            const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
-            const navGaleriMobile = document.getElementById('nav-galeri-mobile');
-            const sectionJadwal = document.getElementById('jadwal');
-            const btnCardCreator = document.getElementById('btn-card-creator');
-            
-            const greetingDesktop = document.getElementById('user-greeting-desktop');
-            const btnAuthDesktop = document.getElementById('btn-auth-desktop');
-            const greetingMobile = document.getElementById('user-greeting-mobile');
-            const btnAuthMobile = document.getElementById('btn-auth-mobile');
+    const savedName = localStorage.getItem('soka_user_name');
+    const savedJabatan = localStorage.getItem('soka_user_jabatan'); // <-- Ambil data jabatan
+    
+    const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
+    const navGaleriMobile = document.getElementById('nav-galeri-mobile');
+    const sectionJadwal = document.getElementById('jadwal');
+    const btnCardCreator = document.getElementById('btn-card-creator');
+    
+    const greetingDesktop = document.getElementById('user-greeting-desktop');
+    const btnAuthDesktop = document.getElementById('btn-auth-desktop');
+    const greetingMobile = document.getElementById('user-greeting-mobile');
+    const btnAuthMobile = document.getElementById('btn-auth-mobile');
 
-            if (savedName) {
-                if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
-                if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
-                if (sectionJadwal) sectionJadwal.classList.remove('hidden');
-                if (btnCardCreator) btnCardCreator.classList.remove('hidden');
-                
-                if (greetingDesktop) {
-                    greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
-                    greetingDesktop.classList.remove('hidden');
-                }
-                if (btnAuthDesktop) {
-                    btnAuthDesktop.innerText = "Logout";
-                    btnAuthDesktop.onclick = processLogout;
-                    btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
-                }
+    // Element Floating Button Baru
+    const floatingBtn = document.getElementById('floating-admin-btn');
+    const floatingLink = document.getElementById('floating-btn-link');
+    const floatingText = document.getElementById('floating-btn-text');
 
-                if (greetingMobile) {
-                    greetingMobile.innerText = `Halo, ${savedName}`;
-                    greetingMobile.className = "font-black text-blue-950";
-                }
-                if (btnAuthMobile) {
-                    btnAuthMobile.innerText = "Keluar";
-                    btnAuthMobile.onclick = processLogout;
-                    btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
-                }
+    if (savedName) {
+        if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
+        if (sectionJadwal) sectionJadwal.classList.remove('hidden');
+        if (btnCardCreator) btnCardCreator.classList.remove('hidden');
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
+            greetingDesktop.classList.remove('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Logout";
+            btnAuthDesktop.onclick = processLogout;
+            btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = `Halo, ${savedName}`;
+            greetingMobile.className = "font-black text-blue-950";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Keluar";
+            btnAuthMobile.onclick = processLogout;
+            btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
+        }
+
+        // --- LOGIKA KONTROL FLOATING BUTTON BERDASARKAN JABATAN ---
+        if (floatingBtn && floatingLink && floatingText) {
+            if (savedJabatan === "Pimpinan") {
+                floatingLink.href = "intishibu.html";
+                floatingText.innerText = "Menu Pimpinan";
+                floatingBtn.classList.remove('hidden');
+            } else if (savedJabatan === "Pimpinan (Admin)") {
+                floatingLink.href = "admin.html";
+                floatingText.innerText = "Menu Admin";
+                floatingBtn.classList.remove('hidden');
             } else {
-                if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
-                if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
-                if (sectionJadwal) sectionJadwal.classList.add('hidden');
-                if (btnCardCreator) btnCardCreator.classList.add('hidden');
-                
-                if (greetingDesktop) {
-                    greetingDesktop.innerText = "";
-                    greetingDesktop.classList.add('hidden');
-                }
-                if (btnAuthDesktop) {
-                    btnAuthDesktop.innerText = "Login Anggota";
-                    btnAuthDesktop.onclick = openLoginModal;
-                    btnAuthDesktop.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition";
-                }
-
-                if (greetingMobile) {
-                    greetingMobile.innerText = "Menu Khusus Anggota:";
-                    greetingMobile.className = "font-bold text-gray-500 italic";
-                }
-                if (btnAuthMobile) {
-                    btnAuthMobile.innerText = "Login";
-                    btnAuthMobile.onclick = openLoginModal;
-                    btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
-                }
+                // Anggota, Inti, Calon tidak melihat tombol ini
+                floatingBtn.classList.add('hidden');
             }
         }
+
+    } else {
+        if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
+        if (sectionJadwal) sectionJadwal.classList.add('hidden');
+        if (btnCardCreator) btnCardCreator.classList.add('hidden');
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = "";
+            greetingDesktop.classList.add('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Login Anggota";
+            btnAuthDesktop.onclick = openLoginModal;
+            btnAuthDesktop.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = "Menu Khautan Anggota:";
+            greetingMobile.className = "font-bold text-gray-500 italic";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Login";
+            btnAuthMobile.onclick = openLoginModal;
+            btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
+        }
+
+        // Sembunyikan floating button jika tidak sedang login
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+    }
+}
 
         function openLoginModal() {
             document.getElementById('login-modal').classList.remove('hidden');
@@ -709,56 +735,65 @@ document.addEventListener('wheel', function (event) {
         }
 
         async function processLogin() {
-            const phoneInput = document.getElementById('input-phone').value.trim();
-            const errorMsg = document.getElementById('login-error-msg');
-            const btnSubmit = document.getElementById('btn-submit-login');
-            
-            if (!phoneInput) {
-                errorMsg.innerText = "Nomor ponsel tidak boleh kosong.";
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-            
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Memverifikasi...";
-            errorMsg.classList.add('hidden');
-            
-            try {
-                // MENGGUNAKAN text/plain UNTUK MENGHINDARI BLOKIR CORS DARI GOOGLE APPS SCRIPT
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ phone: phoneInput })
-                });
-                
-                const result = await response.json();
-                
-                if (result.status === "success") {
-                    localStorage.setItem('soka_user_name', result.nama);
-                    closeLoginModal();
-                    checkLoginStatus(); 
-                } else {
-                    errorMsg.innerText = result.message || "Nomor tidak dikenali.";
-                    errorMsg.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error("Authentication Error:", error);
-                errorMsg.innerText = "Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.";
-                errorMsg.classList.remove('hidden');
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Verifikasi";
-            }
+    const phoneInput = document.getElementById('input-phone').value.trim();
+    const errorMsg = document.getElementById('login-error-msg');
+    const btnSubmit = document.getElementById('btn-submit-login');
+    
+    if (!phoneInput) {
+        errorMsg.innerText = "Nomor ponsel tidak boleh kosong.";
+        errorMsg.classList.remove('hidden');
+        return;
+    }
+    
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "Memverifikasi...";
+    errorMsg.classList.add('hidden');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ phone: phoneInput })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            localStorage.setItem('soka_user_name', result.nama);
+            localStorage.setItem('soka_user_jabatan', result.jabatan || ""); // <-- TAMBAHKAN INI (Menyimpan jabatan dari Sheets)
+            closeLoginModal();
+            checkLoginStatus(); 
+        } else {
+            errorMsg.innerText = result.message || "Nomor tidak dikenali.";
+            errorMsg.classList.remove('hidden');
         }
+    } catch (error) {
+        console.error("Authentication Error:", error);
+        errorMsg.innerText = "Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.";
+        errorMsg.classList.remove('hidden');
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Verifikasi";
+    }
+}
 
-        function processLogout() {
-            if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
-                localStorage.removeItem('soka_user_name');
-                checkLoginStatus(); 
-            }
-        }
+function processLogout() {
+    if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
+        localStorage.removeItem('soka_user_name');
+        localStorage.removeItem('soka_user_jabatan'); // <-- TAMBAHKAN INI (Menghapus jabatan saat logout)
+        checkLoginStatus(); 
+    }
+}
     </script>
-     
+     <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
+    <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        <span id="floating-btn-text">Menu Khusus</span>
+    </a>
+</div>
+
 </body>
 </html>
