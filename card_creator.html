@@ -203,22 +203,10 @@
                 <!-- Wadah Utama yang di-convert ke Image -->
                 <div id="capture-area" class="aspect-square-canvas bg-[#002F6C] text-white flex flex-col justify-between p-10 relative overflow-hidden shadow-2xl rounded-lg transition-colors duration-300">
                     
-                    <!-- LOGO INLINE SVG (Mencegah Bug html2canvas & Mendukung Dinamika Warna) -->
-                    <div id="preview-logo-wrapper" style="width: 200px; height: 200px; opacity: 0.15;" class="absolute inset-0 m-auto pointer-events-none select-none z-0 flex items-center justify-center">
-                        <svg id="preview-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" class="w-full h-full">
-                            <g fill="none" stroke="currentColor" stroke-width="12">
-                                <circle cx="300" cy="300" r="160"/>
-                                <circle cx="300" cy="190" r="160"/>
-                                <circle cx="300" cy="410" r="160"/>
-                                <circle cx="190" cy="300" r="160"/>
-                                <circle cx="410" cy="300" r="160"/>
-                                <circle cx="222" cy="222" r="160"/>
-                                <circle cx="378" cy="222" r="160"/>
-                                <circle cx="222" cy="378" r="160"/>
-                                <circle cx="378" cy="378" r="160"/>
-                            </g>
-                        </svg>
-                    </div>
+                    <!-- ELEMEN LOGO WATERMARK BARU (Posisi Tengah Absolut) -->
+                    <img id="preview-logo" src="sgilogo1.svg" alt="Logo Watermark" 
+                         style="width: 200px; height: 200px; opacity: 0.15;" 
+                         class="absolute inset-0 m-auto pointer-events-none select-none z-0 object-contain">
 
                     <!-- Aksesoris Triwarna Atas -->
                     <div id="preview-tricolor-top" class="absolute top-0 left-0 right-0 h-2 flex z-10">
@@ -232,6 +220,7 @@
 
                     <!-- Tengah: Isi Teks Utama -->
                     <div class="my-auto text-center px-4 w-full overflow-hidden z-10">
+                        <!-- Gaya ukuran font diatur inline style dari nilai default slider -->
                         <p id="preview-text" style="font-size: 18px;" class="font-medium leading-relaxed italic font-playfair break-words">
                             Memuat teks...
                         </p>
@@ -455,15 +444,15 @@
         // FUNGSI MENGUBAH UKURAN LOGO WATERMARK
         function changeLogoSize(size) {
             document.getElementById('logo-size-val').innerText = size + "px";
-            const logoWrapper = document.getElementById('preview-logo-wrapper');
-            logoWrapper.style.width = size + "px";
-            logoWrapper.style.height = size + "px";
+            const logo = document.getElementById('preview-logo');
+            logo.style.width = size + "px";
+            logo.style.height = size + "px";
         }
 
         // FUNGSI MENGUBAH OPACITY LOGO WATERMARK
         function changeLogoOpacity(opacityValue) {
             document.getElementById('logo-opacity-val').innerText = opacityValue + "%";
-            document.getElementById('preview-logo-wrapper').style.opacity = opacityValue / 100;
+            document.getElementById('preview-logo').style.opacity = opacityValue / 100;
         }
 
         // Toggle aksesoris
@@ -514,32 +503,51 @@
             toggleAcc();
         }
 
-        // PROSES UTAMA: DOWNLOAD HTML KE JPEG (SUDUT FIX SIKU-SIKU)
-        function downloadCard() {
-            const captureArea = document.getElementById('capture-area');
-            
-            // Trik Jitu: Sembunyikan efek rounded sementara waktu saat sistem memotret elemen
-            captureArea.classList.remove('rounded-lg');
-            
-            html2canvas(captureArea, {
-                scale: 3, 
-                useCORS: true,
-                logging: false,
-                backgroundColor: null // Mencegah munculnya background putih di area luar foto
-            }).then(canvas => {
-                // Kembalikan efek melengkung di website live preview setelah potret selesai
-                captureArea.classList.add('rounded-lg');
+        // PROSES UTAMA: DOWNLOAD HTML KE JPEG (SUDUT FIX SIKU-SIKU + FIX WATERMARK)
+function downloadCard() {
+    const captureArea = document.getElementById('capture-area');
+    const logoImg = document.getElementById('preview-logo');
 
-                const image = canvas.toDataURL("image/jpeg", 0.95);
-                const link = document.createElement('a');
-                link.download = `Soka_Quote_${Date.now()}.jpg`;
-                link.href = image;
-                link.click();
-            }).catch(err => {
-                captureArea.classList.add('rounded-lg');
-                console.error("Gagal memproses gambar:", err);
-            });
-        }
+    // Trik Jitu: Sembunyikan efek rounded sementara waktu saat sistem memotret elemen
+    captureArea.classList.remove('rounded-lg');
+
+    // Fungsi internal untuk eksekusi html2canvas
+    const executeCapture = () => {
+        html2canvas(captureArea, {
+            scale: 3, 
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: null // Mencegah munculnya background putih di area luar foto
+        }).then(canvas => {
+            // Kembalikan efek melengkung di website live preview setelah potret selesai
+            captureArea.classList.add('rounded-lg');
+
+            const image = canvas.toDataURL("image/jpeg", 0.95);
+            const link = document.createElement('a');
+            link.download = `Soka_Quote_${Date.now()}.jpg`;
+            link.href = image;
+            link.click();
+        }).catch(err => {
+            captureArea.classList.add('rounded-lg');
+            console.error("Gagal memproses gambar:", err);
+        });
+    };
+
+    // Pengecekan krusial: Jika ada logo, pastikan browser sudah selesai me-render gambar tersebut
+    if (logoImg && logoImg.src && !logoImg.complete) {
+        logoImg.onload = () => {
+            // Beri jeda mikro agar rendering engine browser sinkron dengan html2canvas
+            setTimeout(executeCapture, 50);
+        };
+    } else if (logoImg && typeof logoImg.decode === 'function') {
+        // Gunakan fungsi modern .decode() jika gambar sudah ada di cache agar langsung siap jepret
+        logoImg.decode().then(executeCapture).catch(() => setTimeout(executeCapture, 50));
+    } else {
+        // Jika tidak ada gambar/logo, langsung eksekusi seperti biasa
+        executeCapture();
+    }
+}
     </script>
 </body>
 </html>
