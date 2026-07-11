@@ -809,152 +809,156 @@ function processLogout() {
     }
 }
 
-// === LOGIKA SLIDER KEGIATAN TERAKHIR (INFINITE ONE-WAY LOOP) ===
-        const slider = document.getElementById('gallery-slider');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        let autoScrollTimer;
-        let autoScrollInterval;
-        let originalWidth = 0;
+// === LOGIKA SLIDER KEGIATAN TERAKHIR (INFINITE SMOOTH LOOP) ===
+const slider = document.getElementById('gallery-slider');
+let isDown = false;
+let startX;
+let scrollLeft;
+let autoScrollInterval;
+let originalWidth = 0;
 
-        // Fungsi bantu mengacak 5 nomor file gambar unik (fotoXXX.webp) tanpa duplikasi
-        // Mengasumsikan ketersediaan file berkisar antara foto001.webp s/d foto050.webp.
-        // Anda bisa menaikkan angka batas max (50) di bawah ini sesuai jumlah koleksi asli di folder images/ Anda.
-        function generateRandomImages() {
-            const totalAvailableImages = 50; 
-            const chosenNumbers = new Set();
-            
-            while(chosenNumbers.size < 5) {
-                const randomNum = Math.floor(Math.random() * totalAvailableImages) + 1;
-                chosenNumbers.add(randomNum);
+function generateRandomImages() {
+    const totalAvailableImages = 50; 
+    const chosenNumbers = new Set();
+    
+    while(chosenNumbers.size < 5) {
+        const randomNum = Math.floor(Math.random() * totalAvailableImages) + 1;
+        chosenNumbers.add(randomNum);
+    }
+    
+    Array.from(chosenNumbers).forEach((num) => {
+        const padNum = String(num).padStart(3, '0');
+        const itemHTML = `
+            <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                <img src="images/foto${padNum}.webp" alt="Kegiatan ${padNum}" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+            </div>`;
+        slider.insertAdjacentHTML('beforeend', itemHTML);
+    });
+}
+
+function setupInfiniteScroll() {
+    generateRandomImages();
+
+    // Kloning semua item untuk membuat efek infinite loop
+    const items = Array.from(slider.children);
+    if (items.length === 0) return;
+
+    items.forEach(item => {
+        const clone = item.cloneNode(true);
+        slider.appendChild(clone);
+    });
+
+    // PENTING: Gunakan requestAnimationFrame atau hitung ulang saat semua konten selesai dimuat
+    // agar offsetWidth tidak terbaca 0
+    setTimeout(() => {
+        updateSliderWidth();
+    }, 500); 
+}
+
+function updateSliderWidth() {
+    const items = Array.from(slider.children);
+    // Karena item sudah dikloning (total 10 item), konten asli adalah setengah dari total item (5 item pertama)
+    const halfLength = items.length / 2;
+    originalWidth = 0;
+    
+    for (let i = 0; i < halfLength; i++) {
+        // 16 adalah gap dari class space-x-4 milik Tailwind (1rem = 16px)
+        originalWidth += items[i].offsetWidth + 16; 
+    }
+}
+
+// Menggunakan requestAnimationFrame untuk performa scroll yang jauh lebih smooth (60fps+)
+function startAutoScroll() {
+    if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
+    
+    function scrollStep() {
+        if (!isDown) {
+            slider.scrollLeft += 0.8; // Turunkan angka ini jika ingin scroll lebih lambat dan halus
+
+            // Jika scroll melewati batas konten asli, kurangi dengan originalWidth secara halus (bukan diset ke 0)
+            if (slider.scrollLeft >= originalWidth) {
+                slider.scrollLeft -= originalWidth;
             }
-            
-            // Konversi nomor menjadi template elemen HTML string
-            Array.from(chosenNumbers).forEach((num) => {
-                const padNum = String(num).padStart(3, '0'); // Mengubah 5 menjadi "005"
-                const itemHTML = `
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="images/foto${padNum}.webp" alt="Kegiatan ${padNum}" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>`;
-                slider.insertAdjacentHTML('beforeend', itemHTML);
-            });
         }
+        autoScrollInterval = requestAnimationFrame(scrollStep);
+    }
+    autoScrollInterval = requestAnimationFrame(scrollStep);
+}
 
-        // Prosedur kloning untuk efek Infinite Loop Murni
-        function setupInfiniteScroll() {
-            // Render 5 gambar acak ke slider sebelum melakukan kloning DOM elemen
-            generateRandomImages();
+function stopAutoScroll() {
+    cancelAnimationFrame(autoScrollInterval);
+}
 
-            const items = Array.from(slider.children);
-            if (items.length === 0) return;
+// Event Listeners Mouse Drag
+slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    stopAutoScroll();
+});
 
-            // Hitung lebar total sebelum dikloning
-            // Menggunakan properti gabungan lebar elemen + gap space-x-4 (16px)
-            originalWidth = items.reduce((acc, item) => acc + item.offsetWidth + 16, 0);
+slider.addEventListener('mouseleave', () => {
+    if (isDown) {
+        isDown = false;
+        startAutoScroll();
+    }
+});
 
-            // Kloning semua item sekali dan masukkan ke bagian akhir container
-            items.forEach(item => {
-                const clone = item.cloneNode(true);
-                slider.appendChild(clone);
-            });
-        }
+slider.addEventListener('mouseup', (e) => {
+    const endX = e.pageX - slider.offsetLeft;
+    if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+        openGalleryModal(e.target.src);
+    }
+    isDown = false;
+    startAutoScroll();
+});
 
-        // Fungsi Bergerak Satu Arah Secara Halus
-        function startAutoScroll() {
-            autoScrollInterval = setInterval(() => {
-                if (isDown) return;
+slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1.2;
+    let targetScroll = scrollLeft - walk;
 
-                slider.scrollLeft += 1; // Ubah nilai ini (misal: 1.5 atau 2) untuk mempercepat pergerakan
+    // Proteksi batas saat di-drag manual
+    if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+    if (targetScroll < 0) targetScroll += originalWidth;
 
-                // Jika scroll sudah melewati batas konten asli, reset instan ke koordinat 0
-                if (slider.scrollLeft >= originalWidth) {
-                    slider.scrollLeft = 0;
-                }
-            }, 16); // ~60fps smooth scrolling
-        }
+    slider.scrollLeft = targetScroll;
+});
 
-        function stopAutoScroll() {
-            clearInterval(autoScrollInterval);
-            clearTimeout(autoScrollTimer);
-        }
+// Event Listeners Touch (Mobile)
+slider.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    stopAutoScroll();
+});
 
-        function resetAutoScrollTimer() {
-            stopAutoScroll();
-            autoScrollTimer = setTimeout(() => {
-                startAutoScroll();
-            }, 2000); // Jalan otomatis kembali setelah 2 detik tanpa input
-        }
+slider.addEventListener('touchend', () => {
+    isDown = false;
+    startAutoScroll();
+});
 
-        // Event Listeners untuk Interaksi Mouse Drag
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-            stopAutoScroll();
-        });
+slider.addEventListener('touchmove', (e) => {
+    if (!isDown) return;
+    const x = e.touches[0].pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1.2;
+    let targetScroll = scrollLeft - walk;
 
-        slider.addEventListener('mouseleave', () => {
-            if (isDown) {
-                isDown = false;
-                resetAutoScrollTimer();
-            }
-        });
+    if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+    if (targetScroll < 0) targetScroll += originalWidth;
 
-        slider.addEventListener('mouseup', (e) => {
-            const endX = e.pageX - slider.offsetLeft;
-            // Jika pergeseran mouse sangat minim, anggap sebagai aksi klik biasa (Picu Zoom Modal)
-            if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
-                openGalleryModal(e.target.src);
-            }
-            isDown = false;
-            resetAutoScrollTimer();
-        });
+    slider.scrollLeft = targetScroll;
+});
 
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            let targetScroll = scrollLeft - walk;
-
-            // Proteksi batas infinity saat di-drag manual oleh pengguna
-            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
-            if (targetScroll < 0) targetScroll += originalWidth;
-
-            slider.scrollLeft = targetScroll;
-        });
-
-        // Event Listeners Layar Sentuh Mobile (Touch)
-        slider.addEventListener('touchstart', (e) => {
-            isDown = true;
-            startX = e.touches[0].pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-            stopAutoScroll();
-        });
-
-        slider.addEventListener('touchend', () => {
-            isDown = false;
-            resetAutoScrollTimer();
-        });
-
-        slider.addEventListener('touchmove', (e) => {
-            if (!isDown) return;
-            const x = e.touches[0].pageX - slider.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            let targetScroll = scrollLeft - walk;
-
-            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
-            if (targetScroll < 0) targetScroll += originalWidth;
-
-            slider.scrollLeft = targetScroll;
-        });
-
-        // Inisialisasi awal saat dokumen selesai dimuat
-        window.addEventListener('load', () => {
-            setupInfiniteScroll();
-            setTimeout(startAutoScroll, 1000);
-        });
+// Inisialisasi awal
+window.addEventListener('load', () => {
+    setupInfiniteScroll();
+    // Pastikan kalkulasi ulang jika layar di-resize
+    window.addEventListener('resize', updateSliderWidth);
+    setTimeout(startAutoScroll, 1000);
+});
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
         function openGalleryModal(imgSrc) {
