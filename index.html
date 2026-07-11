@@ -1043,51 +1043,61 @@ window.addEventListener('load', () => {
             updateCharCount();
         }
 
-        async function loadChatMessages() {
-            const body = document.getElementById('chat-body');
-            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: "readChat" })
-                });
-                const chats = await response.json();
-                
-                if (!chats || chats.length === 0) {
-                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
-                    return;
-                }
-                
-                body.innerHTML = "";
-                const currentUser = localStorage.getItem('soka_user_name');
-                
-                chats.forEach(c => {
-                    const isMe = c.nama === currentUser;
-                    const chatBubble = document.createElement('div');
-                    
-                    // Bubble chat styling mirip WhatsApp (Kanan hijau jika kita, kiri putih jika anggota lain)
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-                    }`;
-                    
-                    chatBubble.innerHTML = `
-                        <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-                    `;
-                    body.appendChild(chatBubble);
-                });
-                
-                // Auto scroll ke bawah
-                body.scrollTop = body.scrollHeight;
-                
-            } catch (error) {
-                console.error("Gagal memuat chat:", error);
-                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
-            }
+       async function loadChatMessages() {
+    const body = document.getElementById('chat-body');
+    body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+    
+    try {
+        // Menggunakan fetch GET bawaan doGet Apps Script jauh lebih instan 
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, { method: 'GET', mode: 'cors' });
+        const chats = await response.json();
+        
+        if (!chats || chats.length === 0) {
+            body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>"; 
+            return;
         }
+        
+        body.innerHTML = "";
+        const currentUser = localStorage.getItem('soka_user_name');
+        
+        chats.forEach(c => {
+            const isMe = c.nama === currentUser;
+            const chatBubble = document.createElement('div');
+            
+            // Logika ekstraksi waktu Jam:Menit dari timestamp database
+            let displayTime = "";
+            if (c.timestamp) {
+                // Jika formatnya ISO string atau Date text, kita ambil bagian jam & menitnya saja
+                const timeParts = new Date(c.timestamp);
+                if (!isNaN(timeParts.getTime())) {
+                    const hours = String(timeParts.getHours()).padStart(2, '0');
+                    const minutes = String(timeParts.getMinutes()).padStart(2, '0');
+                    displayTime = `${hours}:${minutes}`;
+                } else {
+                    // Fallback aman jika berupa string teks biasa bawaan sheets
+                    displayTime = String(c.timestamp).substring(11, 16) || "";
+                }
+            }
+
+            chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm relative ${
+                isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+            }`;
+            
+            // Menambahkan elemen timestamp di bagian bawah teks pesan
+            chatBubble.innerHTML = `
+                <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
+                <p class="leading-relaxed break-words font-medium text-gray-700 pr-10">${c.pesan}</p>
+                <span class="text-[9px] font-semibold text-gray-400 absolute bottom-1 right-2.5">${displayTime}</span>
+            `;
+            body.appendChild(chatBubble);
+        });
+        
+        body.scrollTop = body.scrollHeight;
+    } catch (error) {
+        console.error(error); 
+        body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+    }
+}
 
         async function submitChat() {
             const input = document.getElementById('input-chat-msg');
