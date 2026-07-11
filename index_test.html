@@ -499,15 +499,9 @@
                 </div>
                 <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">×</button>
             </div>
-            
-            <div class="flex-1 overflow-y-auto pr-2 space-y-4">
-                <div id="modal-pengalaman-images" class="hidden"></div>
-                
-                <div id="modal-pengalaman-cerita" class="text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
-                    Isi cerita lengkap akan muncul di sini...
-                </div>
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
+                Isi cerita lengkap akan muncul di sini...
             </div>
-            
             <div class="border-t border-gray-100 pt-3 mt-4 text-right">
                 <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition">
                     Selesai Membaca
@@ -780,7 +774,6 @@
         function checkLoginStatus() {
             const savedName = localStorage.getItem('soka_user_name');
             const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
-            const savedPhone = localStorage.getItem('soka_user_phone'); 
             const savedPinStatus = localStorage.getItem('soka_user_pin_status'); 
             
             const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
@@ -1305,29 +1298,38 @@
             }
         }
 
-        // ==================== KODE PENGALAMAN ANGGOTA (FORMAT BARU: 6 KOLOM DENGAN JUDUL & DOKUMEN) ====================
+        // ==================== KODE PENGALAMAN ANGGOTA (DIPERBAIKI TOTAL) ====================
         async function loadPengalamanAnggota() {
             try {
+                // Memanggil variabel URL yang benar (CSV_URL_PENGALAMAN)
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parser CSV Dinamis multi-kolom yang aman dari koma/kutip ganda di dalam cerita
+                // Parsing CSV anti-eror (aman dari tanda koma dan tanda kutip ganda di dalam cerita)
                 const rows = data.split("\r\n").filter(row => row.trim() !== "").map(row => {
-                    let result = []; let insideQuote = false; let entry = "";
+                    let result = [];
+                    let insideQuote = false;
+                    let entry = "";
                     for (let i = 0; i < row.length; i++) {
                         let char = row[i];
-                        if (char === '"') insideQuote = !insideQuote;
-                        else if (char === ',' && !insideQuote) { result.push(entry); entry = ""; }
-                        else entry += char;
+                        if (char === '"') {
+                            insideQuote = !insideQuote;
+                        } else if (char === ',' && !insideQuote) {
+                            result.push(entry);
+                            entry = "";
+                        } else {
+                            entry += char;
+                        }
                     }
-                    result.push(entry); return result;
+                    result.push(entry);
+                    return result;
                 });
 
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Validasi Kolom A (Nama) & Kolom C (Isi Cerita)
-                const activeRows = rows.slice(1).filter(r => r[0] && r[2]).reverse();
+                // Lewati header (baris 0), filter baris valid, lalu balik urutan (terbaru di atas)
+                const activeRows = rows.slice(1).filter(r => r[0] && r[1]).reverse();
                 const dataDitampilkan = activeRows.slice(0, 3);
 
                 if (dataDitampilkan.length === 0) {
@@ -1337,34 +1339,25 @@
 
                 dataDitampilkan.forEach((row) => {
                     const nama = row[0].replace(/"/g, "").trim();
-                    const judul = row[1] ? row[1].replace(/"/g, "").trim() : "";
-                    const isiCerita = row[2].replace(/"/g, "").trim();
+                    const isiCerita = row[1].replace(/"/g, "").trim();
                     
-                    // Pemetaan indeks baru pasca penambahan kolom Judul
-                    const fotoProfilSheet = row[3] ? row[3].replace(/"/g, "").trim() : "";
-                    const fotoDok1 = row[4] ? row[4].replace(/"/g, "").trim() : "";
-                    const fotoDok2 = row[5] ? row[5].replace(/"/g, "").trim() : "";
-                    
-                    const previewCerita = isiCerita.length > 90 ? isiCerita.substring(0, 90) + "..." : isiCerita;
-                    const fotoProfilFix = fotoProfilSheet || `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=150`;
+                    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+                    const fotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
 
                     const cardHtml = `
-                        <div class="bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md border border-gray-150 p-5 flex flex-col items-center text-center justify-between hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="w-full flex flex-col items-center">
-                                <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-yellow-500 shadow-md mb-3 bg-gray-100">
-                                    <img src="${fotoProfilFix}" alt="${nama}" class="w-full h-full object-cover">
+                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+                            <div>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="${fotoUrl}" alt="${nama}" class="w-12 h-12 rounded-full object-cover border-2 border-[#F9A825]">
+                                    <h3 class="text-lg font-semibold text-gray-800">${nama}</h3>
                                 </div>
-                                
-                                <h3 class="text-base font-extrabold text-blue-950 mb-0.5 tracking-wide">${nama}</h3>
-                                ${judul ? `<span class="text-[11px] font-bold text-amber-600 uppercase tracking-wider px-2 py-0.5 bg-amber-50 rounded-full mb-3">${judul}</span>` : ''}
-                                
-                                <p class="text-gray-600 text-xs md:text-sm whitespace-pre-line leading-relaxed italic px-2">
-                                    "${previewCerita}"
+                                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
+                                    ${previewCerita}
                                 </p>
                             </div>
-                            <div class="mt-4 w-full pt-3 border-t border-gray-100">
-                                <button onclick="bukaDetailPengalaman('${nama}', '${judul.replace(/'/g, "\\'")}', \`${isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`, '${fotoDok1}', '${fotoDok2}')" class="text-xs font-bold uppercase tracking-wider text-[#C62828] hover:text-[#002F6C] transition focus:outline-none">
-                                    Baca Cerita Lengkap
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button onclick="bukaDetailPengalaman('${nama}', \`${isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" class="text-sm font-medium text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                                    Lanjut baca...
                                 </button>
                             </div>
                         </div>
@@ -1373,40 +1366,20 @@
                 });
 
             } catch (error) {
-                console.error(error);
-                document.getElementById('pengalaman-container').innerHTML = `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita.</p>`;
+                console.error("Gagal memuat pengalaman:", error);
+                document.getElementById('pengalaman-container').innerHTML = 
+                    `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita pengalaman.</p>`;
             }
         }
 
-        // Handler Modal Detail yang Mendukung Judul Cerita & Foto Bukti Dokumen
-        function bukaDetailPengalaman(nama, judul, isiLengkap, img1, img2) {
+        // Fungsi Membuka Modal Detail Cerita
+        function bukaDetailPengalaman(nama, isiLengkap) {
             const modal = document.getElementById('modal-pengalaman');
             const modalNama = document.getElementById('modal-pengalaman-nama');
             const modalCerita = document.getElementById('modal-pengalaman-cerita');
-            const imgContainer = document.getElementById('modal-pengalaman-images');
             
-            // Menggabungkan Nama dan Judul di Header Modal
-            modalNama.innerHTML = judul ? `${nama} <span class="text-xs font-normal text-gray-500 block md:inline md:ml-2">(${judul})</span>` : nama;
+            modalNama.innerText = "Pengalaman Iman: " + nama;
             modalCerita.innerText = isiLengkap;
-            
-            imgContainer.innerHTML = "";
-            let totalImages = 0;
-
-            if (img1 && img1.startsWith("http")) {
-                imgContainer.insertAdjacentHTML('beforeend', `<div class="rounded-xl overflow-hidden shadow-sm border border-gray-200 h-36 md:h-48 bg-gray-50"><img src="${img1}" class="w-full h-full object-cover"></div>`);
-                totalImages++;
-            }
-            if (img2 && img2.startsWith("http")) {
-                imgContainer.insertAdjacentHTML('beforeend', `<div class="rounded-xl overflow-hidden shadow-sm border border-gray-200 h-36 md:h-48 bg-gray-50"><img src="${img2}" class="w-full h-full object-cover"></div>`);
-                totalImages++;
-            }
-
-            if (totalImages > 0) {
-                imgContainer.className = totalImages === 1 ? "grid grid-cols-1 max-w-sm mx-auto gap-3 mb-4" : "grid grid-cols-2 gap-3 mb-4";
-                imgContainer.classList.remove('hidden');
-            } else {
-                imgContainer.classList.add('hidden');
-            }
             
             modal.classList.remove('hidden');
             setTimeout(() => {
