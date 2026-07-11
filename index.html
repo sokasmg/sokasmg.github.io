@@ -111,7 +111,7 @@
                 Selamat Datang di Soka Gakkai Semarang
             </h1>
             <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">
-                Membangun perdamaian, pendidikan, dan dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.
+                Membangun perdamaian, pendidikan, dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.
             </p>
             <div class="inline-flex rounded-full overflow-hidden p-[3px] bg-gradient-to-r from-[#002F6C] via-[#F9A825] to-[#C62828] shadow-lg transform hover:scale-105 transition">
                 <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">
@@ -377,6 +377,44 @@
                 <button id="btn-submit-login" onclick="processLogin()" class="bg-blue-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition flex items-center justify-center">
                     Verifikasi
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="floating-chat-btn" class="fixed bottom-6 left-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
+        <button onclick="toggleChatWindow()" class="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-5 py-3 rounded-full shadow-2xl border border-green-500 font-bold text-sm tracking-wide">
+            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+            </svg>
+            <span>Chat Anggota</span>
+        </button>
+    </div>
+
+    <div id="chat-window" class="fixed bottom-24 left-6 z-[100] w-80 md:w-96 h-[420px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col hidden overflow-hidden animate-fade-in">
+        <div class="bg-gradient-to-r from-blue-950 to-indigo-900 text-white p-4 flex justify-between items-center shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="font-bold text-sm tracking-wide">Forum Komunikasi Anggota</span>
+            </div>
+            <button onclick="toggleChatWindow()" class="text-white hover:text-gray-300 font-bold text-xl">×</button>
+        </div>
+        
+        <div id="chat-body" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 text-xs md:text-sm">
+            <p class="text-center text-gray-400 italic">Memuat obrolan...</p>
+        </div>
+        
+        <div class="p-3 bg-white border-t border-gray-150 flex flex-col space-y-1">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="input-chat-msg" maxlength="160" oninput="updateCharCount()" placeholder="Tulis pesan (maks 160 huruf)..." class="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none text-xs md:text-sm">
+                <button id="btn-send-chat" onclick="submitChat()" class="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl transition shadow flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex justify-between px-1 text-[10px] font-semibold text-gray-400">
+                <span>Klik nama pengirim untuk membalas</span>
+                <span id="char-counter">0/160</span>
             </div>
         </div>
     </div>
@@ -657,7 +695,7 @@ document.addEventListener('wheel', function (event) {
         // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
         function checkLoginStatus() {
     const savedName = localStorage.getItem('soka_user_name');
-    const savedJabatan = localStorage.getItem('soka_user_jabatan'); // <-- Ambil data jabatan
+    const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
     
     const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
     const navGaleriMobile = document.getElementById('nav-galeri-mobile');
@@ -669,16 +707,20 @@ document.addEventListener('wheel', function (event) {
     const greetingMobile = document.getElementById('user-greeting-mobile');
     const btnAuthMobile = document.getElementById('btn-auth-mobile');
 
-    // Element Floating Button Baru
+    // Element Floating Button Bawaan
     const floatingBtn = document.getElementById('floating-admin-btn');
     const floatingLink = document.getElementById('floating-btn-link');
     const floatingText = document.getElementById('floating-btn-text');
+
+    // Element Floating Chat Baru
+    const floatingChatBtn = document.getElementById('floating-chat-btn');
 
     if (savedName) {
         if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
         if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
         if (sectionJadwal) sectionJadwal.classList.remove('hidden');
         if (btnCardCreator) btnCardCreator.classList.remove('hidden');
+        if (floatingChatBtn) floatingChatBtn.classList.remove('hidden'); // Tampilkan tombol chat saat login
         
         if (greetingDesktop) {
             greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
@@ -711,7 +753,6 @@ document.addEventListener('wheel', function (event) {
                 floatingText.innerText = "Menu Admin";
                 floatingBtn.classList.remove('hidden');
             } else {
-                // Anggota, Inti, Calon tidak melihat tombol ini
                 floatingBtn.classList.add('hidden');
             }
         }
@@ -721,6 +762,8 @@ document.addEventListener('wheel', function (event) {
         if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
         if (sectionJadwal) sectionJadwal.classList.add('hidden');
         if (btnCardCreator) btnCardCreator.classList.add('hidden');
+        if (floatingChatBtn) floatingChatBtn.classList.add('hidden'); // Sembunyikan tombol chat
+        document.getElementById('chat-window').classList.add('hidden'); // Sembunyikan jendela jika terbuka
         
         if (greetingDesktop) {
             greetingDesktop.innerText = "";
@@ -733,7 +776,7 @@ document.addEventListener('wheel', function (event) {
         }
 
         if (greetingMobile) {
-            greetingMobile.innerText = "Menu Khautan Anggota:";
+            greetingMobile.innerText = "Menu Khusus Anggota:";
             greetingMobile.className = "font-bold text-gray-500 italic";
         }
         if (btnAuthMobile) {
@@ -742,7 +785,6 @@ document.addEventListener('wheel', function (event) {
             btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
         }
 
-        // Sembunyikan floating button jika tidak sedang login
         if (floatingBtn) floatingBtn.classList.add('hidden');
     }
 }
@@ -784,7 +826,7 @@ document.addEventListener('wheel', function (event) {
         
         if (result.status === "success") {
             localStorage.setItem('soka_user_name', result.nama);
-            localStorage.setItem('soka_user_jabatan', result.jabatan || ""); // <-- TAMBAHKAN INI (Menyimpan jabatan dari Sheets)
+            localStorage.setItem('soka_user_jabatan', result.jabatan || ""); 
             closeLoginModal();
             checkLoginStatus(); 
         } else {
@@ -804,7 +846,7 @@ document.addEventListener('wheel', function (event) {
 function processLogout() {
     if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
         localStorage.removeItem('soka_user_name');
-        localStorage.removeItem('soka_user_jabatan'); // <-- TAMBAHKAN INI (Menghapus jabatan saat logout)
+        localStorage.removeItem('soka_user_jabatan'); 
         checkLoginStatus(); 
     }
 }
@@ -839,7 +881,6 @@ function generateRandomImages() {
 function setupInfiniteScroll() {
     generateRandomImages();
 
-    // Kloning semua item untuk membuat efek infinite loop
     const items = Array.from(slider.children);
     if (items.length === 0) return;
 
@@ -848,8 +889,6 @@ function setupInfiniteScroll() {
         slider.appendChild(clone);
     });
 
-    // PENTING: Gunakan requestAnimationFrame atau hitung ulang saat semua konten selesai dimuat
-    // agar offsetWidth tidak terbaca 0
     setTimeout(() => {
         updateSliderWidth();
     }, 500); 
@@ -857,25 +896,21 @@ function setupInfiniteScroll() {
 
 function updateSliderWidth() {
     const items = Array.from(slider.children);
-    // Karena item sudah dikloning (total 10 item), konten asli adalah setengah dari total item (5 item pertama)
     const halfLength = items.length / 2;
     originalWidth = 0;
     
     for (let i = 0; i < halfLength; i++) {
-        // 16 adalah gap dari class space-x-4 milik Tailwind (1rem = 16px)
         originalWidth += items[i].offsetWidth + 16; 
     }
 }
 
-// Menggunakan requestAnimationFrame untuk performa scroll yang jauh lebih smooth (60fps+)
 function startAutoScroll() {
     if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
     
     function scrollStep() {
         if (!isDown) {
-            slider.scrollLeft += 0.8; // Turunkan angka ini jika ingin scroll lebih lambat dan halus
+            slider.scrollLeft += 0.8; 
 
-            // Jika scroll melewati batas konten asli, kurangi dengan originalWidth secara halus (bukan diset ke 0)
             if (slider.scrollLeft >= originalWidth) {
                 slider.scrollLeft -= originalWidth;
             }
@@ -889,7 +924,6 @@ function stopAutoScroll() {
     cancelAnimationFrame(autoScrollInterval);
 }
 
-// Event Listeners Mouse Drag
 slider.addEventListener('mousedown', (e) => {
     isDown = true;
     startX = e.pageX - slider.offsetLeft;
@@ -920,14 +954,12 @@ slider.addEventListener('mousemove', (e) => {
     const walk = (x - startX) * 1.2;
     let targetScroll = scrollLeft - walk;
 
-    // Proteksi batas saat di-drag manual
     if (targetScroll >= originalWidth) targetScroll -= originalWidth;
     if (targetScroll < 0) targetScroll += originalWidth;
 
     slider.scrollLeft = targetScroll;
 });
 
-// Event Listeners Touch (Mobile)
 slider.addEventListener('touchstart', (e) => {
     isDown = true;
     startX = e.touches[0].pageX - slider.offsetLeft;
@@ -952,10 +984,8 @@ slider.addEventListener('touchmove', (e) => {
     slider.scrollLeft = targetScroll;
 });
 
-// Inisialisasi awal
 window.addEventListener('load', () => {
     setupInfiniteScroll();
-    // Pastikan kalkulasi ulang jika layar di-resize
     window.addEventListener('resize', updateSliderWidth);
     setTimeout(startAutoScroll, 1000);
 });
@@ -983,16 +1013,134 @@ window.addEventListener('load', () => {
                 resetAutoScrollTimer();
             }, 300);
         }
+
+        // =========================================================================
+        // === OPERASIONAL OPERASI MINI CHAT BOX (WA STYLE) ===
+        // =========================================================================
+        function toggleChatWindow() {
+            const chatWin = document.getElementById('chat-window');
+            chatWin.classList.toggle('hidden');
+            if (!chatWin.classList.contains('hidden')) {
+                loadChatMessages();
+            }
+        }
+
+        function updateCharCount() {
+            const input = document.getElementById('input-chat-msg');
+            const counter = document.getElementById('char-counter');
+            
+            // Penguncian/pemotongan keras jika melebihi 160 huruf
+            if (input.value.length > 160) {
+                input.value = input.value.substring(0, 160);
+            }
+            counter.innerText = `${input.value.length}/160`;
+        }
+
+        function replyToUser(targetName) {
+            const input = document.getElementById('input-chat-msg');
+            input.value = `@${targetName} ${input.value}`;
+            input.focus();
+            updateCharCount();
+        }
+
+        async function loadChatMessages() {
+            const body = document.getElementById('chat-body');
+            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: "readChat" })
+                });
+                const chats = await response.json();
+                
+                if (!chats || chats.length === 0) {
+                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+                    return;
+                }
+                
+                body.innerHTML = "";
+                const currentUser = localStorage.getItem('soka_user_name');
+                
+                chats.forEach(c => {
+                    const isMe = c.nama === currentUser;
+                    const chatBubble = document.createElement('div');
+                    
+                    // Bubble chat styling mirip WhatsApp (Kanan hijau jika kita, kiri putih jika anggota lain)
+                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+                    }`;
+                    
+                    chatBubble.innerHTML = `
+                        <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
+                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+                    `;
+                    body.appendChild(chatBubble);
+                });
+                
+                // Auto scroll ke bawah
+                body.scrollTop = body.scrollHeight;
+                
+            } catch (error) {
+                console.error("Gagal memuat chat:", error);
+                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+            }
+        }
+
+        async function submitChat() {
+            const input = document.getElementById('input-chat-msg');
+            const btn = document.getElementById('btn-send-chat');
+            const msg = input.value.trim();
+            const myName = localStorage.getItem('soka_user_name');
+            
+            // Validasi string kosong atau lewat dari 160 huruf sebelum kirim
+            if (!msg || msg.length > 160) return;
+            
+            btn.disabled = true;
+            input.disabled = true;
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: "sendChat",
+                        nama: myName,
+                        pesan: msg
+                    })
+                });
+                
+                const res = await response.json();
+                if (res.status === "success") {
+                    input.value = "";
+                    updateCharCount();
+                    // Auto-refresh jendela chat sesuai keinginan
+                    await loadChatMessages(); 
+                } else {
+                    alert("Gagal mengirim pesan ke server.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Gangguan koneksi internet ke Google Cloud.");
+            } finally {
+                btn.disabled = false;
+                input.disabled = false;
+            }
+        }
       
     </script>
+    
      <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
-    <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-        <span id="floating-btn-text">Menu Khusus</span>
-    </a>
-</div>
+        <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span id="floating-btn-text">Menu Khusus</span>
+        </a>
+    </div>
 
 </body>
 </html>
