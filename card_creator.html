@@ -476,42 +476,62 @@
             document.getElementById('preview-quote-end').style.opacity = showQuotes ? '0.2' : '0';
         }
 
-        // FUNGSI UTAMA RANDOMIZER (ACAK SETTINGAN)
-        function randomizeSettings() {
-            // 1. Acak Warna Latar Belakang
-            const randomBgIdx = Math.floor(Math.random() * bgPalettes.length);
-            const chosenPalette = bgPalettes[randomBgIdx];
-            selectBgButton(randomBgIdx, chosenPalette.bg, chosenPalette.text);
+        // FUNGSI UTAMA RANDOMIZER (SEKARANG MENGACAK SEMUANYA TERMASUK TEKS)
+function randomizeSettings() {
+    // 1. Acak Jenis Sumber (50% peluang Bimbingan, 50% peluang Gosho)
+    const randomSource = Math.random() > 0.5 ? 'bimbingan' : 'gosho';
+    
+    // Simulasikan klik ganti sumber agar UI tombol di kiri ikut berubah aktif
+    changeSource(randomSource);
 
-            // 2. Acak Font dari opsi dropdown yang ada
-            const fontSelect = document.getElementById('font-select');
-            const fontOptions = fontSelect.querySelectorAll('option');
-            const randomFontIdx = Math.floor(Math.random() * fontOptions.length);
-            fontSelect.value = fontOptions[randomFontIdx].value;
-            changeFont();
+    // 2. Acak Kutipan dari Sumber yang Terpilih
+    const currentList = randomSource === 'bimbingan' ? quoteList : goshoList;
+    if (currentList && currentList.length > 0) {
+        // Pilih index acak dari database spreadsheet yang sudah termuat
+        const randomIndex = Math.floor(Math.random() * currentList.length);
+        
+        // Ubah nilai dropdown select di UI
+        const selectEl = document.getElementById('quote-select');
+        selectEl.value = randomIndex;
+        
+        // Muat teks kutipan acak tersebut ke area teks manual dan update preview
+        loadSelectedQuote();
+    }
 
-            // 3. Acak Ukuran Font (Rentang aman 15px - 22px untuk kestabilan visual)
-            const randomSize = Math.floor(Math.random() * (22 - 15 + 1)) + 15;
-            document.getElementById('font-size-slider').value = randomSize;
-            changeFontSize(randomSize);
+    // 3. Acak Warna Latar Belakang
+    const randomBgIdx = Math.floor(Math.random() * bgPalettes.length);
+    const chosenPalette = bgPalettes[randomBgIdx];
+    selectBgButton(randomBgIdx, chosenPalette.bg, chosenPalette.text);
 
-            // 4. Acak Transparansi Watermark SVG (Rentang aman 5% - 25% biar ga ganggu teks)
-            const randomOpacity = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
-            document.getElementById('wm-opacity-slider').value = randomOpacity;
-            changeWatermarkOpacity(randomOpacity);
+    // 4. Acak Gaya Tulisan (Font)
+    const fontSelect = document.getElementById('font-select');
+    const fontOptions = fontSelect.querySelectorAll('option');
+    const randomFontIdx = Math.floor(Math.random() * fontOptions.length);
+    fontSelect.value = fontOptions[randomFontIdx].value;
+    changeFont();
 
-            // 5. Acak Ukuran Watermark SVG (Rentang aman 150px - 300px)
-            const randomWmSize = Math.floor(Math.random() * (300 - 150 + 1)) + 150;
-            document.getElementById('wm-size-slider').value = randomWmSize;
-            changeWatermarkSize(randomWmSize);
+    // 5. Acak Ukuran Font Teks Isi (Rentang aman 15px - 22px agar seimbang)
+    const randomSize = Math.floor(Math.random() * (22 - 15 + 1)) + 15;
+    document.getElementById('font-size-slider').value = randomSize;
+    changeFontSize(randomSize);
 
-            // 6. Acak Aksesoris Dekorasi (Garis & Petik)
-            const checkTricolor = document.getElementById('acc-tricolor');
-            const checkQuotes = document.getElementById('acc-quotes');
-            checkTricolor.checked = Math.random() > 0.2; // 80% peluang aktif
-            checkQuotes.checked = Math.random() > 0.2;
-            toggleAcc();
-        }
+    // 6. Acak Transparansi Watermark SVG Teratai (Rentang aman 5% - 25%)
+    const randomOpacity = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
+    document.getElementById('wm-opacity-slider').value = randomOpacity;
+    changeWatermarkOpacity(randomOpacity);
+
+    // 7. Acak Ukuran Watermark SVG Teratai (Rentang aman 150px - 300px)
+    const randomWmSize = Math.floor(Math.random() * (300 - 150 + 1)) + 150;
+    document.getElementById('wm-size-slider').value = randomWmSize;
+    changeWatermarkSize(randomWmSize);
+
+    // 8. Acak Aksesoris Dekorasi (Garis Triwarna & Tanda Petik)
+    const checkTricolor = document.getElementById('acc-tricolor');
+    const checkQuotes = document.getElementById('acc-quotes');
+    checkTricolor.checked = Math.random() > 0.2; // 80% peluang muncul
+    checkQuotes.checked = Math.random() > 0.2;
+    toggleAcc();
+}
 
         // PROSES UTAMA: DOWNLOAD HTML KE JPEG (SUDUT FIX SIKU-SIKU)
         function downloadCard() {
