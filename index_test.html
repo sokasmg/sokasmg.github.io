@@ -244,8 +244,7 @@
         <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
     
-  <section id="pengalaman-section" class="py-12 bg-white">
-      <section id="pengalaman-section" class="py-12 bg-white">
+    <section id="pengalaman-section" class="py-12 bg-white border-b border-gray-100">
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Cerita Kemenangan</h2>
             <div class="soka-tricolor mb-8">
@@ -258,7 +257,7 @@
                 <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat pengalaman anggota...</div>
             </div>
         </div>
-      </section>
+    </section>
     
     <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
@@ -491,6 +490,26 @@
         </button>
     </div>
 
+    <div id="modal-pengalaman" class="fixed inset-0 bg-black/60 z-[150] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="tutupDetailPengalaman()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] flex flex-col animate-fade-in" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-2.5 h-2.5 bg-[#F9A825] rounded-full"></div>
+                    <h3 id="modal-pengalaman-nama" class="text-xl font-bold text-[#002F6C]">Nama Anggota</h3>
+                </div>
+                <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">×</button>
+            </div>
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
+                Isi cerita lengkap akan muncul di sini...
+            </div>
+            <div class="border-t border-gray-100 pt-3 mt-4 text-right">
+                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition">
+                    Selesai Membaca
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
         document.addEventListener('touchmove', function (event) {
@@ -527,6 +546,7 @@
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
+        
         // PUSAT KONTROL URL WEB APP
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
         
@@ -750,7 +770,7 @@
             }
         }
 
-        // --- SISTEM AUTENTIKASI AKSES ANGGOTA (DIPERBARUI) ---
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
         function checkLoginStatus() {
             const savedName = localStorage.getItem('soka_user_name');
             const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
@@ -814,7 +834,6 @@
                     }
                 }
 
-                // --- TOMBOL MERAH BERDENYUT TETAP DI SINI SELAMA STATUS PIN KOSONG ---
                 if (savedPinStatus === "kosong") {
                     floatingPinWarningBtn.classList.remove('hidden');
                 } else {
@@ -876,7 +895,6 @@
             document.getElementById('pin-setup-modal').classList.add('hidden');
         }
 
-        // --- PROSES LOGIN MULTI-INPUT (PONSEL & PIN) ---
         async function processLogin() {
             const phoneInput = document.getElementById('input-phone').value.trim();
             const pinInput = document.getElementById('input-login-pin').value.trim();
@@ -914,9 +932,6 @@
                     
                     closeLoginModal();
                     checkLoginStatus(); 
-
-                    // KOREKSI UTAMA: Pengguna baru dibiarkan masuk langsung. 
-                    // Tidak memancing modal setup pin terbuka otomatis.
                 } else {
                     errorMsg.innerText = result.message || "Nomor tidak dikenali atau PIN salah.";
                     errorMsg.classList.remove('hidden');
@@ -931,7 +946,6 @@
             }
         }
 
-        // --- SISTEM OPERASIONAL AKTIVASI BUAT PIN BARU ---
         async function processCreatePin() {
             const newPin = document.getElementById('input-new-pin').value.trim();
             const confirmPin = document.getElementById('input-confirm-pin').value.trim();
@@ -1137,7 +1151,7 @@
             setupInfiniteScroll();
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
-            loadPengalamanAnggota();
+            loadPengalamanAnggota(); // Menjalankan fungsi penarik cerita
         });
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
@@ -1284,25 +1298,37 @@
             }
         }
 
-                // ... (ini adalah batas akhir dari kode-kode javascript lama Anda) ...
-
-        // ==================== KODE PENGALAMAN ANGGOTA (BARU) ====================
-        const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
-
+        // ==================== KODE PENGALAMAN ANGGOTA (DIPERBAIKI TOTAL) ====================
         async function loadPengalamanAnggota() {
             try {
-                const response = await fetch(PENGALAMAN_SHEET_URL);
+                // Memanggil variabel URL yang benar (CSV_URL_PENGALAMAN)
+                const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parsing baris CSV (memisahkan berdasarkan enter baris baru)
-                const rows = data.split("\n").map(row => {
-                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                // Parsing CSV anti-eror (aman dari tanda koma dan tanda kutip ganda di dalam cerita)
+                const rows = data.split("\r\n").filter(row => row.trim() !== "").map(row => {
+                    let result = [];
+                    let insideQuote = false;
+                    let entry = "";
+                    for (let i = 0; i < row.length; i++) {
+                        let char = row[i];
+                        if (char === '"') {
+                            insideQuote = !insideQuote;
+                        } else if (char === ',' && !insideQuote) {
+                            result.push(entry);
+                            entry = "";
+                        } else {
+                            entry += char;
+                        }
+                    }
+                    result.push(entry);
+                    return result;
                 });
 
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Lewati baris pertama (header), lalu balik urutannya agar yang paling baru diinput muncul pertama
+                // Lewati header (baris 0), filter baris valid, lalu balik urutan (terbaru di atas)
                 const activeRows = rows.slice(1).filter(r => r[0] && r[1]).reverse();
                 const dataDitampilkan = activeRows.slice(0, 3);
 
@@ -1315,7 +1341,6 @@
                     const nama = row[0].replace(/"/g, "").trim();
                     const isiCerita = row[1].replace(/"/g, "").trim();
                     
-                    // Membuat preview 120 karakter pertama
                     const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
                     const fotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
 
@@ -1347,37 +1372,31 @@
             }
         }
 
+        // Fungsi Membuka Modal Detail Cerita
         function bukaDetailPengalaman(nama, isiLengkap) {
-            // Untuk sementara menggunakan alert bawaan browser, Anda bisa menggantinya dengan custom modal nanti
-            alert(`Pengalaman dari: ${nama}\n\n${isiLengkap}`);
+            const modal = document.getElementById('modal-pengalaman');
+            const modalNama = document.getElementById('modal-pengalaman-nama');
+            const modalCerita = document.getElementById('modal-pengalaman-cerita');
+            
+            modalNama.innerText = "Pengalaman Iman: " + nama;
+            modalCerita.innerText = isiLengkap;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        // Fungsi Menutup Modal Detail Cerita
+        function tutupDetailPengalaman() {
+            const modal = document.getElementById('modal-pengalaman');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
     </script>
-          <!-- ==================== MODAL DETAIL PENGALAMAN (BARU) ==================== -->
-    <div id="modal-pengalaman" class="fixed inset-0 bg-black/60 z-[150] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="tutupDetailPengalaman()">
-        <!-- Kotak Putih Modal -->
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] flex flex-col animate-fade-in" onclick="event.stopPropagation()">
-            
-            <!-- Header Modal (Nama & Tombol Close) -->
-            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-2.5 h-2.5 bg-[#F9A825] rounded-full"></div>
-                    <h3 id="modal-pengalaman-nama" class="text-xl font-bold text-[#002F6C]">Nama Anggota</h3>
-                </div>
-                <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
-            </div>
-            
-            <!-- Isi Cerita Lengkap (Scrollable & Mendukung Enter/Alinea) -->
-            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
-                Isi cerita lengkap akan muncul di sini...
-            </div>
-            
-            <!-- Footer Modal -->
-            <div class="border-t border-gray-100 pt-3 mt-4 text-right">
-                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition">
-                    Selesai Membaca
-                </button>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
