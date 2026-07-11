@@ -66,7 +66,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.213 6H16" />
                         </svg>
-                        <span>Desain Acak Full</span>
+                        <span>Desain Acak</span>
                     </button>
                 </div>
                 
@@ -166,7 +166,7 @@
 
                 <!-- Tombol Cetak / Unduh -->
                 <button onclick="downloadCard()" class="w-full bg-gradient-to-r from-blue-900 to-indigo-950 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:from-blue-800 hover:to-indigo-900 transition flex items-center justify-center gap-2 mt-4">
-                    <svg xmlns="http://www.w3.org/2000/xl" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                     Unduh Gambar JPEG
@@ -181,17 +181,17 @@
                 <div id="capture-area" class="aspect-square-canvas bg-[#002F6C] text-white flex flex-col justify-between p-10 relative overflow-hidden shadow-2xl rounded-lg transition-colors duration-300">
                     
                     <!-- Aksesoris Triwarna Atas -->
-                    <div id="preview-tricolor-top" class="absolute top-0 left-0 right-0 h-2 flex z-10">
+                    <div id="preview-tricolor-top" class="absolute top-0 left-0 right-0 h-2 flex">
                         <div class="bg-[#002F6C] flex-1"></div>
                         <div class="bg-[#F9A825] flex-1"></div>
                         <div class="bg-[#C62828] flex-1"></div>
                     </div>
 
                     <!-- Tanda Kutip Atas -->
-                    <div id="preview-quote-start" class="text-5xl opacity-20 font-serif leading-none select-none -mb-4 z-10">“</div>
+                    <div id="preview-quote-start" class="text-5xl opacity-20 font-serif leading-none select-none -mb-4">“</div>
 
                     <!-- Tengah: Isi Teks Utama -->
-                    <div class="my-auto text-center px-4 w-full overflow-hidden z-10">
+                    <div class="my-auto text-center px-4 w-full overflow-hidden">
                         <!-- Gaya ukuran font diatur inline style dari nilai default slider -->
                         <p id="preview-text" style="font-size: 18px;" class="font-medium leading-relaxed italic font-playfair break-words">
                             Memuat teks...
@@ -202,15 +202,15 @@
                     </div>
 
                     <!-- Tanda Kutip Bawah -->
-                    <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4 z-10">”</div>
+                    <div id="preview-quote-end" class="text-5xl opacity-20 font-serif leading-none select-none text-right -mt-4">”</div>
 
                     <!-- Watermark Identitas Komunitas -->
-                    <div id="preview-watermark" class="text-center text-[10px] font-bold tracking-widest uppercase border-t pt-2 border-white/20 opacity-40 z-10">
+                    <div id="preview-watermark" class="text-center text-[10px] font-bold tracking-widest uppercase border-t pt-2 border-white/20 opacity-40">
                         Soka Gakkai Semarang
                     </div>
 
                     <!-- Aksesoris Triwarna Bawah -->
-                    <div id="preview-tricolor-bottom" class="absolute bottom-0 left-0 right-0 h-2 flex z-10">
+                    <div id="preview-tricolor-bottom" class="absolute bottom-0 left-0 right-0 h-2 flex">
                         <div class="bg-[#002F6C] flex-1"></div>
                         <div class="bg-[#F9A825] flex-1"></div>
                         <div class="bg-[#C62828] flex-1"></div>
@@ -247,57 +247,88 @@
         ];
         let currentBgIndex = 0;
 
-        // FETCH DATA DARI GOOGLE SHEETS CSV
-        async function fetchQuotes() {
-            try {
-                const [resBimbingan, resGosho] = await Promise.all([
-                    fetch(CSV_URL_BIMBINGAN),
-                    fetch(CSV_URL_GOSHO)
-                ]);
-
-                const textBimbingan = await resBimbingan.text();
-                const textGosho = await resGosho.text();
-
-                quoteList = parseCSV(textBimbingan);
-                goshoList = parseCSV(textGosho);
-
-                populateSelect(quoteList);
-                if (quoteList.length > 0) {
-                    displayQuote(quoteList[0]);
-                }
-            } catch (error) {
-                console.error("Gagal memuat data Google Sheets:", error);
-                document.getElementById('quote-select').innerHTML = `<option>Gagal memuat data spreadsheet</option>`;
-            }
-        }
-
         function parseCSV(text) {
-            const lines = text.split("\n");
             const result = [];
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-                
-                // Regex simpel untuk menangani koma di dalam tanda kutip CSV
-                const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(",");
-                if (matches.length >= 2) {
-                    const title = matches[0].replace(/^"|"$/g, '').trim();
-                    const content = matches[1].replace(/^"|"$/g, '').trim();
-                    const author = matches[2] ? matches[2].replace(/^"|"$/g, '').trim() : "Ikeda Sensei";
-                    result.push({ title, content, author });
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+            const cleanText = text.replace(/\r/g, "");
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
+            }
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
                 }
             }
             return result;
         }
 
-        function populateSelect(list) {
-            const select = document.getElementById('quote-select');
-            select.innerHTML = "";
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuotesFromSheets();
+            updateBgButtonUI();
+        });
+
+        async function loadQuotesFromSheets() {
+            try {
+                const [resBimbingan, resGosho] = await Promise.all([
+                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+                    fetch(CSV_URL_GOSHO).then(res => res.text())
+                ]);
+
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+
+                renderDropdownOptions();
+                loadSelectedQuote();
+            } catch (error) {
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                document.getElementById('quote-select').innerHTML = '<option>Gagal memuat data dari cloud.</option>';
+            }
+        }
+
+        function renderDropdownOptions() {
+            const selectEl = document.getElementById('quote-select');
+            selectEl.innerHTML = '';
+            const list = currentActiveSource === 'bimbingan' ? quoteList : goshoList;
+            
+            if (list.length === 0) {
+                selectEl.innerHTML = '<option>Tidak ada data ditemukan.</option>';
+                return;
+            }
+
             list.forEach((item, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = item.title;
-                select.appendChild(opt);
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = `${index + 1}. ${item.text.substring(0, 45)}...`;
+                selectEl.appendChild(option);
             });
         }
 
@@ -305,156 +336,148 @@
             currentActiveSource = type;
             const btnBimbingan = document.getElementById('src-bimbingan');
             const btnGosho = document.getElementById('src-gosho');
-
-            if (type === 'bimbingan') {
+            
+            if(type === 'bimbingan') {
                 btnBimbingan.className = "w-full py-2 text-xs font-bold rounded-md bg-white text-blue-950 shadow-sm transition";
                 btnGosho.className = "w-full py-2 text-xs font-bold rounded-md text-gray-500 hover:text-gray-900 transition";
-                populateSelect(quoteList);
-                if (quoteList.length > 0) displayQuote(quoteList[0]);
             } else {
                 btnGosho.className = "w-full py-2 text-xs font-bold rounded-md bg-white text-blue-950 shadow-sm transition";
                 btnBimbingan.className = "w-full py-2 text-xs font-bold rounded-md text-gray-500 hover:text-gray-900 transition";
-                populateSelect(goshoList);
-                if (goshoList.length > 0) displayQuote(goshoList[0]);
             }
+            renderDropdownOptions();
+            loadSelectedQuote();
         }
 
         function loadSelectedQuote() {
             const index = document.getElementById('quote-select').value;
-            const list = (currentActiveSource === 'bimbingan') ? quoteList : goshoList;
-            if (list[index]) {
-                displayQuote(list[index]);
+            const list = currentActiveSource === 'bimbingan' ? quoteList : goshoList;
+            
+            if(list[index]) {
+                document.getElementById('custom-text').value = list[index].text;
+                document.getElementById('custom-author').value = list[index].author;
+                updatePreview();
             }
         }
 
-        function displayQuote(item) {
-            document.getElementById('custom-text').value = item.content;
-            document.getElementById('custom-author').value = item.author;
-            updatePreview();
-        }
-
-        // UPDATE LIVE PREVIEW CANVAS
         function updatePreview() {
-            const text = document.getElementById('custom-text').value;
-            const author = document.getElementById('custom-author').value;
-
-            document.getElementById('preview-text').textContent = text;
-            document.getElementById('preview-author').textContent = author ? `- ${author}` : "-";
+            const prefix = currentActiveSource === 'gosho' ? 'Gosho: ' : '';
+            document.getElementById('preview-text').innerText = document.getElementById('custom-text').value;
+            document.getElementById('preview-author').innerText = "— " + prefix + document.getElementById('custom-author').value;
         }
 
-        // KUSTOMISASI: WARNA BG & TEKS
+        // Fungsi pemilihan warna terintegrasi indikator aktif
         function selectBgButton(index, bgColor, textColorClass) {
             currentBgIndex = index;
             const canvas = document.getElementById('capture-area');
+            const watermark = document.getElementById('preview-watermark');
             
-            // Hapus class text warna sebelumnya
-            canvas.className = canvas.className.replace(/text-\S+/g, '');
+            canvas.className = "aspect-square-canvas flex flex-col justify-between p-10 relative overflow-hidden shadow-2xl rounded-lg transition-colors duration-300";
             canvas.classList.add(textColorClass);
             canvas.style.backgroundColor = bgColor;
 
-            // Update warna garis border watermark agar kontras mengikuti tema
-            const wm = document.getElementById('preview-watermark');
-            if (bgColor === '#ffffff' || bgColor === '#FDFBF7' || bgColor.startsWith('#E')) {
-                wm.style.borderColor = 'rgba(0,0,0,0.1)';
+            if(textColorClass.includes('white') || textColorClass.includes('gray-100')) {
+                watermark.style.borderTopColor = "rgba(255, 255, 255, 0.2)";
             } else {
-                wm.style.borderColor = 'rgba(255,255,255,0.2)';
+                watermark.style.borderTopColor = "rgba(0, 0, 0, 0.15)";
             }
+            updateBgButtonUI();
+        }
 
-            // Kelola visual aktif border tombol palet
+        function updateBgButtonUI() {
             const buttons = document.querySelectorAll('.bg-btn');
             buttons.forEach((btn, idx) => {
-                if (idx === index) {
-                    btn.classList.remove('border-transparent');
-                    btn.classList.add('border-blue-500', 'scale-110', 'ring-2', 'ring-offset-2', 'ring-blue-400');
+                if(idx === currentBgIndex) {
+                    btn.classList.add('border-black', 'scale-110', 'ring-2', 'ring-offset-2', 'ring-blue-900');
                 } else {
-                    btn.classList.remove('border-blue-500', 'ring-2', 'ring-offset-2', 'ring-blue-400');
-                    btn.classList.add('border-transparent');
+                    btn.classList.remove('border-black', 'scale-110', 'ring-2', 'ring-offset-2', 'ring-blue-900');
                 }
             });
         }
 
-        // KUSTOMISASI: GANTI FONT
+        // Mengubah jenis Font tulisan
         function changeFont() {
-            const selectedFont = document.getElementById('font-select').value;
-            const previewText = document.getElementById('preview-text');
+            const fontSelected = document.getElementById('font-select').value;
+            const textPreview = document.getElementById('preview-text');
             
-            // Hapus class font lama
-            previewText.className = previewText.className.replace(/font-\S+/g, '');
-            previewText.classList.add(selectedFont);
+            textPreview.classList.remove('font-playfair', 'font-inter', 'font-jakarta', 'font-cinzel', 'font-caveat', 'font-comfortaa', 'font-dmserif', 'font-montserrat', 'text-2xl', 'md:text-3xl');
+            textPreview.classList.add(fontSelected);
+
+            if(fontSelected === 'font-caveat') {
+                textPreview.classList.add('text-2xl');
+            }
         }
 
-        // KUSTOMISASI: UKURAN FONT SLIDER
+        // FUNGSI PENGUBAH UKURAN FONT DINAMIS
         function changeFontSize(size) {
-            document.getElementById('font-size-val').textContent = size + "px";
+            document.getElementById('font-size-val').innerText = size + "px";
             document.getElementById('preview-text').style.fontSize = size + "px";
         }
 
-        // KUSTOMISASI: TOGGLE AKSESORIS TRIWARNA & QUOTES
+        // Toggle aksesoris
         function toggleAcc() {
-            const isTricolor = document.getElementById('acc-tricolor').checked;
-            const isQuotes = document.getElementById('acc-quotes').checked;
-
-            document.getElementById('preview-tricolor-top').style.display = isTricolor ? 'flex' : 'none';
-            document.getElementById('preview-tricolor-bottom').style.display = isTricolor ? 'flex' : 'none';
-
-            document.getElementById('preview-quote-start').style.opacity = isQuotes ? '0.2' : '0';
-            document.getElementById('preview-quote-end').style.opacity = isQuotes ? '0.2' : '0';
+            const showTricolor = document.getElementById('acc-tricolor').checked;
+            const showQuotes = document.getElementById('acc-quotes').checked;
+            
+            document.getElementById('preview-tricolor-top').style.display = showTricolor ? 'flex' : 'none';
+            document.getElementById('preview-tricolor-bottom').style.display = showTricolor ? 'flex' : 'none';
+            
+            document.getElementById('preview-quote-start').style.opacity = showQuotes ? '0.2' : '0';
+            document.getElementById('preview-quote-end').style.opacity = showQuotes ? '0.2' : '0';
         }
 
-        // DESAIN ACAK FULL (RANDOMIZER)
+        // FUNGSI UTAMA RANDOMIZER (ACAK SETTINGAN)
         function randomizeSettings() {
             // 1. Acak Warna Latar Belakang
             const randomBgIdx = Math.floor(Math.random() * bgPalettes.length);
-            const selectedPalette = bgPalettes[randomBgIdx];
-            selectBgButton(randomBgIdx, selectedPalette.bg, selectedPalette.text);
+            const chosenPalette = bgPalettes[randomBgIdx];
+            selectBgButton(randomBgIdx, chosenPalette.bg, chosenPalette.text);
 
-            // 2. Acak Pilihan Font
+            // 2. Acak Font dari opsi dropdown yang ada
             const fontSelect = document.getElementById('font-select');
-            const options = fontSelect.getElementsByTagName('option');
-            const randomFontIdx = Math.floor(Math.random() * options.length);
-            fontSelect.value = options[randomFontIdx].value;
+            const fontOptions = fontSelect.querySelectorAll('option');
+            const randomFontIdx = Math.floor(Math.random() * fontOptions.length);
+            fontSelect.value = fontOptions[randomFontIdx].value;
             changeFont();
 
-            // 3. Acak Ukuran Font (Rentang 16px - 24px agar aman)
-            const randomFontSize = Math.floor(Math.random() * (24 - 16 + 1)) + 16;
-            document.getElementById('font-size-slider').value = randomFontSize;
-            changeFontSize(randomFontSize);
+            // 3. Acak Ukuran Font (Rentang aman 15px - 22px untuk kestabilan visual)
+            const randomSize = Math.floor(Math.random() * (22 - 15 + 1)) + 15;
+            document.getElementById('font-size-slider').value = randomSize;
+            changeFontSize(randomSize);
 
-            // 4. Acak Aksesoris Dekorasi (True/False secara acak)
-            document.getElementById('acc-tricolor').checked = Math.random() >= 0.3; 
-            document.getElementById('acc-quotes').checked = Math.random() >= 0.3;
+            // 4. Acak Aksesoris Dekorasi (Garis & Petik)
+            const checkTricolor = document.getElementById('acc-tricolor');
+            const checkQuotes = document.getElementById('acc-quotes');
+            checkTricolor.checked = Math.random() > 0.2; // 80% peluang aktif
+            checkQuotes.checked = Math.random() > 0.2;
             toggleAcc();
         }
 
-        // CONVERT HTML CANVAS KE DOWNLOADABLE IMAGE JPEG
+        // PROSES UTAMA: DOWNLOAD HTML KE JPEG (SUDUT FIX SIKU-SIKU)
         function downloadCard() {
             const captureArea = document.getElementById('capture-area');
             
-            // Konfigurasi optimal html2canvas tanpa sudut melengkung/noda putih
+            // Trik Jitu: Sembunyikan efek rounded sementara waktu saat sistem memotret elemen
+            captureArea.classList.remove('rounded-lg');
+            
             html2canvas(captureArea, {
+                scale: 3, 
                 useCORS: true,
-                scale: 3, // Meningkatkan resolusi kualitas cetak hd
-                backgroundColor: null,
                 logging: false,
-                width: 500,
-                height: 500
+                backgroundColor: null // Mencegah munculnya background putih di area luar foto
             }).then(canvas => {
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                // Kembalikan efek melengkung di website live preview setelah potret selesai
+                captureArea.classList.add('rounded-lg');
+
+                const image = canvas.toDataURL("image/jpeg", 0.95);
                 const link = document.createElement('a');
-                
-                // Judul File Output dinamis berdasarkan nama tokoh/sumber
-                const authorName = document.getElementById('custom-author').value || "soka";
-                link.download = `QuoteCard_${authorName.replace(/\s+/g, '_')}.jpg`;
-                link.href = imgData;
+                link.download = `Soka_Quote_${Date.now()}.jpg`;
+                link.href = image;
                 link.click();
+            }).catch(err => {
+                captureArea.classList.add('rounded-lg');
+                console.error("Gagal memproses gambar:", err);
             });
         }
-
-        // Menjalankan inisialisasi awal saat dokumen siap
-        window.onload = function() {
-            fetchQuotes();
-            selectBgButton(0, '#002F6C', 'text-white'); // Default Soka Blue
-        };
     </script>
 </body>
 </html>
