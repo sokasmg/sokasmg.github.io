@@ -1296,19 +1296,21 @@
             }
         }
 
-        // ==================== KODE PENGALAMAN ANGGOTA (DIPERBAIKI TOTAL) ====================
+// Buat variabel global di atas fungsi untuk menyimpan data sementara
+        let listPengalamanGlobal = [];
+
+        // ==================== KODE PENGALAMAN ANGGOTA (FIX MODAL) ====================
         async function loadPengalamanAnggota() {
             try {
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel/tanda kutip
+                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel
                 const rows = [];
                 let currentRow = [];
                 let currentField = "";
                 let insideQuote = false;
 
-                // Normalisasi end-of-line agar konsisten
                 const normalizedData = data.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
                 for (let i = 0; i < normalizedData.length; i++) {
@@ -1317,10 +1319,10 @@
 
                     if (char === '"') {
                         if (insideQuote && nextChar === '"') {
-                            currentField += '"'; // Handle double quote escaped inside
+                            currentField += '"'; 
                             i++;
                         } else {
-                            insideQuote = !insideQuote; // Toggle status tanda kutip
+                            insideQuote = !insideQuote; 
                         }
                     } else if (char === ',' && !insideQuote) {
                         currentRow.push(currentField);
@@ -1334,7 +1336,6 @@
                         currentField += char;
                     }
                 }
-                // Push sisa data jika ada baris terakhir tanpa newline
                 if (currentField || currentRow.length > 0) {
                     currentRow.push(currentField);
                     rows.push(currentRow);
@@ -1343,10 +1344,10 @@
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Lewati header (baris 0), filter baris valid (cek apakah nama kolom A dan cerita kolom F ada)
+                // Lewati header, filter baris valid
                 const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
                 
-                // Balik urutan agar data terbaru berada di atas
+                // Balik urutan agar data terbaru di atas
                 activeRows.reverse();
                 
                 // Ambil 3 data teratas untuk ditampilkan
@@ -1357,19 +1358,16 @@
                     return;
                 }
 
-                dataDitampilkan.forEach((row) => {
+                // Simpan data yang ditampilkan ke dalam array global agar bisa diakses modal tanpa error teks
+                listPengalamanGlobal = dataDitampilkan;
+
+                dataDitampilkan.forEach((row, index) => {
                     const nama = row[0].trim();
                     const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
                     const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
-                    const fotoModal1 = row[3] ? row[3].trim() : "";
-                    const fotoModal2 = row[4] ? row[4].trim() : "";
                     const isiCerita = row[5] ? row[5].trim() : "";
                     
                     const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
-
-                    // Mengamankan string teks agar tidak merusak fungsi onclick JavaScript
-                    const safeIsiCerita = isiCerita.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
-                    const safeJudul = judul.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
 
                     const cardHtml = `
                         <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
@@ -1386,7 +1384,7 @@
                                 </p>
                             </div>
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="bukaDetailPengalaman('${nama}', \`${safeJudul}\`, \`${safeIsiCerita}\`, '${fotoModal1}', '${fotoModal2}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
                                     Lanjut baca...
                                 </button>
                             </div>
@@ -1399,6 +1397,25 @@
                 console.error("Gagal memuat pengalaman:", error);
                 document.getElementById('pengalaman-container').innerHTML = 
                     `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita pengalaman.</p>`;
+            }
+        }
+
+        // Fungsi jembatan baru untuk menangani klik agar bebas dari error "broken string"
+        function panggilModalLewatIndex(index) {
+            const data = listPengalamanGlobal[index];
+            if (data) {
+                const nama = data[0].trim();
+                const judul = data[1] ? data[1].trim() : "Cerita Kemenangan";
+                const fotoModal1 = data[3] ? data[3].trim() : "";
+                const fotoModal2 = data[4] ? data[4].trim() : "";
+                const isiCerita = data[5] ? data[5].trim() : "";
+
+                // Panggil fungsi modal asli bawaan web Anda
+                if (typeof bukaDetailPengalaman === "function") {
+                    bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
+                } else {
+                    console.error("Fungsi bukaDetailPengalaman tidak ditemukan!");
+                }
             }
         }
 
