@@ -1352,5 +1352,32 @@
             alert(`Pengalaman dari: ${nama}\n\n${isiLengkap}`);
         }
     </script>
+          <!-- ==================== MODAL DETAIL PENGALAMAN (BARU) ==================== -->
+    <div id="modal-pengalaman" class="fixed inset-0 bg-black/60 z-[150] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="tutupDetailPengalaman()">
+        <!-- Kotak Putih Modal -->
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] flex flex-col animate-fade-in" onclick="event.stopPropagation()">
+            
+            <!-- Header Modal (Nama & Tombol Close) -->
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-2.5 h-2.5 bg-[#F9A825] rounded-full"></div>
+                    <h3 id="modal-pengalaman-nama" class="text-xl font-bold text-[#002F6C]">Nama Anggota</h3>
+                </div>
+                <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
+            </div>
+            
+            <!-- Isi Cerita Lengkap (Scrollable & Mendukung Enter/Alinea) -->
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
+                Isi cerita lengkap akan muncul di sini...
+            </div>
+            
+            <!-- Footer Modal -->
+            <div class="border-t border-gray-100 pt-3 mt-4 text-right">
+                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition">
+                    Selesai Membaca
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
