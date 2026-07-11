@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri - Soka Gakkai Semarang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+        .soka-blue { background-color: #002F6C; flex: 1; }
+        .soka-yellow { background-color: #F9A825; flex: 1; }
+        .soka-red { background-color: #C62828; flex: 1; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 md:h-24">
+                <div class="flex items-center space-x-3 md:space-x-4">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai" class="h-12 w-12 md:h-16 md:w-16 object-contain">
+                    <div>
+                        <span class="text-xl md:text-3xl font-black text-blue-950 block tracking-wide leading-none">Soka Gakkai Indonesia</span>
+                        <span class="text-xs md:text-base font-bold text-gray-500 block uppercase tracking-widest mt-1">Semarang (Jawa Tengah)</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 font-semibold">
+                    <a href="index.html#beranda" class="text-blue-900 hover:text-blue-700 transition">Beranda</a>
+                    <a href="index.html#tentang" class="text-gray-600 hover:text-blue-700 transition">Tentang Kami</a>
+                    <a href="index.html#kontak" class="text-gray-600 hover:text-blue-700 transition">Kontak</a>
+                    <a href="" class="text-blue-900 hover:text-blue-700 transition">Galeri</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden bg-gray-50 border-t border-gray-100 flex justify-around py-3 text-xs font-bold uppercase tracking-wider">
+            <a href="index.html#beranda" class="text-blue-900 px-1 py-1">Beranda</a>
+            <a href="index.html#tentang" class="text-gray-600 px-1 py-1">Tentang</a>
+            <a href="index.html#kontak" class="text-gray-600 px-1 py-1">Kontak</a>
+            <a href="" class="text-blue-900 bg-blue-50 rounded px-2.5 py-1 border border-blue-200">Galeri</a>
+        </div>
+
+        <div class="soka-tricolor">
+            <div class="soka-blue"></div>
+            <div class="soka-yellow"></div>
+            <div class="soka-red"></div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-blue-950 mb-2">Galeri Foto</h1>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-500 max-w-md mx-auto">Dokumentasi kegiatan dan kebersamaan Soka Gakkai Semarang.</p>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                </div>
+        </div>
+    </main>
+
+    <div id="zoom-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-modal" class="absolute top-6 right-6 text-white hover:text-gray-300 focus:outline-none bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="max-w-4xl max-h-[85vh] p-4 flex items-center justify-center">
+            <img id="modal-img" src="" alt="Zoomed Photo" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300">
+        </div>
+    </div>
+
+    <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Organisasi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
+                        <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const gridContainer = document.getElementById('gallery-grid');
+        const modal = document.getElementById('zoom-modal');
+        const modalImg = document.getElementById('modal-img');
+        const closeModal = document.getElementById('close-modal');
+
+        // ==========================================
+        // 1. SCANNING FOTO (DENGAN EKSTENSI WEBP)
+        // ==========================================
+        function cekGambarExist(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);  
+                img.onerror = () => resolve(false); 
+                img.src = src;
+            });
+        }
+
+        async function dapatkanDaftarFoto() {
+            const listValid = [];
+            const batasMaksimal = 999;
+            const toleransiSela = 2; // Berhenti jika ada 2 nomor kosong berurutan
+            let jumlahKosongBerurutan = 0;
+
+            for (let i = 1; i <= batasMaksimal; i++) {
+                const nomorFormat = String(i).padStart(3, '0');
+                // DIUBAH: Sekarang membaca ekstensi .webp sesuai permintaan Anda
+                const pathFoto = `images/foto${nomorFormat}.webp`;
+
+                const isExist = await cekGambarExist(pathFoto);
+
+                if (isExist) {
+                    listValid.push(pathFoto);
+                    jumlahKosongBerurutan = 0; 
+                } else {
+                    jumlahKosongBerurutan++;
+                    if (jumlahKosongBerurutan >= toleransiSela) {
+                        break; 
+                    }
+                }
+            }
+            return listValid;
+        }
+
+        // ==========================================
+        // 2. RENDER FOTO KEDALAM GRID RESPONSIVE
+        // ==========================================
+        async function initGallery() {
+            gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center animate-pulse">Memuat galeri foto...</div>';
+            
+            const fotoList = await dapatkanDaftarFoto();
+
+            if(fotoList.length === 0) {
+                gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center">Belum ada foto .webp yang tersedia di folder images/.</div>';
+                return;
+            }
+
+            gridContainer.innerHTML = '';
+
+            // Render hanya satu kali (tidak dikloning lagi karena sistemnya vertical scroll biasa)
+            fotoList.forEach(src => {
+                const imgCard = document.createElement('div');
+                // Menggunakan rasio aspek video (asymmetrical/aspect-video) agar seragam tingginya di baris grid
+                imgCard.className = "group relative aspect-video bg-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer";
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = "Dokumentasi Soka Gakkai Semarang";
+                img.className = "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 select-none"; 
+                
+                // Efek overlay halus saat kursor diarahkan ke foto (hover)
+                const overlay = document.createElement('div');
+                overlay.className = "absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center";
+                overlay.innerHTML = '<span class="text-white bg-black/40 p-2 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" /></svg></span>';
+
+                imgCard.appendChild(img);
+                imgCard.appendChild(overlay);
+                imgCard.addEventListener('click', () => openZoom(src));
+                
+                gridContainer.appendChild(imgCard);
+            });
+        }
+
+        // ==========================================
+        // 3. LOGIC MODAL ZOOM (POPUP FOTO)
+        // ==========================================
+        function openZoom(src) {
+            modalImg.src = src;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalImg.classList.remove('scale-95');
+                modalImg.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeZoom() {
+            modalImg.classList.remove('scale-100');
+            modalImg.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        closeModal.addEventListener('click', closeZoom);
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeZoom(); 
+        });
+
+        // Jalankan inisialisasi grid foto saat halaman selesai dimuat
+        window.onload = initGallery;
+    </script>
+</body>
+</html>
