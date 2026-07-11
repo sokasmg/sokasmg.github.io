@@ -364,7 +364,7 @@
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         
-        // Gantilah teks di bawah ini dengan URL Web App Deployment dari Apps Script Anda setelah di-deploy
+        // PUSAT KONTROL URL WEB APP (Gantilah jika Anda melakukan New Deployment di Apps Script)
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
         
         // Variabel penampung data dari cloud
@@ -562,7 +562,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             loadQuotesFromSheets();
-            checkLoginStatus(); // Sinkronisasi kondisi proteksi user saat load pertama kali
+            checkLoginStatus(); 
 
             slides.forEach((slide) => {
                 const lazySrc = slide.getAttribute('data-src');
@@ -586,7 +586,6 @@
             slides[currentSlide].classList.add('opacity-40');
         }
 
-        // Fungsi Mengubah Ukuran Teks (Toggle Text Size Mobile)
         function toggleTextSize() {
             const bodyEl = document.body;
             const btnToggle = document.getElementById('btn-toggle-text');
@@ -602,12 +601,10 @@
             }
         }
 
-        // --- SISTEM AUTENTIKASI AKSES ANGGOTA (FRONTEND DRIVER) ---
-
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
         function checkLoginStatus() {
             const savedName = localStorage.getItem('soka_user_name');
             
-            // Definisikan DOM Element target proteksi
             const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
             const navGaleriMobile = document.getElementById('nav-galeri-mobile');
             const sectionJadwal = document.getElementById('jadwal');
@@ -619,13 +616,11 @@
             const btnAuthMobile = document.getElementById('btn-auth-mobile');
 
             if (savedName) {
-                // 1. Tampilkan seluruh konten rahasia jika user tervalidasi
                 if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
                 if (sectionJadwal) sectionJadwal.classList.remove('hidden');
                 if (btnCardCreator) btnCardCreator.classList.remove('hidden');
                 
-                // 2. Set UI Profil Sapaan & Tombol Logout di Desktop
                 if (greetingDesktop) {
                     greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
                     greetingDesktop.classList.remove('hidden');
@@ -636,7 +631,6 @@
                     btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
                 }
 
-                // 3. Set UI Profil Sapaan & Tombol Logout di Mobile
                 if (greetingMobile) {
                     greetingMobile.innerText = `Halo, ${savedName}`;
                     greetingMobile.className = "font-black text-blue-950";
@@ -647,7 +641,6 @@
                     btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
                 }
             } else {
-                // Sembunyikan kembali seluruh elemen terproteksi jika tidak login
                 if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
                 if (sectionJadwal) sectionJadwal.classList.add('hidden');
@@ -681,7 +674,6 @@
             document.getElementById('input-phone').value = "";
         }
 
-        // Menutup jendela dialog verifikasi
         function closeLoginModal() {
             document.getElementById('login-modal').classList.add('hidden');
         }
@@ -702,10 +694,11 @@
             errorMsg.classList.add('hidden');
             
             try {
+                // MENGGUNAKAN text/plain UNTUK MENGHINDARI BLOKIR CORS DARI GOOGLE APPS SCRIPT
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({ phone: phoneInput })
                 });
                 
@@ -735,36 +728,6 @@
                 checkLoginStatus(); 
             }
         }
-        // Ganti dengan URL Web App (Macro URL) yang Anda dapatkan setelah Deploy di Google Apps Script
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec"; 
-
-async function prosesLogin(nomorPonsel) {
-    try {
-        const response = await fetch(WEB_APP_URL, {
-            method: "POST",
-            mode: "cors", // Penting untuk menangani CORS
-            headers: {
-                "Content-Type": "text/plain" // Menggunakan text/plain agar tidak memicu preflight rumit pada beberapa browser
-            },
-            body: JSON.stringify({
-                phone: nomorPonsel
-            })
-        });
-
-        const result = await response.json();
-
-        if (result.status === "success") {
-            alert("Selamat datang, " + result.nama);
-            // Lakukan aksi setelah login sukses di sini (misal: redirect atau simpan session)
-        } else {
-            alert("Login Gagal: " + result.message);
-        }
-
-    } catch (error) {
-        console.error("Error Login:", error);
-        alert("Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.");
-    }
-}
     </script>
      
 </body>
