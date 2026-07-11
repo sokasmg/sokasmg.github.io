@@ -1302,31 +1302,54 @@
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parsing CSV anti-eror
-                const rows = data.split("\r\n").filter(row => row.trim() !== "").map(row => {
-                    let result = [];
-                    let insideQuote = false;
-                    let entry = "";
-                    for (let i = 0; i < row.length; i++) {
-                        let char = row[i];
-                        if (char === '"') {
-                            insideQuote = !insideQuote;
-                        } else if (char === ',' && !insideQuote) {
-                            result.push(entry);
-                            entry = "";
+                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel/tanda kutip
+                const rows = [];
+                let currentRow = [];
+                let currentField = "";
+                let insideQuote = false;
+
+                // Normalisasi end-of-line agar konsisten
+                const normalizedData = data.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i];
+                    let nextChar = normalizedData[i + 1];
+
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') {
+                            currentField += '"'; // Handle double quote escaped inside
+                            i++;
                         } else {
-                            entry += char;
+                            insideQuote = !insideQuote; // Toggle status tanda kutip
                         }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField);
+                        currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = "";
+                    } else {
+                        currentField += char;
                     }
-                    result.push(entry);
-                    return result;
-                });
+                }
+                // Push sisa data jika ada baris terakhir tanpa newline
+                if (currentField || currentRow.length > 0) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                }
 
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Lewati header (baris 0), filter baris valid, balik urutan (terbaru di atas)
-                const activeRows = rows.slice(1).filter(r => r[0] && r[5]).reverse();
+                // Lewati header (baris 0), filter baris valid (cek apakah nama kolom A dan cerita kolom F ada)
+                const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
+                
+                // Balik urutan agar data terbaru berada di atas
+                activeRows.reverse();
+                
+                // Ambil 3 data teratas untuk ditampilkan
                 const dataDitampilkan = activeRows.slice(0, 3);
 
                 if (dataDitampilkan.length === 0) {
@@ -1335,18 +1358,18 @@
                 }
 
                 dataDitampilkan.forEach((row) => {
-                    const nama = row[0].replace(/"/g, "").trim();
-                    const judul = row[1] ? row[1].replace(/"/g, "").trim() : "Cerita Kemenangan";
-                    const fotoProfil = row[2] ? row[2].replace(/"/g, "").trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
-                    const fotoModal1 = row[3] ? row[3].replace(/"/g, "").trim() : "";
-                    const fotoModal2 = row[4] ? row[4].replace(/"/g, "").trim() : "";
-                    const isiCerita = row[5].replace(/"/g, "").trim();
+                    const nama = row[0].trim();
+                    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
+                    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+                    const fotoModal1 = row[3] ? row[3].trim() : "";
+                    const fotoModal2 = row[4] ? row[4].trim() : "";
+                    const isiCerita = row[5] ? row[5].trim() : "";
                     
                     const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
 
                     // Mengamankan string teks agar tidak merusak fungsi onclick JavaScript
-                    const safeIsiCerita = isiCerita.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-                    const safeJudul = judul.replace(/`/g, '\\`').replace(/\$/g, '\\$');
+                    const safeIsiCerita = isiCerita.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+                    const safeJudul = judul.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
 
                     const cardHtml = `
                         <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
