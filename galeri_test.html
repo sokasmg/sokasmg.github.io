@@ -70,6 +70,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 </div>
+
+            <div class="flex items-center justify-center space-x-2 mt-12 mb-6 select-none">
+                <button id="btn-prev" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    Sebelumnya
+                </button>
+                
+                <div id="pagination-numbers" class="flex items-center space-x-1"></div>
+
+                <button id="btn-next" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    Berikutnya
+                </button>
+            </div>
         </div>
     </main>
 
@@ -128,8 +140,17 @@
         const modalImg = document.getElementById('modal-img');
         const closeModal = document.getElementById('close-modal');
 
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const pageNumbersContainer = document.getElementById('pagination-numbers');
+
+        // STATE UTAMA GALERI
+        let seluruhFoto = []; 
+        let halamanSekarang = 1;
+        const fotoPerHalaman = 16; // Sesuai permintaan Anda (16 foto per halaman)
+
         // ==========================================
-        // 1. SCANNING FOTO (DENGAN EKSTENSI WEBP)
+        // 1. SCANNING FOTO AUTOMATIS
         // ==========================================
         function cekGambarExist(src) {
             return new Promise((resolve) => {
@@ -143,12 +164,11 @@
         async function dapatkanDaftarFoto() {
             const listValid = [];
             const batasMaksimal = 999;
-            const toleransiSela = 2; // Berhenti jika ada 2 nomor kosong berurutan
+            const toleransiSela = 2; 
             let jumlahKosongBerurutan = 0;
 
             for (let i = 1; i <= batasMaksimal; i++) {
                 const nomorFormat = String(i).padStart(3, '0');
-                // DIUBAH: Sekarang membaca ekstensi .webp sesuai permintaan Anda
                 const pathFoto = `images/foto${nomorFormat}.webp`;
 
                 const isExist = await cekGambarExist(pathFoto);
@@ -167,24 +187,18 @@
         }
 
         // ==========================================
-        // 2. RENDER FOTO KEDALAM GRID RESPONSIVE
+        // 2. FUNGSI TAMPILKAN GRID (BERDASARKAN HALAMAN)
         // ==========================================
-        async function initGallery() {
-            gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center animate-pulse">Memuat galeri foto...</div>';
-            
-            const fotoList = await dapatkanDaftarFoto();
-
-            if(fotoList.length === 0) {
-                gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center">Belum ada foto .webp yang tersedia di folder images/.</div>';
-                return;
-            }
-
+        function renderHalaman(page) {
             gridContainer.innerHTML = '';
+            
+            // Rumus memotong array list foto (misal halaman 1: index 0 s/d 15)
+            const indexMulai = (page - 1) * fotoPerHalaman;
+            const indexSelesai = indexMulai + fotoPerHalaman;
+            const fotoHalamanIni = seluruhFoto.slice(indexMulai, indexSelesai);
 
-            // Render hanya satu kali (tidak dikloning lagi karena sistemnya vertical scroll biasa)
-            fotoList.forEach(src => {
+            fotoHalamanIni.forEach(src => {
                 const imgCard = document.createElement('div');
-                // Menggunakan rasio aspek video (asymmetrical/aspect-video) agar seragam tingginya di baris grid
                 imgCard.className = "group relative aspect-video bg-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer";
                 
                 const img = document.createElement('img');
@@ -192,7 +206,6 @@
                 img.alt = "Dokumentasi Soka Gakkai Semarang";
                 img.className = "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 select-none"; 
                 
-                // Efek overlay halus saat kursor diarahkan ke foto (hover)
                 const overlay = document.createElement('div');
                 overlay.className = "absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center";
                 overlay.innerHTML = '<span class="text-white bg-black/40 p-2 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" /></svg></span>';
@@ -203,10 +216,67 @@
                 
                 gridContainer.appendChild(imgCard);
             });
+
+            updateTombolNavigasi();
         }
 
         // ==========================================
-        // 3. LOGIC MODAL ZOOM (POPUP FOTO)
+        // 3. LOGIC GENERATE TOMBOL PAGINATION
+        // ==========================================
+        function updateTombolNavigasi() {
+            const totalHalaman = Math.ceil(seluruhFoto.length / fotoPerHalaman);
+            
+            // Mengatur disable/enable tombol Prev dan Next
+            btnPrev.disabled = (halamanSekarang === 1);
+            btnNext.disabled = (halamanSekarang === totalHalaman || totalHalaman === 0);
+
+            // Bersihkan nomor halaman lama
+            pageNumbersContainer.innerHTML = '';
+
+            // Render ulang deretan nomor halaman
+            for (let i = 1; i <= totalHalaman; i++) {
+                const btnPage = document.createElement('button');
+                btnPage.innerText = i;
+                
+                if (i === halamanSekarang) {
+                    // Gaya Desain Tombol Aktif (Biru Soka)
+                    btnPage.className = "px-3.5 py-2 rounded-lg text-sm font-bold bg-[#002F6C] text-white transition";
+                } else {
+                    // Gaya Desain Tombol Biasa
+                    btnPage.className = "px-3.5 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition";
+                }
+
+                btnPage.addEventListener('click', () => {
+                    halamanSekarang = i;
+                    renderHalaman(halamanSekarang);
+                    // Otomatis scroll ke atas area galeri saat ganti halaman demi kenyamanan user
+                    gridContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+
+                pageNumbersContainer.appendChild(btnPage);
+            }
+        }
+
+        // Event Listener untuk tombol Sebelumnya & Berikutnya
+        btnPrev.addEventListener('click', () => {
+            if (halamanSekarang > 1) {
+                halamanSekarang--;
+                renderHalaman(halamanSekarang);
+                gridContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            const totalHalaman = Math.ceil(seluruhFoto.length / fotoPerHalaman);
+            if (halamanSekarang < totalHalaman) {
+                halamanSekarang++;
+                renderHalaman(halamanSekarang);
+                gridContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        // ==========================================
+        // 4. LOGIC MODAL ZOOM (POPUP FOTO)
         // ==========================================
         function openZoom(src) {
             modalImg.src = src;
@@ -228,7 +298,28 @@
             if(e.target === modal) closeZoom(); 
         });
 
-        // Jalankan inisialisasi grid foto saat halaman selesai dimuat
+        // ==========================================
+        // INIDIALISASI AWAL JALAN
+        // ==========================================
+        async function initGallery() {
+            gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center animate-pulse">Memuat galeri foto...</div>';
+            
+            // Ambil semua daftar foto yang ada di folder
+            seluruhFoto = await dapatkanDaftarFoto();
+
+            if(seluruhFoto.length === 0) {
+                gridContainer.innerHTML = '<div class="text-gray-400 py-8 col-span-full text-center">Belum ada foto .webp yang tersedia di folder images/.</div>';
+                pageNumbersContainer.innerHTML = '';
+                btnPrev.disabled = true;
+                btnNext.disabled = true;
+                return;
+            }
+
+            // Jalankan halaman pertama
+            halamanSekarang = 1;
+            renderHalaman(halamanSekarang);
+        }
+
         window.onload = initGallery;
     </script>
 </body>
