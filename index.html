@@ -6,26 +6,41 @@
     <title>Soka Gakkai Indonesia - Semarang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html { scroll-behavior: smooth; }
-        .soka-tricolor { height: 4px; display: flex; width: 100%; }
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
         .soka-blue { background-color: #002F6C; flex: 1; }
         .soka-yellow { background-color: #F9A825; flex: 1; }
         .soka-red { background-color: #C62828; flex: 1; }
 
-        body.text-large { font-size: 1.25rem; }
+        /* Kelas untuk memperbesar font dasar seluruh website saat toggle aktif */
+        body.text-large {
+            font-size: 1.25rem;
+        }
         body.text-large h1 { font-size: 2.5rem !important; }
         body.text-large h2 { font-size: 2rem !important; }
         body.text-large p { font-size: 1.25rem !important; }
         body.text-large blockquote { font-size: 1.5rem !important; }
+        /* Memaksa jawaban Q&A dan seluruh link di footer ikut membesar secara proporsional */
         body.text-large #qa-container div[id^="ans-"] { font-size: 1.25rem !important; }
         body.text-large footer a { font-size: 1.1rem !important; }
         body.text-large footer h4 { font-size: 1.3rem !important; }
         
+        /* Animasi fade in untuk modal */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
-        .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -47,14 +62,7 @@
                     <a id="nav-galeri-desktop" href="galeri.html" class="text-blue-900 hover:text-blue-700 transition hidden">Galeri</a>
                     
                     <div class="flex items-center space-x-4 border-l border-gray-200 pl-4">
-                        <div class="flex items-center space-x-1">
-                            <span id="user-greeting-desktop" class="text-sm font-bold text-blue-950 hidden"></span>
-                            <button id="btn-alert-pin-desktop" onclick="openCreatePinModal()" class="bg-red-500 text-white rounded-full p-1 shadow animate-pulse hidden" title="Akun belum aman! Klik untuk membuat PIN">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </button>
-                        </div>
+                        <span id="user-greeting-desktop" class="text-sm font-bold text-blue-950 hidden"></span>
                         <button id="btn-auth-desktop" onclick="openLoginModal()" class="bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition">
                             Login Anggota
                         </button>
@@ -74,14 +82,7 @@
                 </button>
             </div>
             <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-200 text-xs mt-1 shadow-sm">
-                <div class="flex items-center space-x-1">
-                    <span id="user-greeting-mobile" class="font-bold text-gray-500 italic">Menu Khusus Anggota:</span>
-                    <button id="btn-alert-pin-mobile" onclick="openCreatePinModal()" class="bg-red-500 text-white rounded-full p-1 shadow animate-pulse hidden" title="Buat PIN Baru">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </button>
-                </div>
+                <span id="user-greeting-mobile" class="font-bold text-gray-500 italic">Menu Khusus Anggota:</span>
                 <button id="btn-auth-mobile" onclick="openLoginModal()" class="bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition">
                     Login
                 </button>
@@ -97,33 +98,45 @@
 
     <div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 w-full h-full">
-            <img src="banner.webp" alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out">
-            <img data-src="banner2.webp" alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
-            <img data-src="banner3.webp" alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
-            <img data-src="banner4.webp" alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
-            <img data-src="banner5.webp" alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
-            <img data-src="banner6.webp" alt="Banner 6" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
+            <img src="banner.webp" alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner2.webp" alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner3.webp" alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner4.webp" alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner5.webp" alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+            <img data-src="banner6.webp" alt="Banner 6" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
         </div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-md">Selamat Datang di Soka Gakkai Semarang</h1>
-            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">Membangun perdamaian, pendidikan, dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.</p>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-md">
+                Selamat Datang di Soka Gakkai Semarang
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">
+                Membangun perdamaian, pendidikan, dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.
+            </p>
             <div class="inline-flex rounded-full overflow-hidden p-[3px] bg-gradient-to-r from-[#002F6C] via-[#F9A825] to-[#C62828] shadow-lg transform hover:scale-105 transition">
-                <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">Pelajari Lebih Lanjut</a>
+                <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">
+                    Pelajari Lebih Lanjut
+                </a>
             </div>
         </div>
     </div>
 
     <section id="tentang" class="py-20 bg-white scroll-mt-24">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-blue-950 mb-2">Tentang Kami</h2>
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Tentang Kami
+            </h2>
             <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
                 <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
             </div>
-            <p class="text-gray-600 leading-relaxed text-lg mb-6">Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.</p>
-            <p class="text-gray-600 leading-relaxed text-lg">Kami percaya bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.</p>
+            <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.
+            </p>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Kami percaya bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.
+            </p>
         </div>
     </section>
     
@@ -133,19 +146,33 @@
         
         <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
             <div class="inline-flex bg-white bg-opacity-10 p-1.5 rounded-full mb-8 border border-white border-opacity-10">
-                <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">Bimbingan Hari Ini</button>
-                <button id="tab-gosho" onclick="switchTab('gosho')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400">Gosho Hari Ini</button>
+                <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">
+                    Bimbingan Hari Ini
+                </button>
+                <button id="tab-gosho" onclick="switchTab('gosho')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400">
+                    Gosho Hari Ini
+                </button>
             </div>
-            <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">Memuat kutipan...</blockquote>
-            <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">-</p>
+
+            <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
+                Memuat kutipan...
+            </blockquote>
+            <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
+                -
+            </p>
 
             <div class="flex justify-center items-center space-x-4">
                 <button onclick="shareToWhatsApp()" class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full font-semibold shadow transition transform hover:scale-105">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+                    </svg>
                     <span>Bagikan ke WA</span>
                 </button>
+
                 <a id="btn-card-creator" href="card_creator.html" class="inline-flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white text-sm px-4 py-2 rounded-full font-semibold border border-white border-opacity-30 shadow transition transform hover:scale-105 hidden">
-                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" /></svg>
+                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" />
+                    </svg>
                     <span>Buat Gambar Kartu</span>
                 </a>
             </div>
@@ -154,35 +181,48 @@
 
    <section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100 hidden">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-blue-950 mb-2">Jadwal Kegiatan Bulanan</h2>
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Jadwal Kegiatan Bulanan
+            </h2>
             <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
                 <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
             </div>
-            <p class="text-gray-600 max-w-xl mx-auto mb-8">Mari bergabung bersama kami dalam kegiatan diskusi, doa bersama, dan kegiatan komunitas lainnya. Berikut adalah jadwal terbaru bulan ini:</p>
+            <p class="text-gray-600 max-w-xl mx-auto mb-8">
+                Mari bergabung bersama kami dalam kegiatan diskusi, doa bersama, dan kegiatan komunitas lainnya. Berikut adalah jadwal terbaru bulan ini:
+            </p>
 
             <div class="bg-white p-4 rounded-2xl shadow-lg max-w-2xl mx-auto border border-gray-100">
-                <a href="jadwal.jpeg" target="_blank" class="block group relative overflow-hidden rounded-xl cursor-zoom-in">
-                    <img src="jadwal.jpeg" alt="Jadwal Kegiatan" class="w-full h-auto transition duration-300 group-hover:scale-102">
+                <a href="jadwal.jpeg" target="_blank" title="Klik untuk memperbesar gambar" class="block group relative overflow-hidden rounded-xl cursor-zoom-in">
+                    <img src="jadwal.jpeg" alt="Jadwal Kegiatan Soka Gakkai Semarang" class="w-full h-auto transition duration-300 group-hover:scale-102">
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white font-medium gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
                         Klik untuk memperbesar
                     </div>
                 </a>
             </div>
+
             <div class="mt-6">
                 <a href="jadwal.jpeg" download class="inline-flex items-center space-x-2 bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-800 transition shadow">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
                     <span>Unduh Gambar Jadwal</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <div class="soka-tricolor"><div class="soka-blue"></div><div class="soka-yellow"></div><div class="soka-red"></div></div>
+    <div class="soka-tricolor">
+        <div class="soka-blue"></div>
+        <div class="soka-yellow"></div>
+        <div class="soka-red"></div>
+    </div>
 
-    <section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
+<section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">Kegiatan Kami</h2>
@@ -191,7 +231,9 @@
                     <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
                 </div>
+                <p class="text-gray-500 text-sm md:text-base">Dokumentasi momen dan kebersamaan dalam aktivitas komunitas kami.</p>
             </div>
+            
             <div class="relative max-w-5xl mx-auto group">
                 <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2" style="-ms-overflow-style: none; scrollbar-width: none;"></div>
             </div>
@@ -199,11 +241,11 @@
     </section>
 
     <div id="gallery-modal" class="fixed inset-0 bg-black/95 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
-        <button class="absolute top-6 right-6 text-white text-3xl font-bold">×</button>
-        <img id="modal-zoom-img" src="" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+        <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">×</button>
+        <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
   
-    <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
+        <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
@@ -213,27 +255,37 @@
                     <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
                 </div>
             </div>
-            <div id="qa-container" class="space-y-4 max-w-3xl mx-auto"><p class="text-center text-gray-500 italic">Memuat tanya jawab...</p></div>
+            
+            <div id="qa-container" class="space-y-4 max-w-3xl mx-auto">
+                <p class="text-center text-gray-500 italic">Memuat tanya jawab...</p>
+            </div>
         </div>
     </section>
 
     <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-blue-950 mb-2">Hubungi Kami</h2>
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                    Hubungi Kami
+                </h2>
                 <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
                     <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
                 </div>
+                <p class="text-gray-500">Silakan kunjungi atau hubungi kami untuk informasi lebih lanjut</p>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-[#002F6C] flex flex-col justify-between">
                     <div>
                         <h3 class="text-xl font-bold text-blue-950 mb-6">Informasi Kontak</h3>
                         <div class="flex items-start space-x-4 mb-6">
                             <div class="bg-blue-50 p-3 rounded-lg text-blue-900 mt-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-700">Alamat</h4>
@@ -241,9 +293,12 @@
                                 <p class="text-gray-600 mt-1">(024) 8315358</p>
                             </div>
                         </div>
+
                         <div class="flex items-start space-x-4">
                             <div class="bg-red-50 p-3 rounded-lg text-red-700 mt-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-700">Email</h4>
@@ -252,9 +307,10 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="bg-white p-4 rounded-2xl shadow-md h-64 md:h-auto min-h-[250px] flex items-center justify-center border-t-4 border-[#C62828]">
                     <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;"> 
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
@@ -269,17 +325,22 @@
                     <ul class="space-y-2 text-sm">
                         <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
                         <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                        <li><a href="https://www.sokagakkai.jp" target="_blank" class="hover:text-yellow-500 transition">Sokagakkai Japan</a></li>
+                        <li><a href="https://www.sgi-usa.org" target="_blank" class="hover:text-yellow-500 transition">SGI-USA</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://wwww.worldtribune.org" target="_blank" class="hover:text-yellow-500 transition">World Tribune</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
                     <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
                         <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
                     </ul>
                 </div>
@@ -287,10 +348,16 @@
                     <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                        <li><a href="https://sism.edu.my" target="_blank" class="hover:text-yellow-500 transition">Soka International School Malaysia</a></li>
+                        <li><a href="https://www.sokapreschool.org" target="_blank" class="hover:text-yellow-500 transition">Soka Preschool</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="text-center text-sm border-t border-blue-900 pt-8"><p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p></div>
+            
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -299,55 +366,26 @@
             <h3 class="text-xl font-bold text-blue-950 mb-2">Verifikasi Anggota</h3>
             <p class="text-sm text-gray-500 mb-4">Masukkan nomor ponsel Anda yang terdaftar untuk membuka fitur internal organisasi.</p>
             
-            <div class="space-y-3 mb-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
-                    <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
-                </div>
-                <div id="wrapper-input-pin" class="hidden">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">PIN Pengaman Akun</label>
-                    <input type="password" id="input-login-pin" placeholder="Masukkan PIN Anda" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
-                </div>
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
+                <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
                 <p id="login-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
             </div>
             
             <div class="flex space-x-3 justify-end">
                 <button onclick="closeLoginModal()" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700">Batal</button>
-                <button id="btn-submit-login" onclick="processLogin()" class="bg-blue-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition flex items-center justify-center">Verifikasi</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="create-pin-modal" class="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative animate-fade-in">
-            <div class="flex items-center space-x-2 text-red-600 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                <h3 class="text-lg font-bold text-blue-950">Buat PIN Pengaman</h3>
-            </div>
-            <p class="text-xs text-gray-500 mb-4">Amankan akun Anda sekarang agar identitas nama Anda di chatbox tidak bisa disalahgunakan oleh orang lain.</p>
-            
-            <div class="space-y-3 mb-4 text-xs md:text-sm">
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">PIN Baru (Bebas Huruf/Angka)</label>
-                    <input type="password" id="new-pin-1" placeholder="Masukkan PIN baru" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-950">
-                </div>
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1">Ulangi PIN Baru</label>
-                    <input type="password" id="new-pin-2" placeholder="Konfirmasi PIN baru" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-950">
-                </div>
-                <p id="pin-create-error" class="text-red-500 text-xs font-semibold hidden"></p>
-            </div>
-            
-            <div class="flex space-x-2 justify-end text-xs font-bold">
-                <button onclick="closeCreatePinModal()" class="px-3 py-2 text-gray-500 hover:text-gray-700">Nanti Saja</button>
-                <button id="btn-save-new-pin" onclick="submitNewPin()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition shadow">Simpan PIN</button>
+                <button id="btn-submit-login" onclick="processLogin()" class="bg-blue-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition flex items-center justify-center">
+                    Verifikasi
+                </button>
             </div>
         </div>
     </div>
 
     <div id="floating-chat-btn" class="fixed bottom-6 left-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
         <button onclick="toggleChatWindow()" class="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-5 py-3 rounded-full shadow-2xl border border-green-500 font-bold text-sm tracking-wide">
-            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/></svg>
+            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+            </svg>
             <span>Chat Anggota</span>
         </button>
     </div>
@@ -369,7 +407,9 @@
             <div class="flex items-center space-x-2">
                 <input type="text" id="input-chat-msg" maxlength="160" oninput="updateCharCount()" placeholder="Tulis pesan (maks 160 huruf)..." class="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none text-xs md:text-sm">
                 <button id="btn-send-chat" onclick="submitChat()" class="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl transition shadow flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
                 </button>
             </div>
             <div class="flex justify-between px-1 text-[10px] font-semibold text-gray-400">
@@ -380,34 +420,96 @@
     </div>
 
     <script>
-        // Zoom-blocking scripts
-        document.addEventListener('touchmove', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (e) { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, false);
-        document.addEventListener('keydown', function (e) { if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) e.preventDefault(); });
-        document.addEventListener('wheel', function (e) { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+        // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
+document.addEventListener('touchmove', function (event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
 
+// Mencegah zoom melalui ketukan ganda cepat (Double Tap to Zoom)
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// Mencegah zoom di komputer menggunakan tombol pintasan (Ctrl + / Ctrl - / Ctrl + Scroll)
+document.addEventListener('keydown', function (event) {
+    if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '=' || event.key === '0')) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('wheel', function (event) {
+    if (event.ctrlKey) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+        // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
+        
+        // PUSAT KONTROL URL WEB APP (Gantilah jika Anda melakukan New Deployment di Apps Script)
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
         
-        let quoteList = [], goshoList = [], qaList = [], activeTab = 'bimbingan';
+        // Variabel penampung data dari cloud
+        let quoteList = [];
+        let goshoList = [];
+        let qaList = [];
+        let activeTab = 'bimbingan';
 
+        // Fungsi pembaca CSV: Aman membaca koma dan enter di dalam teks kutipan
         function parseCSV(text) {
-            const result = []; let row = ["", ""], inQuotes = false, colIndex = 0, currentStr = "";
+            const result = [];
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+
             const cleanText = text.replace(/\r/g, "");
+
             for (let i = 0; i < cleanText.length; i++) {
-                let char = cleanText[i], nextChar = cleanText[i + 1];
-                if (char === '"') { if (inQuotes && nextChar === '"') { currentStr += '"'; i++; } else { inQuotes = !inQuotes; } }
-                else if (char === ',' && !inQuotes) { if (colIndex < 2) row[colIndex] = currentStr.trim(); currentStr = ""; colIndex++; }
-                else if (char === '\n' && !inQuotes) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
                     if (colIndex < 2) row[colIndex] = currentStr.trim();
-                    if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") result.push({ text: row[0], author: row[1] || "Anonim" });
-                    row = ["", ""]; colIndex = 0; currentStr = "";
-                } else { currentStr += char; }
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
             }
-            if (currentStr || colIndex > 0) { if (colIndex < 2) row[colIndex] = currentStr.trim(); if (row[0] && row[0] !== "text" && row[0] !== '"text"') result.push({ text: row[0], author: row[1] || "Anonim" }); }
+            
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
+                }
+            }
             return result;
         }
 
@@ -419,269 +521,526 @@
                     fetch(CSV_URL_GOSHO).then(res => res.text()),
                     fetch(CSV_URL_QA).then(res => res.text())
                 ]);
-                quoteList = parseCSV(resBimbingan); goshoList = parseCSV(resGosho); qaList = parseCSV(resQA);
-                setQuoteOfTheDay(); renderQASearch();
+
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+                qaList = parseCSV(resQA); 
+
+                setQuoteOfTheDay();
+                renderQASearch();
             } catch (error) {
-                console.error(error);
-                document.getElementById('soka-quote').innerText = "Gagal memuat renungan.";
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
+                document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
             }
         }
 
         function renderQASearch() {
             const container = document.getElementById('qa-container');
-            if (qaList.length === 0) { container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A.</p>"; return; }
+            if (qaList.length === 0) {
+                container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
+                return;
+            }
+
             container.innerHTML = "";
+
             qaList.forEach((item, index) => {
-                const qaItem = document.createElement('div'); qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+                const question = item.text;
+                const answer = item.author;
+
+                const qaItem = document.createElement('div');
+                qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+
                 qaItem.innerHTML = `
-                    <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none"><span>${item.text}</span><svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
-                    <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">${item.author}</div>`;
+                    <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
+                        <span>${question}</span>
+                        <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
+                        ${answer}
+                    </div>
+                `;
                 container.appendChild(qaItem);
             });
         }
 
         function toggleAccordion(index) {
-            const div = document.getElementById(`ans-${index}`), icon = document.getElementById(`icon-${index}`);
-            if (div.classList.contains('hidden')) { div.classList.remove('hidden'); icon.classList.add('rotate-180'); }
-            else { div.classList.add('hidden'); icon.classList.remove('rotate-180'); }
+            const answerDiv = document.getElementById(`ans-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (answerDiv.classList.contains('hidden')) {
+                answerDiv.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                answerDiv.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
         }
         
         function setQuoteOfTheDay() {
             if (quoteList.length === 0 || goshoList.length === 0) return;
-            const today = new Date(), currentDay = today.getDate(); let selectedItem = {};
+
+            const today = new Date();
+            const currentDay = today.getDate(); 
+            let selectedItem = {};
+
             if (activeTab === 'bimbingan') {
                 const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
-                selectedItem = quoteList[dateSeed % quoteList.length];
+                const quoteIndex = dateSeed % quoteList.length;
+                selectedItem = quoteList[quoteIndex];
+                
                 document.getElementById('soka-quote').innerText = selectedItem.text;
                 document.getElementById('soka-author').innerText = "— " + selectedItem.author;
             } else {
-                let targetIndex = currentDay - 1; if (targetIndex >= goshoList.length) targetIndex = goshoList.length - 1;
+                let targetIndex = currentDay - 1;
+                if (targetIndex >= goshoList.length) {
+                    targetIndex = goshoList.length - 1; 
+                }
                 selectedItem = goshoList[targetIndex];
+                
                 document.getElementById('soka-quote').innerText = selectedItem.text;
                 document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
             }
         }
 
         function switchTab(tabName) {
-            activeTab = tabName; const btnB=document.getElementById('tab-bimbingan'), btnG=document.getElementById('tab-gosho');
-            if (tabName === 'bimbingan') { btnB.className="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase bg-yellow-500 text-blue-950 shadow"; btnG.className="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase text-white hover:text-yellow-400"; }
-            else { btnG.className="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase bg-yellow-500 text-blue-950 shadow"; btnB.className="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase text-white hover:text-yellow-400"; }
+            activeTab = tabName;
+            
+            const btnBimbingan = document.getElementById('tab-bimbingan');
+            const btnGosho = document.getElementById('tab-gosho');
+            
+            if (tabName === 'bimbingan') {
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            } else {
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            }
+            
             setQuoteOfTheDay();
         }
 
-        function shareToWhatsApp() { window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('*' + (activeTab==='bimbingan'?'Bimbingan':'Gosho') + ' Hari Ini*\n\n_" ' + document.getElementById('soka-quote').innerText + ' "_\n\n*' + document.getElementById('soka-author').innerText + '*')}`, '_blank'); }
+        function shareToWhatsApp() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const titleHeader = activeTab === 'bimbingan' ? '*Bimbingan Hari Ini - Soka Gakkai Semarang*' : '*Gosho Hari Ini - Soka Gakkai Semarang*';
+            
+            const textMessage = `${titleHeader}\n\n_" ${quote} "_\n\n*${author}*`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function copyQuote() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const btnText = document.getElementById('copy-text');
+            const textToCopy = `"${quote}" ${author}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                btnText.innerText = "Tersalin!";
+                setTimeout(() => { btnText.innerText = "Salin Kutipan"; }, 2000);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
         
-        const slides = document.querySelectorAll('.banner-slide'); let currentSlide = 0;
+        // Logika Banner Slider Otomatis (Fading)
+        const slides = document.querySelectorAll('.banner-slide');
+        let currentSlide = 0;
+        const slideInterval = 5000;
+
         document.addEventListener('DOMContentLoaded', () => {
-            loadQuotesFromSheets(); checkLoginStatus();
-            slides.forEach(s => { const src = s.getAttribute('data-src'); if (src) { s.setAttribute('src', src); s.removeAttribute('data-src'); } });
-            setInterval(() => {
-                const next = (currentSlide + 1) % slides.length; if (!slides[next].complete || slides[next].naturalWidth === 0) return;
-                slides[currentSlide].className="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000";
-                currentSlide = next; slides[currentSlide].className="banner-slide absolute inset-0 w-full h-full object-cover opacity-40 transition-opacity duration-1000";
-            }, 5000);
+            loadQuotesFromSheets();
+            checkLoginStatus(); 
+
+            slides.forEach((slide) => {
+                const lazySrc = slide.getAttribute('data-src');
+                if (lazySrc) {
+                    slide.setAttribute('src', lazySrc);
+                    slide.removeAttribute('data-src');
+                }
+            });
+
+            setInterval(nextSlide, slideInterval);
         });
 
-        function toggleTextSize() {
-            document.body.classList.toggle('text-large'); const btn = document.getElementById('btn-toggle-text');
-            btn.innerText = document.body.classList.contains('text-large') ? "A-" : "A+";
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            if (!slides[nextIndex].complete || slides[nextIndex].naturalWidth === 0) return; 
+
+            slides[currentSlide].classList.remove('opacity-40');
+            slides[currentSlide].classList.add('opacity-0');
+            currentSlide = nextIndex;
+            slides[currentSlide].classList.remove('opacity-0');
+            slides[currentSlide].classList.add('opacity-40');
         }
 
-        // --- MANAJEMEN LOGIN STATUS & KONTROL PIN ---
-        function checkLoginStatus() {
-            const savedName = localStorage.getItem('soka_user_name');
-            const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
-            const savedPinSet = localStorage.getItem('soka_user_pin_set'); // "true" atau "false"
+        function toggleTextSize() {
+            const bodyEl = document.body;
+            const btnToggle = document.getElementById('btn-toggle-text');
             
-            const els = ['nav-galeri-desktop', 'nav-galeri-mobile', 'jadwal', 'btn-card-creator', 'floating-chat-btn'];
-            const greetingD = document.getElementById('user-greeting-desktop'), btnD = document.getElementById('btn-auth-desktop');
-            const greetingM = document.getElementById('user-greeting-mobile'), btnM = document.getElementById('btn-auth-mobile');
-            const alertD = document.getElementById('btn-alert-pin-desktop'), alertM = document.getElementById('btn-alert-pin-mobile');
-            const fBtn = document.getElementById('floating-admin-btn'), fLink = document.getElementById('floating-btn-link'), fText = document.getElementById('floating-btn-text');
-
-            if (savedName) {
-                els.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
-                if (greetingD) { greetingD.innerText = `Selamat Datang, ${savedName}`; greetingD.classList.remove('hidden'); }
-                if (btnD) { btnD.innerText = "Logout"; btnD.onclick = processLogout; btnD.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition"; }
-                if (greetingM) { greetingM.innerText = `Halo, ${savedName}`; greetingM.className = "font-black text-blue-950"; }
-                if (btnM) { btnM.innerText = "Keluar"; btnM.onclick = processLogout; btnM.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition"; }
-                
-                // MUNCULKAN ALERT TANDA SERU MERAH JIKA PIN BELUM DIBUAT
-                if (savedPinSet === "false") {
-                    if (alertD) alertD.classList.remove('hidden');
-                    if (alertM) alertM.classList.remove('hidden');
-                } else {
-                    if (alertD) alertD.classList.add('hidden');
-                    if (alertM) alertM.classList.add('hidden');
-                }
-
-                if (fBtn && fLink && fText) {
-                    if (savedJabatan === "Pimpinan") { fLink.href = "intishibu.html"; fText.innerText = "Menu Pimpinan"; fBtn.classList.remove('hidden'); }
-                    else if (savedJabatan === "Pimpinan (Admin)") { fLink.href = "admin.html"; fText.innerText = "Menu Admin"; fBtn.classList.remove('hidden'); }
-                    else { fBtn.classList.add('hidden'); }
-                }
+            if (bodyEl.classList.contains('text-large')) {
+                bodyEl.classList.remove('text-large');
+                btnToggle.innerText = "A+";
+                btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
             } else {
-                els.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
-                if (document.getElementById('chat-window')) document.getElementById('chat-window').classList.add('hidden');
-                if (greetingD) { greetingD.innerText = ""; greetingD.classList.add('hidden'); }
-                if (btnD) { btnD.innerText = "Login Anggota"; btnD.onclick = openLoginModal; btnD.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition"; }
-                if (greetingM) { greetingM.innerText = "Menu Khusus Anggota:"; greetingM.className = "font-bold text-gray-500 italic"; }
-                if (btnM) { btnM.innerText = "Login"; btnM.onclick = openLoginModal; btnM.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition"; }
-                if (alertD) alertD.classList.add('hidden');
-                if (alertM) alertM.classList.add('hidden');
-                if (fBtn) fBtn.classList.add('hidden');
+                bodyEl.classList.add('text-large');
+                btnToggle.innerText = "A-";
+                btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
             }
         }
+
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
+        function checkLoginStatus() {
+    const savedName = localStorage.getItem('soka_user_name');
+    const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
+    
+    const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
+    const navGaleriMobile = document.getElementById('nav-galeri-mobile');
+    const sectionJadwal = document.getElementById('jadwal');
+    const btnCardCreator = document.getElementById('btn-card-creator');
+    
+    const greetingDesktop = document.getElementById('user-greeting-desktop');
+    const btnAuthDesktop = document.getElementById('btn-auth-desktop');
+    const greetingMobile = document.getElementById('user-greeting-mobile');
+    const btnAuthMobile = document.getElementById('btn-auth-mobile');
+
+    // Element Floating Button Bawaan
+    const floatingBtn = document.getElementById('floating-admin-btn');
+    const floatingLink = document.getElementById('floating-btn-link');
+    const floatingText = document.getElementById('floating-btn-text');
+
+    // Element Floating Chat Baru
+    const floatingChatBtn = document.getElementById('floating-chat-btn');
+
+    if (savedName) {
+        if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
+        if (sectionJadwal) sectionJadwal.classList.remove('hidden');
+        if (btnCardCreator) btnCardCreator.classList.remove('hidden');
+        if (floatingChatBtn) floatingChatBtn.classList.remove('hidden'); // Tampilkan tombol chat saat login
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
+            greetingDesktop.classList.remove('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Logout";
+            btnAuthDesktop.onclick = processLogout;
+            btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = `Halo, ${savedName}`;
+            greetingMobile.className = "font-black text-blue-950";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Keluar";
+            btnAuthMobile.onclick = processLogout;
+            btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
+        }
+
+        // --- LOGIKA KONTROL FLOATING BUTTON BERDASARKAN JABATAN ---
+        if (floatingBtn && floatingLink && floatingText) {
+            if (savedJabatan === "Pimpinan") {
+                floatingLink.href = "intishibu.html";
+                floatingText.innerText = "Menu Pimpinan";
+                floatingBtn.classList.remove('hidden');
+            } else if (savedJabatan === "Pimpinan (Admin)") {
+                floatingLink.href = "admin.html";
+                floatingText.innerText = "Menu Admin";
+                floatingBtn.classList.remove('hidden');
+            } else {
+                floatingBtn.classList.add('hidden');
+            }
+        }
+
+    } else {
+        if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
+        if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
+        if (sectionJadwal) sectionJadwal.classList.add('hidden');
+        if (btnCardCreator) btnCardCreator.classList.add('hidden');
+        if (floatingChatBtn) floatingChatBtn.classList.add('hidden'); // Sembunyikan tombol chat
+        document.getElementById('chat-window').classList.add('hidden'); // Sembunyikan jendela jika terbuka
+        
+        if (greetingDesktop) {
+            greetingDesktop.innerText = "";
+            greetingDesktop.classList.add('hidden');
+        }
+        if (btnAuthDesktop) {
+            btnAuthDesktop.innerText = "Login Anggota";
+            btnAuthDesktop.onclick = openLoginModal;
+            btnAuthDesktop.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition";
+        }
+
+        if (greetingMobile) {
+            greetingMobile.innerText = "Menu Khusus Anggota:";
+            greetingMobile.className = "font-bold text-gray-500 italic";
+        }
+        if (btnAuthMobile) {
+            btnAuthMobile.innerText = "Login";
+            btnAuthMobile.onclick = openLoginModal;
+            btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
+        }
+
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+    }
+}
 
         function openLoginModal() {
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-error-msg').classList.add('hidden');
-            document.getElementById('wrapper-input-pin').classList.add('hidden'); // Sembunyikan input PIN dulu di awal
             document.getElementById('input-phone').value = "";
-            document.getElementById('input-login-pin').value = "";
         }
-        function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
 
         async function processLogin() {
-            const phoneInput = document.getElementById('input-phone').value.trim();
-            const pinInput = document.getElementById('input-login-pin').value.trim();
-            const errorMsg = document.getElementById('login-error-msg');
-            const btnSubmit = document.getElementById('btn-submit-login');
-            const wrapperPin = document.getElementById('wrapper-input-pin');
-            
-            if (!phoneInput) { errorMsg.innerText = "Nomor ponsel wajib diisi."; errorMsg.classList.remove('hidden'); return; }
-            btnSubmit.disabled = true; btnSubmit.innerText = "Memverifikasi..."; errorMsg.classList.add('hidden');
-            
-            try {
-                // Siapkan data pengiriman login
-                let payload = { phone: phoneInput };
-                if (wrapperPin.classList.contains('hidden') === false) {
-                    payload.pin = pinInput; // Kirim PIN jika box input PIN sudah terbuka di modal
-                }
-
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                
-                if (result.status === "require_pin") {
-                    // JIKA GAS MENDETEKSI NO HP SUDAH PUNYA PIN, BUKA INPUTAN PIN-NYA
-                    wrapperPin.classList.remove('hidden');
-                    errorMsg.innerText = result.message;
-                    errorMsg.className = "text-yellow-600 text-xs font-bold mt-1";
-                    errorMsg.classList.remove('hidden');
-                } else if (result.status === "success") {
-                    localStorage.setItem('soka_user_name', result.nama);
-                    localStorage.setItem('soka_user_jabatan', result.jabatan || ""); 
-                    localStorage.setItem('soka_user_phone', phoneInput); // Simpan HP untuk keperluan simpan PIN nanti
-                    localStorage.setItem('soka_user_pin_set', String(result.isPinSet)); // Simpan status PIN di lokal
-                    closeLoginModal(); checkLoginStatus();
-                    
-                    // Jika login sukses tetapi deteksi akun belum aman (PIN kosong), tawarkan buat PIN seketika!
-                    if (result.isPinSet === false) { openCreatePinModal(); }
-                } else {
-                    errorMsg.innerText = result.message || "Gagal masuk.";
-                    errorMsg.className = "text-red-500 text-xs mt-1";
-                    errorMsg.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error(error); errorMsg.innerText = "Gangguan koneksi."; errorMsg.classList.remove('hidden');
-            } finally { btnSubmit.disabled = false; btnSubmit.innerText = "Verifikasi"; }
+    const phoneInput = document.getElementById('input-phone').value.trim();
+    const errorMsg = document.getElementById('login-error-msg');
+    const btnSubmit = document.getElementById('btn-submit-login');
+    
+    if (!phoneInput) {
+        errorMsg.innerText = "Nomor ponsel tidak boleh kosong.";
+        errorMsg.classList.remove('hidden');
+        return;
+    }
+    
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "Memverifikasi...";
+    errorMsg.classList.add('hidden');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ phone: phoneInput })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            localStorage.setItem('soka_user_name', result.nama);
+            localStorage.setItem('soka_user_jabatan', result.jabatan || ""); 
+            closeLoginModal();
+            checkLoginStatus(); 
+        } else {
+            errorMsg.innerText = result.message || "Nomor tidak dikenali.";
+            errorMsg.classList.remove('hidden');
         }
+    } catch (error) {
+        console.error("Authentication Error:", error);
+        errorMsg.innerText = "Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.";
+        errorMsg.classList.remove('hidden');
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Verifikasi";
+    }
+}
 
-        function processLogout() {
-            if (confirm("Apakah Anda yakin ingin keluar?")) {
-                localStorage.clear(); checkLoginStatus();
+function processLogout() {
+    if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
+        localStorage.removeItem('soka_user_name');
+        localStorage.removeItem('soka_user_jabatan'); 
+        checkLoginStatus(); 
+    }
+}
+
+// === LOGIKA SLIDER KEGIATAN TERAKHIR (INFINITE SMOOTH LOOP) ===
+const slider = document.getElementById('gallery-slider');
+let isDown = false;
+let startX;
+let scrollLeft;
+let autoScrollInterval;
+let originalWidth = 0;
+
+function generateRandomImages() {
+    const totalAvailableImages = 50; 
+    const chosenNumbers = new Set();
+    
+    while(chosenNumbers.size < 5) {
+        const randomNum = Math.floor(Math.random() * totalAvailableImages) + 1;
+        chosenNumbers.add(randomNum);
+    }
+    
+    Array.from(chosenNumbers).forEach((num) => {
+        const padNum = String(num).padStart(3, '0');
+        const itemHTML = `
+            <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                <img src="images/foto${padNum}.webp" alt="Kegiatan ${padNum}" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+            </div>`;
+        slider.insertAdjacentHTML('beforeend', itemHTML);
+    });
+}
+
+function setupInfiniteScroll() {
+    generateRandomImages();
+
+    const items = Array.from(slider.children);
+    if (items.length === 0) return;
+
+    items.forEach(item => {
+        const clone = item.cloneNode(true);
+        slider.appendChild(clone);
+    });
+
+    setTimeout(() => {
+        updateSliderWidth();
+    }, 500); 
+}
+
+function updateSliderWidth() {
+    const items = Array.from(slider.children);
+    const halfLength = items.length / 2;
+    originalWidth = 0;
+    
+    for (let i = 0; i < halfLength; i++) {
+        originalWidth += items[i].offsetWidth + 16; 
+    }
+}
+
+function startAutoScroll() {
+    if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
+    
+    function scrollStep() {
+        if (!isDown) {
+            slider.scrollLeft += 0.8; 
+
+            if (slider.scrollLeft >= originalWidth) {
+                slider.scrollLeft -= originalWidth;
             }
         }
+        autoScrollInterval = requestAnimationFrame(scrollStep);
+    }
+    autoScrollInterval = requestAnimationFrame(scrollStep);
+}
 
-        // --- LOGIKA OPERASIONAL MODAL PEMBUATAN PIN BARU ---
-        function openCreatePinModal() {
-            document.getElementById('create-pin-modal').classList.remove('hidden');
-            document.getElementById('pin-create-error').classList.add('hidden');
-            document.getElementById('new-pin-1').value = "";
-            document.getElementById('new-pin-2').value = "";
+function stopAutoScroll() {
+    cancelAnimationFrame(autoScrollInterval);
+}
+
+slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    stopAutoScroll();
+});
+
+slider.addEventListener('mouseleave', () => {
+    if (isDown) {
+        isDown = false;
+        startAutoScroll();
+    }
+});
+
+slider.addEventListener('mouseup', (e) => {
+    const endX = e.pageX - slider.offsetLeft;
+    if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+        openGalleryModal(e.target.src);
+    }
+    isDown = false;
+    startAutoScroll();
+});
+
+slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1.2;
+    let targetScroll = scrollLeft - walk;
+
+    if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+    if (targetScroll < 0) targetScroll += originalWidth;
+
+    slider.scrollLeft = targetScroll;
+});
+
+slider.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    stopAutoScroll();
+});
+
+slider.addEventListener('touchend', () => {
+    isDown = false;
+    startAutoScroll();
+});
+
+slider.addEventListener('touchmove', (e) => {
+    if (!isDown) return;
+    const x = e.touches[0].pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1.2;
+    let targetScroll = scrollLeft - walk;
+
+    if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+    if (targetScroll < 0) targetScroll += originalWidth;
+
+    slider.scrollLeft = targetScroll;
+});
+
+window.addEventListener('load', () => {
+    setupInfiniteScroll();
+    window.addEventListener('resize', updateSliderWidth);
+    setTimeout(startAutoScroll, 1000);
+});
+
+        // === FUNGSI MODAL ZOOM GAMBAR ===
+        function openGalleryModal(imgSrc) {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modalImg.src = imgSrc;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalImg.classList.remove('scale-95');
+            }, 10);
+            stopAutoScroll();
         }
-        function closeCreatePinModal() { document.getElementById('create-pin-modal').classList.add('hidden'); }
 
-        async function submitNewPin() {
-            const p1 = document.getElementById('new-pin-1').value.trim();
-            const p2 = document.getElementById('new-pin-2').value.trim();
-            const err = document.getElementById('pin-create-error');
-            const btn = document.getElementById('btn-save-new-pin');
-            const phone = localStorage.getItem('soka_user_phone');
-
-            if (!p1 || !p2) { err.innerText = "PIN dan Konfirmasi PIN tidak boleh kosong!"; err.classList.remove('hidden'); return; }
-            if (p1 !== p2) { err.innerText = "Konfirmasi PIN tidak cocok dengan PIN utama!"; err.classList.remove('hidden'); return; }
-
-            btn.disabled = true; btn.innerText = "Menyimpan..."; err.classList.add('hidden');
-
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: "setPin", phone: phone, newPin: p1 })
-                });
-                const res = await response.json();
-                if (res.status === "success") {
-                    alert("Akun Anda sukses diamankan dengan PIN baru!");
-                    localStorage.setItem('soka_user_pin_set', "true"); // Update status lokal
-                    closeCreatePinModal(); checkLoginStatus();
-                } else {
-                    err.innerText = res.message; err.classList.remove('hidden');
-                }
-            } catch (e) {
-                console.error(e); alert("Koneksi gagal.");
-            } finally { btn.disabled = false; btn.innerText = "Simpan PIN"; }
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modal.classList.add('opacity-0');
+            modalImg.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                resetAutoScrollTimer();
+            }, 300);
         }
-
-        // --- SISTEM SLIDER KEGIATAN TERAKHIR ---
-        const slider = document.getElementById('gallery-slider'); let isDown = false, startX, scrollLeft, autoScrollInterval, originalWidth = 0;
-        function generateRandomImages() {
-            const chosen = new Set(); while(chosen.size < 5) chosen.add(Math.floor(Math.random() * 50) + 1);
-            Array.from(chosen).forEach((num) => {
-                slider.insertAdjacentHTML('beforeend', `<div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200"><img src="images/foto${String(num).padStart(3, '0')}.webp" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300"></div>`);
-            });
-        }
-        function setupInfiniteScroll() {
-            generateRandomImages(); Array.from(slider.children).forEach(item => slider.appendChild(item.cloneNode(true)));
-            setTimeout(() => { originalWidth = 0; const half = slider.children.length / 2; for (let i = 0; i < half; i++) originalWidth += slider.children[i].offsetWidth + 16; }, 500);
-        }
-        function startAutoScroll() { if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval); function step() { if (!isDown) { slider.scrollLeft += 0.8; if (slider.scrollLeft >= originalWidth) slider.scrollLeft -= originalWidth; } autoScrollInterval = requestAnimationFrame(step); } autoScrollInterval = requestAnimationFrame(step); }
-        slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; cancelAnimationFrame(autoScrollInterval); });
-        slider.addEventListener('mouseleave', () => { if (isDown) { isDown = false; startAutoScroll(); } });
-        slider.addEventListener('mouseup', (e) => { if (Math.abs((e.pageX - slider.offsetLeft) - startX) < 5 && e.target.tagName === 'IMG') openGalleryModal(e.target.src); isDown = false; startAutoScroll(); });
-        slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const walk = ((e.pageX - slider.offsetLeft) - startX) * 1.2; let t = scrollLeft - walk; if (t >= originalWidth) t -= originalWidth; if (t < 0) t += originalWidth; slider.scrollLeft = t; });
-        slider.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; cancelAnimationFrame(autoScrollInterval); });
-        slider.addEventListener('touchend', () => { isDown = false; startAutoScroll(); });
-        slider.addEventListener('touchmove', (e) => { if (!isDown) return; const walk = ((e.touches[0].pageX - slider.offsetLeft) - startX) * 1.2; let t = scrollLeft - walk; if (t >= originalWidth) t -= originalWidth; if (t < 0) t += originalWidth; slider.scrollLeft = t; });
-        window.addEventListener('load', () => { setupInfiniteScroll(); window.addEventListener('resize', () => { originalWidth = 0; const half = slider.children.length / 2; for (let i = 0; i < half; i++) originalWidth += slider.children[i].offsetWidth + 16; }); setTimeout(startAutoScroll, 1000); });
-
-        function openGalleryModal(src) { const m = document.getElementById('gallery-modal'), img = document.getElementById('modal-zoom-img'); img.src = src; m.classList.remove('hidden'); setTimeout(() => { m.classList.remove('opacity-0'); img.classList.remove('scale-95'); }, 10); cancelAnimationFrame(autoScrollInterval); }
-        function closeGalleryModal() { const m = document.getElementById('gallery-modal'), img = document.getElementById('modal-zoom-img'); m.classList.add('opacity-0'); img.classList.add('scale-95'); setTimeout(() => { m.classList.add('hidden'); startAutoScroll(); }, 300); }
 
         // =========================================================================
-        // === OPERASIONAL MINI CHAT BOX (WA STYLE DENGAN OPTIMASI METHOD GET) ===
+        // === OPERASIONAL OPERASI MINI CHAT BOX (WA STYLE) ===
         // =========================================================================
         function toggleChatWindow() {
             const chatWin = document.getElementById('chat-window');
             chatWin.classList.toggle('hidden');
-            if (!chatWin.classList.contains('hidden')) { loadChatMessages(); }
+            if (!chatWin.classList.contains('hidden')) {
+                loadChatMessages();
+            }
         }
 
         function updateCharCount() {
-            const input = document.getElementById('input-chat-msg'), counter = document.getElementById('char-counter');
-            if (input.value.length > 160) input.value = input.value.substring(0, 160); // Frontend strict enforcement
+            const input = document.getElementById('input-chat-msg');
+            const counter = document.getElementById('char-counter');
+            
+            // Penguncian/pemotongan keras jika melebihi 160 huruf
+            if (input.value.length > 160) {
+                input.value = input.value.substring(0, 160);
+            }
             counter.innerText = `${input.value.length}/160`;
         }
 
         function replyToUser(targetName) {
             const input = document.getElementById('input-chat-msg');
-            input.value = `@${targetName} ${input.value}`; input.focus(); updateCharCount();
+            input.value = `@${targetName} ${input.value}`;
+            input.focus();
+            updateCharCount();
         }
 
         async function loadChatMessages() {
@@ -689,12 +1048,17 @@
             body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
             
             try {
-                // OPTIMASI: Menggunakan fetch GET bawaan doGet Apps Script jauh lebih instan 
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, { method: 'GET', mode: 'cors' });
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: "readChat" })
+                });
                 const chats = await response.json();
                 
                 if (!chats || chats.length === 0) {
-                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>"; return;
+                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+                    return;
                 }
                 
                 body.innerHTML = "";
@@ -703,44 +1067,80 @@
                 chats.forEach(c => {
                     const isMe = c.nama === currentUser;
                     const chatBubble = document.createElement('div');
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'}`;
+                    
+                    // Bubble chat styling mirip WhatsApp (Kanan hijau jika kita, kiri putih jika anggota lain)
+                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+                    }`;
+                    
                     chatBubble.innerHTML = `
                         <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>`;
+                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+                    `;
                     body.appendChild(chatBubble);
                 });
+                
+                // Auto scroll ke bawah
                 body.scrollTop = body.scrollHeight;
+                
             } catch (error) {
-                console.error(error); body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+                console.error("Gagal memuat chat:", error);
+                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
             }
         }
 
         async function submitChat() {
-            const input = document.getElementById('input-chat-msg'), btn = document.getElementById('btn-send-chat');
-            const msg = input.value.trim(), myName = localStorage.getItem('soka_user_name');
+            const input = document.getElementById('input-chat-msg');
+            const btn = document.getElementById('btn-send-chat');
+            const msg = input.value.trim();
+            const myName = localStorage.getItem('soka_user_name');
             
+            // Validasi string kosong atau lewat dari 160 huruf sebelum kirim
             if (!msg || msg.length > 160) return;
-            btn.disabled = true; input.disabled = true;
+            
+            btn.disabled = true;
+            input.disabled = true;
             
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: "sendChat", nama: myName, pesan: msg })
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: "sendChat",
+                        nama: myName,
+                        pesan: msg
+                    })
                 });
+                
                 const res = await response.json();
-                if (res.status === "success") { input.value = ""; updateCharCount(); await loadChatMessages(); }
-                else { alert("Gagal mengirim pesan."); }
+                if (res.status === "success") {
+                    input.value = "";
+                    updateCharCount();
+                    // Auto-refresh jendela chat sesuai keinginan
+                    await loadChatMessages(); 
+                } else {
+                    alert("Gagal mengirim pesan ke server.");
+                }
             } catch (e) {
-                console.error(e); alert("Gangguan koneksi.");
-            } finally { btn.disabled = false; input.disabled = false; }
+                console.error(e);
+                alert("Gangguan koneksi internet ke Google Cloud.");
+            } finally {
+                btn.disabled = false;
+                input.disabled = false;
+            }
         }
+      
     </script>
     
      <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
         <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
             <span id="floating-btn-text">Menu Khusus</span>
         </a>
     </div>
+
 </body>
 </html>
