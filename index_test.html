@@ -235,23 +235,23 @@
             </div>
             
             <div class="relative max-w-5xl mx-auto group">
-                <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2 scroll-smooth" style="-ms-overflow-style: none; scrollbar-width: none;">
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="kegiatan1.jpg" alt="Kegiatan 1" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="kegiatan2.jpg" alt="Kegiatan 2" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="kegiatan3.jpg" alt="Kegiatan 3" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="kegiatan4.jpg" alt="Kegiatan 4" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>
-                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
-                        <img src="kegiatan5.jpg" alt="Kegiatan 5" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
-                    </div>
-                </div>
+                <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2" style="-ms-overflow-style: none; scrollbar-width: none;">
+    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+        <img src="kegiatan1.jpg" alt="Kegiatan 1" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+    </div>
+    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+        <img src="kegiatan2.jpg" alt="Kegiatan 2" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+    </div>
+    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+        <img src="kegiatan3.jpg" alt="Kegiatan 3" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+    </div>
+    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+        <img src="kegiatan4.jpg" alt="Kegiatan 4" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+    </div>
+    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+        <img src="kegiatan5.jpg" alt="Kegiatan 5" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+    </div>
+</div>
             </div>
         </div>
     </section>
@@ -825,30 +825,43 @@ function processLogout() {
     }
 }
 
-// === LOGIKA SLIDER KEGIATAN TERAKHIR ===
+// === LOGIKA SLIDER KEGIATAN TERAKHIR (INFINITE ONE-WAY LOOP) ===
         const slider = document.getElementById('gallery-slider');
         let isDown = false;
         let startX;
         let scrollLeft;
         let autoScrollTimer;
         let autoScrollInterval;
-        let scrollDirection = 1; // 1 = kanan, -1 = kiri
+        let originalWidth = 0;
 
-        // Fungsi Auto Scroll Berkelanjutan secara Halus
+        // Prosedur kloning untuk efek Infinite Loop Murni
+        function setupInfiniteScroll() {
+            const items = Array.from(slider.children);
+            if (items.length === 0) return;
+
+            // Hitung lebar total sebelum dikloning
+            // Menggunakan properti gabungan lebar elemen + gap space-x-4 (16px)
+            originalWidth = items.reduce((acc, item) => acc + item.offsetWidth + 16, 0);
+
+            // Kloning semua item sekali dan masukkan ke bagian akhir container
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                slider.appendChild(clone);
+            });
+        }
+
+        // Fungsi Bergerak Satu Arah Secara Halus
         function startAutoScroll() {
             autoScrollInterval = setInterval(() => {
                 if (isDown) return;
-                
-                // Cek batas kanan/kiri untuk membalik arah scroll
-                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
-                if (slider.scrollLeft >= maxScrollLeft - 1) {
-                    scrollDirection = -1;
-                } else if (slider.scrollLeft <= 0) {
-                    scrollDirection = 1;
+
+                slider.scrollLeft += 1; // Ubah nilai ini (misal: 1.5 atau 2) untuk mempercepat pergerakan
+
+                // Jika scroll sudah melewati batas konten asli, reset instan ke koordinat 0
+                if (slider.scrollLeft >= originalWidth) {
+                    slider.scrollLeft = 0;
                 }
-                
-                slider.scrollLeft += scrollDirection * 1; // Sesuaikan angka untuk kecepatan
-            }, 20); // Interval 20ms menghasilkan pergerakan yang mulus
+            }, 16); // ~60fps smooth scrolling
         }
 
         function stopAutoScroll() {
@@ -856,18 +869,16 @@ function processLogout() {
             clearTimeout(autoScrollTimer);
         }
 
-        // Manajemen Jeda Input 2 Detik
         function resetAutoScrollTimer() {
             stopAutoScroll();
             autoScrollTimer = setTimeout(() => {
                 startAutoScroll();
-            }, 2000); // 2 detik terhitung sejak input terakhir selesai
+            }, 2000); // Jalan otomatis kembali setelah 2 detik tanpa input
         }
 
-        // Event Listeners untuk Drag Mouse & Touch Screen
+        // Event Listeners untuk Interaksi Mouse Drag
         slider.addEventListener('mousedown', (e) => {
             isDown = true;
-            slider.classList.remove('scroll-smooth'); // Matikan smooth scroll bawaan saat di-drag agar responsif
             startX = e.pageX - slider.offsetLeft;
             scrollLeft = slider.scrollLeft;
             stopAutoScroll();
@@ -881,8 +892,8 @@ function processLogout() {
         });
 
         slider.addEventListener('mouseup', (e) => {
-            // Deteksi jika hanya klik biasa (bukan drag jauh) untuk memicu zoom
             const endX = e.pageX - slider.offsetLeft;
+            // Jika pergeseran mouse sangat minim, anggap sebagai aksi klik biasa (Picu Zoom Modal)
             if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
                 openGalleryModal(e.target.src);
             }
@@ -894,20 +905,25 @@ function processLogout() {
             if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 1.5; // Kecepatan sensitivitas drag
-            slider.scrollLeft = scrollLeft - walk;
+            const walk = (x - startX) * 1.5;
+            let targetScroll = scrollLeft - walk;
+
+            // Proteksi batas infinity saat di-drag manual oleh pengguna
+            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+            if (targetScroll < 0) targetScroll += originalWidth;
+
+            slider.scrollLeft = targetScroll;
         });
 
-        // Dukungan untuk Layar Sentuh (Mobile/Tablet)
+        // Event Listeners Layar Sentuh Mobile (Touch)
         slider.addEventListener('touchstart', (e) => {
             isDown = true;
-            slider.classList.remove('scroll-smooth');
             startX = e.touches[0].pageX - slider.offsetLeft;
             scrollLeft = slider.scrollLeft;
             stopAutoScroll();
         });
 
-        slider.addEventListener('touchend', (e) => {
+        slider.addEventListener('touchend', () => {
             isDown = false;
             resetAutoScrollTimer();
         });
@@ -916,15 +932,19 @@ function processLogout() {
             if (!isDown) return;
             const x = e.touches[0].pageX - slider.offsetLeft;
             const walk = (x - startX) * 1.5;
-            slider.scrollLeft = scrollLeft - walk;
+            let targetScroll = scrollLeft - walk;
+
+            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+            if (targetScroll < 0) targetScroll += originalWidth;
+
+            slider.scrollLeft = targetScroll;
         });
 
-        // Jalankan auto-scroll pertama kali saat halaman siap
-        slider.addEventListener('DOMContentLoaded', () => {
-            // Menghindari konflik dengan script DOMContentLoaded bawaan Anda, kita inject ke antrean saja
+        // Inisialisasi awal saat dokumen selesai dimuat
+        window.addEventListener('load', () => {
+            setupInfiniteScroll();
+            setTimeout(startAutoScroll, 1000);
         });
-        // Pemicu langsung karena ditaruh di script bawah
-        setTimeout(startAutoScroll, 1000);
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
         function openGalleryModal(imgSrc) {
