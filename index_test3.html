@@ -41,6 +41,15 @@
         .animate-fade-in {
             animation: fadeIn 0.2s ease-out forwards;
         }
+        /* Menyembunyikan scrollbar untuk pengalaman-container */
+#pengalaman-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -261,9 +270,11 @@
                     <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
                 </div>
-            <div id="pengalaman-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat pengalaman anggota...</div>
-            </div>
+            <!-- Menggunakan flex-row, overflow-x-auto untuk scroll horizontal, dan snap-x mandatory -->
+<div id="pengalaman-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+    <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
+</div>
+
         </div>
     </section>
     
@@ -1547,46 +1558,49 @@
                 container.innerHTML = ""; 
 
                 const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
-                activeRows.reverse();
-                const dataDitampilkan = activeRows.slice(0, 3);
+activeRows.reverse();
 
-                if (dataDitampilkan.length === 0) {
-                    container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada cerita pengalaman.</p>`;
-                    return;
-                }
+// KONTROL DATA: Ubah angka 15 ke jumlah yang diinginkan, atau hapus .slice(0, 15) jika ingin menampilkan SEMUA cerita
+const dataDitampilkan = activeRows.slice(0, 15); 
 
-                listPengalamanGlobal = dataDitampilkan;
+if (dataDitampilkan.length === 0) {
+    container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada cerita pengalaman.</p>`;
+    return;
+}
 
-                dataDitampilkan.forEach((row, index) => {
-                    const nama = row[0].trim();
-                    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
-                    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
-                    const isiCerita = row[5] ? row[5].trim() : "";
-                    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+listPengalamanGlobal = dataDitampilkan;
 
-                    const cardHtml = `
-                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
-                            <div>
-                                <div class="flex items-center space-x-4 mb-4">
-                                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
-                                    <div>
-                                        <h3 class="text-base font-bold text-gray-900 leading-tight">${nama}</h3>
-                                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider">${judul}</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
-                                    ${previewCerita}
-                                </p>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end items-center">
-                                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
-                                    Lanjut baca...
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    container.insertAdjacentHTML('beforeend', cardHtml);
-                });
+dataDitampilkan.forEach((row, index) => {
+    const nama = row[0].trim();
+    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
+    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+    const isiCerita = row[5] ? row[5].trim() : "";
+    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+
+    // Menambahkan class 'flex-none', menentukan lebar kartu 'w-[85vw]' di mobile / 'md:w-[350px]' di desktop, dan 'snap-center'
+    const cardHtml = `
+        <div class="flex-none w-[85vw] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+            <div>
+                <div class="flex items-center space-x-4 mb-4">
+                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
+                    <div class="overflow-hidden">
+                        <h3 class="text-base font-bold text-gray-900 leading-tight truncate">${nama}</h3>
+                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider truncate">${judul}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed line-clamp-4">
+                    ${previewCerita}
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end items-center">
+                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                    Lanjut baca...
+                </button>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', cardHtml);
+});
 
             } catch (error) {
                 console.error("Gagal memuat pengalaman:", error);
