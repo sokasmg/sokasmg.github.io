@@ -271,61 +271,87 @@
     </div>
     
     <section id="pengalaman-section" class="py-12 bg-blue-50 border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Cerita Kemenangan</h2>
-            <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
-                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
-                </div>
-            <!-- Menggunakan flex-row, overflow-x-auto untuk scroll horizontal, dan snap-x mandatory -->
-<div id="pengalaman-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
-    <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
-</div>
-
-        </div>
-    </section>
-    
-    <div class="soka-tricolor">
-        <div class="soka-blue"></div>
-        <div class="soka-yellow"></div>
-        <div class="soka-red"></div>
-    </div>
-
-    <section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex items-baseline justify-center space-x-3 mb-2">
-    <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
-        </div>
-            <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
-                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
-                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
-                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
-            </div>
-        	<!-- Menggunakan flex-row, overflow-x-auto untuk scroll horizontal, dan snap-x mandatory -->
-<div id="materi-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
-    <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat materi pelajaran...</div>
-</div>
-        </div>
-    </section>
-
-    <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
-                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
-                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
-                </div>
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION CERITA PENGALAMAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Cerita Kemenangan</h2>
             </div>
             
-            <div id="qa-container" class="space-y-4 max-w-3xl mx-auto">
-                <p class="text-center text-gray-500 italic">Memuat tanya jawab...</p>
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas agar mobile tetap bersih) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('pengalaman-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('pengalaman-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </div>
-    </section>
 
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Cerita Pengalaman -->
+        <div id="pengalaman-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
+        </div>
+    </div>
+</section>
+
+<div class="soka-tricolor">
+    <div class="soka-blue"></div>
+    <div class="soka-yellow"></div>
+    <div class="soka-red"></div>
+</div>
+
+<section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION MATERI PELAJARAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
+            </div>
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('materi-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('materi-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Materi Pelajaran -->
+        <div id="materi-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat materi pelajaran...</div>
+        </div>
+    </div>
+</section>
+    
     <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-12">
@@ -1924,6 +1950,31 @@ document.addEventListener('click', function(e) {
         }
     }, 350); // Beri delay sedikit mengikuti animasi fade-out modal Anda
 });
+/**
+ * Fungsi Universal untuk Menggeser Kontainer Horizontal secara Halus
+ * @param {string} containerId - ID dari elemen HTML yang ingin di-scroll
+ * @param {string} arah - 'kiri' atau 'kanan'
+ */
+function scrollHorisontal(containerId, arah) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Menghitung jarak geser (mengambil lebar kontainer saat ini agar dinamis)
+    // Dibagi 1.2 supaya geserannya pas dan menyisakan sedikit kartu sebelumnya
+    const jarakGeser = container.clientWidth / 1.2; 
+    
+    if (arah === 'kiri') {
+        container.scrollBy({
+            left: -jarakGeser,
+            behavior: 'smooth'
+        });
+    } else if (arah === 'kanan') {
+        container.scrollBy({
+            left: jarakGeser,
+            behavior: 'smooth'
+        });
+    }
+}
 
     </script>
 </body>
