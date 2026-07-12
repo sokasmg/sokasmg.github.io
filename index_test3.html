@@ -273,7 +273,7 @@
         <div class="soka-red"></div>
     </div>
 
-    <section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100">
+    <section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Materi & Pelajaran</h2>
             <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
@@ -948,6 +948,8 @@
             const navGaleriMobile = document.getElementById('nav-galeri-mobile');
             const sectionJadwal = document.getElementById('jadwal');
             const btnCardCreator = document.getElementById('btn-card-creator');
+
+            const sectionMateri = document.getElementById('materi-section');
             
             const greetingDesktop = document.getElementById('user-greeting-desktop');
             const btnAuthDesktop = document.getElementById('btn-auth-desktop');
@@ -969,6 +971,8 @@
                 if (sectionJadwal) sectionJadwal.classList.remove('hidden');
                 if (btnCardCreator) btnCardCreator.classList.remove('hidden');
                 if (floatingChatBtn) floatingChatBtn.classList.remove('hidden'); 
+
+                if (sectionMateri) sectionMateri.classList.remove('hidden');
                 
                 if (greetingDesktop) {
                     greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
