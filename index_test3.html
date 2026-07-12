@@ -266,13 +266,11 @@
             </div>
         </div>
     </section>
-
-    <div class="soka-tricolor">
+        <div class="soka-tricolor">
         <div class="soka-blue"></div>
         <div class="soka-yellow"></div>
         <div class="soka-red"></div>
     </div>
-
     <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
@@ -517,12 +515,12 @@
                 Isi cerita lengkap akan muncul di sini...
             </div>
             <div class="border-t border-gray-150 pt-3 mt-4 flex items-center justify-between">
-                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
-                    A+
-                </button>
-                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
-                    Selesai Membaca
-                </button>
+            <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                A+
+            </button>
+            <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
+                Selesai Membaca
+            </button>
             </div>
         </div>
     </div>
@@ -650,130 +648,130 @@
 
         // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
         async function updateRunningTextAnnouncement() {
-            const marqueeEl = document.getElementById('announcement-marquee');
-            const announcementBar = document.getElementById('member-announcement-bar');
-            if (!marqueeEl || !announcementBar) return;
+    const marqueeEl = document.getElementById('announcement-marquee');
+    const announcementBar = document.getElementById('member-announcement-bar');
+    if (!marqueeEl || !announcementBar) return;
 
-            // Tetap sembunyikan bar pengumuman saat proses memuat agar tidak glitch/patah-patah di HP
-            announcementBar.classList.add('hidden');
+    // Tetap sembunyikan bar pengumuman saat proses memuat agar tidak glitch/patah-patah di HP
+    announcementBar.classList.add('hidden');
 
-            try {
-                const response = await fetch(CSV_URL_JADWAL_BULANAN);
-                const csvData = await response.text();
-                
-                const rows = [];
-                let currentRow = [];
-                let currentField = "";
-                let insideQuote = false;
-                const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    try {
+        const response = await fetch(CSV_URL_JADWAL_BULANAN);
+        const csvData = await response.text();
+        
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+        const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-                for (let i = 0; i < normalizedData.length; i++) {
-                    let char = normalizedData[i];
-                    let nextChar = normalizedData[i + 1];
+        for (let i = 0; i < normalizedData.length; i++) {
+            let char = normalizedData[i];
+            let nextChar = normalizedData[i + 1];
 
-                    if (char === '"') {
-                        if (insideQuote && nextChar === '"') {
-                            currentField += '"'; 
-                            i++;
-                        } else {
-                            insideQuote = !insideQuote; 
-                        }
-                    } else if (char === ',' && !insideQuote) {
-                        currentRow.push(currentField);
-                        currentField = "";
-                    } else if (char === '\n' && !insideQuote) {
-                        currentRow.push(currentField);
-                        rows.push(currentRow);
-                        currentRow = [];
-                        currentField = "";
-                    } else {
-                        currentField += char;
-                    }
-                }
-                if (currentField || currentRow.length > 0) {
-                    currentRow.push(currentField);
-                    rows.push(currentRow);
-                }
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const upcomingEvents = [];
-                // Array nama hari Indonesia
-                const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    if (!row || row.length < 3 || !row[0]) continue;
-
-                    const tglString = row[0].trim(); 
-                    const jamString = row[1] ? row[1].trim() : "";
-                    const acaraString = row[2] ? row[2].trim() : "";
-
-                    if (!acaraString) continue;
-
-                    let eventDate;
-                    if (tglString.includes('-')) {
-                        eventDate = new Date(tglString);
-                    } else if (tglString.includes('/')) {
-                        const parts = tglString.split('/');
-                        eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
-                    } else {
-                        eventDate = new Date(tglString);
-                    }
-
-                    if (isNaN(eventDate.getTime())) continue; 
-                    
-                    // Dapatkan nama hari sebelum jamnya di-reset ke 00:00
-                    const hariTeks = namaHari[eventDate.getDay()];
-                    
-                    eventDate.setHours(0, 0, 0, 0);
-
-                    if (eventDate >= today) {
-                        upcomingEvents.push({
-                            tanggalRaw: eventDate,
-                            hari: hariTeks,
-                            tanggalTeks: tglString,
-                            jam: jamString,
-                            acara: acaraString
-                        });
-                    }
-                }
-
-                // Urutkan jadwal secara bersih berdasarkan tanggal terdekat
-                upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
-
-                // Satukan data setelah semuanya lengkap 100%
-                if (upcomingEvents.length > 0) {
-                    const teksPengumuman = upcomingEvents.map(ev => {
-                        const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
-                        return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
-                    }).join("     |     ");
-
-                    // Masukkan teks ke dalam marquee
-                    marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
-                    
-                    // Tampilkan bar pengumuman hanya ketika data SUDAH LENGKAP & SIAP DI-SCROLL
-                    const savedName = localStorage.getItem('soka_user_name');
-                    if (savedName) {
-                        announcementBar.classList.remove('hidden');
-                        
-                        // Trik Khusus HP: Memaksa browser me-render ulang animasi marquee agar tidak macet
-                        marqueeEl.stop();
-                        marqueeEl.start();
-                    }
+            if (char === '"') {
+                if (insideQuote && nextChar === '"') {
+                    currentField += '"'; 
+                    i++;
                 } else {
-                    marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
-                    if (localStorage.getItem('soka_user_name')) {
-                        announcementBar.classList.remove('hidden');
-                    }
+                    insideQuote = !insideQuote; 
                 }
-
-            } catch (error) {
-                console.error("Gagal memuat teks berjalan:", error);
-                marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
             }
         }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingEvents = [];
+        // Array nama hari Indonesia
+        const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length < 3 || !row[0]) continue;
+
+            const tglString = row[0].trim(); 
+            const jamString = row[1] ? row[1].trim() : "";
+            const acaraString = row[2] ? row[2].trim() : "";
+
+            if (!acaraString) continue;
+
+            let eventDate;
+            if (tglString.includes('-')) {
+                eventDate = new Date(tglString);
+            } else if (tglString.includes('/')) {
+                const parts = tglString.split('/');
+                eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            } else {
+                eventDate = new Date(tglString);
+            }
+
+            if (isNaN(eventDate.getTime())) continue; 
+            
+            // Dapatkan nama hari sebelum jamnya di-reset ke 00:00
+            const hariTeks = namaHari[eventDate.getDay()];
+            
+            eventDate.setHours(0, 0, 0, 0);
+
+            if (eventDate >= today) {
+                upcomingEvents.push({
+                    tanggalRaw: eventDate,
+                    hari: hariTeks,
+                    tanggalTeks: tglString,
+                    jam: jamString,
+                    acara: acaraString
+                });
+            }
+        }
+
+        // Urutkan jadwal secara bersih berdasarkan tanggal terdekat
+        upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
+
+        // Satukan data setelah semuanya lengkap 100%
+        if (upcomingEvents.length > 0) {
+            const teksPengumuman = upcomingEvents.map(ev => {
+                const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
+                return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+            }).join("     |     ");
+
+            // Masukkan teks ke dalam marquee
+            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
+            
+            // Tampilkan bar pengumuman hanya ketika data SUDAH LENGKAP & SIAP DI-SCROLL
+            const savedName = localStorage.getItem('soka_user_name');
+            if (savedName) {
+                announcementBar.classList.remove('hidden');
+                
+                // Trik Khusus HP: Memaksa browser me-render ulang animasi marquee agar tidak macet
+                marqueeEl.stop();
+                marqueeEl.start();
+            }
+        } else {
+            marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+            if (localStorage.getItem('soka_user_name')) {
+                announcementBar.classList.remove('hidden');
+            }
+        }
+
+    } catch (error) {
+        console.error("Gagal memuat teks berjalan:", error);
+        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
+    }
+}
 
         function renderQASearch() {
             const container = document.getElementById('qa-container');
@@ -909,16 +907,12 @@
             
             if (bodyEl.classList.contains('text-large')) {
                 bodyEl.classList.remove('text-large');
-                if(btnToggle) {
-                    btnToggle.innerText = "A+";
-                    btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
-                }
+                btnToggle.innerText = "A+";
+                btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
             } else {
                 bodyEl.classList.add('text-large');
-                if(btnToggle) {
-                    btnToggle.innerText = "A-";
-                    btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
-                }
+                btnToggle.innerText = "A-";
+                btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
             }
         }
 
@@ -1315,7 +1309,7 @@
             setupInfiniteScroll();
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
-            loadPengalamanAnggota(); 
+            loadPengalamanAnggota(); // Menjalankan fungsi penarik cerita
         });
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
@@ -1344,12 +1338,17 @@
 
         // === MINI CHAT BOX OPERASIONAL ===
         function toggleChatWindow() {
-            const chatWin = document.getElementById('chat-window');
-            chatWin.classList.toggle('hidden');
-            if (!chatWin.classList.contains('hidden')) {
-                loadChatMessages();
-            }
-        }
+    const chatWin = document.getElementById('chat-window');
+    chatWin.classList.toggle('hidden');
+    if (!chatWin.classList.contains('hidden')) {
+        loadChatMessages();
+        // Opsional: Memastikan scroll ulang setelah window muncul
+        setTimeout(() => {
+            const body = document.getElementById('chat-body');
+            if(body) body.scrollTop = body.scrollHeight;
+        }, 200);
+    }
+}
 
         function updateCharCount() {
             const input = document.getElementById('input-chat-msg');
@@ -1368,123 +1367,142 @@
         }
 
         async function loadChatMessages() {
-            const body = document.getElementById('chat-body');
-            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
-            
-            try {
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-                const chats = await response.json();
-                
-                if (!chats || chats.length === 0) {
-                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
-                    return;
-                }
-                
-                body.innerHTML = "";
-                const currentUser = localStorage.getItem('soka_user_name');
-                
-                chats.forEach(c => {
-                    const isMe = c.nama === currentUser;
-                    const chatBubble = document.createElement('div');
-                    
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-                    }`;
-                    
-                    let waktuTampil = "";
-                    if (c.timestamp) {
-                        const dateObj = new Date(c.timestamp);
-                        const jam = String(dateObj.getHours()).padStart(2, '0');
-                        const menit = String(dateObj.getMinutes()).padStart(2, '0');
-                        waktuTampil = `${jam}:${menit}`;
-                    }
-                    
-                    chatBubble.innerHTML = `
-                        <div class="flex justify-between items-center gap-4 mb-0.5">
-                            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
-                            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
-                        </div>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-                    `;
-                    body.appendChild(chatBubble);
-                });
-                
-                body.scrollTop = body.scrollHeight;
-                
-            } catch (error) {
-                console.error("Gagal memuat chat:", error);
-                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
-            }
+    const body = document.getElementById('chat-body');
+    body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+    
+    try {
+        // Jalur cepat: Mengubah POST menjadi GET dengan query parameter (?action=readChat)
+        // Ini akan memicu fungsi doGet di GAS yang tanpa getLastRow()
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
+            method: 'GET',
+            mode: 'cors'
+        });
+        const chats = await response.json();
+        
+        if (!chats || chats.length === 0) {
+            body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+            return;
         }
+        
+        body.innerHTML = "";
+        const currentUser = localStorage.getItem('soka_user_name');
+        
+        chats.forEach(c => {
+            const isMe = c.nama === currentUser;
+            const chatBubble = document.createElement('div');
+            
+            chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+            }`;
+            
+            let waktuTampil = "";
+            if (c.timestamp) {
+                const dateObj = new Date(c.timestamp);
+                const jam = String(dateObj.getHours()).padStart(2, '0');
+                const menit = String(dateObj.getMinutes()).padStart(2, '0');
+                waktuTampil = `${jam}:${menit}`;
+            }
+            
+            chatBubble.innerHTML = `
+                <div class="flex justify-between items-center gap-4 mb-0.5">
+                    <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
+                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
+                </div>
+                <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+            `;
+            body.appendChild(chatBubble);
+        });
+        
+        body.scrollTop = body.scrollHeight;
+        
+    } catch (error) {
+        console.error("Gagal memuat chat:", error);
+        body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+    }
+}
 
         async function submitChat() {
-            const input = document.getElementById('input-chat-msg');
-            const msg = input.value.trim();
-            const myName = localStorage.getItem('soka_user_name') || "Anggota";
+    const input = document.getElementById('input-chat-msg');
+    const btn = document.getElementById('btn-send-chat');
+    const msg = input.value.trim();
+    const myName = localStorage.getItem('soka_user_name') || "Anggota";
+    
+    // Validasi panjang karakter sesuai aturan backend Anda
+    if (!msg || msg.length > 160) return;
+    
+    // 1. Dapatkan kontainer body tempat balon chat menempel
+    const body = document.getElementById('chat-body');
+    
+    // 2. REKAYASA INSTAN: Buat balon chat tiruan di layar secara lokal
+    const fakeBubble = document.createElement('div');
+    // Desain disamakan dengan loadChatMessages (selalu bg-green-100 karena ini pesan kita sendiri)
+    fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity duration-300";
+    
+    const sekarang = new Date();
+    const jam = String(sekarang.getHours()).padStart(2, '0');
+    const menit = String(sekarang.getMinutes()).padStart(2, '0');
+    const waktuTampil = `${jam}:${menit}`;
+    
+    fakeBubble.innerHTML = `
+        <div class="flex justify-between items-center gap-4 mb-0.5">
+            <span class="font-black text-[10px] text-blue-900 block">${myName}</span>
+            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil} <span class="status-icon">🕒</span></span>
+        </div>
+        <p class="leading-relaxed break-words font-medium text-gray-700">${msg}</p>
+    `;
+    
+    // Tempelkan langsung ke layar dan scroll paling bawah detik itu juga
+    body.appendChild(fakeBubble);
+    body.scrollTop = body.scrollHeight;
+    
+    // Langsung kosongkan input & reset hitungan karakter tanpa menunggu server
+    input.value = "";
+    if (typeof updateCharCount === "function") updateCharCount();
+    
+    // Biarkan user bisa langsung mengetik pesan berikutnya tanpa memblokir input
+    // (Kita sengaja tidak me-disable input dan tombol agar terasa luwes seperti WhatsApp)
+    
+    try {
+        // 3. PROSES DI LATAR BELAKANG (Kirim ke GAS)
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+                action: "sendChat",
+                nama: myName,
+                pesan: msg
+            })
+        });
+        
+        const res = await response.json();
+        if (res.status === "success") {
+            // Jika sukses, hilangkan efek pudar dan ubah ikon jam pasir menjadi centang
+            fakeBubble.classList.remove('opacity-70');
+            const iconSpan = fakeBubble.querySelector('.status-icon');
+            if (iconSpan) iconSpan.innerText = "✓";
             
-            if (!msg || msg.length > 160) return;
-            
-            const body = document.getElementById('chat-body');
-            const fakeBubble = document.createElement('div');
-            fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity duration-300";
-            
-            const sekarang = new Date();
-            const jam = String(sekarang.getHours()).padStart(2, '0');
-            const menit = String(sekarang.getMinutes()).padStart(2, '0');
-            const waktuTampil = `${jam}:${menit}`;
-            
-            fakeBubble.innerHTML = `
-                <div class="flex justify-between items-center gap-4 mb-0.5">
-                    <span class="font-black text-[10px] text-blue-900 block">${myName}</span>
-                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil} <span class="status-icon">🕒</span></span>
-                </div>
-                <p class="leading-relaxed break-words font-medium text-gray-700">${msg}</p>
-            `;
-            
-            body.appendChild(fakeBubble);
-            body.scrollTop = body.scrollHeight;
-            
-            input.value = "";
-            if (typeof updateCharCount === "function") updateCharCount();
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: "sendChat",
-                        nama: myName,
-                        pesan: msg
-                    })
-                });
-                
-                const res = await response.json();
-                if (res.status === "success") {
-                    fakeBubble.classList.remove('opacity-70');
-                    const iconSpan = fakeBubble.querySelector('.status-icon');
-                    if (iconSpan) iconSpan.innerText = "✓";
-                    await loadChatMessages(); 
-                } else {
-                    throw new Error("Gagal menyimpan di server");
-                }
-            } catch (e) {
-                console.error(e);
-                fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-red-100 text-red-800 ml-auto rounded-tr-none border border-red-300 text-left";
-                const iconSpan = fakeBubble.querySelector('.status-icon');
-                if (iconSpan) iconSpan.innerText = "❌";
-                
-                input.value = msg;
-                if (typeof updateCharCount === "function") updateCharCount();
-                
-                alert("Gagal mengirim pesan. Silakan periksa koneksi internet Anda.");
-            }
+            // Ambil data chat asli secara diam-diam untuk memastikan timeline sinkron
+            await loadChatMessages(); 
+        } else {
+            throw new Error("Gagal menyimpan di server");
         }
+    } catch (e) {
+        console.error(e);
+        // Jika gagal, ubah warna balon tiruan menjadi merah tanda error
+        fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-red-100 text-red-800 ml-auto rounded-tr-none border border-red-300 text-left";
+        const iconSpan = fakeBubble.querySelector('.status-icon');
+        if (iconSpan) iconSpan.innerText = "❌";
+        
+        // Kembalikan teks yang gagal ke input agar user tidak capek mengetik ulang jika ingin mencoba lagi
+        input.value = msg;
+        if (typeof updateCharCount === "function") updateCharCount();
+        
+        alert("Gagal mengirim pesan. Silakan periksa koneksi internet Anda.");
+    }
+}
 
-        // Variabel global penampung data pengalaman anggota
+// Buat variabel global di atas fungsi untuk menyimpan data sementara
         let listPengalamanGlobal = [];
 
         // ==================== KODE PENGALAMAN ANGGOTA (FIX MODAL) ====================
@@ -1493,6 +1511,7 @@
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
+                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel
                 const rows = [];
                 let currentRow = [];
                 let currentField = "";
@@ -1529,10 +1548,9 @@
                 }
 
                 const container = document.getElementById('pengalaman-container');
-                if(!container) return;
                 container.innerHTML = ""; 
 
-                // Lewati header, filter baris valid yang memiliki isi cerita (kolom index 5)
+                // Lewati header, filter baris valid
                 const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
                 
                 // Balik urutan agar data terbaru di atas
@@ -1588,7 +1606,7 @@
             }
         }
 
-        // Fungsi jembatan baru untuk menangani klik agar bebas dari error "broken string" akibat spasi/tanda kutip
+        // Fungsi jembatan baru untuk menangani klik agar bebas dari error "broken string"
         function panggilModalLewatIndex(index) {
             const data = listPengalamanGlobal[index];
             if (data) {
@@ -1598,18 +1616,21 @@
                 const fotoModal2 = data[4] ? data[4].trim() : "";
                 const isiCerita = data[5] ? data[5].trim() : "";
 
-                bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
+                // Panggil fungsi modal asli bawaan web Anda
+                if (typeof bukaDetailPengalaman === "function") {
+                    bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
+                } else {
+                    console.error("Fungsi bukaDetailPengalaman tidak ditemukan!");
+                }
             }
         }
 
-        // Fungsi Membuka Modal Detail Cerita (Mendukung Grid Foto Tambahan)
+        // Fungsi Membuka Modal Detail Cerita (Sudah Mendukung Grid Foto Tambahan)
         function bukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2) {
             const modal = document.getElementById('modal-pengalaman');
             const modalNama = document.getElementById('modal-pengalaman-nama');
             const modalCerita = document.getElementById('modal-pengalaman-cerita');
             
-            if(!modal || !modalNama || !modalCerita) return;
-
             modalNama.innerHTML = `<div>
                 <span class="text-xl font-black text-[#002F6C]">Cerita Kemenangan: ${nama}</span>
                 <span class="block text-xs uppercase text-[#F9A825] tracking-widest font-bold font-sans">${judul}</span>
@@ -1643,7 +1664,6 @@
         // Fungsi Menutup Modal Detail Cerita
         function tutupDetailPengalaman() {
             const modal = document.getElementById('modal-pengalaman');
-            if(!modal) return;
             modal.classList.add('opacity-0');
             modal.querySelector('div').classList.add('scale-95');
             setTimeout(() => {
