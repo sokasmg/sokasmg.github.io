@@ -1362,62 +1362,50 @@
         }
 
         async function loadChatMessages() {
-            const body = document.getElementById('chat-body');
-            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: "readChat" })
-                });
-                const chats = await response.json();
-                
-                if (!chats || chats.length === 0) {
-                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
-                    return;
-                }
-                
-                body.innerHTML = "";
-                const currentUser = localStorage.getItem('soka_user_name');
-                
-                chats.forEach(c => {
-                    const isMe = c.nama === currentUser;
-                    const chatBubble = document.createElement('div');
-                    
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-                    }`;
-                    
-                    let waktuTampil = "";
-                    if (c.timestamp) {
-                        const dateObj = new Date(c.timestamp);
-                        const jam = String(dateObj.getHours()).padStart(2, '0');
-                        const menit = String(dateObj.getMinutes()).padStart(2, '0');
-                        waktuTampil = `${jam}:${menit}`;
-                    }
-                    
-                    chatBubble.innerHTML = `
-                        <div class="flex justify-between items-center gap-4 mb-0.5">
-                            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
-                            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
-                        </div>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-                    `;
-                        body.appendChild(chatBubble);
-});
-
-// Memberikan jeda 50 milidetik agar render HTML selesai 100% baru di-scroll
-setTimeout(() => {
-    body.scrollTop = body.scrollHeight;
-}, 500); 
-                
-            } catch (error) {
-                console.error("Gagal memuat chat:", error);
-                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
-            }
+    const body = document.getElementById('chat-body');
+    // Supaya user tidak merasa digantung, loading/skeleton tetap dipasang
+    body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+    
+    try {
+        // MENGUBAH DARI POST MENJADI GET
+        // Kita menyelipkan parameter ?action=readChat di ujung URL
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
+            method: 'GET',
+            mode: 'cors'
+        });
+        const chats = await response.json();
+        
+        if (!chats || chats.length === 0) {
+            body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+            return;
         }
+        
+        body.innerHTML = "";
+        const currentUser = localStorage.getItem('soka_user_name');
+        
+        chats.forEach(c => {
+            const isMe = c.nama === currentUser;
+            const chatBubble = document.createElement('div');
+            
+            chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+            }`;
+            
+            chatBubble.innerHTML = `
+                <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block mb-0.5">${c.nama}</span>
+                <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+            `;
+            body.appendChild(chatBubble);
+        });
+        
+        // Auto-scroll ke chat paling bawah setelah berhasil dimuat
+        body.scrollTop = body.scrollHeight;
+        
+    </div> catch (error) {
+        console.error("Gagal memuat chat:", error);
+        body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+    }
+}
 
         async function submitChat() {
             const input = document.getElementById('input-chat-msg');
