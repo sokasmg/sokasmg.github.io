@@ -49,6 +49,15 @@
 #pengalaman-container::-webkit-scrollbar { 
     display: none;  /* Safari dan Chrome */
 }
+        /* Menyembunyikan scrollbar untuk pengalaman dan materi */
+#pengalaman-container, #materi-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar, #materi-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -285,15 +294,18 @@
 
     <section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Materi & Pelajaran</h2>
+            <div class="flex items-baseline justify-center space-x-3 mb-2">
+    <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
+        </div>
             <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
                 <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                 <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
             </div>
-        	<div id="materi-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat materi...</div>
-        	</div>
+        	<!-- Menggunakan flex-row, overflow-x-auto untuk scroll horizontal, dan snap-x mandatory -->
+<div id="materi-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+    <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat materi pelajaran...</div>
+</div>
         </div>
     </section>
 
@@ -1578,7 +1590,7 @@ dataDitampilkan.forEach((row, index) => {
 
     // Menambahkan class 'flex-none', menentukan lebar kartu 'w-[85vw]' di mobile / 'md:w-[350px]' di desktop, dan 'snap-center'
     const cardHtml = `
-        <div class="flex-none w-[85vw] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+        <div class="flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
             <div>
                 <div class="flex items-center space-x-4 mb-4">
                     <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
@@ -1600,7 +1612,19 @@ dataDitampilkan.forEach((row, index) => {
     `;
     container.insertAdjacentHTML('beforeend', cardHtml);
 });
-
+setTimeout(() => {
+                // Beri jeda 1 detik setelah data dimuat
+                if (container.scrollLeft === 0) {
+                    // Hanya animasi jika user belum scroll
+                    // Scroll kontainer ke kanan sejauh 60px
+                    container.scroll({ left: 60, behavior: 'smooth' });
+                    
+                    setTimeout(() => {
+                        // Kembali ke kiri setelah 400ms
+                        container.scroll({ left: 0, behavior: 'smooth' });
+                    }, 400); 
+                }
+            }, 1000); // 1 detik setelah dimuat agar tidak mengganggu load awal
             } catch (error) {
                 console.error("Gagal memuat pengalaman:", error);
                 document.getElementById('pengalaman-container').innerHTML = 
@@ -1713,7 +1737,7 @@ dataDitampilkan.forEach((row, index) => {
         const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "");
         
         if (activeRows.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada materi pelajaran saat ini.</p>`;
+            container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada materi pelajaran saat ini.</p>`;
             return;
         }
 
@@ -1730,7 +1754,9 @@ dataDitampilkan.forEach((row, index) => {
             const safeIsi = isi.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
 
             const card = document.createElement('div');
-            card.className = "bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
+            
+            // --- BAGIAN INI YANG DIUBAH (Ditambah flex-none, lebar terpotong 75vw, dan snap-center) ---
+            card.className = "flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
             
             card.innerHTML = `
                 <div class="p-5 flex-1" onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')">
@@ -1755,16 +1781,25 @@ dataDitampilkan.forEach((row, index) => {
             container.appendChild(card);
         });
 
+        // --- TAMBAHAN BARU: ANIMASI INTIP OTOMATIS SAAT BERHASIL LOAD ---
+        setTimeout(() => {
+            if (container.scrollLeft === 0) {
+                container.scroll({ left: 60, behavior: 'smooth' });
+                setTimeout(() => {
+                    container.scroll({ left: 0, behavior: 'smooth' });
+                }, 400);
+            }
+        }, 1200); // Dijeda 1.2 detik agar tidak barengan dengan section pengalaman
+
     } catch (error) {
         console.error("Error Materi Section:", error);
         container.innerHTML = `
-            <div class="col-span-full text-center py-6 text-red-600 text-sm">
+            <div class="w-full text-center py-6 text-red-600 text-sm">
                 ⚠️ Gagal memuat Materi & Pelajaran.
             </div>
         `;
     }
 }
-
         function openMateriModal(kategori, judul, isi) {
             const modal = document.getElementById("materiModal");
             if (!modal) return;
