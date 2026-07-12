@@ -541,24 +541,6 @@
 
     <script>
 
-		// MODAL MATERI & PELAJARAN
-		<div id="materiModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
-    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh]">
-        <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <span id="modalKategori" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">Kategori</span>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors text-2xl font-bold focus:outline-none">&times;</button>
-        </div>
-        <div class="p-6 overflow-y-auto space-y-4">
-            <h3 id="modalJudul" class="font-bold text-slate-800 text-2xl leading-tight">Judul Materi</h3>
-            <p id="modalIsi" class="text-slate-600 text-base leading-relaxed text-justify whitespace-pre-line">Isi materi lengkap akan muncul di sini...</p>
-        </div>
-        <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
-            <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-semibold focus:outline-none">
-                Tutup
-            </button>
-        </div>
-    </div>
-</div>
 		
         // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
         document.addEventListener('touchmove', function (event) {
@@ -1748,8 +1730,8 @@
                 </div>
                 <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
                     <button onclick="openMateriModal(\`${kategori.replace(/`/g, '\\`').replace(/"/g, '&quot;')}\`, \`${judul.replace(/`/g, '\\`').replace(/"/g, '&quot;')}\`, \`${isi.replace(/`/g, '\\`').replace(/"/g, '&quot;')}\`)" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
-                        Lanjut baca...
-                    </button>
+        Lanjut baca...
+    </button>
                 </div>
             `;
             container.appendChild(card);
@@ -1796,6 +1778,54 @@ window.onclick = function(event) {
         closeModal();
     }
 }
+		// --- TARUH INI DI DALAM TAG <script> DI BAGIAN PALING BAWAH ---
+
+function openMateriModal(kategori, judul, isi) {
+    const modal = document.getElementById("materiModal");
+    if (!modal) return;
+    
+    document.getElementById("modalKategori").innerText = kategori;
+    document.getElementById("modalJudul").innerText = judul;
+    document.getElementById("modalIsi").innerText = isi;
+    
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+function closeModalMateri() {
+    const modal = document.getElementById("materiModal");
+    if (!modal) return;
+    
+    modal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+}
+
+// Menutup modal secara aman jika area luar jendela diklik tanpa mengganggu modul chat/lainnya
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById("materiModal");
+    if (modal && event.target === modal) {
+        closeModalMateri();
+    }
+});
+
     </script>
+		// MODAL MATERI & PELAJARAN
+		<div id="materiModal" class="fixed inset-0 z-[250] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <span id="modalKategori" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">Kategori</span>
+                <button onclick="closeMateriModal()" class="text-slate-400 hover:text-slate-600 transition-colors text-2xl font-bold focus:outline-none">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <h3 id="modalJudul" class="font-bold text-slate-800 text-2xl leading-tight">Judul Materi</h3>
+                <p id="modalIsi" class="text-slate-600 text-base leading-relaxed text-justify whitespace-pre-line">Isi materi lengkap akan muncul di sini...</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeMateriModal()" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-semibold focus:outline-none">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
