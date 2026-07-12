@@ -551,9 +551,12 @@
                 <h3 id="modalJudul" class="font-bold text-slate-800 text-2xl leading-tight">Judul Materi</h3>
                 <p id="modalIsi" class="text-slate-600 text-base leading-relaxed text-justify whitespace-pre-line">Isi materi lengkap akan muncul di sini...</p>
             </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                    A+
+                </button>
                 <button onclick="closeModalMateri()" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-semibold focus:outline-none">
-                    Tutup
+                    Selesai membaca
                 </button>
             </div>
         </div>
@@ -1575,7 +1578,7 @@
                                     ${previewCerita}
                                 </p>
                             </div>
-                            <div class="mt-4 pt-3 justify-end border-t border-gray-100">
+                            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end items-center">
                                 <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
                                     Lanjut baca...
                                 </button>
