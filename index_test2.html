@@ -1405,10 +1405,13 @@
                         </div>
                         <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
                     `;
-                    body.appendChild(chatBubble);
-                });
-                
-                body.scrollTop = body.scrollHeight;
+                        body.appendChild(chatBubble);
+});
+
+// Memberikan jeda 50 milidetik agar render HTML selesai 100% baru di-scroll
+setTimeout(() => {
+    body.scrollTop = body.scrollHeight;
+}, 500); 
                 
             } catch (error) {
                 console.error("Gagal memuat chat:", error);
