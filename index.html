@@ -41,15 +41,6 @@
         .animate-fade-in {
             animation: fadeIn 0.2s ease-out forwards;
         }
-        /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-/* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
-.scrollbar-hide {
-    -ms-overflow-style: none;  /* IE dan Edge */
-    scrollbar-width: none;  /* Firefox */
-}
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -270,9 +261,9 @@
                     <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
                     <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
                 </div>
-            <div id="pengalaman-container" class="flex overflow-x-auto gap-6 scrollbar-hide snap-x snap-mandatory py-4 px-2 scroll-smooth">
-    <div class="text-center text-gray-500 flex-shrink-0 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
-</div>
+            <div id="pengalaman-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat pengalaman anggota...</div>
+            </div>
         </div>
     </section>
     
@@ -1557,7 +1548,7 @@
 
                 const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
                 activeRows.reverse();
-                const dataDitampilkan = activeRows;
+                const dataDitampilkan = activeRows.slice(0, 3);
 
                 if (dataDitampilkan.length === 0) {
                     container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada cerita pengalaman.</p>`;
@@ -1574,8 +1565,7 @@
                     const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
 
                     const cardHtml = `
-                        const cardHtml = `
-    <div class="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[380px] bg-white rounded-2xl shadow-md p-6 snap-start border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
                             <div>
                                 <div class="flex items-center space-x-4 mb-4">
                                     <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
