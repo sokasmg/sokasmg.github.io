@@ -561,6 +561,7 @@
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
+        const CSV_URL_JADWAL_BULANAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv";
         
         // PUSAT KONTROL URL WEB APP
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
@@ -646,25 +647,115 @@
         }
 
         // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
-        function updateRunningTextAnnouncement() {
-            const marqueeEl = document.getElementById('announcement-marquee');
-            if (!marqueeEl) return;
+        async function updateRunningTextAnnouncement() {
+    const marqueeEl = document.getElementById('announcement-marquee');
+    if (!marqueeEl) return;
 
-            if (quoteList && quoteList.length > 0) {
-                const today = new Date();
-                const currentDay = today.getDate();
-                const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
-                const quoteIndex = dateSeed % quoteList.length;
-                
-                const pengumumanHariIni = quoteList[quoteIndex].text;
-                const penutur = quoteList[quoteIndex].author;
-                
-                // Set isi teks berjalan
-                marqueeEl.innerText = `Jadwal & Pengingat Penting: "${pengumumanHariIni}" — Persembahan: ${penutur}. Tetap semangat melaksanakan revolusi manusia!`;
+    marqueeEl.innerText = "Memuat pengumuman jadwal terbaru...";
+
+    try {
+        const response = await fetch(CSV_URL_JADWAL_BULANAN);
+        const csvData = await response.text();
+        
+        // Parser CSV untuk struktur: Tanggal, Jam, Acara
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+        const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+        for (let i = 0; i < normalizedData.length; i++) {
+            let char = normalizedData[i];
+            let nextChar = normalizedData[i + 1];
+
+            if (char === '"') {
+                if (insideQuote && nextChar === '"') {
+                    currentField += '"'; 
+                    i++;
+                } else {
+                    insideQuote = !insideQuote; 
+                }
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
             } else {
-                marqueeEl.innerText = "Selamat datang di halaman internal Anggota Soka Gakkai Semarang. Silakan periksa tab jadwal berkala di bawah untuk informasi konsolidasi terupdate.";
+                currentField += char;
             }
         }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        // Ambil tanggal hari ini (set waktu ke 00:00:00 untuk perbandingan tanggal murni)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingEvents = [];
+
+        // Iterasi dimulai dari indeks 1 untuk melewati Header (Tanggal, Jam, Acara)
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length < 3 || !row[0]) continue;
+
+            const tglString = row[0].trim(); // Format di Sheet disarankan: YYYY-MM-DD atau DD/MM/YYYY
+            const jamString = row[1] ? row[1].trim() : "";
+            const acaraString = row[2] ? row[2].trim() : "";
+
+            if (!acaraString) continue;
+
+            // Proses konversi string tanggal Google Sheet ke objek Date JavaScript
+            let eventDate;
+            if (tglString.includes('-')) {
+                // Menangani format YYYY-MM-DD
+                eventDate = new Date(tglString);
+            } else if (tglString.includes('/')) {
+                // Menangani format DD/MM/YYYY
+                const parts = tglString.split('/');
+                eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            } else {
+                eventDate = new Date(tglString);
+            }
+
+            if (isNaN(eventDate.getTime())) continue; // Lewati jika format tanggal rusak
+            eventDate.setHours(0, 0, 0, 0);
+
+            // Validasi: Tampilkan jika tanggal acara LEBIH BESAR ATAU SAMA DENGAN hari ini (Belum lewat)
+            if (eventDate >= today) {
+                upcomingEvents.push({
+                    tanggalRaw: eventDate,
+                    tanggalTeks: tglString,
+                    jam: jamString,
+                    acara: acaraString
+                });
+            }
+        }
+
+        // Urutkan jadwal dari yang paling dekat
+        upcomingEvents.sort((a, b) => a.tanggalRaw - b.timezone - b.tanggalRaw);
+
+        // Satukan semua acara yang valid menjadi satu teks berjalan panjang
+        if (upcomingEvents.length > 0) {
+            const teksPengumuman = upcomingEvents.map(ev => {
+                const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
+                return `📢 [${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+            }).join("   |   ");
+
+            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}   |   Tetap semangat melaksanakan revolusi manusia!`;
+        } else {
+            marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+        }
+
+    } catch (error) {
+        console.error("Gagal memuat teks berjalan:", error);
+        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud. Silakan segarkan halaman.";
+    }
+}
 
         function renderQASearch() {
             const container = document.getElementById('qa-container');
