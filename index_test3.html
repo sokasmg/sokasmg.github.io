@@ -271,6 +271,26 @@
         <div class="soka-yellow"></div>
         <div class="soka-red"></div>
     </div>
+    <!-- SECTION MATERI & PELAJARAN (PERSIS CERITA KEMENANGAN) -->
+<section id="materi-section" class="py-8 bg-white border-b-4 soka-tricolor">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                📖 Materi & Pelajaran
+            </h2>
+        </div>
+        
+        <!-- Grid Kontainer (Identik dengan cerita kemenangan) -->
+        <div id="materi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading State -->
+            <div class="animate-pulse bg-slate-100 h-48 rounded-xl p-4 border border-slate-200">
+                <div class="h-4 bg-slate-300 rounded w-1/4 mb-4"></div>
+                <div class="h-6 bg-slate-300 rounded w-3/4 mb-2"></div>
+                <div class="h-4 bg-slate-300 rounded w-full mb-2"></div>
+            </div>
+        </div>
+    </div>
+</section>
     <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
@@ -558,6 +578,7 @@
 
         // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+        const CSV_URL_MATERI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=903124982&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
@@ -1310,6 +1331,7 @@
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
             loadPengalamanAnggota(); // Menjalankan fungsi penarik cerita
+            fetchMateri(); 
         });
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
@@ -1672,6 +1694,102 @@
                 modal.classList.add('hidden');
             }, 300);
         }
+        async function fetchMateri() {
+    const container = document.getElementById('materi-container');
+    try {
+        const response = await fetch(CSV_URL_MATERI);
+        if (!response.ok) throw new Error("Gagal memuat data");
+        
+        const csvText = await response.text();
+        const rows = parseCSV(csvText); 
+        
+        container.innerHTML = '';
+        
+        if (rows.length === 0) {
+            container.innerHTML = `<p class="text-slate-500 text-center col-span-full py-8">Belum ada materi tersedia.</p>`;
+            return;
+        }
+
+        rows.forEach(row => {
+            // Sesuai screenshot: Kolom 0 = judul, Kolom 1 = kategori, Kolom 2 = isi
+            if (row.length < 2 || !row[0]) return; 
+            
+            const judul = row[0];
+            const kategori = row[1] || 'Umum';
+            const isi = row[2] || '';
+
+            // Membuat Card yang persis plek dengan Cerita Kemenangan
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
+            
+            // Mengamankan teks dari bug tanda petik saat dilempar ke fungsi modal
+            const safeJudul = judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeIsi = isi.replace(/'/g, "\\'").replace(/\n/g, '<br>');
+            const safeKategori = kategori.replace(/'/g, "\\'");
+
+            // Seluruh card bisa diklik untuk membuka modal, persis tipe card cerita/pengalaman
+            card.onclick = () => bukaModalMateriIdentik(safeJudul, safeKategori, safeIsi);
+
+            card.innerHTML = `
+                <div class="p-5 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
+                            ${kategori}
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-blue-700 transition-colors duration-200 line-clamp-2">
+                        ${judul}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed text-justify line-clamp-4 whitespace-pre-line">
+                        ${isi}
+                    </p>
+                </div>
+                <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
+                    <span class="text-xs font-bold text-blue-600 group-hover:translate-x-1 transition-transform duration-200">
+                        Baca Selengkapnya &rarr;
+                    </span>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Error Materi Section:", error);
+        container.innerHTML = `
+            <div class="col-span-full text-center py-6 text-red-600 text-sm">
+                ⚠️ Gagal memuat Materi & Pelajaran.
+            </div>
+        `;
+    }
+}
+
+// Fungsi Modal yang menembak ID Modal Kemenangan Anda
+function bukaModalMateriIdentik(judul, kategori, isiHtml) {
+    // Kita tembak ID modal yang sudah ada di web Anda untuk Cerita Kemenangan
+    // Gantilah ID di bawah ini ('modal-cerita', 'modal-title', 'modal-content') 
+    // sesuai dengan nama ID asli modal cerita kemenangan di kode HTML Anda.
+    const modal = document.getElementById('chat-window') || document.getElementById('modal-cerita'); 
+    
+    // Jika web Anda menggunakan fungsi bawaan seperti bukaModal(judul, isi), gunakan itu.
+    // Tetapi jika sistemnya manual mengubah innerHTML modal, ini jalurnya:
+    const modalTitle = document.getElementById('modal-title') || document.getElementById('modal-cerita-title');
+    const modalBody = document.getElementById('modal-body') || document.getElementById('modal-cerita-body');
+    
+    if (modalTitle && modalBody) {
+        modalTitle.innerHTML = `<span class="text-xs block text-amber-600 font-semibold mb-1">[${kategori}]</span>${judul}`;
+        modalBody.innerHTML = `<div class="text-slate-700 text-base leading-relaxed text-justify whitespace-pre-line">${isiHtml}</div>`;
+        
+        // Munculkan modal (sesuaikan dengan cara web Anda memunculkan kelas 'hidden' / 'flex')
+        modal.classList.remove('hidden');
+    } else {
+        // Jika ID modal cerita berbeda, jalankan fungsi pemanggil modal bawaan Anda di sini
+        // Contoh jika nama fungsinya: tampilkanDetail(judul, isi)
+        if (typeof tampilkanDetail === "function") {
+            tampilkanDetail(judul, isiHtml);
+        }
+    }
+}
+
     </script>
 </body>
 </html>
