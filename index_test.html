@@ -46,6 +46,15 @@
 <body class="bg-gray-50 text-gray-800 font-sans">
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div id="member-announcement-bar" class="bg-[#C62828] text-white overflow-hidden py-2 px-4 hidden border-b border-red-800">
+            <div class="max-w-7xl mx-auto flex items-center">
+                <span class="bg-white text-[#C62828] text-xs font-black uppercase px-2 py-0.5 rounded mr-3 select-none flex-shrink-0 animate-pulse">PENGUMUMAN</span>
+                <marquee id="announcement-marquee" behavior="scroll" direction="left" class="text-xs md:text-sm font-bold tracking-wide">
+                    Memuat pengumuman jadwal terbaru...
+                </marquee>
+            </div>
+        </div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 md:h-24">
                 <div class="flex items-center space-x-3 md:space-x-4">
@@ -552,6 +561,7 @@
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
+        const CSV_URL_JADWAL_BULANAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv";
         
         // PUSAT KONTROL URL WEB APP
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
@@ -626,12 +636,142 @@
 
                 setQuoteOfTheDay();
                 renderQASearch();
+                
+                // Panggil pembuat running text setelah data bimbingan/jadwal dari spreadsheet siap
+                updateRunningTextAnnouncement();
             } catch (error) {
                 console.error("Gagal mengambil data dari Google Sheets:", error);
                 document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
                 document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
             }
         }
+
+        // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
+        async function updateRunningTextAnnouncement() {
+    const marqueeEl = document.getElementById('announcement-marquee');
+    const announcementBar = document.getElementById('member-announcement-bar');
+    if (!marqueeEl || !announcementBar) return;
+
+    // Tetap sembunyikan bar pengumuman saat proses memuat agar tidak glitch/patah-patah di HP
+    announcementBar.classList.add('hidden');
+
+    try {
+        const response = await fetch(CSV_URL_JADWAL_BULANAN);
+        const csvData = await response.text();
+        
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+        const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+        for (let i = 0; i < normalizedData.length; i++) {
+            let char = normalizedData[i];
+            let nextChar = normalizedData[i + 1];
+
+            if (char === '"') {
+                if (insideQuote && nextChar === '"') {
+                    currentField += '"'; 
+                    i++;
+                } else {
+                    insideQuote = !insideQuote; 
+                }
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
+            }
+        }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingEvents = [];
+        // Array nama hari Indonesia
+        const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length < 3 || !row[0]) continue;
+
+            const tglString = row[0].trim(); 
+            const jamString = row[1] ? row[1].trim() : "";
+            const acaraString = row[2] ? row[2].trim() : "";
+
+            if (!acaraString) continue;
+
+            let eventDate;
+            if (tglString.includes('-')) {
+                eventDate = new Date(tglString);
+            } else if (tglString.includes('/')) {
+                const parts = tglString.split('/');
+                eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            } else {
+                eventDate = new Date(tglString);
+            }
+
+            if (isNaN(eventDate.getTime())) continue; 
+            
+            // Dapatkan nama hari sebelum jamnya di-reset ke 00:00
+            const hariTeks = namaHari[eventDate.getDay()];
+            
+            eventDate.setHours(0, 0, 0, 0);
+
+            if (eventDate >= today) {
+                upcomingEvents.push({
+                    tanggalRaw: eventDate,
+                    hari: hariTeks,
+                    tanggalTeks: tglString,
+                    jam: jamString,
+                    acara: acaraString
+                });
+            }
+        }
+
+        // Urutkan jadwal secara bersih berdasarkan tanggal terdekat
+        upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
+
+        // Satukan data setelah semuanya lengkap 100%
+        if (upcomingEvents.length > 0) {
+            const teksPengumuman = upcomingEvents.map(ev => {
+                const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
+                return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+            }).join("     |     ");
+
+            // Masukkan teks ke dalam marquee
+            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
+            
+            // Tampilkan bar pengumuman hanya ketika data SUDAH LENGKAP & SIAP DI-SCROLL
+            const savedName = localStorage.getItem('soka_user_name');
+            if (savedName) {
+                announcementBar.classList.remove('hidden');
+                
+                // Trik Khusus HP: Memaksa browser me-render ulang animasi marquee agar tidak macet
+                marqueeEl.stop();
+                marqueeEl.start();
+            }
+        } else {
+            marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+            if (localStorage.getItem('soka_user_name')) {
+                announcementBar.classList.remove('hidden');
+            }
+        }
+
+    } catch (error) {
+        console.error("Gagal memuat teks berjalan:", error);
+        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
+    }
+}
 
         function renderQASearch() {
             const container = document.getElementById('qa-container');
@@ -798,8 +938,14 @@
 
             const floatingChatBtn = document.getElementById('floating-chat-btn');
             const floatingPinWarningBtn = document.getElementById('floating-pin-warning-btn');
+            
+            // Elemen Baris Pengumuman (Marquee) Merah
+            const memberAnnouncementBar = document.getElementById('member-announcement-bar');
 
             if (savedName) {
+                // Tampilkan running text pengumuman saat member sudah login
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.remove('hidden');
+                
                 if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
                 if (sectionJadwal) sectionJadwal.classList.remove('hidden');
@@ -845,8 +991,14 @@
                 } else {
                     floatingPinWarningBtn.classList.add('hidden');
                 }
+                
+                // Segarkan konten running text pengumuman agar datanya sinkron
+                updateRunningTextAnnouncement();
 
             } else {
+                // Sembunyikan running text pengumuman jika belum login/logout
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.add('hidden');
+
                 if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
                 if (sectionJadwal) sectionJadwal.classList.add('hidden');
@@ -1210,59 +1362,60 @@
         }
 
         async function loadChatMessages() {
-            const body = document.getElementById('chat-body');
-            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action: "readChat" })
-                });
-                const chats = await response.json();
-                
-                if (!chats || chats.length === 0) {
-                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
-                    return;
-                }
-                
-                body.innerHTML = "";
-                const currentUser = localStorage.getItem('soka_user_name');
-                
-                chats.forEach(c => {
-                    const isMe = c.nama === currentUser;
-                    const chatBubble = document.createElement('div');
-                    
-                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-                    }`;
-                    
-                    let waktuTampil = "";
-                    if (c.timestamp) {
-                        const dateObj = new Date(c.timestamp);
-                        const jam = String(dateObj.getHours()).padStart(2, '0');
-                        const menit = String(dateObj.getMinutes()).padStart(2, '0');
-                        waktuTampil = `${jam}:${menit}`;
-                    }
-                    
-                    chatBubble.innerHTML = `
-                        <div class="flex justify-between items-center gap-4 mb-0.5">
-                            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
-                            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
-                        </div>
-                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-                    `;
-                    body.appendChild(chatBubble);
-                });
-                
-                body.scrollTop = body.scrollHeight;
-                
-            } catch (error) {
-                console.error("Gagal memuat chat:", error);
-                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
-            }
+    const body = document.getElementById('chat-body');
+    body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+    
+    try {
+        // Jalur cepat: Mengubah POST menjadi GET dengan query parameter (?action=readChat)
+        // Ini akan memicu fungsi doGet di GAS yang tanpa getLastRow()
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
+            method: 'GET',
+            mode: 'cors'
+        });
+        const chats = await response.json();
+        
+        if (!chats || chats.length === 0) {
+            body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+            return;
         }
+        
+        body.innerHTML = "";
+        const currentUser = localStorage.getItem('soka_user_name');
+        
+        chats.forEach(c => {
+            const isMe = c.nama === currentUser;
+            const chatBubble = document.createElement('div');
+            
+            chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+            }`;
+            
+            let waktuTampil = "";
+            if (c.timestamp) {
+                const dateObj = new Date(c.timestamp);
+                const jam = String(dateObj.getHours()).padStart(2, '0');
+                const menit = String(dateObj.getMinutes()).padStart(2, '0');
+                waktuTampil = `${jam}:${menit}`;
+            }
+            
+            chatBubble.innerHTML = `
+                <div class="flex justify-between items-center gap-4 mb-0.5">
+                    <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
+                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
+                </div>
+                <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+            `;
+            body.appendChild(chatBubble);
+        });
+        
+        body.scrollTop = body.scrollHeight;
+        
+    } catch (error) {
+        console.error("Gagal memuat chat:", error);
+        body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+    }
+}
+
 
         async function submitChat() {
             const input = document.getElementById('input-chat-msg');
