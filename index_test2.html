@@ -737,7 +737,8 @@
         }
 
         // Urutkan jadwal dari yang paling dekat
-        upcomingEvents.sort((a, b) => a.tanggalRaw - b.timezone - b.tanggalRaw);
+                // Urutkan jadwal dari yang paling dekat (Berdasarkan urutan tanggal)
+        upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
 
         // Satukan semua acara yang valid menjadi satu teks berjalan panjang
         if (upcomingEvents.length > 0) {
