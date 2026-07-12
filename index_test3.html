@@ -1701,33 +1701,67 @@
         if (!response.ok) throw new Error("Gagal memuat data");
         
         const csvText = await response.text();
-        const rows = parseCSV(csvText); 
         
+        // --- PARSER KHUSUS MULTI-KOLOM UNTUK MATERI ---
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+        const normalizedData = csvText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+        for (let i = 0; i < normalizedData.length; i++) {
+            let char = normalizedData[i];
+            let nextChar = normalizedData[i + 1];
+
+            if (char === '"') {
+                if (insideQuote && nextChar === '"') {
+                    currentField += '"'; 
+                    i++;
+                } else {
+                    insideQuote = !insideQuote; 
+                }
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField.trim());
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField.trim());
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
+            }
+        }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField.trim());
+            rows.push(currentRow);
+        }
+        // ---------------------------------------------
+
         container.innerHTML = '';
         
-        if (rows.length === 0) {
+        // Lewati baris pertama (header: judul, kategori, isi)
+        const dataRows = rows.slice(1);
+
+        if (dataRows.length === 0 || (dataRows.length === 1 && !dataRows[0][0])) {
             container.innerHTML = `<p class="text-slate-500 text-center col-span-full py-8">Belum ada materi tersedia.</p>`;
             return;
         }
 
-        rows.forEach(row => {
-            // Sesuai screenshot: Kolom 0 = judul, Kolom 1 = kategori, Kolom 2 = isi
-            if (row.length < 2 || !row[0]) return; 
+        dataRows.forEach(row => {
+            if (!row || row.length < 3 || !row[0]) return; 
             
             const judul = row[0];
             const kategori = row[1] || 'Umum';
             const isi = row[2] || '';
 
-            // Membuat Card yang persis plek dengan Cerita Kemenangan
             const card = document.createElement('div');
             card.className = "bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
             
-            // Mengamankan teks dari bug tanda petik saat dilempar ke fungsi modal
             const safeJudul = judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
             const safeIsi = isi.replace(/'/g, "\\'").replace(/\n/g, '<br>');
             const safeKategori = kategori.replace(/'/g, "\\'");
 
-            // Seluruh card bisa diklik untuk membuka modal, persis tipe card cerita/pengalaman
             card.onclick = () => bukaModalMateriIdentik(safeJudul, safeKategori, safeIsi);
 
             card.innerHTML = `
@@ -1762,34 +1796,6 @@
         `;
     }
 }
-
-// Fungsi Modal yang menembak ID Modal Kemenangan Anda
-function bukaModalMateriIdentik(judul, kategori, isiHtml) {
-    // Kita tembak ID modal yang sudah ada di web Anda untuk Cerita Kemenangan
-    // Gantilah ID di bawah ini ('modal-cerita', 'modal-title', 'modal-content') 
-    // sesuai dengan nama ID asli modal cerita kemenangan di kode HTML Anda.
-    const modal = document.getElementById('chat-window') || document.getElementById('modal-cerita'); 
-    
-    // Jika web Anda menggunakan fungsi bawaan seperti bukaModal(judul, isi), gunakan itu.
-    // Tetapi jika sistemnya manual mengubah innerHTML modal, ini jalurnya:
-    const modalTitle = document.getElementById('modal-title') || document.getElementById('modal-cerita-title');
-    const modalBody = document.getElementById('modal-body') || document.getElementById('modal-cerita-body');
-    
-    if (modalTitle && modalBody) {
-        modalTitle.innerHTML = `<span class="text-xs block text-amber-600 font-semibold mb-1">[${kategori}]</span>${judul}`;
-        modalBody.innerHTML = `<div class="text-slate-700 text-base leading-relaxed text-justify whitespace-pre-line">${isiHtml}</div>`;
-        
-        // Munculkan modal (sesuaikan dengan cara web Anda memunculkan kelas 'hidden' / 'flex')
-        modal.classList.remove('hidden');
-    } else {
-        // Jika ID modal cerita berbeda, jalankan fungsi pemanggil modal bawaan Anda di sini
-        // Contoh jika nama fungsinya: tampilkanDetail(judul, isi)
-        if (typeof tampilkanDetail === "function") {
-            tampilkanDetail(judul, isiHtml);
-        }
-    }
-}
-
     </script>
 </body>
 </html>
