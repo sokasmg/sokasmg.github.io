@@ -272,14 +272,16 @@
     
     <section id="pengalaman-section" class="py-12 bg-blue-50 border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4">
-        <!-- HEADER SECTION CERITA PENGALAMAN WITH BUTTONS -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-            <div class="flex items-baseline space-x-2 justify-center sm:justify-start">
+        <!-- HEADER SECTION CERITA PENGALAMAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
                 <h2 class="text-2xl font-bold text-[#002F6C]">Cerita Kemenangan</h2>
                 <span class="text-xs font-medium text-gray-400 md:hidden animate-pulse">(Geser ↔)</span>
             </div>
-            <!-- Tombol Navigasi Desktop & Mouse User -->
-            <div class="flex justify-center space-x-2 mt-3 sm:mt-0">
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas agar mobile tetap bersih) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
                 <button onclick="scrollHorisontal('pengalaman-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
@@ -293,7 +295,8 @@
             </div>
         </div>
 
-        <div class="flex justify-center sm:justify-start space-x-1 w-24 sm:mx-0 mb-4">
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
             <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
             <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
             <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
@@ -314,14 +317,16 @@
 
 <section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
     <div class="max-w-6xl mx-auto px-4">
-        <!-- HEADER SECTION MATERI PELAJARAN WITH BUTTONS -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-            <div class="flex items-baseline space-x-2 justify-center sm:justify-start">
+        <!-- HEADER SECTION MATERI PELAJARAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
                 <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
                 <span class="text-xs font-medium text-gray-400 md:hidden animate-pulse">(Geser ↔)</span>
             </div>
-            <!-- Tombol Navigasi Desktop & Mouse User -->
-            <div class="flex justify-center space-x-2 mt-3 sm:mt-0">
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
                 <button onclick="scrollHorisontal('materi-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
@@ -335,7 +340,8 @@
             </div>
         </div>
 
-        <div class="flex justify-center sm:justify-start space-x-1 w-24 sm:mx-0 mb-4">
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
             <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
             <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
             <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
