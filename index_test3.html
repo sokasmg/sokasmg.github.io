@@ -1413,7 +1413,9 @@
             body.appendChild(chatBubble);
         });
         
-        body.scrollTop = body.scrollHeight;
+        setTimeout(() => {
+            body.scrollTop = body.scrollHeight;
+        }, 50);
         
     } catch (error) {
         console.error("Gagal memuat chat:", error);
