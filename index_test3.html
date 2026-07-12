@@ -467,7 +467,7 @@
             <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
             </svg>
-            <span>Chat Anggota</span>
+            <span>Chat</span>
         </button>
     </div>
 
@@ -997,11 +997,11 @@
                 if (floatingBtn && floatingLink && floatingText) {
                     if (savedJabatan === "Pimpinan") {
                         floatingLink.href = "intishibu.html";
-                        floatingText.innerText = "Menu Pimpinan";
+                        floatingText.innerText = "Pimpinan";
                         floatingBtn.classList.remove('hidden');
                     } else if (savedJabatan === "Pimpinan (Admin)") {
                         floatingLink.href = "admin.html";
-                        floatingText.innerText = "Menu Admin";
+                        floatingText.innerText = "Admin";
                         floatingBtn.classList.remove('hidden');
                     } else {
                         floatingBtn.classList.add('hidden');
