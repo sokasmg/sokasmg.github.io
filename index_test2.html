@@ -1408,44 +1408,80 @@
 }
 
         async function submitChat() {
-            const input = document.getElementById('input-chat-msg');
-            const btn = document.getElementById('btn-send-chat');
-            const msg = input.value.trim();
-            const myName = localStorage.getItem('soka_user_name');
-            
-            if (!msg || msg.length > 160) return;
-            
-            btn.disabled = true;
-            input.disabled = true;
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: "sendChat",
-                        nama: myName,
-                        pesan: msg
-                    })
-                });
+    const inputElement = document.getElementById('input-chat-msg');
+    const pesan = inputElement.value.trim();
+    const nama = localStorage.getItem('soka_user_name') || "Anggota";
+
+    if (!pesan) return;
+
+    // 1. Kosongkan input dan reset counter karakter secara instan
+    inputElement.value = "";
+    const charCounter = document.getElementById('char-counter');
+    if (charCounter) charCounter.innerText = "0/160";
+
+    // 2. Ambil kontainer chat body
+    const body = document.getElementById('chat-body');
+
+    // 3. Buat Balon Chat "Palsu" (Optimistic) secara instan di layar
+    const tempId = "msg-" + Date.now(); // ID unik sementara
+    const chatBubble = document.createElement('div');
+    chatBubble.id = tempId;
+    
+    // Memberikan style yang sama, namun dengan efek transparan (opacity-70) sebagai tanda sedang dikirim
+    chatBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity";
+    
+    chatBubble.innerHTML = `
+        <span class="font-black text-[10px] text-blue-900 block mb-0.5">${nama}</span>
+        <p class="leading-relaxed break-words font-medium text-gray-700">${pesan}</p>
+        <span class="text-[9px] text-gray-400 text-right block mt-0.5 penanda-status">Mengirim...</span>
+    `;
+    body.appendChild(chatBubble);
+    
+    // Langsung gulirkan chat ke bagian paling bawah
+    body.scrollTop = body.scrollHeight;
+
+    // 4. Kirim data asli ke backend (Google Apps Script) di latar belakang
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                action: "sendChat",
+                nama: nama,
+                pesan: pesan
+            })
+        });
+        
+        const result = await response.json();
+
+        if (result.status === "success") {
+            // Jika sukses, kembalikan opasitas balon chat menjadi normal dan ubah statusnya
+            const bubbleSukses = document.getElementById(tempId);
+            if (bubbleSukses) {
+                bubbleSukses.classList.remove('opacity-70');
+                bubbleSukses.querySelector('.penanda-status').innerText = "Terkirim";
                 
-                const res = await response.json();
-                if (res.status === "success") {
-                    input.value = "";
-                    updateCharCount();
-                    await loadChatMessages(); 
-                } else {
-                    alert("Gagal mengirim pesan ke server.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Gangguan koneksi internet ke Google Cloud.");
-            } finally {
-                btn.disabled = false;
-                input.disabled = false;
+                // Hapus teks status kecil setelah 2 detik agar tampilan kembali bersih
+                setTimeout(() => {
+                    const statusText = bubbleSukses.querySelector('.penanda-status');
+                    if (statusText) statusText.remove();
+                }, 2000);
             }
+        } else {
+            throw new Error(result.message || "Gagal menyimpan");
         }
+    } catch (error) {
+        console.error("Gagal mengirim chat ke server:", error);
+        
+        // 5. Penanganan jika jaringan bermasalah atau gagal kirim
+        const bubbleGagal = document.getElementById(tempId);
+        if (bubbleGagal) {
+            bubbleGagal.classList.remove('bg-green-100');
+            bubbleGagal.classList.add('bg-red-100'); // Berubah warna kemerahan
+            bubbleGagal.querySelector('.penanda-status').innerHTML = "<span class='text-red-600 font-bold'>Gagal mengirim!</span>";
+        }
+    }
+}
 
 // Buat variabel global di atas fungsi untuk menyimpan data sementara
         let listPengalamanGlobal = [];
