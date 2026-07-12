@@ -1647,60 +1647,98 @@
         }
 
         async function fetchMateri() {
-            const container = document.getElementById("materi-container");
-            if (!container) return;
+    const container = document.getElementById('materi-container');
+    if (!container) return;
 
-            try {
-                const response = await fetch("https://script.google.com/macros/s/AKfycbw6U8R4GgVv3Nco0V8wL1_V_G_f_O5v7y06Wbe6rscB2A-A6S_zW-Q7L93T4O9-SgM/exec?action=read&sheet=Materi");
-                const json = await response.json();
+    try {
+        // Ambil data langsung lewat link CSV Publik (Aman dari kendala CORS)
+        const response = await fetch(CSV_URL_MATERI);
+        const csvData = await response.text();
+        
+        // Proses parsing baris CSV manual (sama persis dengan logic cerita pengalaman)
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
 
-                if (json.status !== "success" || !json.data || json.data.length === 0) {
-                    container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-sm">Tidak ada Materi & Pelajaran saat ini.</div>`;
-                    return;
+        for (let i = 0; i < csvData.length; i++) {
+            const char = csvData[i];
+            if (char === '"') {
+                if (insideQuote && csvData[i + 1] === '"') {
+                    currentField += '"';
+                    i++;
+                } else {
+                    insideQuote = !insideQuote;
                 }
-
-                container.innerHTML = "";
-
-                json.data.forEach(item => {
-                    const kategori = item.Kategori || "UMUM";
-                    const judul = item.Judul || "Tanpa Judul";
-                    const isi = item.Isi || "";
-
-                    const card = document.createElement("div");
-                    card.className = "bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border border-slate-100 group";
-                    
-                    card.innerHTML = `
-                        <div class="p-5 flex-1">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
-                                    ${kategori}
-                                </span>
-                            </div>
-                            <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-blue-700 transition-colors duration-200 line-clamp-2">
-                                ${judul}
-                            </h3>
-                            <p class="text-slate-600 text-sm leading-relaxed text-justify line-clamp-4 whitespace-pre-line">
-                                ${isi}
-                            </p>
-                        </div>
-                        <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
-                            <button onclick="openMateriModal(\`${kategori.replace(/`/g, '\\`').replace(/"/g, '"')}\`, \`${judul.replace(/`/g, '\\`').replace(/"/g, '"')}\`, \`${isi.replace(/`/g, '\\`').replace(/"/g, '"')}\`)" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
-                                Lanjut baca...
-                            </button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-
-            } catch (error) {
-                console.error("Error Materi Section:", error);
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-6 text-red-600 text-sm">
-                        ⚠️ Gagal memuat Materi & Pelajaran.
-                    </div>
-                `;
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
             }
         }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        container.innerHTML = "";
+
+        // Lewati baris header indeks ke-0, ambil data yang valid
+        const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "");
+        
+        if (activeRows.length === 0) {
+            container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada materi pelajaran saat ini.</p>`;
+            return;
+        }
+
+        // Tampilkan data materi ke dalam bentuk card komponen
+        activeRows.forEach((row) => {
+            if (row.length < 3) return;
+            const judul = row[0].trim();
+            const kategori = row[1] ? row[1].trim() : 'Umum';
+            const isi = row[2] ? row[2].trim() : '';
+
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
+            
+            card.innerHTML = `
+                <div class="p-5 flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
+                            ${kategori}
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-blue-700 transition-colors duration-200 line-clamp-2">
+                        ${judul}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed text-justify line-clamp-4 whitespace-pre-line">
+                        ${isi}
+                    </p>
+                </div>
+                <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
+                    <button class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                        Lanjut baca...
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Error Materi Section:", error);
+        container.innerHTML = `
+            <div class="col-span-full text-center py-6 text-red-600 text-sm">
+                ⚠️ Gagal memuat Materi & Pelajaran.
+            </div>
+        `;
+    }
+}
 
         function openMateriModal(kategori, judul, isi) {
             const modal = document.getElementById("materiModal");
