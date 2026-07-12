@@ -649,15 +649,16 @@
         // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
         async function updateRunningTextAnnouncement() {
     const marqueeEl = document.getElementById('announcement-marquee');
-    if (!marqueeEl) return;
+    const announcementBar = document.getElementById('member-announcement-bar');
+    if (!marqueeEl || !announcementBar) return;
 
-    marqueeEl.innerText = "Memuat pengumuman jadwal terbaru...";
+    // Tetap sembunyikan bar pengumuman saat proses memuat agar tidak glitch/patah-patah di HP
+    announcementBar.classList.add('hidden');
 
     try {
         const response = await fetch(CSV_URL_JADWAL_BULANAN);
         const csvData = await response.text();
         
-        // Parser CSV untuk struktur: Tanggal, Jam, Acara
         const rows = [];
         let currentRow = [];
         let currentField = "";
@@ -692,43 +693,44 @@
             rows.push(currentRow);
         }
 
-        // Ambil tanggal hari ini (set waktu ke 00:00:00 untuk perbandingan tanggal murni)
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
         const upcomingEvents = [];
+        // Array nama hari Indonesia
+        const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
-        // Iterasi dimulai dari indeks 1 untuk melewati Header (Tanggal, Jam, Acara)
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
             if (!row || row.length < 3 || !row[0]) continue;
 
-            const tglString = row[0].trim(); // Format di Sheet disarankan: YYYY-MM-DD atau DD/MM/YYYY
+            const tglString = row[0].trim(); 
             const jamString = row[1] ? row[1].trim() : "";
             const acaraString = row[2] ? row[2].trim() : "";
 
             if (!acaraString) continue;
 
-            // Proses konversi string tanggal Google Sheet ke objek Date JavaScript
             let eventDate;
             if (tglString.includes('-')) {
-                // Menangani format YYYY-MM-DD
                 eventDate = new Date(tglString);
             } else if (tglString.includes('/')) {
-                // Menangani format DD/MM/YYYY
                 const parts = tglString.split('/');
                 eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
             } else {
                 eventDate = new Date(tglString);
             }
 
-            if (isNaN(eventDate.getTime())) continue; // Lewati jika format tanggal rusak
+            if (isNaN(eventDate.getTime())) continue; 
+            
+            // Dapatkan nama hari sebelum jamnya di-reset ke 00:00
+            const hariTeks = namaHari[eventDate.getDay()];
+            
             eventDate.setHours(0, 0, 0, 0);
 
-            // Validasi: Tampilkan jika tanggal acara LEBIH BESAR ATAU SAMA DENGAN hari ini (Belum lewat)
             if (eventDate >= today) {
                 upcomingEvents.push({
                     tanggalRaw: eventDate,
+                    hari: hariTeks,
                     tanggalTeks: tglString,
                     jam: jamString,
                     acara: acaraString
@@ -736,25 +738,38 @@
             }
         }
 
-        // Urutkan jadwal dari yang paling dekat
-                // Urutkan jadwal dari yang paling dekat (Berdasarkan urutan tanggal)
+        // Urutkan jadwal secara bersih berdasarkan tanggal terdekat
         upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
 
-        // Satukan semua acara yang valid menjadi satu teks berjalan panjang
+        // Satukan data setelah semuanya lengkap 100%
         if (upcomingEvents.length > 0) {
             const teksPengumuman = upcomingEvents.map(ev => {
                 const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
-                return `📢 [${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
-            }).join("   |   ");
+                return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+            }).join("     |     ");
 
-            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}   |   Tetap semangat melaksanakan revolusi manusia!`;
+            // Masukkan teks ke dalam marquee
+            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
+            
+            // Tampilkan bar pengumuman hanya ketika data SUDAH LENGKAP & SIAP DI-SCROLL
+            const savedName = localStorage.getItem('soka_user_name');
+            if (savedName) {
+                announcementBar.classList.remove('hidden');
+                
+                // Trik Khusus HP: Memaksa browser me-render ulang animasi marquee agar tidak macet
+                marqueeEl.stop();
+                marqueeEl.start();
+            }
         } else {
             marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+            if (localStorage.getItem('soka_user_name')) {
+                announcementBar.classList.remove('hidden');
+            }
         }
 
     } catch (error) {
         console.error("Gagal memuat teks berjalan:", error);
-        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud. Silakan segarkan halaman.";
+        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
     }
 }
 
