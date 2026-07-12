@@ -1775,6 +1775,105 @@
                 closeModalMateri();
             }
         });
+        // ==========================================
+// ANTI ACCIDENTALLY SWIPE BACK BROWSER SYSTEM
+// ==========================================
+let isModalActiveInHistory = false;
+
+// Fungsi pembantu untuk mendeteksi apakah ada modal yang sedang terbuka di layar
+function isAnyModalVisible() {
+    const modals = ['login-modal', 'pin-setup-modal', 'gallery-modal', 'modal-pengalaman', 'materiModal'];
+    return modals.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+    });
+}
+
+// Daftarkan state baru ke browser setiap kali ada modal yang memicu pembukaan
+function registerModalState() {
+    if (!isModalActiveInHistory) {
+        window.history.pushState({ modalOpen: true }, "");
+        isModalActiveInHistory = true;
+    }
+}
+
+// Bersihkan state browser jika user menutup modal secara manual (klik tombol X / Batal / Selesai)
+function clearModalState() {
+    if (isModalActiveInHistory && !isAnyModalVisible()) {
+        isModalActiveInHistory = false;
+        window.history.back();
+    }
+}
+
+// Intersepsi tombol Back fisik / Swipe Back Browser
+window.addEventListener('popstate', function(event) {
+    if (isModalActiveInHistory) {
+        isModalActiveInHistory = false;
+        
+        // Paksa tutup semua jenis modal yang ada di index_test3.html tanpa pindah halaman
+        const loginMod = document.getElementById('login-modal');
+        if (loginMod) loginMod.classList.add('hidden');
+
+        const pinMod = document.getElementById('pin-setup-modal');
+        if (pinMod) pinMod.classList.add('hidden');
+
+        if (typeof closeGalleryModal === 'function') closeGalleryModal();
+        if (typeof tutupDetailPengalaman === 'function') tutupDetailPengalaman();
+        if (typeof closeModalMateri === 'function') closeModalMateri();
+    }
+});
+
+// Bungkus fungsi bawaan agar otomatis mencatat riwayat history saat dibuka
+const originalOpenLoginModal = openLoginModal;
+openLoginModal = function() {
+    originalOpenLoginModal();
+    registerModalState();
+};
+
+const originalOpenPinSetupModal = openPinSetupModal;
+openPinSetupModal = function() {
+    originalOpenPinSetupModal();
+    registerModalState();
+};
+
+const originalBukaDetailPengalaman = bukaDetailPengalaman;
+bukaDetailPengalaman = function(nama, judul, isiLengkap, foto1, foto2) {
+    originalBukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2);
+    registerModalState();
+};
+
+const originalOpenMateriModal = openMateriModal;
+openMateriModal = function(kategori, judul, isi) {
+    originalOpenMateriModal(kategori, judul, isi);
+    registerModalState();
+};
+
+// Modifikasi fungsi galeri slider agar ikut mendaftarkan status history saat gambar dizoom
+slider.addEventListener('mouseup', (e) => {
+    const endX = e.pageX - slider.offsetLeft;
+    if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+        openGalleryModal(e.target.src);
+        registerModalState(); // Catat di sini
+    }
+});
+slider.addEventListener('touchend', (e) => {
+    // Memastikan deteksi ketukan pada mobile juga tercatat aman
+    if (e.target.tagName === 'IMG' && !isDown) {
+        registerModalState();
+    }
+});
+
+// Kaitkan pembersihan riwayat saat tombol penutup bawaan diklik manual
+document.addEventListener('click', function(e) {
+    // Jika yang diklik adalah tombol/elemen penutup, cek apakah perlu membersihkan riwayat browser
+    setTimeout(() => {
+        if (!isAnyModalVisible() && isModalActiveInHistory) {
+            isModalActiveInHistory = false;
+            window.history.back();
+        }
+    }, 350); // Beri delay sedikit mengikuti animasi fade-out modal Anda
+});
+
     </script>
 </body>
 </html>
