@@ -1338,12 +1338,17 @@
 
         // === MINI CHAT BOX OPERASIONAL ===
         function toggleChatWindow() {
-            const chatWin = document.getElementById('chat-window');
-            chatWin.classList.toggle('hidden');
-            if (!chatWin.classList.contains('hidden')) {
-                loadChatMessages();
-            }
-        }
+    const chatWin = document.getElementById('chat-window');
+    chatWin.classList.toggle('hidden');
+    if (!chatWin.classList.contains('hidden')) {
+        loadChatMessages();
+        // Opsional: Memastikan scroll ulang setelah window muncul
+        setTimeout(() => {
+            const body = document.getElementById('chat-body');
+            if(body) body.scrollTop = body.scrollHeight;
+        }, 200);
+    }
+}
 
         function updateCharCount() {
             const input = document.getElementById('input-chat-msg');
@@ -1408,7 +1413,9 @@
             body.appendChild(chatBubble);
         });
         
-        body.scrollTop = body.scrollHeight;
+        setTimeout(() => {
+            body.scrollTop = body.scrollHeight;
+        }, 50);
         
     } catch (error) {
         console.error("Gagal memuat chat:", error);
