@@ -46,6 +46,15 @@
 <body class="bg-gray-50 text-gray-800 font-sans">
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div id="member-announcement-bar" class="bg-[#C62828] text-white overflow-hidden py-2 px-4 hidden border-b border-red-800">
+            <div class="max-w-7xl mx-auto flex items-center">
+                <span class="bg-white text-[#C62828] text-xs font-black uppercase px-2 py-0.5 rounded mr-3 select-none flex-shrink-0 animate-pulse">PENGUMUMAN</span>
+                <marquee id="announcement-marquee" behavior="scroll" direction="left" class="text-xs md:text-sm font-bold tracking-wide">
+                    Memuat pengumuman jadwal terbaru...
+                </marquee>
+            </div>
+        </div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 md:h-24">
                 <div class="flex items-center space-x-3 md:space-x-4">
@@ -243,7 +252,25 @@
         <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">×</button>
         <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
-  
+    
+    <section id="pengalaman-section" class="py-12 bg-blue-50 border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Cerita Kemenangan</h2>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+            <div id="pengalaman-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat pengalaman anggota...</div>
+            </div>
+        </div>
+    </section>
+        <div class="soka-tricolor">
+        <div class="soka-blue"></div>
+        <div class="soka-yellow"></div>
+        <div class="soka-red"></div>
+    </div>
     <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
@@ -475,6 +502,29 @@
         </button>
     </div>
 
+    <div id="modal-pengalaman" class="fixed inset-0 bg-black/60 z-[150] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="tutupDetailPengalaman()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] flex flex-col animate-fade-in" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-2.5 h-2.5 bg-[#F9A825] rounded-full"></div>
+                    <h3 id="modal-pengalaman-nama" class="text-xl font-bold text-[#002F6C]">Nama Anggota</h3>
+                </div>
+                <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">×</button>
+            </div>
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
+                Isi cerita lengkap akan muncul di sini...
+            </div>
+            <div class="border-t border-gray-150 pt-3 mt-4 flex items-center justify-between">
+            <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                A+
+            </button>
+            <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
+                Selesai Membaca
+            </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
         document.addEventListener('touchmove', function (event) {
@@ -510,6 +560,7 @@
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
+        const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
         
         // PUSAT KONTROL URL WEB APP
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
@@ -584,10 +635,34 @@
 
                 setQuoteOfTheDay();
                 renderQASearch();
+                
+                // Panggil pembuat running text setelah data bimbingan/jadwal dari spreadsheet siap
+                updateRunningTextAnnouncement();
             } catch (error) {
                 console.error("Gagal mengambil data dari Google Sheets:", error);
                 document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
                 document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
+            }
+        }
+
+        // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
+        function updateRunningTextAnnouncement() {
+            const marqueeEl = document.getElementById('announcement-marquee');
+            if (!marqueeEl) return;
+
+            if (quoteList && quoteList.length > 0) {
+                const today = new Date();
+                const currentDay = today.getDate();
+                const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
+                const quoteIndex = dateSeed % quoteList.length;
+                
+                const pengumumanHariIni = quoteList[quoteIndex].text;
+                const penutur = quoteList[quoteIndex].author;
+                
+                // Set isi teks berjalan
+                marqueeEl.innerText = `Jadwal & Pengingat Penting: "${pengumumanHariIni}" — Persembahan: ${penutur}. Tetap semangat melaksanakan revolusi manusia!`;
+            } else {
+                marqueeEl.innerText = "Selamat datang di halaman internal Anggota Soka Gakkai Semarang. Silakan periksa tab jadwal berkala di bawah untuk informasi konsolidasi terupdate.";
             }
         }
 
@@ -734,7 +809,7 @@
             }
         }
 
-        // --- SISTEM AUTENTIKASI AKSES ANGGOTA (DIPERBARUI) ---
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
         function checkLoginStatus() {
             const savedName = localStorage.getItem('soka_user_name');
             const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
@@ -756,8 +831,14 @@
 
             const floatingChatBtn = document.getElementById('floating-chat-btn');
             const floatingPinWarningBtn = document.getElementById('floating-pin-warning-btn');
+            
+            // Elemen Baris Pengumuman (Marquee) Merah
+            const memberAnnouncementBar = document.getElementById('member-announcement-bar');
 
             if (savedName) {
+                // Tampilkan running text pengumuman saat member sudah login
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.remove('hidden');
+                
                 if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
                 if (sectionJadwal) sectionJadwal.classList.remove('hidden');
@@ -798,14 +879,19 @@
                     }
                 }
 
-                // --- TOMBOL MERAH BERDENYUT TETAP DI SINI SELAMA STATUS PIN KOSONG ---
                 if (savedPinStatus === "kosong") {
                     floatingPinWarningBtn.classList.remove('hidden');
                 } else {
                     floatingPinWarningBtn.classList.add('hidden');
                 }
+                
+                // Segarkan konten running text pengumuman agar datanya sinkron
+                updateRunningTextAnnouncement();
 
             } else {
+                // Sembunyikan running text pengumuman jika belum login/logout
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.add('hidden');
+
                 if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
                 if (sectionJadwal) sectionJadwal.classList.add('hidden');
@@ -860,7 +946,6 @@
             document.getElementById('pin-setup-modal').classList.add('hidden');
         }
 
-        // --- PROSES LOGIN MULTI-INPUT (PONSEL & PIN) ---
         async function processLogin() {
             const phoneInput = document.getElementById('input-phone').value.trim();
             const pinInput = document.getElementById('input-login-pin').value.trim();
@@ -898,9 +983,6 @@
                     
                     closeLoginModal();
                     checkLoginStatus(); 
-
-                    // KOREKSI UTAMA: Pengguna baru dibiarkan masuk langsung. 
-                    // Tidak memancing modal setup pin terbuka otomatis.
                 } else {
                     errorMsg.innerText = result.message || "Nomor tidak dikenali atau PIN salah.";
                     errorMsg.classList.remove('hidden');
@@ -915,7 +997,6 @@
             }
         }
 
-        // --- SISTEM OPERASIONAL AKTIVASI BUAT PIN BARU ---
         async function processCreatePin() {
             const newPin = document.getElementById('input-new-pin').value.trim();
             const confirmPin = document.getElementById('input-confirm-pin').value.trim();
@@ -1121,6 +1202,7 @@
             setupInfiniteScroll();
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
+            loadPengalamanAnggota(); // Menjalankan fungsi penarik cerita
         });
 
         // === FUNGSI MODAL ZOOM GAMBAR ===
@@ -1265,6 +1347,175 @@
                 btn.disabled = false;
                 input.disabled = false;
             }
+        }
+
+// Buat variabel global di atas fungsi untuk menyimpan data sementara
+        let listPengalamanGlobal = [];
+
+        // ==================== KODE PENGALAMAN ANGGOTA (FIX MODAL) ====================
+        async function loadPengalamanAnggota() {
+            try {
+                const response = await fetch(CSV_URL_PENGALAMAN);
+                const data = await response.text();
+                
+                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel
+                const rows = [];
+                let currentRow = [];
+                let currentField = "";
+                let insideQuote = false;
+
+                const normalizedData = data.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i];
+                    let nextChar = normalizedData[i + 1];
+
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') {
+                            currentField += '"'; 
+                            i++;
+                        } else {
+                            insideQuote = !insideQuote; 
+                        }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField);
+                        currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = "";
+                    } else {
+                        currentField += char;
+                    }
+                }
+                if (currentField || currentRow.length > 0) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                }
+
+                const container = document.getElementById('pengalaman-container');
+                container.innerHTML = ""; 
+
+                // Lewati header, filter baris valid
+                const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
+                
+                // Balik urutan agar data terbaru di atas
+                activeRows.reverse();
+                
+                // Ambil 3 data teratas untuk ditampilkan
+                const dataDitampilkan = activeRows.slice(0, 3);
+
+                if (dataDitampilkan.length === 0) {
+                    container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada cerita pengalaman.</p>`;
+                    return;
+                }
+
+                // Simpan data yang ditampilkan ke dalam array global agar bisa diakses modal tanpa error teks
+                listPengalamanGlobal = dataDitampilkan;
+
+                dataDitampilkan.forEach((row, index) => {
+                    const nama = row[0].trim();
+                    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
+                    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+                    const isiCerita = row[5] ? row[5].trim() : "";
+                    
+                    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+
+                    const cardHtml = `
+                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+                            <div>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
+                                    <div>
+                                        <h3 class="text-base font-bold text-gray-900 leading-tight">${nama}</h3>
+                                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider">${judul}</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
+                                    ${previewCerita}
+                                </p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                                    Lanjut baca...
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', cardHtml);
+                });
+
+            } catch (error) {
+                console.error("Gagal memuat pengalaman:", error);
+                document.getElementById('pengalaman-container').innerHTML = 
+                    `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita pengalaman.</p>`;
+            }
+        }
+
+        // Fungsi jembatan baru untuk menangani klik agar bebas dari error "broken string"
+        function panggilModalLewatIndex(index) {
+            const data = listPengalamanGlobal[index];
+            if (data) {
+                const nama = data[0].trim();
+                const judul = data[1] ? data[1].trim() : "Cerita Kemenangan";
+                const fotoModal1 = data[3] ? data[3].trim() : "";
+                const fotoModal2 = data[4] ? data[4].trim() : "";
+                const isiCerita = data[5] ? data[5].trim() : "";
+
+                // Panggil fungsi modal asli bawaan web Anda
+                if (typeof bukaDetailPengalaman === "function") {
+                    bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
+                } else {
+                    console.error("Fungsi bukaDetailPengalaman tidak ditemukan!");
+                }
+            }
+        }
+
+        // Fungsi Membuka Modal Detail Cerita (Sudah Mendukung Grid Foto Tambahan)
+        function bukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2) {
+            const modal = document.getElementById('modal-pengalaman');
+            const modalNama = document.getElementById('modal-pengalaman-nama');
+            const modalCerita = document.getElementById('modal-pengalaman-cerita');
+            
+            modalNama.innerHTML = `<div>
+                <span class="text-xl font-black text-[#002F6C]">Cerita Kemenangan: ${nama}</span>
+                <span class="block text-xs uppercase text-[#F9A825] tracking-widest font-bold font-sans">${judul}</span>
+            </div>`;
+            
+            // Generate HTML untuk foto tambahan di dalam modal jika URL-nya tersedia
+            let fotoHTML = "";
+            if (foto1 || foto2) {
+                fotoHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 mt-2">`;
+                if (foto1) {
+                    fotoHTML += `<img src="${foto1}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 1" onerror="this.style.display='none'">`;
+                }
+                if (foto2) {
+                    fotoHTML += `<img src="${foto2}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 2" onerror="this.style.display='none'">`;
+                }
+                fotoHTML += `</div>`;
+            }
+
+            modalCerita.innerHTML = `
+                ${fotoHTML}
+                <p class="text-gray-700 leading-relaxed font-medium mt-2">${isiLengkap}</p>
+            `;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        // Fungsi Menutup Modal Detail Cerita
+        function tutupDetailPengalaman() {
+            const modal = document.getElementById('modal-pengalaman');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
     </script>
 </body>
