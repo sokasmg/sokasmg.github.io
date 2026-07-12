@@ -1655,7 +1655,7 @@
         const response = await fetch(CSV_URL_MATERI);
         const csvData = await response.text();
         
-        // Proses parsing baris CSV manual (sama persis dengan logic cerita pengalaman)
+        // Proses parsing baris CSV manual
         const rows = [];
         let currentRow = [];
         let currentField = "";
@@ -1704,11 +1704,16 @@
             const kategori = row[1] ? row[1].trim() : 'Umum';
             const isi = row[2] ? row[2].trim() : '';
 
+            // Escape tanda kutip agar tidak merusak parameter onclick di HTML
+            const safeJudul = judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeKategori = kategori.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeIsi = isi.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+
             const card = document.createElement('div');
             card.className = "bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
             
             card.innerHTML = `
-                <div class="p-5 flex-1">
+                <div class="p-5 flex-1" onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
                             ${kategori}
@@ -1722,7 +1727,7 @@
                     </p>
                 </div>
                 <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
-                    <button onclick="bukaDetailPengalaman('${safeKategori}', '${safeJudul}', '${safeIsi}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                    <button onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
                         Lanjut baca...
                     </button>
                 </div>
