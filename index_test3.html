@@ -1578,7 +1578,7 @@ dataDitampilkan.forEach((row, index) => {
 
     // Menambahkan class 'flex-none', menentukan lebar kartu 'w-[85vw]' di mobile / 'md:w-[350px]' di desktop, dan 'snap-center'
     const cardHtml = `
-        <div class="flex-none w-[85vw] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+        <div class="flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
             <div>
                 <div class="flex items-center space-x-4 mb-4">
                     <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
@@ -1600,7 +1600,19 @@ dataDitampilkan.forEach((row, index) => {
     `;
     container.insertAdjacentHTML('beforeend', cardHtml);
 });
-
+setTimeout(() => {
+                // Beri jeda 1 detik setelah data dimuat
+                if (container.scrollLeft === 0) {
+                    // Hanya animasi jika user belum scroll
+                    // Scroll kontainer ke kanan sejauh 60px
+                    container.scroll({ left: 60, behavior: 'smooth' });
+                    
+                    setTimeout(() => {
+                        // Kembali ke kiri setelah 400ms
+                        container.scroll({ left: 0, behavior: 'smooth' });
+                    }, 400); 
+                }
+            }, 1000); // 1 detik setelah dimuat agar tidak mengganggu load awal
             } catch (error) {
                 console.error("Gagal memuat pengalaman:", error);
                 document.getElementById('pengalaman-container').innerHTML = 
