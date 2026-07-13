@@ -45,7 +45,7 @@
             margin-bottom: 10px;
         }
         .header-left {
-            font-size: 56px; /* Poin 1: Tulisan SEMARANG Diperbesar dari 42px ke 56px */
+            font-size: 56px; /* Ukuran Semarang yang sudah diperbesar */
             font-weight: bold;
             letter-spacing: 2px;
             width: 35%;
@@ -58,7 +58,7 @@
             vertical-align: middle;
         }
         .header-center img {
-            height: 60px; /* Pengaturan tinggi logo Anda */
+            height: 60px; /* Tinggi logo.jpg Anda */
             display: block;
             margin: 0 auto 5px auto;
         }
@@ -179,7 +179,7 @@
             <tr>
                 <td class="header-left">SEMARANG</td>
                 <td class="header-center">
-                    <img src="logo.jpg" alt="Logo Soka Gakkai Indonesia">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia">
                     <div class="brand-name">SOKA GAKKAI INDONESIA</div>
                 </td>
                 <td class="header-right" id="textHeaderBulan">JADWAL BULANAN</td>
@@ -232,7 +232,7 @@
             const response = await fetch(CSV_URL_JADWAL_BULANAN);
             const csvData = await response.text();
             
-            // Parser CSV
+            // Parser CSV andalan Anda
             const rows = [];
             let currentRow = [];
             let currentField = "";
@@ -267,7 +267,6 @@
                 rows.push(currentRow);
             }
 
-            // Object Kontainer Acara & Pencatat Modus (Bulan/Tahun Terbanyak)
             const parsedEvents = {};
             const hitungBulanTahun = {};
             
@@ -293,7 +292,6 @@
 
                 if (isNaN(eventDate.getTime())) continue; 
 
-                // Catat kunci identitas bulan dan tahun kegiatan (Format: YYYY-MM)
                 const keyKey = `${eventDate.getFullYear()}-${eventDate.getMonth()}`;
                 hitungBulanTahun[keyKey] = (hitungBulanTahun[keyKey] || 0) + 1;
 
@@ -309,7 +307,7 @@
                 parsedEvents[blnThnTag][dayNum].push({ jam: jamString, acara: acaraString });
             }
 
-            // Poin 2: Cari Bulan & Tahun mana yang memiliki jumlah entri kegiatan paling dominan
+            // Cari Bulan & Tahun yang dominan (Dinamis)
             let targetKey = "";
             let maxCount = 0;
             for (const key in hitungBulanTahun) {
@@ -319,7 +317,6 @@
                 }
             }
 
-            // Jika sheet kosong, kunci cadangan otomatis jatuh pada bulan-tahun saat ini
             if (!targetKey) {
                 const skrg = new Date();
                 targetKey = `${skrg.getFullYear()}-${skrg.getMonth()}`;
@@ -327,13 +324,11 @@
 
             const [targetYear, targetMonth] = targetKey.split('-').map(Number);
 
-            // Ganti Tulisan Header Kanan secara Dinamis
+            // Ganti Judul Bulan Kanan Atas secara Otomatis
             document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
 
-            // Ambil sub-kumpulan data jadwal khusus bulan terpilih
             const bulanEvents = parsedEvents[targetKey] || {};
 
-            // Render komponen tabel berdasarkan bulan & tahun dinamis hasil ekstraksi
             generateCalendar(targetYear, targetMonth, bulanEvents);
             document.getElementById('calendarWrapper').style.display = 'block';
 
@@ -368,12 +363,12 @@
                     let eventHtml = '';
                     let dayEvents = [];
 
-                    // 1. Rutinitas Hari Kamis otomatis
+                    // 1. Jadwal rutin hari Kamis otomatis
                     if (j === 4) { 
                         dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
                     }
 
-                    // 2. Olahan Dinamis Google Sheets sesuai Tanggal Aktif
+                    // 2. Gabungkan data dari Google Sheets Anda
                     if (dynamicEvents[dateCounter]) {
                         dynamicEvents[dateCounter].forEach(e => {
                             const isDuplicate = (j === 4 && e.acara.toLowerCase().includes('shodaikai'));
