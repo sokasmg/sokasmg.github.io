@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalender Jadwal Soka Gakkai Indonesia</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,8 +25,6 @@
             text-align: center;
         }
         button {
-            background-color: #0056b3;
-            color: white;
             border: none;
             padding: 12px 24px;
             font-size: 16px;
@@ -33,9 +32,22 @@
             cursor: pointer;
             border-radius: 4px;
             transition: background 0.3s;
+            margin: 0 5px;
         }
-        button:hover {
+        #generateBtn {
+            background-color: #0056b3;
+            color: white;
+        }
+        #generateBtn:hover {
             background-color: #004085;
+        }
+        #downloadBtn {
+            background-color: #28a745;
+            color: white;
+            display: none; /* Sembunyikan sampai kalender di-generate */
+        }
+        #downloadBtn:hover {
+            background-color: #218838;
         }
         
         /* Layout Header Kalender */
@@ -140,7 +152,6 @@
         .footer-right {
             float: right;
         }
-        /* Mengatur ukuran banner kanan bawah agar proporsional */
         .footer-right img {
             height: 55px; 
             display: block;
@@ -153,6 +164,8 @@
         
         #calendarWrapper {
             display: none;
+            background: #fff; /* Memastikan background putih bersih saat di-capture */
+            padding: 10px;
         }
 
         @media print {
@@ -176,6 +189,7 @@
 <div class="container">
     <div class="control-panel">
         <button id="generateBtn">Generate Kalender</button>
+        <button id="downloadBtn">Download JPEG</button>
     </div>
 
     <div id="calendarWrapper">
@@ -225,6 +239,7 @@
 <script>
     const CSV_URL_JADWAL_BULANAN = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv';
     const namaBulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    let namaFileDownload = "kalender_jadwal";
 
     document.getElementById('generateBtn').addEventListener('click', async () => {
         try {
@@ -323,17 +338,51 @@
 
             const [targetYear, targetMonth] = targetKey.split('-').map(Number);
 
-            document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+            // Set judul text dinamis
+            const teksBulanTahun = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+            document.getElementById('textHeaderBulan').innerText = teksBulanTahun;
+            
+            // Format nama file unduhan (contoh: jadwal_juli_2026.jpg)
+            namaFileDownload = `jadwal_${namaBulanIndo[targetMonth].toLowerCase()}_${targetYear}`;
 
             const bulanEvents = parsedEvents[targetKey] || {};
 
             generateCalendar(targetYear, targetMonth, bulanEvents);
+            
+            // Tampilkan pembungkus kalender beserta tombol download
             document.getElementById('calendarWrapper').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'inline-block';
 
         } catch (error) {
             console.error("Gagal memuat jadwal:", error);
             alert("Gagal memuat data dari Google Sheets.");
         }
+    });
+
+    // Logika Fungsi Aksi Tombol Download JPEG
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+        const targetElement = document.getElementById('calendarWrapper');
+        
+        // Konversi area kalender menjadi kanvas gambar
+        html2canvas(targetElement, {
+            useCORS: true,           // Mengizinkan pengambilan gambar lintas domain jika ada hosting luar
+            allowTaint: true,
+            scale: 2                 // Menaikkan skala pixel agar hasil cetak gambar tajam/HD
+        }).then(canvas => {
+            // Mengubah format hasil kanvas ke tautan data biner gambar JPEG (.jpg)
+            const imageBlob = canvas.toDataURL('image/jpeg', 0.9); 
+            
+            // Membuat elemen simulasi klik unduh internal browser
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageBlob;
+            downloadLink.download = `${namaFileDownload}.jpg`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }).catch(err => {
+            alert("Terjadi kendala saat menyiapkan file gambar.");
+            console.error(err);
+        });
     });
 
     function generateCalendar(year, month, dynamicEvents) {
@@ -361,12 +410,10 @@
                     let eventHtml = '';
                     let dayEvents = [];
 
-                    // 1. Jadwal rutin Kamis otomatis
                     if (j === 4) { 
                         dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
                     }
 
-                    // 2. Gabungkan data Google Sheets
                     if (dynamicEvents[dateCounter]) {
                         dynamicEvents[dateCounter].forEach(e => {
                             const isDuplicate = (j === 4 && e.acara.toLowerCase().includes('shodaikai'));
