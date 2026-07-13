@@ -948,6 +948,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadQuotesFromSheets();
             checkLoginStatus(); 
+            switchTab('bimbingan');
 
             slides.forEach((slide) => {
                 const lazySrc = slide.getAttribute('data-src');
