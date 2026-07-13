@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Jadwal Soka Gakkai Indonesia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            color: #000;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .control-panel {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #004085;
+        }
+        
+        /* Layout Header Kalender */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        .header-left {
+            font-size: 56px; /* Poin 1: Tulisan SEMARANG Diperbesar dari 42px ke 56px */
+            font-weight: bold;
+            letter-spacing: 2px;
+            width: 35%;
+            vertical-align: bottom;
+            line-height: 1;
+        }
+        .header-center {
+            text-align: center;
+            width: 30%;
+            vertical-align: middle;
+        }
+        .header-center img {
+            height: 60px; /* Pengaturan tinggi logo Anda */
+            display: block;
+            margin: 0 auto 5px auto;
+        }
+        .header-center .brand-name {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .header-right {
+            text-align: right;
+            font-size: 24px;
+            font-weight: bold;
+            width: 35%;
+            vertical-align: bottom;
+            text-transform: uppercase;
+        }
+
+        /* Kalender Grid/Table */
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .calendar-table th {
+            border: 2px solid #000;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+            background-color: #fff;
+        }
+        .calendar-table td {
+            border: 2px solid #000;
+            height: 120px;
+            vertical-align: top;
+            padding: 6px;
+            position: relative;
+            background-color: #fff;
+        }
+        .date-number {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 4px;
+        }
+        
+        /* Hari Minggu diwarnai merah */
+        .calendar-table th:first-child,
+        .calendar-table td:first-child .date-number {
+            color: red;
+        }
+        
+        .event-list {
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        .event-item {
+            margin-bottom: 6px;
+        }
+        
+        /* Footer Layout */
+        .footer-section {
+            margin-top: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            position: relative;
+            min-height: 60px;
+        }
+        .footer-left {
+            float: left;
+            line-height: 1.5;
+        }
+        .footer-center {
+            text-align: center;
+            padding-top: 15px;
+            font-size: 13px;
+        }
+        .footer-right {
+            float: right;
+            margin-top: -10px;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        
+        #calendarWrapper {
+            display: none;
+        }
+
+        @media print {
+            .control-panel {
+                display: none;
+            }
+            body {
+                margin: 0;
+                background-color: #fff;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="control-panel">
+        <button id="generateBtn">Generate Kalender</button>
+    </div>
+
+    <div id="calendarWrapper">
+        <table class="header-table">
+            <tr>
+                <td class="header-left">SEMARANG</td>
+                <td class="header-center">
+                    <img src="logo.jpg" alt="Logo Soka Gakkai Indonesia">
+                    <div class="brand-name">SOKA GAKKAI INDONESIA</div>
+                </td>
+                <td class="header-right" id="textHeaderBulan">JADWAL BULANAN</td>
+            </tr>
+        </table>
+
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>Minggu</th>
+                    <th>Senin</th>
+                    <th>Selasa</th>
+                    <th>Rabu</th>
+                    <th>Kamis</th>
+                    <th>Jumat</th>
+                    <th>Sabtu</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+                </tbody>
+        </table>
+
+        <div class="footer-section clearfix">
+            <div class="footer-left">
+                03 Juli : Hari guru dan murid<br>
+                11 Juli : Hari Divisi Pemuda<br>
+                19 Juli : Hari Divisi Pemuda, Hari Ikeda Kayokai
+            </div>
+            <div class="footer-right">
+                <svg width="180" height="55" viewBox="0 0 180 55">
+                    <text x="10" y="25" font-family="Arial" font-size="10" font-weight="bold" fill="#75a434">Menuju tahun berdirinya</text>
+                    <text x="10" y="42" font-family="Arial" font-size="14" font-weight="bold" fill="#0056b3">Soka Gakkai di 2030</text>
+                    <circle cx="155" cy="30" r="15" fill="none" stroke="#75a434" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M 140 35 Q 155 20 170 35" fill="none" stroke="#0056b3" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="footer-center">
+                Setiap hari kamis jam 19.00 ada Shodaikai umum
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CSV_URL_JADWAL_BULANAN = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv';
+    const namaBulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+        try {
+            const response = await fetch(CSV_URL_JADWAL_BULANAN);
+            const csvData = await response.text();
+            
+            // Parser CSV
+            const rows = [];
+            let currentRow = [];
+            let currentField = "";
+            let insideQuote = false;
+            const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+            for (let i = 0; i < normalizedData.length; i++) {
+                let char = normalizedData[i];
+                let nextChar = normalizedData[i + 1];
+
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') {
+                        currentField += '"'; 
+                        i++;
+                    } else {
+                        insideQuote = !insideQuote; 
+                    }
+                } else if (char === ',' && !insideQuote) {
+                    currentRow.push(currentField);
+                    currentField = "";
+                } else if (char === '\n' && !insideQuote) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                    currentRow = [];
+                    currentField = "";
+                } else {
+                    currentField += char;
+                }
+            }
+            if (currentField || currentRow.length > 0) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+            }
+
+            // Object Kontainer Acara & Pencatat Modus (Bulan/Tahun Terbanyak)
+            const parsedEvents = {};
+            const hitungBulanTahun = {};
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length < 3 || !row[0]) continue;
+
+                const tglString = row[0].trim(); 
+                const jamString = row[1] ? row[1].trim() : "";
+                const acaraString = row[2] ? row[2].trim() : "";
+
+                if (!acaraString) continue;
+
+                let eventDate;
+                if (tglString.includes('-')) {
+                    eventDate = new Date(tglString);
+                } else if (tglString.includes('/')) {
+                    const parts = tglString.split('/');
+                    eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                } else {
+                    eventDate = new Date(tglString);
+                }
+
+                if (isNaN(eventDate.getTime())) continue; 
+
+                // Catat kunci identitas bulan dan tahun kegiatan (Format: YYYY-MM)
+                const keyKey = `${eventDate.getFullYear()}-${eventDate.getMonth()}`;
+                hitungBulanTahun[keyKey] = (hitungBulanTahun[keyKey] || 0) + 1;
+
+                const dayNum = eventDate.getDate();
+                const blnThnTag = keyKey;
+
+                if (!parsedEvents[blnThnTag]) {
+                    parsedEvents[blnThnTag] = {};
+                }
+                if (!parsedEvents[blnThnTag][dayNum]) {
+                    parsedEvents[blnThnTag][dayNum] = [];
+                }
+                parsedEvents[blnThnTag][dayNum].push({ jam: jamString, acara: acaraString });
+            }
+
+            // Poin 2: Cari Bulan & Tahun mana yang memiliki jumlah entri kegiatan paling dominan
+            let targetKey = "";
+            let maxCount = 0;
+            for (const key in hitungBulanTahun) {
+                if (hitungBulanTahun[key] > maxCount) {
+                    maxCount = hitungBulanTahun[key];
+                    targetKey = key;
+                }
+            }
+
+            // Jika sheet kosong, kunci cadangan otomatis jatuh pada bulan-tahun saat ini
+            if (!targetKey) {
+                const skrg = new Date();
+                targetKey = `${skrg.getFullYear()}-${skrg.getMonth()}`;
+            }
+
+            const [targetYear, targetMonth] = targetKey.split('-').map(Number);
+
+            // Ganti Tulisan Header Kanan secara Dinamis
+            document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+
+            // Ambil sub-kumpulan data jadwal khusus bulan terpilih
+            const bulanEvents = parsedEvents[targetKey] || {};
+
+            // Render komponen tabel berdasarkan bulan & tahun dinamis hasil ekstraksi
+            generateCalendar(targetYear, targetMonth, bulanEvents);
+            document.getElementById('calendarWrapper').style.display = 'block';
+
+        } catch (error) {
+            console.error("Gagal memuat jadwal:", error);
+            alert("Gagal memuat data dari Google Sheets.");
+        }
+    });
+
+    function generateCalendar(year, month, dynamicEvents) {
+        const calendarBody = document.getElementById('calendarBody');
+        calendarBody.innerHTML = '';
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        let dateCounter = 1;
+        let htmlRows = '';
+
+        for (let i = 0; i < 6; i++) {
+            let rowCells = '<tr>';
+            let hasCellsInRow = false;
+
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDayIndex) {
+                    rowCells += '<td></td>';
+                } else if (dateCounter > totalDays) {
+                    rowCells += '<td></td>';
+                } else {
+                    hasCellsInRow = true;
+                    
+                    let eventHtml = '';
+                    let dayEvents = [];
+
+                    // 1. Rutinitas Hari Kamis otomatis
+                    if (j === 4) { 
+                        dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
+                    }
+
+                    // 2. Olahan Dinamis Google Sheets sesuai Tanggal Aktif
+                    if (dynamicEvents[dateCounter]) {
+                        dynamicEvents[dateCounter].forEach(e => {
+                            const isDuplicate = (j === 4 && e.acara.toLowerCase().includes('shodaikai'));
+                            if (!isDuplicate) {
+                                dayEvents.push(e);
+                            }
+                        });
+                    }
+
+                    if (dayEvents.length > 0) {
+                        eventHtml += '<div class="event-list">';
+                        dayEvents.forEach(e => {
+                            const jamTeks = e.jam ? `<b>${e.jam}</b> ` : "";
+                            eventHtml += `<div class="event-item">${jamTeks}${e.acara}</div>`;
+                        });
+                        eventHtml += '</div>';
+                    }
+
+                    rowCells += `<td>
+                        <div class="date-number">${dateCounter}</div>
+                        ${eventHtml}
+                    </td>`;
+                    dateCounter++;
+                }
+            }
+            rowCells += '</tr>';
+            
+            if (hasCellsInRow) {
+                htmlRows += rowCells;
+            }
+        }
+        calendarBody.innerHTML = htmlRows;
+    }
+</script>
+
+</body>
+</html>
