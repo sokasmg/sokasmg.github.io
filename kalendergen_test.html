@@ -45,7 +45,7 @@
             margin-bottom: 10px;
         }
         .header-left {
-            font-size: 72px; /* Ukuran Semarang yang sudah diperbesar */
+            font-size: 56px;
             font-weight: bold;
             letter-spacing: 2px;
             width: 35%;
@@ -58,7 +58,7 @@
             vertical-align: middle;
         }
         .header-center img {
-            height: 60px; /* Tinggi logo.jpg Anda */
+            height: 60px;
             display: block;
             margin: 0 auto 5px auto;
         }
@@ -139,7 +139,11 @@
         }
         .footer-right {
             float: right;
-            margin-top: -10px;
+        }
+        /* Mengatur ukuran banner kanan bawah agar proporsional */
+        .footer-right img {
+            height: 55px; 
+            display: block;
         }
         .clearfix::after {
             content: "";
@@ -179,7 +183,7 @@
             <tr>
                 <td class="header-left">SEMARANG</td>
                 <td class="header-center">
-                    <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia">
+                    <img src="logo.jpg" alt="Logo Soka Gakkai Indonesia">
                     <div class="brand-name">SOKA GAKKAI INDONESIA</div>
                 </td>
                 <td class="header-right" id="textHeaderBulan">JADWAL BULANAN</td>
@@ -209,12 +213,7 @@
                 19 Juli : Hari Divisi Pemuda, Hari Ikeda Kayokai
             </div>
             <div class="footer-right">
-                <svg width="180" height="55" viewBox="0 0 180 55">
-                    <text x="10" y="25" font-family="Arial" font-size="10" font-weight="bold" fill="#75a434">Menuju tahun berdirinya</text>
-                    <text x="10" y="42" font-family="Arial" font-size="14" font-weight="bold" fill="#0056b3">Soka Gakkai di 2030</text>
-                    <circle cx="155" cy="30" r="15" fill="none" stroke="#75a434" stroke-width="1.5" opacity="0.6"/>
-                    <path d="M 140 35 Q 155 20 170 35" fill="none" stroke="#0056b3" stroke-width="2"/>
-                </svg>
+                <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai">
             </div>
             <div class="footer-center">
                 Setiap hari kamis jam 19.00 ada Shodaikai umum
@@ -232,7 +231,7 @@
             const response = await fetch(CSV_URL_JADWAL_BULANAN);
             const csvData = await response.text();
             
-            // Parser CSV andalan Anda
+            // Parser CSV
             const rows = [];
             let currentRow = [];
             let currentField = "";
@@ -307,7 +306,7 @@
                 parsedEvents[blnThnTag][dayNum].push({ jam: jamString, acara: acaraString });
             }
 
-            // Cari Bulan & Tahun yang dominan (Dinamis)
+            // Cari Bulan & Tahun dominan
             let targetKey = "";
             let maxCount = 0;
             for (const key in hitungBulanTahun) {
@@ -324,7 +323,6 @@
 
             const [targetYear, targetMonth] = targetKey.split('-').map(Number);
 
-            // Ganti Judul Bulan Kanan Atas secara Otomatis
             document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
 
             const bulanEvents = parsedEvents[targetKey] || {};
@@ -363,12 +361,12 @@
                     let eventHtml = '';
                     let dayEvents = [];
 
-                    // 1. Jadwal rutin hari Kamis otomatis
+                    // 1. Jadwal rutin Kamis otomatis
                     if (j === 4) { 
                         dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
                     }
 
-                    // 2. Gabungkan data dari Google Sheets Anda
+                    // 2. Gabungkan data Google Sheets
                     if (dynamicEvents[dateCounter]) {
                         dynamicEvents[dateCounter].forEach(e => {
                             const isDuplicate = (j === 4 && e.acara.toLowerCase().includes('shodaikai'));
