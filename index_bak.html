@@ -41,14 +41,31 @@
         .animate-fade-in {
             animation: fadeIn 0.2s ease-out forwards;
         }
+        /* Menyembunyikan scrollbar untuk pengalaman-container */
+#pengalaman-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+        /* Menyembunyikan scrollbar untuk pengalaman dan materi */
+#pengalaman-container, #materi-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar, #materi-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div id="member-announcement-bar" class="bg-[#C62828] text-white overflow-hidden py-2 px-4 hidden border-b border-red-800">
+        <div id="member-announcement-bar" class="bg-[#172554] text-white overflow-hidden py-2 px-4 hidden border-b border-red-800">
             <div class="max-w-7xl mx-auto flex items-center">
-                <span class="bg-white text-[#C62828] text-xs font-black uppercase px-2 py-0.5 rounded mr-3 select-none flex-shrink-0 animate-pulse">PENGUMUMAN</span>
+                <span class="bg-white text-[#172554] text-xs font-black uppercase px-2 py-0.5 rounded mr-3 select-none flex-shrink-0 animate-pulse">PENGUMUMAN</span>
                 <marquee id="announcement-marquee" behavior="scroll" direction="left" class="text-xs md:text-sm font-bold tracking-wide">
                     Memuat pengumuman jadwal terbaru...
                 </marquee>
@@ -254,23 +271,87 @@
     </div>
     
     <section id="pengalaman-section" class="py-12 bg-blue-50 border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-[#002F6C] text-center mb-2">Cerita Kemenangan</h2>
-            <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
-                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
-                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
-                </div>
-            <div id="pengalaman-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center text-gray-500 col-span-3 py-4 animate-pulse">Memuat pengalaman anggota...</div>
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION CERITA PENGALAMAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Cerita Kemenangan</h2>
+            </div>
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas agar mobile tetap bersih) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('pengalaman-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('pengalaman-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </div>
-    </section>
-        <div class="soka-tricolor">
-        <div class="soka-blue"></div>
-        <div class="soka-yellow"></div>
-        <div class="soka-red"></div>
+
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Cerita Pengalaman -->
+        <div id="pengalaman-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
+        </div>
     </div>
+</section>
+
+<div class="soka-tricolor">
+    <div class="soka-blue"></div>
+    <div class="soka-yellow"></div>
+    <div class="soka-red"></div>
+</div>
+
+<section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION MATERI PELAJARAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
+            </div>
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('materi-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('materi-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Materi Pelajaran -->
+        <div id="materi-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat materi pelajaran...</div>
+        </div>
+    </div>
+</section>
+
     <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
@@ -287,7 +368,7 @@
             </div>
         </div>
     </section>
-
+    
     <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-12">
@@ -451,7 +532,7 @@
             <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
             </svg>
-            <span>Chat Anggota</span>
+            <span>Chat</span>
         </button>
     </div>
 
@@ -486,9 +567,6 @@
 
     <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
         <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
             <span id="floating-btn-text">Menu Khusus</span>
         </a>
     </div>
@@ -511,16 +589,37 @@
                 </div>
                 <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">×</button>
             </div>
-            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base text-justify whitespace-pre-line">
                 Isi cerita lengkap akan muncul di sini...
             </div>
             <div class="border-t border-gray-150 pt-3 mt-4 flex items-center justify-between">
-            <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
-                A+
-            </button>
-            <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
-                Selesai Membaca
-            </button>
+                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                    A+
+                </button>
+                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
+                    Selesai Membaca
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="materiModal" class="fixed inset-0 z-[250] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <span id="modalKategori" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">Kategori</span>
+                <button onclick="closeModalMateri()" class="text-slate-400 hover:text-slate-600 transition-colors text-2xl font-bold focus:outline-none">×</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <h3 id="modalJudul" class="font-bold text-slate-800 text-2xl leading-tight">Judul Materi</h3>
+                <p id="modalIsi" class="text-slate-600 text-base leading-relaxed text-justify whitespace-pre-line">Isi materi lengkap akan muncul di sini...</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                    A+
+                </button>
+                <button onclick="closeModalMateri()" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-semibold focus:outline-none">
+                    Selesai membaca
+                </button>
             </div>
         </div>
     </div>
@@ -558,6 +657,7 @@
 
         // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
         const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+        const CSV_URL_MATERI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=903124982&single=true&output=csv";
         const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
         const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
         const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
@@ -637,7 +737,6 @@
                 setQuoteOfTheDay();
                 renderQASearch();
                 
-                // Panggil pembuat running text setelah data bimbingan/jadwal dari spreadsheet siap
                 updateRunningTextAnnouncement();
             } catch (error) {
                 console.error("Gagal mengambil data dari Google Sheets:", error);
@@ -646,132 +745,121 @@
             }
         }
 
-        // Fungsi mengekstrak teks bimbingan/jadwal hari ini dari Google Sheet untuk dijadikan Running Text
         async function updateRunningTextAnnouncement() {
-    const marqueeEl = document.getElementById('announcement-marquee');
-    const announcementBar = document.getElementById('member-announcement-bar');
-    if (!marqueeEl || !announcementBar) return;
+            const marqueeEl = document.getElementById('announcement-marquee');
+            const announcementBar = document.getElementById('member-announcement-bar');
+            if (!marqueeEl || !announcementBar) return;
 
-    // Tetap sembunyikan bar pengumuman saat proses memuat agar tidak glitch/patah-patah di HP
-    announcementBar.classList.add('hidden');
+            announcementBar.classList.add('hidden');
 
-    try {
-        const response = await fetch(CSV_URL_JADWAL_BULANAN);
-        const csvData = await response.text();
-        
-        const rows = [];
-        let currentRow = [];
-        let currentField = "";
-        let insideQuote = false;
-        const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
-        for (let i = 0; i < normalizedData.length; i++) {
-            let char = normalizedData[i];
-            let nextChar = normalizedData[i + 1];
-
-            if (char === '"') {
-                if (insideQuote && nextChar === '"') {
-                    currentField += '"'; 
-                    i++;
-                } else {
-                    insideQuote = !insideQuote; 
-                }
-            } else if (char === ',' && !insideQuote) {
-                currentRow.push(currentField);
-                currentField = "";
-            } else if (char === '\n' && !insideQuote) {
-                currentRow.push(currentField);
-                rows.push(currentRow);
-                currentRow = [];
-                currentField = "";
-            } else {
-                currentField += char;
-            }
-        }
-        if (currentField || currentRow.length > 0) {
-            currentRow.push(currentField);
-            rows.push(currentRow);
-        }
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const upcomingEvents = [];
-        // Array nama hari Indonesia
-        const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-
-        for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
-            if (!row || row.length < 3 || !row[0]) continue;
-
-            const tglString = row[0].trim(); 
-            const jamString = row[1] ? row[1].trim() : "";
-            const acaraString = row[2] ? row[2].trim() : "";
-
-            if (!acaraString) continue;
-
-            let eventDate;
-            if (tglString.includes('-')) {
-                eventDate = new Date(tglString);
-            } else if (tglString.includes('/')) {
-                const parts = tglString.split('/');
-                eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
-            } else {
-                eventDate = new Date(tglString);
-            }
-
-            if (isNaN(eventDate.getTime())) continue; 
-            
-            // Dapatkan nama hari sebelum jamnya di-reset ke 00:00
-            const hariTeks = namaHari[eventDate.getDay()];
-            
-            eventDate.setHours(0, 0, 0, 0);
-
-            if (eventDate >= today) {
-                upcomingEvents.push({
-                    tanggalRaw: eventDate,
-                    hari: hariTeks,
-                    tanggalTeks: tglString,
-                    jam: jamString,
-                    acara: acaraString
-                });
-            }
-        }
-
-        // Urutkan jadwal secara bersih berdasarkan tanggal terdekat
-        upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
-
-        // Satukan data setelah semuanya lengkap 100%
-        if (upcomingEvents.length > 0) {
-            const teksPengumuman = upcomingEvents.map(ev => {
-                const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
-                return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
-            }).join("     |     ");
-
-            // Masukkan teks ke dalam marquee
-            marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
-            
-            // Tampilkan bar pengumuman hanya ketika data SUDAH LENGKAP & SIAP DI-SCROLL
-            const savedName = localStorage.getItem('soka_user_name');
-            if (savedName) {
-                announcementBar.classList.remove('hidden');
+            try {
+                const response = await fetch(CSV_URL_JADWAL_BULANAN);
+                const csvData = await response.text();
                 
-                // Trik Khusus HP: Memaksa browser me-render ulang animasi marquee agar tidak macet
-                marqueeEl.stop();
-                marqueeEl.start();
-            }
-        } else {
-            marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
-            if (localStorage.getItem('soka_user_name')) {
-                announcementBar.classList.remove('hidden');
+                const rows = [];
+                let currentRow = [];
+                let currentField = "";
+                let insideQuote = false;
+                const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i];
+                    let nextChar = normalizedData[i + 1];
+
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') {
+                            currentField += '"'; 
+                            i++;
+                        } else {
+                            insideQuote = !insideQuote; 
+                        }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField);
+                        currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = "";
+                    } else {
+                        currentField += char;
+                    }
+                }
+                if (currentField || currentRow.length > 0) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const upcomingEvents = [];
+                const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    if (!row || row.length < 3 || !row[0]) continue;
+
+                    const tglString = row[0].trim(); 
+                    const jamString = row[1] ? row[1].trim() : "";
+                    const acaraString = row[2] ? row[2].trim() : "";
+
+                    if (!acaraString) continue;
+
+                    let eventDate;
+                    if (tglString.includes('-')) {
+                        eventDate = new Date(tglString);
+                    } else if (tglString.includes('/')) {
+                        const parts = tglString.split('/');
+                        eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                    } else {
+                        eventDate = new Date(tglString);
+                    }
+
+                    if (isNaN(eventDate.getTime())) continue; 
+                    
+                    const hariTeks = namaHari[eventDate.getDay()];
+                    eventDate.setHours(0, 0, 0, 0);
+
+                    if (eventDate >= today) {
+                        upcomingEvents.push({
+                            tanggalRaw: eventDate,
+                            hari: hariTeks,
+                            tanggalTeks: tglString,
+                            jam: jamString,
+                            acara: acaraString
+                        });
+                    }
+                }
+
+                upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
+
+                if (upcomingEvents.length > 0) {
+                    const teksPengumuman = upcomingEvents.map(ev => {
+                        const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
+                        return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+                    }).join("     |     ");
+
+                    marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
+                    
+                    const savedName = localStorage.getItem('soka_user_name');
+                    if (savedName) {
+                        announcementBar.classList.remove('hidden');
+                        marqueeEl.stop();
+                        marqueeEl.start();
+                    }
+                } else {
+                    marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+                    if (localStorage.getItem('soka_user_name')) {
+                        announcementBar.classList.remove('hidden');
+                    }
+                }
+
+            } catch (error) {
+                console.error("Gagal memuat teks berjalan:", error);
+                marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
             }
         }
-
-    } catch (error) {
-        console.error("Gagal memuat teks berjalan:", error);
-        marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
-    }
-}
 
         function renderQASearch() {
             const container = document.getElementById('qa-container');
@@ -845,7 +933,6 @@
 
         function switchTab(tabName) {
             activeTab = tabName;
-            
             const btnBimbingan = document.getElementById('tab-bimbingan');
             const btnGosho = document.getElementById('tab-gosho');
             
@@ -878,6 +965,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadQuotesFromSheets();
             checkLoginStatus(); 
+            switchTab('bimbingan');
 
             slides.forEach((slide) => {
                 const lazySrc = slide.getAttribute('data-src');
@@ -926,6 +1014,8 @@
             const navGaleriMobile = document.getElementById('nav-galeri-mobile');
             const sectionJadwal = document.getElementById('jadwal');
             const btnCardCreator = document.getElementById('btn-card-creator');
+
+            const sectionMateri = document.getElementById('materi-section');
             
             const greetingDesktop = document.getElementById('user-greeting-desktop');
             const btnAuthDesktop = document.getElementById('btn-auth-desktop');
@@ -938,19 +1028,17 @@
 
             const floatingChatBtn = document.getElementById('floating-chat-btn');
             const floatingPinWarningBtn = document.getElementById('floating-pin-warning-btn');
-            
-            // Elemen Baris Pengumuman (Marquee) Merah
             const memberAnnouncementBar = document.getElementById('member-announcement-bar');
 
             if (savedName) {
-                // Tampilkan running text pengumuman saat member sudah login
                 if (memberAnnouncementBar) memberAnnouncementBar.classList.remove('hidden');
-                
                 if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
                 if (sectionJadwal) sectionJadwal.classList.remove('hidden');
                 if (btnCardCreator) btnCardCreator.classList.remove('hidden');
                 if (floatingChatBtn) floatingChatBtn.classList.remove('hidden'); 
+
+                if (sectionMateri) sectionMateri.classList.remove('hidden');
                 
                 if (greetingDesktop) {
                     greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
@@ -975,11 +1063,11 @@
                 if (floatingBtn && floatingLink && floatingText) {
                     if (savedJabatan === "Pimpinan") {
                         floatingLink.href = "intishibu.html";
-                        floatingText.innerText = "Menu Pimpinan";
+                        floatingText.innerText = "🦁";
                         floatingBtn.classList.remove('hidden');
                     } else if (savedJabatan === "Pimpinan (Admin)") {
                         floatingLink.href = "admin.html";
-                        floatingText.innerText = "Menu Admin";
+                        floatingText.innerText = "💻";
                         floatingBtn.classList.remove('hidden');
                     } else {
                         floatingBtn.classList.add('hidden');
@@ -992,13 +1080,10 @@
                     floatingPinWarningBtn.classList.add('hidden');
                 }
                 
-                // Segarkan konten running text pengumuman agar datanya sinkron
                 updateRunningTextAnnouncement();
 
             } else {
-                // Sembunyikan running text pengumuman jika belum login/logout
                 if (memberAnnouncementBar) memberAnnouncementBar.classList.add('hidden');
-
                 if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
                 if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
                 if (sectionJadwal) sectionJadwal.classList.add('hidden');
@@ -1110,7 +1195,6 @@
             const errorMsg = document.getElementById('pin-error-msg');
             const btnSubmit = document.getElementById('btn-submit-pin');
             const savedPhone = localStorage.getItem('soka_user_phone');
-
             const isNumeric = /^\d+$/.test(newPin);
 
             if (!newPin || newPin.length !== 6 || !isNumeric) {
@@ -1201,7 +1285,6 @@
 
         function setupInfiniteScroll() {
             generateRandomImages();
-
             const items = Array.from(slider.children);
             if (items.length === 0) return;
 
@@ -1231,7 +1314,6 @@
             function scrollStep() {
                 if (!isDown) {
                     slider.scrollLeft += 0.8; 
-
                     if (slider.scrollLeft >= originalWidth) {
                         slider.scrollLeft -= originalWidth;
                     }
@@ -1309,10 +1391,10 @@
             setupInfiniteScroll();
             window.addEventListener('resize', updateSliderWidth);
             setTimeout(startAutoScroll, 1000);
-            loadPengalamanAnggota(); // Menjalankan fungsi penarik cerita
+            loadPengalamanAnggota(); 
+            fetchMateri(); 
         });
 
-        // === FUNGSI MODAL ZOOM GAMBAR ===
         function openGalleryModal(imgSrc) {
             const modal = document.getElementById('gallery-modal');
             const modalImg = document.getElementById('modal-zoom-img');
@@ -1342,6 +1424,10 @@
             chatWin.classList.toggle('hidden');
             if (!chatWin.classList.contains('hidden')) {
                 loadChatMessages();
+                setTimeout(() => {
+                    const body = document.getElementById('chat-body');
+                    if(body) body.scrollTop = body.scrollHeight;
+                }, 200);
             }
         }
 
@@ -1362,156 +1448,134 @@
         }
 
         async function loadChatMessages() {
-    const body = document.getElementById('chat-body');
-    body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
-    
-    try {
-        // Jalur cepat: Mengubah POST menjadi GET dengan query parameter (?action=readChat)
-        // Ini akan memicu fungsi doGet di GAS yang tanpa getLastRow()
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
-            method: 'GET',
-            mode: 'cors'
-        });
-        const chats = await response.json();
-        
-        if (!chats || chats.length === 0) {
-            body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
-            return;
-        }
-        
-        body.innerHTML = "";
-        const currentUser = localStorage.getItem('soka_user_name');
-        
-        chats.forEach(c => {
-            const isMe = c.nama === currentUser;
-            const chatBubble = document.createElement('div');
+            const body = document.getElementById('chat-body');
+            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
             
-            chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
-                isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
-            }`;
-            
-            let waktuTampil = "";
-            if (c.timestamp) {
-                const dateObj = new Date(c.timestamp);
-                const jam = String(dateObj.getHours()).padStart(2, '0');
-                const menit = String(dateObj.getMinutes()).padStart(2, '0');
-                waktuTampil = `${jam}:${menit}`;
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const chats = await response.json();
+                
+                if (!chats || chats.length === 0) {
+                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+                    return;
+                }
+                
+                body.innerHTML = "";
+                const currentUser = localStorage.getItem('soka_user_name');
+                
+                chats.forEach(c => {
+                    const isMe = c.nama === currentUser;
+                    const chatBubble = document.createElement('div');
+                    
+                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+                    }`;
+                    
+                    let waktuTampil = "";
+                    if (c.timestamp) {
+                        const dateObj = new Date(c.timestamp);
+                        const jam = String(dateObj.getHours()).padStart(2, '0');
+                        const menit = String(dateObj.getMinutes()).padStart(2, '0');
+                        waktuTampil = `${jam}:${menit}`;
+                    }
+                    
+                    chatBubble.innerHTML = `
+                        <div class="flex justify-between items-center gap-4 mb-0.5">
+                            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
+                            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
+                        </div>
+                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+                    `;
+                    body.appendChild(chatBubble);
+                });
+                
+                setTimeout(() => {
+                    body.scrollTop = body.scrollHeight;
+                }, 50);
+                
+            } catch (error) {
+                console.error("Gagal memuat chat:", error);
+                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
             }
-            
-            chatBubble.innerHTML = `
-                <div class="flex justify-between items-center gap-4 mb-0.5">
-                    <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
-                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
-                </div>
-                <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
-            `;
-            body.appendChild(chatBubble);
-        });
-        
-        body.scrollTop = body.scrollHeight;
-        
-    } catch (error) {
-        console.error("Gagal memuat chat:", error);
-        body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
-    }
-}
+        }
 
         async function submitChat() {
-    const input = document.getElementById('input-chat-msg');
-    const btn = document.getElementById('btn-send-chat');
-    const msg = input.value.trim();
-    const myName = localStorage.getItem('soka_user_name') || "Anggota";
-    
-    // Validasi panjang karakter sesuai aturan backend Anda
-    if (!msg || msg.length > 160) return;
-    
-    // 1. Dapatkan kontainer body tempat balon chat menempel
-    const body = document.getElementById('chat-body');
-    
-    // 2. REKAYASA INSTAN: Buat balon chat tiruan di layar secara lokal
-    const fakeBubble = document.createElement('div');
-    // Desain disamakan dengan loadChatMessages (selalu bg-green-100 karena ini pesan kita sendiri)
-    fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity duration-300";
-    
-    const sekarang = new Date();
-    const jam = String(sekarang.getHours()).padStart(2, '0');
-    const menit = String(sekarang.getMinutes()).padStart(2, '0');
-    const waktuTampil = `${jam}:${menit}`;
-    
-    fakeBubble.innerHTML = `
-        <div class="flex justify-between items-center gap-4 mb-0.5">
-            <span class="font-black text-[10px] text-blue-900 block">${myName}</span>
-            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil} <span class="status-icon">🕒</span></span>
-        </div>
-        <p class="leading-relaxed break-words font-medium text-gray-700">${msg}</p>
-    `;
-    
-    // Tempelkan langsung ke layar dan scroll paling bawah detik itu juga
-    body.appendChild(fakeBubble);
-    body.scrollTop = body.scrollHeight;
-    
-    // Langsung kosongkan input & reset hitungan karakter tanpa menunggu server
-    input.value = "";
-    if (typeof updateCharCount === "function") updateCharCount();
-    
-    // Biarkan user bisa langsung mengetik pesan berikutnya tanpa memblokir input
-    // (Kita sengaja tidak me-disable input dan tombol agar terasa luwes seperti WhatsApp)
-    
-    try {
-        // 3. PROSES DI LATAR BELAKANG (Kirim ke GAS)
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({
-                action: "sendChat",
-                nama: myName,
-                pesan: msg
-            })
-        });
-        
-        const res = await response.json();
-        if (res.status === "success") {
-            // Jika sukses, hilangkan efek pudar dan ubah ikon jam pasir menjadi centang
-            fakeBubble.classList.remove('opacity-70');
-            const iconSpan = fakeBubble.querySelector('.status-icon');
-            if (iconSpan) iconSpan.innerText = "✓";
+            const input = document.getElementById('input-chat-msg');
+            const msg = input.value.trim();
+            const myName = localStorage.getItem('soka_user_name') || "Anggota";
             
-            // Ambil data chat asli secara diam-diam untuk memastikan timeline sinkron
-            await loadChatMessages(); 
-        } else {
-            throw new Error("Gagal menyimpan di server");
+            if (!msg || msg.length > 160) return;
+            
+            const body = document.getElementById('chat-body');
+            const fakeBubble = document.createElement('div');
+            fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity duration-300";
+            
+            const sekarang = new Date();
+            const jam = String(sekarang.getHours()).padStart(2, '0');
+            const menit = String(sekarang.getMinutes()).padStart(2, '0');
+            const waktuTampil = `${jam}:${menit}`;
+            
+            fakeBubble.innerHTML = `
+                <div class="flex justify-between items-center gap-4 mb-0.5">
+                    <span class="font-black text-[10px] text-blue-900 block">${myName}</span>
+                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil} <span class="status-icon">🕒</span></span>
+                </div>
+                <p class="leading-relaxed break-words font-medium text-gray-700">${msg}</p>
+            `;
+            
+            body.appendChild(fakeBubble);
+            body.scrollTop = body.scrollHeight;
+            
+            input.value = "";
+            updateCharCount();
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: "sendChat",
+                        nama: myName,
+                        pesan: msg
+                    })
+                });
+                
+                const res = await response.json();
+                if (res.status === "success") {
+                    fakeBubble.classList.remove('opacity-70');
+                    const iconSpan = fakeBubble.querySelector('.status-icon');
+                    if (iconSpan) iconSpan.innerText = "✓";
+                    await loadChatMessages(); 
+                } else {
+                    throw new Error("Gagal menyimpan di server");
+                }
+            } catch (e) {
+                console.error(e);
+                fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-red-100 text-red-800 ml-auto rounded-tr-none border border-red-300 text-left";
+                const iconSpan = fakeBubble.querySelector('.status-icon');
+                if (iconSpan) iconSpan.innerText = "❌";
+                
+                input.value = msg;
+                updateCharCount();
+                alert("Gagal mengirim pesan. Silakan periksa koneksi internet Anda.");
+            }
         }
-    } catch (e) {
-        console.error(e);
-        // Jika gagal, ubah warna balon tiruan menjadi merah tanda error
-        fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-red-100 text-red-800 ml-auto rounded-tr-none border border-red-300 text-left";
-        const iconSpan = fakeBubble.querySelector('.status-icon');
-        if (iconSpan) iconSpan.innerText = "❌";
-        
-        // Kembalikan teks yang gagal ke input agar user tidak capek mengetik ulang jika ingin mencoba lagi
-        input.value = msg;
-        if (typeof updateCharCount === "function") updateCharCount();
-        
-        alert("Gagal mengirim pesan. Silakan periksa koneksi internet Anda.");
-    }
-}
 
-// Buat variabel global di atas fungsi untuk menyimpan data sementara
         let listPengalamanGlobal = [];
 
-        // ==================== KODE PENGALAMAN ANGGOTA (FIX MODAL) ====================
         async function loadPengalamanAnggota() {
             try {
                 const response = await fetch(CSV_URL_PENGALAMAN);
                 const data = await response.text();
                 
-                // Parser CSV Cerdas: Menangani enter (\n atau \r\n) di dalam sel
                 const rows = [];
                 let currentRow = [];
                 let currentField = "";
                 let insideQuote = false;
-
                 const normalizedData = data.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
                 for (let i = 0; i < normalizedData.length; i++) {
@@ -1545,55 +1609,63 @@
                 const container = document.getElementById('pengalaman-container');
                 container.innerHTML = ""; 
 
-                // Lewati header, filter baris valid
                 const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
-                
-                // Balik urutan agar data terbaru di atas
-                activeRows.reverse();
-                
-                // Ambil 3 data teratas untuk ditampilkan
-                const dataDitampilkan = activeRows.slice(0, 3);
+activeRows.reverse();
 
-                if (dataDitampilkan.length === 0) {
-                    container.innerHTML = `<p class="text-center text-gray-500 col-span-3">Belum ada cerita pengalaman.</p>`;
-                    return;
-                }
+// KONTROL DATA: Ubah angka 15 ke jumlah yang diinginkan, atau hapus .slice(0, 15) jika ingin menampilkan SEMUA cerita
+const dataDitampilkan = activeRows.slice(0, 15); 
 
-                // Simpan data yang ditampilkan ke dalam array global agar bisa diakses modal tanpa error teks
-                listPengalamanGlobal = dataDitampilkan;
+if (dataDitampilkan.length === 0) {
+    container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada cerita pengalaman.</p>`;
+    return;
+}
 
-                dataDitampilkan.forEach((row, index) => {
-                    const nama = row[0].trim();
-                    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
-                    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
-                    const isiCerita = row[5] ? row[5].trim() : "";
+listPengalamanGlobal = dataDitampilkan;
+
+dataDitampilkan.forEach((row, index) => {
+    const nama = row[0].trim();
+    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
+    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+    const isiCerita = row[5] ? row[5].trim() : "";
+    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+
+    // Menambahkan class 'flex-none', menentukan lebar kartu 'w-[85vw]' di mobile / 'md:w-[350px]' di desktop, dan 'snap-center'
+    const cardHtml = `
+        <div class="flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+            <div>
+                <div class="flex items-center space-x-4 mb-4">
+                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
+                    <div class="overflow-hidden">
+                        <h3 class="text-base font-bold text-gray-900 leading-tight truncate">${nama}</h3>
+                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider truncate">${judul}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed line-clamp-4">
+                    ${previewCerita}
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end items-center">
+                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                    Lanjut baca...
+                </button>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', cardHtml);
+});
+setTimeout(() => {
+                // Beri jeda 1 detik setelah data dimuat
+                if (container.scrollLeft === 0) {
+                    // Hanya animasi jika user belum scroll
+                    // Scroll kontainer ke kanan sejauh 60px
+                    container.scroll({ left: 60, behavior: 'smooth' });
                     
-                    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
-
-                    const cardHtml = `
-                        <div class="bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
-                            <div>
-                                <div class="flex items-center space-x-4 mb-4">
-                                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
-                                    <div>
-                                        <h3 class="text-base font-bold text-gray-900 leading-tight">${nama}</h3>
-                                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider">${judul}</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed">
-                                    ${previewCerita}
-                                </p>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
-                                    Lanjut baca...
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    container.insertAdjacentHTML('beforeend', cardHtml);
-                });
-
+                    setTimeout(() => {
+                        // Kembali ke kiri setelah 400ms
+                        container.scroll({ left: 0, behavior: 'smooth' });
+                    }, 400); 
+                }
+            }, 1000); // 1 detik setelah dimuat agar tidak mengganggu load awal
             } catch (error) {
                 console.error("Gagal memuat pengalaman:", error);
                 document.getElementById('pengalaman-container').innerHTML = 
@@ -1601,7 +1673,6 @@
             }
         }
 
-        // Fungsi jembatan baru untuk menangani klik agar bebas dari error "broken string"
         function panggilModalLewatIndex(index) {
             const data = listPengalamanGlobal[index];
             if (data) {
@@ -1611,16 +1682,12 @@
                 const fotoModal2 = data[4] ? data[4].trim() : "";
                 const isiCerita = data[5] ? data[5].trim() : "";
 
-                // Panggil fungsi modal asli bawaan web Anda
                 if (typeof bukaDetailPengalaman === "function") {
                     bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
-                } else {
-                    console.error("Fungsi bukaDetailPengalaman tidak ditemukan!");
                 }
             }
         }
 
-        // Fungsi Membuka Modal Detail Cerita (Sudah Mendukung Grid Foto Tambahan)
         function bukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2) {
             const modal = document.getElementById('modal-pengalaman');
             const modalNama = document.getElementById('modal-pengalaman-nama');
@@ -1631,7 +1698,6 @@
                 <span class="block text-xs uppercase text-[#F9A825] tracking-widest font-bold font-sans">${judul}</span>
             </div>`;
             
-            // Generate HTML untuk foto tambahan di dalam modal jika URL-nya tersedia
             let fotoHTML = "";
             if (foto1 || foto2) {
                 fotoHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 mt-2">`;
@@ -1656,7 +1722,6 @@
             }, 10);
         }
 
-        // Fungsi Menutup Modal Detail Cerita
         function tutupDetailPengalaman() {
             const modal = document.getElementById('modal-pengalaman');
             modal.classList.add('opacity-0');
@@ -1665,6 +1730,267 @@
                 modal.classList.add('hidden');
             }, 300);
         }
+
+        async function fetchMateri() {
+    const container = document.getElementById('materi-container');
+    if (!container) return;
+
+    try {
+        // Ambil data langsung lewat link CSV Publik (Aman dari kendala CORS)
+        const response = await fetch(CSV_URL_MATERI);
+        const csvData = await response.text();
+        
+        // Proses parsing baris CSV manual
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+
+        for (let i = 0; i < csvData.length; i++) {
+            const char = csvData[i];
+            if (char === '"') {
+                if (insideQuote && csvData[i + 1] === '"') {
+                    currentField += '"';
+                    i++;
+                } else {
+                    insideQuote = !insideQuote;
+                }
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
+            }
+        }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        container.innerHTML = "";
+
+        // Lewati baris header indeks ke-0, ambil data yang valid
+        const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "");
+        
+        if (activeRows.length === 0) {
+            container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada materi pelajaran saat ini.</p>`;
+            return;
+        }
+
+        // Tampilkan data materi ke dalam bentuk card komponen
+        activeRows.forEach((row) => {
+            if (row.length < 3) return;
+            const judul = row[0].trim();
+            const kategori = row[1] ? row[1].trim() : 'Umum';
+            const isi = row[2] ? row[2].trim() : '';
+
+            // Escape tanda kutip agar tidak merusak parameter onclick di HTML
+            const safeJudul = judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeKategori = kategori.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeIsi = isi.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+
+            const card = document.createElement('div');
+            
+            // --- BAGIAN INI YANG DIUBAH (Ditambah flex-none, lebar terpotong 75vw, dan snap-center) ---
+            card.className = "flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
+            
+            card.innerHTML = `
+                <div class="p-5 flex-1" onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
+                            ${kategori}
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-blue-700 transition-colors duration-200 line-clamp-2">
+                        ${judul}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed text-justify line-clamp-4 whitespace-pre-line">
+                        ${isi}
+                    </p>
+                </div>
+                <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
+                    <button onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                        Lanjut baca...
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // --- TAMBAHAN BARU: ANIMASI INTIP OTOMATIS SAAT BERHASIL LOAD ---
+        setTimeout(() => {
+            if (container.scrollLeft === 0) {
+                container.scroll({ left: 60, behavior: 'smooth' });
+                setTimeout(() => {
+                    container.scroll({ left: 0, behavior: 'smooth' });
+                }, 400);
+            }
+        }, 1200); // Dijeda 1.2 detik agar tidak barengan dengan section pengalaman
+
+    } catch (error) {
+        console.error("Error Materi Section:", error);
+        container.innerHTML = `
+            <div class="w-full text-center py-6 text-red-600 text-sm">
+                ⚠️ Gagal memuat Materi & Pelajaran.
+            </div>
+        `;
+    }
+}
+        function openMateriModal(kategori, judul, isi) {
+            const modal = document.getElementById("materiModal");
+            if (!modal) return;
+            
+            document.getElementById("modalKategori").innerText = kategori;
+            document.getElementById("modalJudul").innerText = judul;
+            document.getElementById("modalIsi").innerText = isi;
+            
+            modal.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModalMateri() {
+            const modal = document.getElementById("materiModal");
+            if (!modal) return;
+            
+            modal.classList.add("hidden");
+            document.body.style.overflow = "auto";
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById("materiModal");
+            if (modal && event.target === modal) {
+                closeModalMateri();
+            }
+        });
+        // ==========================================
+// ANTI ACCIDENTALLY SWIPE BACK BROWSER SYSTEM
+// ==========================================
+let isModalActiveInHistory = false;
+
+// Fungsi pembantu untuk mendeteksi apakah ada modal yang sedang terbuka di layar
+function isAnyModalVisible() {
+    const modals = ['login-modal', 'pin-setup-modal', 'gallery-modal', 'modal-pengalaman', 'materiModal'];
+    return modals.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+    });
+}
+
+// Daftarkan state baru ke browser setiap kali ada modal yang memicu pembukaan
+function registerModalState() {
+    if (!isModalActiveInHistory) {
+        window.history.pushState({ modalOpen: true }, "");
+        isModalActiveInHistory = true;
+    }
+}
+
+// Bersihkan state browser jika user menutup modal secara manual (klik tombol X / Batal / Selesai)
+function clearModalState() {
+    if (isModalActiveInHistory && !isAnyModalVisible()) {
+        isModalActiveInHistory = false;
+        window.history.back();
+    }
+}
+
+// Intersepsi tombol Back fisik / Swipe Back Browser
+window.addEventListener('popstate', function(event) {
+    if (isModalActiveInHistory) {
+        isModalActiveInHistory = false;
+        
+        // Paksa tutup semua jenis modal yang ada di index_test3.html tanpa pindah halaman
+        const loginMod = document.getElementById('login-modal');
+        if (loginMod) loginMod.classList.add('hidden');
+
+        const pinMod = document.getElementById('pin-setup-modal');
+        if (pinMod) pinMod.classList.add('hidden');
+
+        if (typeof closeGalleryModal === 'function') closeGalleryModal();
+        if (typeof tutupDetailPengalaman === 'function') tutupDetailPengalaman();
+        if (typeof closeModalMateri === 'function') closeModalMateri();
+    }
+});
+
+// Bungkus fungsi bawaan agar otomatis mencatat riwayat history saat dibuka
+const originalOpenLoginModal = openLoginModal;
+openLoginModal = function() {
+    originalOpenLoginModal();
+    registerModalState();
+};
+
+const originalOpenPinSetupModal = openPinSetupModal;
+openPinSetupModal = function() {
+    originalOpenPinSetupModal();
+    registerModalState();
+};
+
+const originalBukaDetailPengalaman = bukaDetailPengalaman;
+bukaDetailPengalaman = function(nama, judul, isiLengkap, foto1, foto2) {
+    originalBukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2);
+    registerModalState();
+};
+
+const originalOpenMateriModal = openMateriModal;
+openMateriModal = function(kategori, judul, isi) {
+    originalOpenMateriModal(kategori, judul, isi);
+    registerModalState();
+};
+
+// Modifikasi fungsi galeri slider agar ikut mendaftarkan status history saat gambar dizoom
+slider.addEventListener('mouseup', (e) => {
+    const endX = e.pageX - slider.offsetLeft;
+    if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+        openGalleryModal(e.target.src);
+        registerModalState(); // Catat di sini
+    }
+});
+slider.addEventListener('touchend', (e) => {
+    // Memastikan deteksi ketukan pada mobile juga tercatat aman
+    if (e.target.tagName === 'IMG' && !isDown) {
+        registerModalState();
+    }
+});
+
+// Kaitkan pembersihan riwayat saat tombol penutup bawaan diklik manual
+document.addEventListener('click', function(e) {
+    // Jika yang diklik adalah tombol/elemen penutup, cek apakah perlu membersihkan riwayat browser
+    setTimeout(() => {
+        if (!isAnyModalVisible() && isModalActiveInHistory) {
+            isModalActiveInHistory = false;
+            window.history.back();
+        }
+    }, 350); // Beri delay sedikit mengikuti animasi fade-out modal Anda
+});
+/**
+ * Fungsi Universal untuk Menggeser Kontainer Horizontal secara Halus
+ * @param {string} containerId - ID dari elemen HTML yang ingin di-scroll
+ * @param {string} arah - 'kiri' atau 'kanan'
+ */
+function scrollHorisontal(containerId, arah) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Menghitung jarak geser (mengambil lebar kontainer saat ini agar dinamis)
+    // Dibagi 1.2 supaya geserannya pas dan menyisakan sedikit kartu sebelumnya
+    const jarakGeser = container.clientWidth / 1.2; 
+    
+    if (arah === 'kiri') {
+        container.scrollBy({
+            left: -jarakGeser,
+            behavior: 'smooth'
+        });
+    } else if (arah === 'kanan') {
+        container.scrollBy({
+            left: jarakGeser,
+            behavior: 'smooth'
+        });
+    }
+}
+
     </script>
 </body>
 </html>
