@@ -183,7 +183,9 @@
                         <span id="refreshText">🔄 Refresh Data</span>
                     </button>
                 </div>
-                <div class="overflow-x-auto w-full">
+
+                <!-- TAMPILAN TABLE (Hanya tampil di Tablet / Laptop ke atas) -->
+                <div class="hidden md:block overflow-x-auto w-full">
                     <table class="w-full border-collapse text-left table-auto">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold tracking-wider border-b border-slate-100">
@@ -204,6 +206,11 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- TAMPILAN CARD LAYOUT (Hanya tampil di HP / Mobile) -->
+                <div id="tabelCardMobile" class="block md:hidden p-4 space-y-4 bg-slate-50/50 divide-y divide-slate-100">
+                    <div class="text-center py-8 text-slate-400 text-sm">Memuat data dari Google Sheets...</div>
                 </div>
             </div>
         </div>
@@ -533,6 +540,7 @@
 
         async function fetchData() {
             const tbody = document.getElementById('tabelBody');
+            const cardContainerMobile = document.getElementById('tabelCardMobile');
             const btnRefresh = document.getElementById('btnRefresh');
             const refreshText = document.getElementById('refreshText');
             if(btnRefresh && refreshText) { btnRefresh.disabled = true; refreshText.innerText = "⏳ Memuat..."; }
@@ -546,11 +554,14 @@
 
                 if (barisData.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-slate-400">Belum ada data laporan yang masuk.</td></tr>`;
+                    cardContainerMobile.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Belum ada data laporan yang masuk.</div>`;
                     return;
                 }
 
                 barisData.sort((rowA, rowB) => parseTanggalKeDateObject(rowB[0]) - parseTanggalKeDateObject(rowA[0]));
-                tbody.innerHTML = ''; let bulanAktif = "";
+                tbody.innerHTML = ''; 
+                cardContainerMobile.innerHTML = '';
+                let bulanAktif = "";
 
                 for (let i = 0; i < barisData.length; i++) {
                     const col = barisData[i];
@@ -558,11 +569,14 @@
                     const bulanTahunData = dapatkanNamaBulanTahun(dateObj);
                     const tanggalTampilan = col[0].replace(/\/+/g, '/').trim();
 
+                    // render header bulan pembatas di table & mobile list
                     if (bulanTahunData !== bulanAktif) {
                         bulanAktif = bulanTahunData;
                         tbody.innerHTML += `<tr class="bg-indigo-50/70 border-y border-indigo-100/80"><td colspan="9" class="py-2.5 px-6 font-bold text-xs uppercase tracking-wider text-indigo-800">📅 ${bulanAktif}</td></tr>`;
+                        cardContainerMobile.innerHTML += `<div class="bg-indigo-100 text-indigo-900 px-4 py-2 font-bold text-xs rounded-lg uppercase tracking-wider mt-4 first:mt-0">📅 ${bulanAktif}</div>`;
                     }
                     
+                    // Render versi TABLE (Desktop)
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50/80 transition-colors">
                             <td class="py-3.5 px-6 font-medium text-slate-900">${tanggalTampilan}</td>
@@ -575,10 +589,46 @@
                             <td class="py-3.5 px-6 text-center font-bold text-indigo-600 bg-indigo-50/30">${col[7] || 0}</td>
                             <td class="py-3.5 px-6 text-slate-500 font-medium">${col[8] || ''}</td>
                         </tr>`;
+
+                    // Render versi CARD (Mobile)
+                    cardContainerMobile.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl shadow-2xs border border-slate-100 flex flex-col gap-3 text-sm mt-3">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-bold text-slate-900">${tanggalTampilan}</span>
+                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-800 rounded-md text-xs font-bold">${col[1] || ''}</span>
+                            </div>
+                            <div class="grid grid-cols-5 gap-1.5 text-center bg-slate-50 p-2 rounded-lg">
+                                <div>
+                                    <span class="block text-[10px] font-semibold text-slate-500">Bpk</span>
+                                    <span class="font-bold text-slate-800 text-sm">${col[2] || 0}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-semibold text-slate-500">Ibu</span>
+                                    <span class="font-bold text-slate-800 text-sm">${col[3] || 0}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-semibold text-slate-500">PMD</span>
+                                    <span class="font-bold text-slate-800 text-sm">${col[4] || 0}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-semibold text-slate-500">PMI</span>
+                                    <span class="font-bold text-slate-800 text-sm">${col[5] || 0}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] font-semibold text-slate-500">Anak</span>
+                                    <span class="font-bold text-slate-800 text-sm">${col[6] || 0}</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-500 pt-1">
+                                <div>Pelapor: <span class="font-semibold text-slate-700">${col[8] || ''}</span></div>
+                                <div class="font-bold text-indigo-600 bg-indigo-50/70 px-2 py-0.5 rounded-sm">Total: ${col[7] || 0} Org</div>
+                            </div>
+                        </div>`;
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
                 tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-red-500">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</td></tr>`;
+                cardContainerMobile.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</div>`;
             } finally {
                 if(btnRefresh && refreshText) { btnRefresh.disabled = false; refreshText.innerText = "🔄 Refresh Data"; }
             }
