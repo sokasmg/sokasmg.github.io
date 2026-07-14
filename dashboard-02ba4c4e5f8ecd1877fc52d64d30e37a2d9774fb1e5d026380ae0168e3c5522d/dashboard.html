@@ -97,7 +97,9 @@
                         </svg>
                         Beranda
                     </a>
-                    
+                    <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+        Materi & Pelajaran
+    </button>
                     <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
                         Laporan Kehadiran
                     </button>
@@ -114,7 +116,117 @@
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
     <main class="max-w-7xl mx-auto p-4 md:p-6">
+    <!-- ========================================================================= -->
+<!-- TAB BARU: MATERI & PELAJARAN                                              -->
+<!-- ========================================================================= -->
+<div id="tab-materi" class="tab-content hidden space-y-6">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-3">
+                    <span class="p-2 bg-emerald-500 text-white rounded-lg shadow-sm"><i class="fas fa-book-open text-xl"></i></span>
+                    Bimbingan Gosho QnA
+                </h1>
+                <p class="text-gray-500 mt-1">Bimbingan Sensei, Gosho, atau Dasar-Dasar Buddhisme</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-2">
+                <button id="btnRefresh" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-lg transition duration-200">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+                <button id="btnToggleForm" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg shadow transition duration-200">
+                    <i id="toggleIcon" class="fas fa-plus"></i>
+                    <span id="toggleText">Tulis Artikel Baru</span>
+                </button>
+            </div>
+        </header>
 
+        <!-- Collapsible Form Section -->
+        <div id="formContainer" class="hidden mb-10 overflow-hidden bg-white rounded-xl shadow-md border border-gray-100 transition-all duration-300">
+            <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
+                <h2 id="formTitle" class="text-lg font-semibold flex items-center gap-2">
+                    <i class="fas fa-pen-to-square"></i> Buat Postingan Baru
+                </h2>
+                <button id="btnCancelForm" class="text-gray-400 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="articleForm" class="p-6 space-y-5">
+                <input type="hidden" id="editRowIndex" value="">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label for="judul" class="block text-sm font-medium text-gray-700 mb-1.5">Judul Artikel <span class="text-red-500">*</span></label>
+                        <input type="text" id="judul" required placeholder="Masukkan judul..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
+                    </div>
+                    <div>
+                        <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
+                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Q&A, dll." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="pengirim" class="block text-sm font-medium text-gray-700 mb-1.5">Pengirim / Narasumber <span class="text-red-500">*</span></label>
+                    <input type="text" id="pengirim" required placeholder="Nama pengirim atau pemateri..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
+                </div>
+
+                <div>
+                    <label for="isi" class="block text-sm font-medium text-gray-700 mb-1.5">Isi Artikel / Paragraf <span class="text-red-500">*</span></label>
+                    <textarea id="isi" rows="6" required placeholder="Tuliskan isi artikel secara lengkap di sini..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none resize-y"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
+                    <button type="button" id="btnReset" class="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
+                        Batal / Reset
+                    </button>
+                    <button type="submit" id="btnSubmit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm transition disabled:bg-gray-400">
+                        <i class="fas fa-paper-plane mr-2"></i>Post Artikel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Article List Section -->
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fas fa-newspaper text-emerald-600"></i> Daftar Artikel
+                    <span id="totalBadge" class="ml-2 text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full font-normal">0</span>
+                </h2>
+                <div class="text-sm text-gray-500 italic">Diurutkan berdasarkan postingan terbaru</div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingState" class="hidden text-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
+                <i class="fas fa-spinner fa-spin text-3xl text-emerald-500 mb-2"></i>
+                <p class="text-gray-500 text-sm">Mengambil data dari Google Sheets...</p>
+            </div>
+
+            <!-- Container List -->
+            <div id="articlesContainer" class="space-y-4">
+                <!-- Data akan di-render menggunakan JavaScript -->
+            </div>
+
+            <!-- Pagination Container -->
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-200 pt-4">
+                <div class="text-sm text-gray-600" id="paginationInfo">
+                    Menampilkan 0 - 0 dari 0 artikel
+                </div>
+                <div class="flex items-center gap-1" id="paginationControls">
+                    <!-- Tombol page akan di-render menggunakan JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    
         <!-- ========================================================================= -->
         <!-- TAB 1: LAPORAN KEHADIRAN                                                 -->
         <!-- ========================================================================= -->
@@ -1435,6 +1547,335 @@
             initCalendar();
             initDatabase();
         });
+        
+        // =========================================================================
+// JAVASCRIPT UNTUK TAB MATERI & PELAJARAN
+// =========================================================================
+
+// Menggunakan URL Apps Script Anda dengan parameter eksplisit untuk memanggil sheet pelajaran
+const WEB_APP_URL_MATERI = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec?sheet=materipelajaran";
+
+let articles = [];
+let currentPageMateri = 1;
+const itemsPerPageMateri = 10;
+
+// Elemen DOM (Menggunakan nama variabel unik agar tidak bentrok dengan script bawaan tab lain)
+const formContainer = document.getElementById('formContainer');
+const articleForm = document.getElementById('articleForm');
+const btnToggleForm = document.getElementById('btnToggleForm');
+const btnCancelForm = document.getElementById('btnCancelForm');
+const btnRefresh = document.getElementById('btnRefresh');
+const toggleIcon = document.getElementById('toggleIcon');
+const toggleText = document.getElementById('toggleText');
+const formTitle = document.getElementById('formTitle');
+const btnSubmit = document.getElementById('btnSubmit');
+const editRowIndexInput = document.getElementById('editRowIndex');
+const articlesContainer = document.getElementById('articlesContainer');
+const totalBadge = document.getElementById('totalBadge');
+const paginationInfo = document.getElementById('paginationInfo');
+const paginationControls = document.getElementById('paginationControls');
+const btnReset = document.getElementById('btnReset');
+const loadingState = document.getElementById('loadingState');
+
+// Toggle form (collapsible)
+function toggleForm(show = null) {
+    const isHidden = formContainer.classList.contains('hidden');
+    const shouldShow = show !== null ? show : isHidden;
+
+    if (shouldShow) {
+        formContainer.classList.remove('hidden');
+        toggleIcon.className = 'fas fa-minus';
+        toggleText.innerText = 'Tutup Form';
+    } else {
+        formContainer.classList.add('hidden');
+        toggleIcon.className = 'fas fa-plus';
+        toggleText.innerText = 'Tulis Artikel Baru';
+        resetForm();
+    }
+}
+
+if(btnToggleForm) btnToggleForm.addEventListener('click', () => toggleForm());
+if(btnCancelForm) btnCancelForm.addEventListener('click', () => toggleForm(false));
+if(btnReset) btnReset.addEventListener('click', () => resetForm());
+if(btnRefresh) btnRefresh.addEventListener('click', fetchArticles);
+
+function resetForm() {
+    articleForm.reset();
+    editRowIndexInput.value = '';
+    formTitle.innerHTML = '<i class="fas fa-pen-to-square"></i> Buat Postingan Baru';
+    btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
+    btnSubmit.disabled = false;
+}
+
+// Ambil Data menggunakan Fetch API
+async function fetchArticles() {
+    if (!loadingState) return;
+    loadingState.classList.remove('hidden');
+    articlesContainer.innerHTML = '';
+    
+    try {
+        // Percobaan 1: Mengambil langsung (Direct Fetch)
+        const response = await fetch(WEB_APP_URL_MATERI, {
+            method: 'GET',
+            redirect: 'follow' 
+        });
+        
+        if (!response.ok) throw new Error("Gagal direct fetch");
+        
+        articles = await response.json();
+        articles.reverse(); 
+        currentPageMateri = 1;
+        renderArticles();
+    } catch (error) {
+        console.warn("Direct fetch gagal/CORS. Mencoba proxy...", error);
+        
+        // Percobaan 2: Fallback menggunakan Proxy yang lebih stabil (allorigins)
+        try {
+            const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(WEB_APP_URL_MATERI);
+            const responseProxy = await fetch(proxyUrl);
+            if (!responseProxy.ok) throw new Error("Proxy bermasalah");
+            
+            const dataProxy = await responseProxy.json();
+            
+            // Membersihkan data string kiriman proxy sebelum diubah jadi JSON objek
+            let rawContents = dataProxy.contents;
+            articles = JSON.parse(rawContents);
+            
+            if (Array.isArray(articles)) {
+                articles.reverse(); 
+                currentPageMateri = 1;
+                renderArticles();
+            } else {
+                throw new Error("Data yang diterima bukan Array");
+            }
+            
+        } catch (proxyError) {
+            console.error("Semua metode fetch gagal:", proxyError);
+            loadingState.classList.add('hidden');
+            articlesContainer.innerHTML = `
+                <div class="bg-red-50 text-red-800 p-5 rounded-xl border border-red-200 text-sm shadow-sm">
+                    <div class="font-bold text-base mb-1"><i class="fas fa-exclamation-triangle mr-2"></i> Koneksi Tertahan / Mengalami Masalah</div>
+                    <p class="text-gray-600 mb-3">Sistem tidak bisa membaca data dari Google Sheets. Coba ikuti 2 langkah pengecekan ini:</p>
+                    <ol class="list-decimal pl-5 space-y-1 text-gray-600 text-xs">
+                        <li>Buka URL Web App Anda langsung di tab baru browser. Apakah keluar data teks tulisan/JSON? Jika meminta login atau kosong, berarti setelan <b>Who has access</b> belum diubah ke <b>Anyone</b> saat Deploy.</li>
+                        <li>Pastikan di Google Sheets Anda, nama tab sheet paling bawah sudah benar-benar tertulis <b>pelajaran</b> (huruf kecil semua, tanpa spasi tambahan).</li>
+                    </ol>
+                </div>
+            `;
+        }
+    } finally {
+        loadingState.classList.add('hidden');
+    }
+}
+
+// RENDER DATA ARTIKEL KE LAYAR (Dengan Fitur Collapse/Expand Isi Artikel)
+function renderArticles() {
+    articlesContainer.innerHTML = '';
+    totalBadge.innerText = articles.length;
+
+    if (articles.length === 0) {
+        articlesContainer.innerHTML = `
+            <div class="bg-white rounded-xl p-8 text-center border border-gray-200 text-gray-500 shadow-sm">
+                <i class="fas fa-folder-open text-4xl text-gray-300 mb-3 block"></i> Belum ada data artikel di Google Sheets.
+            </div>
+        `;
+        paginationInfo.innerText = "Menampilkan 0 - 0 dari 0 artikel";
+        paginationControls.innerHTML = '';
+        return;
+    }
+
+    const totalPages = Math.ceil(articles.length / itemsPerPageMateri);
+    const startIndex = (currentPageMateri - 1) * itemsPerPageMateri;
+    const endIndex = Math.min(startIndex + itemsPerPageMateri, articles.length);
+    const paginatedItems = articles.slice(startIndex, endIndex);
+
+    paginationInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${articles.length} artikel`;
+
+    paginatedItems.forEach((article, index) => {
+        const uniqueId = `isi-${article.row_index}-${index}`;
+        const btnId = `btn-toggle-${article.row_index}-${index}`;
+        const formattedIsi = (article.isi || '').toString().replace(/\n/g, '<br>');
+        
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition p-5 md:p-6";
+        card.innerHTML = `
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-md border border-emerald-100">
+                    <i class="fas fa-tags mr-1 text-emerald-500"></i> ${article.kategori || 'Tanpa Kategori'}
+                </span>
+                <span class="text-xs text-gray-400">•</span>
+                <span class="text-xs text-gray-500 flex items-center gap-1">
+                    <i class="fas fa-user text-gray-400"></i> ${article.pengirim || 'Anonim'}
+                </span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-800 mb-3">${article.judul || 'Tanpa Judul'}</h3>
+            
+            <div id="${uniqueId}" class="text-gray-600 text-sm leading-relaxed space-y-2 mb-3 break-words line-clamp-4 transition-all duration-300">
+                ${formattedIsi}
+            </div>
+            
+            <div class="mb-5">
+                <button id="${btnId}" onclick="toggleReadMore('${uniqueId}', '${btnId}')" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition flex items-center gap-1 focus:outline-none">
+                    <span>Baca Selengkapnya</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                </button>
+            </div>
+            
+            <div class="flex justify-end gap-2 pt-3 border-t border-gray-50">
+                <button onclick="editArticleDirect('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs font-medium rounded-md border border-amber-200 transition">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button onclick="deleteArticleDirect('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-medium rounded-md border border-red-200 transition">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </button>
+            </div>
+        `;
+        articlesContainer.appendChild(card);
+    });
+
+    renderPaginationControls(totalPages);
+}
+
+// Buka-Tutup (Collapse) Artikel
+window.toggleReadMore = function(containerId, buttonId) {
+    const container = document.getElementById(containerId);
+    const button = document.getElementById(buttonId);
+    const btnText = button.querySelector('span');
+    const btnIcon = button.querySelector('i');
+
+    if (container.classList.contains('line-clamp-4')) {
+        container.classList.remove('line-clamp-4');
+        btnText.innerText = 'Sembunyikan';
+        btnIcon.className = 'fas fa-chevron-up text-[10px]';
+    } else {
+        container.classList.add('line-clamp-4');
+        btnText.innerText = 'Baca Selengkapnya';
+        btnIcon.className = 'fas fa-chevron-down text-[10px]';
+    }
+};
+
+function renderPaginationControls(totalPages) {
+    paginationControls.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = `px-3 py-1.5 rounded-md border font-medium text-xs transition ${currentPageMateri === 1 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prevBtn.disabled = currentPageMateri === 1;
+    prevBtn.addEventListener('click', () => { if (currentPageMateri > 1) { currentPageMateri--; renderArticles(); } });
+    paginationControls.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `px-3 py-1.5 rounded-md border text-xs font-semibold transition ${currentPageMateri === i ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
+        pageBtn.innerText = i;
+        pageBtn.addEventListener('click', () => { currentPageMateri = i; renderArticles(); });
+        paginationControls.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = `px-3 py-1.5 rounded-md border font-medium text-xs transition ${currentPageMateri === totalPages ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
+    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    nextBtn.disabled = currentPageMateri === totalPages;
+    nextBtn.addEventListener('click', () => { if (currentPageMateri < totalPages) { currentPageMateri++; renderArticles(); } });
+    paginationControls.appendChild(nextBtn);
+}
+
+// Kirim Data Postingan Baru / Update
+if (articleForm) {
+    articleForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const judul = document.getElementById('judul').value.trim();
+        const kategori = document.getElementById('kategori').value.trim();
+        const pengirim = document.getElementById('pengirim').value.trim();
+        const isi = document.getElementById('isi').value.trim();
+        const editRowIndex = editRowIndexInput.value;
+
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+
+        const formData = new URLSearchParams();
+        formData.append('judul', judul);
+        formData.append('kategori', kategori);
+        formData.append('pengirim', pengirim);
+        formData.append('isi', isi);
+
+        if (editRowIndex !== '') {
+            formData.append('action', 'update');
+            formData.append('row_index', editRowIndex);
+        } else {
+            formData.append('action', 'post');
+        }
+
+        try {
+            await fetch(WEB_APP_URL_MATERI, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+            
+            alert(editRowIndex !== '' ? 'Perubahan berhasil disimpan ke Google Sheets!' : 'Artikel berhasil diposting ke Google Sheets!');
+            toggleForm(false);
+            setTimeout(fetchArticles, 1800);
+        } catch (error) {
+            console.error("Error Form:", error);
+            alert('Terjadi kesalahan saat menyimpan data.');
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = editRowIndex !== '' ? '<i class="fas fa-save mr-2"></i>Simpan' : '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
+        }
+    });
+}
+
+window.editArticleDirect = function(rowIndex) {
+    const item = articles.find(a => a.row_index == rowIndex);
+    if (item) {
+        document.getElementById('judul').value = item.judul || '';
+        document.getElementById('kategori').value = item.kategori || '';
+        document.getElementById('pengirim').value = item.pengirim || '';
+        document.getElementById('isi').value = item.isi || '';
+        editRowIndexInput.value = rowIndex;
+
+        formTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Artikel (Baris: ' + rowIndex + ')';
+        btnSubmit.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
+        toggleForm(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+};
+
+window.deleteArticleDirect = async function(rowIndex) {
+    if (confirm("Apakah Anda yakin ingin menghapus artikel ini dari Google Sheets?")) {
+        const formData = new URLSearchParams();
+        formData.append('action', 'delete');
+        formData.append('row_index', rowIndex);
+
+        try {
+            articlesContainer.innerHTML = `
+                <div class="text-center py-6 text-gray-500 text-sm">
+                    <i class="fas fa-spinner fa-spin mr-2 text-red-500"></i> Menghapus baris ke-${rowIndex}...
+                </div>`;
+            
+            await fetch(WEB_APP_URL_MATERI, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+
+            alert('Artikel berhasil dihapus!');
+            setTimeout(fetchArticles, 1800);
+        } catch (error) {
+            console.error("Error Delete:", error);
+            alert('Gagal menghapus data.');
+            fetchArticles();
+        }
+    }
+};
+
+// Menjalankan fetch data otomatis saat halaman selesai dimuat
+document.addEventListener('DOMContentLoaded', fetchArticles);
+
     </script>
 </body>
 </html>
