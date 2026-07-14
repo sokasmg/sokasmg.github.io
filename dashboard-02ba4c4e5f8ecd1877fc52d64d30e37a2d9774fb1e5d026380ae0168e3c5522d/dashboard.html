@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Integrasi Shibu Semarang</title>
-    <!-- CDN CSS & JS dari Dokumen Asal -->
+    <!-- CDN CSS & JS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
@@ -53,6 +53,18 @@
             margin-bottom: 6px;
         }
         
+        /* RESPONSIVITAS KALENDER ALA LANDSCAPE LAPTOP DI HP */
+        .calendar-outer-container {
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+        #calendarWrapper {
+            width: 1024px; /* Kunci lebar standar laptop */
+            transform-origin: top left;
+            transition: transform 0.2s ease;
+        }
+
         /* CSS Khusus Tab Database (Source 3) */
         .overflow-x-auto {
             overflow-x: auto;
@@ -69,14 +81,23 @@
     <!-- NAVIGASI TAB UTAMA -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16 border-b border-slate-200">
+            <div class="flex flex-col md:flex-row justify-between items-center py-4 md:h-16 gap-4 border-b border-slate-200">
                 <div class="flex items-center gap-2">
-                      <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto">
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG APP</span>
                     <span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v2026</span>
                 </div>
-                <!-- Menu Tab Button -->
-                <nav class="flex space-x-2" aria-label="Tabs">
+                
+                <!-- Menu Tab Button & Tombol Beranda -->
+                <nav class="flex flex-wrap items-center justify-center gap-2" aria-label="Tabs">
+                    <!-- Tombol Kembali Ke Beranda -->
+                    <a href="https://sokasmg.github.io" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        Beranda
+                    </a>
+                    
                     <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
                         Laporan Kehadiran
                     </button>
@@ -197,49 +218,52 @@
                 </button>
             </div>
 
-            <div id="calendarWrapper" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
-                <!-- Layout Header Kalender -->
-                <table class="w-full border-collapse mb-4 text-black">
-                    <tr>
-                        <td class="text-[44px] md:text-[56px] font-bold tracking-wider w-[35%] align-bottom leading-none">SEMARANG</td>
-                        <td class="w-[30%] align-middle">
-    <div class="flex flex-col items-center justify-center text-center">
-        <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-16 h-auto mb-1">
-        <div class="text-xs md:text-sm font-bold tracking-wider whitespace-nowrap">SOKA GAKKAI INDONESIA</div>
-    </div>
-</td>
-                        <td class="text-right text-lg md:text-2xl font-bold w-[35%] align-bottom uppercase tracking-wide" id="textHeaderBulan">JADWAL BULANAN</td>
-                    </tr>
-                </table>
-
-                <!-- Kalender Grid -->
-                <table class="calendar-table">
-                    <thead>
+            <!-- Kontainer Terluar Khusus Pendeteksi Skala Responsif -->
+            <div class="calendar-outer-container">
+                <div id="calendarWrapper" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <!-- Layout Header Kalender -->
+                    <table class="w-full border-collapse mb-4 text-black">
                         <tr>
-                            <th>Minggu</th>
-                            <th>Senin</th>
-                            <th>Selasa</th>
-                            <th>Rabu</th>
-                            <th>Kamis</th>
-                            <th>Jumat</th>
-                            <th>Sabtu</th>
+                            <td class="text-[44px] md:text-[56px] font-bold tracking-wider w-[35%] align-bottom leading-none">SEMARANG</td>
+                            <td class="w-[30%] align-middle">
+                                <div class="flex flex-col items-center justify-center text-center">
+                                    <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-16 h-auto mb-1">
+                                    <div class="text-xs md:text-sm font-bold tracking-wider whitespace-nowrap">SOKA GAKKAI INDONESIA</div>
+                                </div>
+                            </td>
+                            <td class="text-right text-lg md:text-2xl font-bold w-[35%] align-bottom uppercase tracking-wide" id="textHeaderBulan">JADWAL BULANAN</td>
                         </tr>
-                    </thead>
-                    <tbody id="calendarBody"></tbody>
-                </table>
+                    </table>
 
-                <!-- Footer Kalender -->
-                <div class="mt-4 text-xs font-bold text-black border-t border-slate-300 pt-3 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div class="leading-relaxed text-left">
-                        03 Juli : Hari guru dan murid<br>
-                        11 Juli : Hari Divisi Pemuda<br>
-                        19 Juli : Hari Divisi Pemuda, Hari Ikeda Kayokai
-                    </div>
-                    <div class="text-center text-sm px-4 py-2 bg-amber-50 rounded-lg border border-amber-200">
-                        Setiap hari kamis jam 19.00 ada Shodaikai umum
-                    </div>
-                    <div class="text-right font-mono text-[10px] text-slate-400">
-                        <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai">
+                    <!-- Kalender Grid -->
+                    <table class="calendar-table">
+                        <thead>
+                            <tr>
+                                <th>Minggu</th>
+                                <th>Senin</th>
+                                <th>Selasa</th>
+                                <th>Rabu</th>
+                                <th>Kamis</th>
+                                <th>Jumat</th>
+                                <th>Sabtu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendarBody"></tbody>
+                    </table>
+
+                    <!-- Footer Kalender -->
+                    <div class="mt-4 text-xs font-bold text-black border-t border-slate-300 pt-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="leading-relaxed text-left">
+                            03 Juli : Hari guru dan murid<br>
+                            11 Juli : Hari Divisi Pemuda<br>
+                            19 Juli : Hari Divisi Pemuda, Hari Ikeda Kayokai
+                        </div>
+                        <div class="text-center text-sm px-4 py-2 bg-amber-50 rounded-lg border border-amber-200">
+                            Setiap hari kamis jam 19.00 ada Shodaikai umum
+                        </div>
+                        <div class="text-right font-mono text-[10px] text-slate-400">
+                            <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -258,8 +282,8 @@
                     </div>
                     <div class="w-full sm:w-auto">
                         <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 1.252a1.125 1.125 0 0 1-1.107 1.328H7.218a1.125 1.125 0 0 1-1.107-1.328L6.34 18m11.32 0t-.115-.723m0 0a3.24 3.24 0 0 0-3.138-2.736H9.533a3.24 3.24 0 0 0-3.138 2.736m11.32 0H6.34M18 7.5h.008v.008H18V7.5Z" />
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                             </svg>
                             Print / Cetak (Landscape)
                         </button>
@@ -402,7 +426,7 @@
     <!-- LOGIKA CORE ENGINE SCRIPT INTEGRASI JAVASCRIPT                            -->
     <!-- ========================================================================= -->
     <script>
-        // --- 0. FUNGSI CONTROL SYSTEM TAB UTAMA ---
+        // --- 0. FUNGSI CONTROL SYSTEM TAB UTAMA & RESPONSIVITAS KALENDER ---
         function switchTab(tabId) {
             // Sembunyikan semua tab content
             document.querySelectorAll('.tab-content').forEach(content => {
@@ -419,9 +443,40 @@
 
             // Aktifkan style button tab terpilih
             const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
-            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+                activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+            }
+
+            // Atur ulang skala kalender saat berpindah ke tab jadwal
+            if (tabId === 'tab-jadwal') {
+                adjustCalendarScale();
+            }
         }
+
+        // FUNGSI DINAMIS SKALA KALENDER
+        function adjustCalendarScale() {
+            const container = document.querySelector('.calendar-outer-container');
+            const wrapper = document.getElementById('calendarWrapper');
+            if (!container || !wrapper) return;
+
+            const containerWidth = container.offsetWidth;
+            const targetWidth = 1024; // Lebar standar laptop
+
+            if (containerWidth < targetWidth) {
+                const scale = containerWidth / targetWidth;
+                wrapper.style.transform = `scale(${scale})`;
+                // Koreksi tinggi kontainer agar sisa ruang kosong akibat efek zoom out tidak menganga
+                container.style.height = `${wrapper.offsetHeight * scale}px`;
+            } else {
+                wrapper.style.transform = 'none';
+                container.style.height = 'auto';
+            }
+        }
+
+        // Jalankan penyesuaian skala saat layar HP diputar (orientasi berubah) atau di-resize
+        window.addEventListener('resize', adjustCalendarScale);
+
 
         // =========================================================================
         // SCRIPTS ENGINE UNTUK TAB 1: LAPORAN KEHADIRAN (SOURCE 1)
@@ -564,6 +619,7 @@
             } finally { btnSubmit.disabled = false; btnText.innerText = "Lapor"; }
         });
 
+
         // =========================================================================
         // SCRIPTS ENGINE UNTUK TAB 2: KALENDER JADWAL (SOURCE 2)
         // =========================================================================
@@ -655,16 +711,37 @@
                 if (hasCellsInRow) htmlRows += rowCells;
             }
             calendarBody.innerHTML = htmlRows;
+            
+            // Atur skala setelah kalender berhasil ter-render sempurna
+            setTimeout(adjustCalendarScale, 100);
         }
 
         document.getElementById('downloadBtn').addEventListener('click', () => {
-            html2canvas(document.getElementById('calendarWrapper'), { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+            // Reset skala sementara menjadi 1 agar html2canvas memotret objek asli dengan ketajaman penuh tanpa efek CSS scale
+            const container = document.querySelector('.calendar-outer-container');
+            const wrapper = document.getElementById('calendarWrapper');
+            const originalTransform = wrapper.style.transform;
+            const originalHeight = container.style.height;
+            
+            wrapper.style.transform = 'none';
+            container.style.height = 'auto';
+
+            html2canvas(wrapper, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
                 const downloadLink = document.createElement('a');
                 downloadLink.href = canvas.toDataURL('image/jpeg', 0.9);
                 downloadLink.download = `${namaFileDownload}.jpg`;
                 document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
-            }).catch(err => alert("Terjadi kendala saat menyiapkan file gambar."));
+                
+                // Kembalikan efek skala responsif setelah screenshot selesai
+                wrapper.style.transform = originalTransform;
+                container.style.height = originalHeight;
+            }).catch(err => {
+                alert("Terjadi kendala saat menyiapkan file gambar.");
+                wrapper.style.transform = originalTransform;
+                container.style.height = originalHeight;
+            });
         });
+
 
         // =========================================================================
         // SCRIPTS ENGINE UNTUK TAB 3: DATABASE ANGGOTA (SOURCE 3)
@@ -770,8 +847,8 @@
                 const getHierarchyScore = (member, jabatan, ket) => {
                     if (jabatan === 'Pimpinan') {
                         const isWakil = ket.includes('wakil');
-                        if (ket.includes('shibu')) return isWakil ? 190 : 200;
-                        if (ket.includes('chiku')) return isWakil ? 155 : 160;
+                        if (getHierarchyScore.toString().includes('shibu')) return isWakil ? 190 : 200;
+                        if (getHierarchyScore.toString().includes('chiku')) return isWakil ? 155 : 160;
                         return 120;
                     }
                     return jabatan === 'Inti' ? 10 : (jabatan === 'Anggota' ? 5 : 1);
