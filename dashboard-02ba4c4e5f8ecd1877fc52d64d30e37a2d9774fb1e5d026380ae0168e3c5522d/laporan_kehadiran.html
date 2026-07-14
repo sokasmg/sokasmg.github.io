@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Kehadiran</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 p-4 md:p-8 min-h-screen flex justify-center items-start">
+
+    <!-- Container Utama -->
+    <div class="w-full max-w-7xl space-y-6">
+        
+        <!-- ================= 1. JUDUL HALAMAN ================= -->
+        <div class="text-center py-4 border-b border-slate-200">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
+                LAPORAN KEHADIRAN
+            </h1>
+            <p class="text-sm text-slate-500 mt-1">Sistem pencatatan kehadiran anggota</p>
+        </div>
+
+        <!-- ================= BARIS FORM (DI ATAS) ================= -->
+        <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+            
+            <!-- BARIS 1: Input Data -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
+                    <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                </div>
+                
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
+                    <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                        <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
+                        <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
+                        <option value="Chiku Majapahit">Chiku Majapahit</option>
+                        <option value="Salatiga">Salatiga</option>
+                        <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
+                        <option value="Pertemuan Bagian">Pertemuan Bagian</option>
+                        <option value="Shodaikai">Shodaikai</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
+                    <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
+                    <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
+                    <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
+                    <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
+                    <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
+                    <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                </div>
+
+            </div>
+
+            <!-- BARIS 2: Tombol Lapor -->
+            <div class="flex justify-end border-t border-slate-100 pt-4">
+                <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
+                    <span id="btnText">Lapor</span>
+                </button>
+            </div>
+
+        </form>
+
+        <!-- ================= AREA LIST KEHADIRAN (DI BAWAH) ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
+                <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
+                
+                <button type="button" id="btnRefresh" onclick="fetchData()" class="relative z-20 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer">
+                    <span id="refreshText">🔄 Refresh Data</span>
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto w-full">
+                <table class="w-full border-collapse text-left table-auto">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold tracking-wider border-b border-slate-100">
+                            <th class="py-4 px-6">Tanggal</th>
+                            <th class="py-4 px-6">Pertemuan</th>
+                            <th class="py-4 px-6 text-center">Bapak</th>
+                            <th class="py-4 px-6 text-center">Ibu</th>
+                            <th class="py-4 px-6 text-center">Pemuda</th>
+                            <th class="py-4 px-6 text-center">Pemudi</th>
+                            <th class="py-4 px-6 text-center">Anak</th>
+                            <th class="py-4 px-6 text-center bg-indigo-50/50 text-indigo-700">Total</th>
+                            <th class="py-4 px-6">Pelapor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                        <tr>
+                            <td colspan="9" class="py-8 text-center text-slate-400">Memuat data dari Google Sheets...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv';
+
+        // Helper untuk format tanggal HTML (yyyy-mm-dd) -> d/m/yyyy
+        function formatKeTanggalLokal(tanggalInput) {
+            if (!tanggalInput) return '';
+            const parts = tanggalInput.split('-');
+            if (parts.length === 3) {
+                const tahun = parts[0];
+                const bulan = parseInt(parts[1], 10); 
+                const hari = parseInt(parts[2], 10);  
+                return `${hari}/${bulan}/${tahun}`;
+            }
+            return tanggalInput;
+        }
+
+        // Memparse string tanggal menjadi objek Date yang valid
+        function parseTanggalKeDateObject(tanggalString) {
+            if (!tanggalString) return new Date(0);
+            
+            // Bersihkan sisa-sisa typo garis miring ganda
+            const cleanString = tanggalString.replace(/\/+/g, '/').trim();
+
+            if (cleanString.includes('-')) {
+                const parts = cleanString.split('-');
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            } else if (cleanString.includes('/')) {
+                const parts = cleanString.split('/');
+                if (parts.length === 3) {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+            }
+            return new Date(0);
+        }
+
+        // Mendapatkan nama Bulan dan Tahun Indonesia untuk pemisah list
+        function dapatkanNamaBulanTahun(dateObj) {
+            if (isNaN(dateObj.getTime()) || dateObj.getTime() === 0) return 'Format Tanggal Lainnya';
+            
+            const namaBulan = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+            return `${namaBulan[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+        }
+
+        // Mini CSV Parser yang kokoh untuk menangani pembungkus tanda kutip dan baris baru (\r)
+        function parseCSV(text) {
+            let lines = [];
+            let row = [""];
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                let next = text[i+1];
+
+                if (c === '"') {
+                    if (inQuotes && next === '"') { 
+                        row[row.length - 1] += '"'; 
+                        i++; 
+                    } else { 
+                        inQuotes = !inQuotes; 
+                    }
+                } else if (c === ',' && !inQuotes) {
+                    row.push('');
+                } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    lines.push(row);
+                    row = [''];
+                } else {
+                    row[row.length - 1] += c;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
+        // 1. Ambil data CSV dari Google Sheets dan render ke tabel
+        async function fetchData() {
+            const tbody = document.getElementById('tabelBody');
+            const btnRefresh = document.getElementById('btnRefresh');
+            const refreshText = document.getElementById('refreshText');
+            
+            // Beri efek visual memuat pada tombol
+            if(btnRefresh && refreshText) {
+                btnRefresh.disabled = true;
+                refreshText.innerText = "⏳ Memuat...";
+            }
+
+            try {
+                // Tambahkan parameter timestamp agar tidak terkena cache browser
+                const response = await fetch(`${CSV_URL}&t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Gagal mengambil data");
+                
+                const rawText = await response.text();
+                
+                // Menggunakan Parser CSV baru yang aman
+                const parsedRows = parseCSV(rawText);
+
+                // Filter: Lewati baris header indeks ke-0, pastikan ada datanya, dan kolom tanggal tidak kosong
+                const barisData = parsedRows.filter((col, index) => {
+                    return index > 0 && col.length >= 8 && col[0] && col[0].trim() !== "";
+                });
+
+                if (barisData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-slate-400">Belum ada data laporan yang masuk.</td></tr>`;
+                    return;
+                }
+
+                // Urutkan data secara otomatis dari yang terbaru (Descending)
+                barisData.sort((rowA, rowB) => {
+                    const dateA = parseTanggalKeDateObject(rowA[0]);
+                    const dateB = parseTanggalKeDateObject(rowB[0]);
+                    return dateB - dateA;
+                });
+
+                tbody.innerHTML = '';
+                let bulanAktif = "";
+
+                for (let i = 0; i < barisData.length; i++) {
+                    const col = barisData[i];
+                    const dateObj = parseTanggalKeDateObject(col[0]);
+                    const bulanTahunData = dapatkanNamaBulanTahun(dateObj);
+                    const tanggalTampilan = col[0].replace(/\/+/g, '/').trim();
+
+                    // Sisipkan pemisah bulan jika berbeda dari baris sebelumnya
+                    if (bulanTahunData !== bulanAktif) {
+                        bulanAktif = bulanTahunData;
+                        tbody.innerHTML += `
+                            <tr class="bg-indigo-50/70 border-y border-indigo-100/80">
+                                <td colspan="9" class="py-2.5 px-6 font-bold text-xs uppercase tracking-wider text-indigo-800">
+                                    📅 ${bulanAktif}
+                                </td>
+                            </tr>
+                        `;
+                    }
+                    
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-6 font-medium text-slate-900">${tanggalTampilan}</td>
+                            <td class="py-3.5 px-6"><span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-md text-xs font-semibold">${col[1] || ''}</span></td>
+                            <td class="py-3.5 px-6 text-center">${col[2] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[3] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[4] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[5] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[6] || 0}</td>
+                            <td class="py-3.5 px-6 text-center font-bold text-indigo-600 bg-indigo-50/30">${col[7] || 0}</td>
+                            <td class="py-3.5 px-6 text-slate-500 font-medium">${col[8] || ''}</td>
+                        </tr>
+                    `;
+                }
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-red-500">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</td></tr>`;
+            } finally {
+                // Kembalikan status tombol refresh seperti semula
+                if(btnRefresh && refreshText) {
+                    btnRefresh.disabled = false;
+                    refreshText.innerText = "🔄 Refresh Data";
+                }
+            }
+        }
+
+        // 2. Kirim data Form ke Google Sheets menggunakan API GAS
+        document.getElementById('laporanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnText = document.getElementById('btnText');
+            
+            btnSubmit.disabled = true;
+            btnText.innerText = "Mengirim...";
+
+            const inputTanggalRaw = document.getElementById('tanggal').value; 
+            const inputTanggalFormated = formatKeTanggalLokal(inputTanggalRaw);
+
+            const inputPertemuan = document.getElementById('pertemuan').value;
+            const bapak = parseInt(document.getElementById('bapak').value) || 0;
+            const ibu = parseInt(document.getElementById('ibu').value) || 0;
+            const pemuda = parseInt(document.getElementById('pemuda').value) || 0;
+            const pemudi = parseInt(document.getElementById('pemudi').value) || 0;
+            const anak = parseInt(document.getElementById('anak').value) || 0;
+            const pelapor = document.getElementById('pelapor').value;
+
+            const payload = {
+                tanggal: inputTanggalFormated, 
+                pertemuan: inputPertemuan,
+                bapak: bapak,
+                ibu: ibu,
+                pemuda: pemuda,
+                pemudi: pemudi,
+                anak: anak,
+                pelapor: pelapor
+            };
+
+            try {
+                const response = await fetch(GAS_URL, {
+                    redirect: "follow",
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.result === "success") {
+                    document.getElementById('laporanForm').reset();
+                    document.getElementById('tanggal').valueAsDate = new Date();
+                    
+                    // Tunggu jeda 1.5 detik agar Google Sheets selesai menulis data, baru reload
+                    setTimeout(fetchData, 1500);
+                    alert("Laporan Berhasil Terkirim!");
+                } else {
+                    alert("Gagal menyimpan ke Google Sheets: " + result.message);
+                }
+
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                alert("Laporan berhasil dikirim! Sinkronisasi tabel berjalan...");
+                document.getElementById('laporanForm').reset();
+                document.getElementById('tanggal').valueAsDate = new Date();
+                setTimeout(fetchData, 3000);
+            } finally {
+                btnSubmit.disabled = false;
+                btnText.innerText = "Lapor";
+            }
+        });
+
+        // Set default tanggal hari ini
+        document.getElementById('tanggal').valueAsDate = new Date();
+
+        // Load data pertama kali saat web dibuka
+        fetchData();
+    </script>
+</body>
+</html>
