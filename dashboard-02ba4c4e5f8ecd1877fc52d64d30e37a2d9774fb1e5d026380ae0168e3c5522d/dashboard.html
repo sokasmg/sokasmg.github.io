@@ -279,9 +279,9 @@
                             <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai" class="w-full max-w-[240px] h-auto object-contain">
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+</div>
+</div>
+</div>
 
 
         <!-- ========================================================================= -->
@@ -902,83 +902,196 @@
             });
 
             filteredRaw.sort((a, b) => {
-                const getHierarchyScore = (member, jabatan, ket) => {
+                function getHierarchyScore(member, jabatan, ket) {
                     if (jabatan === 'Pimpinan') {
+                        const isShibu = ket.includes('shibu');
+                        const isChiku = ket.includes('chiku');
                         const isWakil = ket.includes('wakil');
-                        if (getHierarchyScore.toString().includes('shibu')) return isWakil ? 190 : 200;
-                        if (getHierarchyScore.toString().includes('chiku')) return isWakil ? 155 : 160;
-                        return 120;
+                        const hasWordIbu = /\bibu\b/.test(ket);
+                        
+                        const isSayapUtama = ket.includes('bapak') || hasWordIbu;
+                        const isSayapMuda = ket.includes('pemuda') || ket.includes('pemudi');
+
+                        if (isShibu) {
+                            if (!isSayapUtama && !isSayapMuda) {
+                                if (isWakil) return 190;
+                                return 200;
+                            }
+                            if (isSayapUtama) {
+                                if (isWakil) return 180;
+                                return 185;
+                            }
+                            if (isSayapMuda) {
+                                if (isWakil) return 165;
+                                return 170;
+                            }
+                        }
+                        
+                        if (isChiku) {
+                            if (!isSayapUtama && !isSayapMuda) {
+                                if (isWakil) return 155;
+                                return 160;
+                            }
+                            if (isSayapUtama) {
+                                if (isWakil) return 145;
+                                return 150;
+                            }
+                            if (isSayapMuda) {
+                                if (isWakil) return 130;
+                                return 135;
+                            }
+                        }
+                        return 120; 
                     }
-                    return jabatan === 'Inti' ? 10 : (jabatan === 'Anggota' ? 5 : 1);
-                };
-                const scoreA = getHierarchyScore(a, a.jabatan || 'Anggota', a.keterangan.toLowerCase());
-                const scoreB = getHierarchyScore(b, b.jabatan || 'Anggota', b.keterangan.toLowerCase());
-                return scoreA !== scoreB ? scoreB - scoreA : (a.chiku !== b.chiku ? a.chiku.localeCompare(b.chiku) : a.nama.localeCompare(b.nama));
+                    if (jabatan === 'Inti') return 10;
+                    if (jabatan === 'Anggota') return 5;
+                    return 1; 
+                }
+				const jabA = a.jabatan || 'Anggota';
+const ketA = (a.keterangan || '').toLowerCase();
+
+const jabB = b.jabatan || 'Anggota';
+const ketB = (b.keterangan || '').toLowerCase();
+                const scoreA = getHierarchyScore(a, jabA, ketA);
+                const scoreB = getHierarchyScore(b, jabB, ketB);
+
+                if (scoreA !== scoreB) return scoreB - scoreA;
+                if (a.chiku !== b.chiku) return a.chiku.localeCompare(b.chiku);
+                return a.nama.localeCompare(b.nama);
             });
 
-            let finalOrderedList = []; let headMembers = filteredRaw.filter(m => !m.parentId);
-            const getFamilyPriority = (h) => { if (!h) return 99; const hl = h.toLowerCase(); return hl==='suami'||hl==='istri' ? 1 : (hl.includes('anak') ? 2 : (hl.includes('cucu') ? 3 : 4)); };
+            let finalOrderedList = [];
+            let headMembers = filteredRaw.filter(m => !m.parentId);
+
+            const getFamilyPriority = (hubungan) => {
+                if (!hubungan) return 99;
+                const hubLower = hubungan.toLowerCase();
+                if (hubLower === 'suami' || hubLower === 'istri') return 1;
+                if (hubLower.includes('anak')) return 2;
+                if (hubLower.includes('cucu')) return 3;
+                return 4;
+            };
 
             headMembers.forEach(head => {
-                head.isChildRender = false; finalOrderedList.push(head);
-                let familyMembers = filteredRaw.filter(m => m.parentId === head.id).sort((a,b) => getFamilyPriority(a.hubungan) - getFamilyPriority(b.hubungan));
-                familyMembers.forEach(child => { child.isChildRender = true; finalOrderedList.push(child); });
+                head.isChildRender = false;
+                finalOrderedList.push(head);
+
+                let familyMembers = filteredRaw.filter(m => m.parentId === head.id);
+                familyMembers.sort((a, b) => {
+                    const scoreA = getFamilyPriority(a.hubungan);
+                    const scoreB = getFamilyPriority(b.hubungan);
+                    if (scoreA !== scoreB) return scoreA - scoreB;
+                    return a.hubungan.localeCompare(b.hubungan, undefined, { numeric: true, sensitivity: 'base' });
+                });
+
+                familyMembers.forEach(child => {
+                    child.isChildRender = true;
+                    finalOrderedList.push(child);
+                });
             });
-            filteredRaw.forEach(m => { if (!finalOrderedList.find(x => x.id === m.id)) { m.isChildRender = false; finalOrderedList.push(m); } });
+
+            filteredRaw.forEach(m => {
+                if (!finalOrderedList.find(x => x.id === m.id)) {
+                    m.isChildRender = false;
+                    finalOrderedList.push(m);
+                }
+            });
+
             return finalOrderedList;
         }
 
         function renderTable() {
             updateStatistics();
-            const tbody = document.getElementById('memberTableBody'); const cardContainer = document.getElementById('memberCardContainer');
-            tbody.innerHTML = ''; cardContainer.innerHTML = '';
+
+            const tbody = document.getElementById('memberTableBody');
+            const cardContainer = document.getElementById('memberCardContainer');
+            
+            tbody.innerHTML = '';
+            cardContainer.innerHTML = '';
+
             const processedData = buildStructuredData(false);
             document.getElementById('totalData').innerText = `Total Hasil: ${processedData.length} Records`;
 
             if (processedData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data.</td></tr>`;
-                cardContainer.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data.</div>`;
+                const emptyHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data anggota yang cocok dengan filter.</div>`;
+                tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
+                cardContainer.innerHTML = emptyHTML;
                 document.getElementById('pageInfo').innerText = "Menampilkan 0 - 0 dari 0 data";
-                document.getElementById('paginationButtons').innerHTML = ''; return;
+                document.getElementById('paginationButtons').innerHTML = '';
+                return;
             }
 
             const totalPages = Math.ceil(processedData.length / rowsPerPage);
             if (currentPage > totalPages) currentPage = totalPages || 1;
+
             const startIndex = (currentPage - 1) * rowsPerPage;
-            const paginatedItems = processedData.slice(startIndex, startIndex + rowsPerPage);
+            const endIndex = Math.min(startIndex + rowsPerPage, processedData.length);
+            const paginatedItems = processedData.slice(startIndex, endIndex);
 
             paginatedItems.forEach((member, index) => {
+                const currentJabatan = member.jabatan || 'Anggota';
+                const currentStatus = member.status || 'Aktif';
+
+                // --- GENERATE LAYOUT TABEL (UNTUK LAPTOP / TABLET) ---
                 const tr = document.createElement('tr');
-                tr.className = member.isChildRender ? "bg-amber-50/30 text-gray-600 text-xs" : "bg-white font-medium text-xs";
+                tr.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
                 tr.innerHTML = `
-                    <td class="px-4 py-3 text-center">${startIndex + index + 1}</td>
-                    <td class="px-4 py-3"><div class="flex items-center">${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}<span class="${member.isChildRender ? '' : 'font-bold text-gray-900'}">${member.nama}</span></div></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] bg-purple-100 text-purple-800">${member.chiku}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getJabatanClass(member.jabatan)}">${member.jabatan || 'Anggota'}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getStatusClass(member.status)}">${member.status || 'Aktif'}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${member.gohonzon}</span></td>
+                    <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center">
+                            ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}
+                            <span class="${member.isChildRender ? 'text-gray-700 font-normal' : 'text-gray-900 font-bold'}">${member.nama}</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">${member.chiku}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span></td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-0.5 rounded text-xs font-medium ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                            ${member.gohonzon}
+                        </span>
+                    </td>
                     <td class="px-4 py-3">${member.tahunLahir}</td>
-                    <td class="px-4 py-3">${member.hubungan}</td>
-                    <td class="px-4 py-3">${member.telepon}</td>
-                    <td class="px-4 py-3 break-all">${member.alamat}</td>
-                    <td class="px-4 py-3 break-all">${member.keterangan}</td>`;
+                    <td class="px-4 py-3 text-xs ${member.isChildRender ? 'text-amber-800 font-medium' : ''}">${member.hubungan}</td>
+                    <td class="px-4 py-3 text-xs">${member.telepon}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.alamat}">${member.alamat}</td>
+                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.keterangan}">${member.keterangan}</td>
+                `;
                 tbody.appendChild(tr);
 
+                // --- GENERATE LAYOUT CARD (OPTIMAL UNTUK HP / PONSEL) ---
                 const card = document.createElement('div');
-                card.className = `p-4 rounded-xl border ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'} text-xs flex flex-col gap-2`;
+                card.className = `p-4 rounded-xl shadow-xs border transition flex flex-col gap-2.5 ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'}`;
                 card.innerHTML = `
-                    <div class="flex justify-between font-bold"><div>${member.isChildRender ? '↳ ' : ''}${member.nama}</div><div class="text-gray-400">#${startIndex + index + 1}</div></div>
-                    <div class="flex flex-wrap gap-1"><span class="px-1.5 py-0.5 bg-purple-100 rounded text-purple-800">${member.chiku}</span><span class="px-1.5 py-0.5 rounded ${getBagianClass(member.bagian)}">${member.bagian}</span><span class="px-1.5 py-0.5 rounded ${getStatusClass(member.status)}">${member.status || 'Aktif'}</span></div>
-                    <div class="grid grid-cols-2 gap-1 text-gray-600 border-t pt-2">
-                        <div><span class="text-gray-400 block text-[9px]">TELP</span><a href="tel:${member.telepon}" class="text-blue-600 underline">${member.telepon}</a></div>
-                        <div><span class="text-gray-400 block text-[9px]">HUB</span><span class="text-amber-900">${member.hubungan}</span></div>
-                        <div class="col-span-2"><span class="text-gray-400 block text-[9px]">ALAMAT</span><p class="text-gray-800">${member.alamat}</p></div>
-                    </div>`;
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="flex items-center gap-1.5">
+                            ${member.isChildRender ? '<span class="text-amber-500 font-bold">↳</span>' : ''}
+                            <h4 class="font-bold text-gray-900 text-base">${member.nama}</h4>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">#${startIndex + index + 1}</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-purple-100 text-purple-800">${member.chiku}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs border-t border-gray-100 pt-2.5 text-gray-600">
+                        <div><span class="text-gray-400 block text-[10px] uppercase">Gohonzon</span><span class="font-medium">${member.gohonzon}</span></div>
+                        <div><span class="text-gray-400 block text-[10px] uppercase">Thn Lahir</span><span class="font-medium">${member.tahunLahir}</span></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Hub. Keluarga</span><span class="font-medium text-amber-900">${member.hubungan}</span></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="font-medium text-blue-600 underline">${member.telepon}</a></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat}</p></div>
+                        <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan}</p></div>
+                    </div>
+                `;
                 cardContainer.appendChild(card);
             });
 
-            document.getElementById('pageInfo').innerText = `Menampilkan ${startIndex + 1} - ${Math.min(startIndex + rowsPerPage, processedData.length)} dari ${processedData.length} hasil`;
+            document.getElementById('pageInfo').innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
             renderPaginationControls(totalPages);
         }
 
