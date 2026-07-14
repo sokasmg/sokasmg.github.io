@@ -116,7 +116,7 @@
     <main class="max-w-7xl mx-auto p-4 md:p-6">
 
         <!-- ========================================================================= -->
-        <!-- TAB 1: LAPORAN KEHADIRAN (SOURCE 1)                                      -->
+        <!-- TAB 1: LAPORAN KEHADIRAN                                                 -->
         <!-- ========================================================================= -->
         <div id="tab-kehadiran" class="tab-content space-y-6">
             <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
@@ -127,75 +127,74 @@
             </div>
 
             <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-    <!-- Menggunakan grid 12 kolom untuk kontrol presisi satu baris di layar desktop -->
-    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 items-end">
-        
-        <!-- Tanggal (Porsi: 1.5/12) -->
-        <div class="flex flex-col gap-1.5 lg:col-span-2">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
-            <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <!-- Pertemuan (Porsi: 2/12) -->
-        <div class="flex flex-col gap-1.5 lg:col-span-2">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
-            <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
-                <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
-                <option value="Chiku Majapahit">Chiku Majapahit</option>
-                <option value="Salatiga">Salatiga</option>
-                <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
-                <option value="Pertemuan Bagian">Pertemuan Bagian</option>
-                <option value="Shodaikai">Shodaikai</option>
-            </select>
-        </div>
-        
-        <!-- Input Angka (Masing-masing porsi: 0.7/12 - Diperkecil ~50% dari versi awal) -->
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
-            <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
-            <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
-            <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
-            <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
-            <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <!-- Keterangan (Porsi: 2/12 - Tampilan diseragamkan) -->
-        <div class="flex flex-col gap-1.5 lg:col-span-2">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
-            <input type="text" id="inputKeterangan" name="keterangan" placeholder="Isi info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-        <!-- Pelapor (Porsi: 1.5/12) -->
-        <div class="flex flex-col gap-1.5 lg:col-span-1">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
-            <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-        </div>
-        
-    </div>
-    
-    <div class="flex justify-end border-t border-slate-100 pt-4">
-        <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
-            <span id="btnText">Lapor</span>
-        </button>
-    </div>
-</form>
+                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 items-end">
+                    
+                    <!-- Tanggal -->
+                    <div class="flex flex-col gap-1.5 lg:col-span-2">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
+                        <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <!-- Pertemuan -->
+                    <div class="flex flex-col gap-1.5 lg:col-span-2">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
+                        <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                            <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
+                            <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
+                            <option value="Chiku Majapahit">Chiku Majapahit</option>
+                            <option value="Salatiga">Salatiga</option>
+                            <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
+                            <option value="Pertemuan Bagian">Pertemuan Bagian</option>
+                            <option value="Shodaikai">Shodaikai</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Input Angka -->
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
+                        <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
+                        <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
+                        <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
+                        <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
+                        <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <!-- Keterangan -->
+                    <div class="flex flex-col gap-1.5 lg:col-span-2">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
+                        <input type="text" id="inputKeterangan" name="keterangan" placeholder="Isi info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                    <!-- Pelapor -->
+                    <div class="flex flex-col gap-1.5 lg:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
+                        <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    
+                </div>
+                
+                <div class="flex justify-end border-t border-slate-100 pt-4">
+                    <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
+                        <span id="btnText">Lapor</span>
+                    </button>
+                </div>
+            </form>
 
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
@@ -205,32 +204,31 @@
                     </button>
                 </div>
 
-                <!-- TAMPILAN TABLE (Hanya tampil di Tablet / Laptop ke atas) -->
+                <!-- TAMPILAN TABLE (Desktop) -->
                 <div class="hidden md:block overflow-x-auto w-full">
-                    <table class="w-full border-collapse text-left table-auto">
+                   <table class="w-full border-collapse text-left table-auto">
                         <thead>
-                            <tr class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold tracking-wider border-b border-slate-100">
-    <th class="py-4 px-6">Tanggal</th>
-    <th class="py-4 px-6">Pertemuan</th>
-    <th class="py-4 px-6 text-center">Bapak</th>
-    <th class="py-4 px-6 text-center">Ibu</th>
-    <th class="py-4 px-6 text-center">Pemuda</th>
-    <th class="py-4 px-6 text-center">Pemudi</th>
-    <th class="py-4 px-6 text-center">Anak</th>
-    <th class="py-4 px-6 text-center bg-indigo-50/50 text-indigo-700">Total</th>
-    <th class="py-4 px-6">Keterangan</th> <!-- Tambahan judul kolom Keterangan -->
-    <th class="py-4 px-6">Pelapor</th>
-</tr>
-                        </thead>
-                        <tbody id="tabelBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
-                            <tr>
-                                <td colspan="10" class="py-8 text-center text-slate-400">Memuat data dari Google Sheets...</td>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                <th class="p-4 w-28">Tanggal</th>
+                                <th class="p-4">Pertemuan</th>
+                                <th class="p-4 w-12 text-center">Bpk</th>
+                                <th class="p-4 w-12 text-center">Ibu</th>
+                                <th class="p-4 w-12 text-center">Pmd</th>
+                                <th class="p-4 w-12 text-center">Pmi</th>
+                                <th class="p-4 w-12 text-center">Anak</th>
+                                <th class="p-4 w-16 text-center bg-indigo-50/50 text-indigo-600 font-bold">Total</th>
+                                <th class="p-4 max-w-xs">Keterangan</th>
+                                <th class="p-4 w-28">Pelapor</th>
+                                <th class="p-4 w-32 text-center">Aksi</th>
                             </tr>
+                        </thead>
+                        <tbody id="tabelBody" class="text-sm text-slate-600 divide-y divide-slate-50">
+                            <tr><td colspan="11" class="p-8 text-center text-slate-400">Memuat data...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- TAMPILAN CARD LAYOUT (Hanya tampil di HP / Mobile) -->
+                <!-- TAMPILAN CARD LAYOUT (Mobile) -->
                 <div id="tabelCardMobile" class="block md:hidden p-4 space-y-4 bg-slate-50/50 divide-y divide-slate-100">
                     <div class="text-center py-8 text-slate-400 text-sm">Memuat data dari Google Sheets...</div>
                 </div>
@@ -238,19 +236,17 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- TAB 2: KALENDER JADWAL (SOURCE 2)                                         -->
+        <!-- TAB 2: KALENDER JADWAL                                                    -->
         <!-- ========================================================================= -->
         <div id="tab-jadwal" class="tab-content hidden space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-xs text-center">
                 <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-2 px-6 rounded-lg transition text-sm cursor-pointer shadow-sm">
-                    📥 Download Jadwal Gambar (JPEG)
+                    📥 Download Jadwal
                 </button>
             </div>
 
-            <!-- Kontainer Terluar Khusus Pendeteksi Skala Responsif -->
             <div class="calendar-outer-container">
                 <div id="calendarWrapper" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <!-- Layout Header Kalender -->
                     <table class="w-full border-collapse mb-4 text-black">
                         <tr>
                             <td class="text-[44px] md:text-[56px] font-bold tracking-wider w-[35%] align-bottom leading-none">SEMARANG</td>
@@ -264,7 +260,6 @@
                         </tr>
                     </table>
 
-                    <!-- Kalender Grid -->
                     <table class="calendar-table">
                         <thead>
                             <tr>
@@ -280,34 +275,28 @@
                         <tbody id="calendarBody"></tbody>
                     </table>
 
-                                                            <!-- Footer Kalender (KODE COCOK DENGAN GAMBAR - SELALU SEJAJAR) -->
                     <div class="mt-6 border-t border-slate-300 pt-4 flex flex-row justify-between items-center gap-4 text-black w-full">
-                        <!-- Kolom Kiri: Hari Penting (Lebar 35% - Selalu Rata Kiri) -->
-                        <!-- Cari bagian ini di HTML Anda, lalu ubah menjadi seperti ini -->
-<!-- Kolom Kiri: Hari Penting (Dinamis) -->
-<div id="containerHariPenting" class="text-[11px] font-bold leading-relaxed text-left w-[35%]">
-    ⏳ Memuat hari penting...
-</div>
+                        <div id="containerHariPenting" class="text-[11px] font-bold leading-relaxed text-left w-[35%]">
+                            ⏳ Memuat hari penting...
+                        </div>
                         
-                        <!-- Kolom Tengah: Kotak Pengumuman Kuning (Lebar 30% - Selalu di Tengah) -->
                         <div class="w-[30%] flex items-center justify-center">
                             <div class="w-full text-center text-[11px] font-bold px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
                                 Setiap hari kamis jam 19.00 ada Shodaikai umum
                             </div>
                         </div>
                         
-                        <!-- Kolom Kanan: Banner Gambar (Lebar 35% - Selalu Rata Kanan) -->
                         <div class="w-[35%] flex justify-end items-center">
                             <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai" class="w-full max-w-[240px] h-auto object-contain">
                         </div>
                     </div>
-</div>
-</div>
-</div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- ========================================================================= -->
-        <!-- TAB 3: DATABASE ANGGOTA (SOURCE 3)                                       -->
+        <!-- TAB 3: DATABASE ANGGOTA                                                  -->
         <!-- ========================================================================= -->
         <div id="tab-database" class="tab-content hidden space-y-4 md:space-y-6">
             <div id="monitorHeader" class="bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
@@ -317,22 +306,21 @@
                         <p class="text-xs md:text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
                         <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026 (Viewer Mode)</p>
                     </div>
-                    <!-- KODE BARU -->
-<div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-    <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-        </svg>
-        Print / Cetak (Landscape)
-    </button>
-    
-    <a href="admin.html" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition text-center shadow-xs flex items-center justify-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        Edit Database
-    </a>
-</div>
+                    <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+                        <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                            </svg>
+                            Print / Cetak (Landscape)
+                        </button>
+                        
+                        <a href="admin.html" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition text-center shadow-xs flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Edit Database
+                        </a>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
@@ -467,51 +455,101 @@
 
     </main>
 
+    <!-- MODAL EDIT LAPORAN KEHADIRAN (Wajib dipastikan ada di sini) -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 hidden animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full mx-4 overflow-hidden transform transition-all">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-800">Edit Laporan Kehadiran</h3>
+                <button type="button" onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
+            </div>
+            <form id="editLaporanForm" class="p-6 space-y-4">
+                <input type="hidden" id="editRowId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tanggal</label>
+                        <input type="date" id="editTanggal" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pertemuan</label>
+                        <input type="text" id="editPertemuan" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
+                    </div>
+                </div>
+                <div class="grid grid-cols-5 gap-2">
+                    <div>
+                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Bpk</label>
+                        <input type="number" id="editBapak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                    </div>
+                    <div>
+                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Ibu</label>
+                        <input type="number" id="editIbu" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                    </div>
+                    <div>
+                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmd</label>
+                        <input type="number" id="editPemuda" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                    </div>
+                    <div>
+                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmi</label>
+                        <input type="number" id="editPemudi" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                    </div>
+                    <div>
+                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Anak</label>
+                        <input type="number" id="editAnak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Keterangan</label>
+                    <input type="text" id="editKeterangan" class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pelapor</label>
+                    <input type="text" id="editPelapor" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+                </div>
+                <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
+                    <button type="button" onclick="tutupModalEdit()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSimpanEdit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ========================================================================= -->
-    <!-- LOGIKA CORE ENGINE SCRIPT INTEGRASI JAVASCRIPT                            -->
+    <!-- JAVASCRIPT ENGINE                                                         -->
     <!-- ========================================================================= -->
     <script>
-        // --- 0. FUNGSI CONTROL SYSTEM TAB UTAMA & RESPONSIVITAS KALENDER ---
+        // --- 0. FUNGSI TAB & RESPONSIVITAS ---
         function switchTab(tabId) {
-            // Sembunyikan semua tab content
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
-            // Tampilkan tab yang dipilih
             document.getElementById(tabId).classList.remove('hidden');
 
-            // Reset style state button tab
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
                 btn.classList.add('text-slate-600', 'hover:bg-slate-100');
             });
 
-            // Aktifkan style button tab terpilih
             const activeBtn = document.getElementById('btn-' + tabId);
             if(activeBtn) {
                 activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
                 activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
             }
 
-            // Atur ulang skala kalender saat berpindah ke tab jadwal
             if (tabId === 'tab-jadwal') {
                 adjustCalendarScale();
             }
         }
 
-        // FUNGSI DINAMIS SKALA KALENDER
         function adjustCalendarScale() {
             const container = document.querySelector('.calendar-outer-container');
             const wrapper = document.getElementById('calendarWrapper');
             if (!container || !wrapper) return;
 
             const containerWidth = container.offsetWidth;
-            const targetWidth = 1024; // Lebar standar laptop
+            const targetWidth = 1024;
 
             if (containerWidth < targetWidth) {
                 const scale = containerWidth / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
-                // Koreksi tinggi kontainer agar sisa ruang kosong akibat efek zoom out tidak menganga
                 container.style.height = `${wrapper.offsetHeight * scale}px`;
             } else {
                 wrapper.style.transform = 'none';
@@ -519,280 +557,308 @@
             }
         }
 
-        // Jalankan penyesuaian skala saat layar HP diputar (orientasi berubah) atau di-resize
         window.addEventListener('resize', adjustCalendarScale);
 
 
         // =========================================================================
-        // SCRIPTS ENGINE UNTUK TAB 1: LAPORAN KEHADIRAN (SOURCE 1)
+        // SCRIPTS TAB 1: LAPORAN KEHADIRAN
         // =========================================================================
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv';
-
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
+        
         function formatKeTanggalLokal(tanggalInput) {
             if (!tanggalInput) return '';
-            const parts = tanggalInput.split('-');
-            if (parts.length === 3) {
-                return `${parseInt(parts[2], 10)}/${parseInt(parts[1], 10)}/${parts[0]}`;
+            const d = new Date(tanggalInput);
+            if (!isNaN(d.getTime())) {
+                return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
             }
             return tanggalInput;
         }
 
-        function parseTanggalKeDateObject(tanggalString) {
-            if (!tanggalString) return new Date(0);
-            const cleanString = tanggalString.replace(/\/+/g, '/').trim();
-            if (cleanString.includes('-')) {
-                const parts = cleanString.split('-');
-                return new Date(parts[0], parts[1] - 1, parts[2]);
-            } else if (cleanString.includes('/')) {
-                const parts = cleanString.split('/');
-                if (parts.length === 3) {
-                    return new Date(parts[2], parts[1] - 1, parts[0]);
-                }
-            }
-            return new Date(0);
-        }
-
-        function dapatkanNamaBulanTahun(dateObj) {
-            if (isNaN(dateObj.getTime()) || dateObj.getTime() === 0) return 'Format Tanggal Lainnya';
-            const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            return `${namaBulan[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-        }
-
-        function parseCSV(text) {
-            let lines = []; let row = [""]; let inQuotes = false;
-            for (let i = 0; i < text.length; i++) {
-                let c = text[i]; let next = text[i+1];
-                if (c === '"') {
-                    if (inQuotes && next === '"') { row[row.length - 1] += '"'; i++; } else { inQuotes = !inQuotes; }
-                } else if (c === ',' && !inQuotes) {
-                    row.push('');
-                } else if ((c === '\r' || c === '\n') && !inQuotes) {
-                    if (c === '\r' && next === '\n') { i++; }
-                    lines.push(row); row = [''];
-                } else { row[row.length - 1] += c; }
-            }
-            if (row.length > 1 || row[0] !== "") lines.push(row);
-            return lines;
-        }
+        let dataKehadiranCache = [];
 
         async function fetchData() {
-            const tbody = document.getElementById('tabelBody');
-            const cardContainerMobile = document.getElementById('tabelCardMobile');
             const btnRefresh = document.getElementById('btnRefresh');
-            const refreshText = document.getElementById('refreshText');
-            if(btnRefresh && refreshText) { btnRefresh.disabled = true; refreshText.innerText = "⏳ Memuat..."; }
-
+            if(btnRefresh) btnRefresh.textContent = '⏳ Memuat...';
+            
             try {
-                const response = await fetch(`${CSV_URL}&t=${new Date().getTime()}`);
-                if (!response.ok) throw new Error("Gagal mengambil data");
-                const rawText = await response.text();
-                const parsedRows = parseCSV(rawText);
-
-                // Validasi jika data kosong atau tidak ada header
-                if (parsedRows.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400">Belum ada data laporan yang masuk.</td></tr>`;
-                    cardContainerMobile.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Belum ada data laporan yang masuk.</div>`;
-                    return;
-                }
-
-                // --- STRATEGI BARU: MEMBACA INDEKS BERDASARKAN JUDUL KOLOM ---
-                const headers = parsedRows[0].map(h => h.trim().toLowerCase());
-                const idxTanggal = headers.indexOf('tanggal');
-                const idxPertemuan = headers.indexOf('pertemuan');
-                const idxBapak = headers.indexOf('bapak');
-                const idxIbu = headers.indexOf('ibu');
-                const idxPemuda = headers.indexOf('pemuda');
-                const idxPemudi = headers.indexOf('pemudi');
-                const idxAnak = headers.indexOf('anak');
-                const idxTotal = headers.indexOf('total');
-                const idxKeterangan = headers.indexOf('keterangan'); // Kolom baru dinamis
-                const idxPelapor = headers.indexOf('pelapor');
-
-                // Ambil data baris (abaikan baris ke-0 karena itu header)
-                const barisData = parsedRows.filter((col, index) => index > 0 && col.length > 0 && col[idxTanggal] && col[idxTanggal].trim() !== "");
-
-                if (barisData.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400">Belum ada data laporan yang masuk.</td></tr>`;
-                    cardContainerMobile.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Belum ada data laporan yang masuk.</div>`;
-                    return;
-                }
-
-                // Urutkan berdasarkan tanggal terbaru
-                barisData.sort((rowA, rowB) => parseTanggalKeDateObject(rowB[idxTanggal]) - parseTanggalKeDateObject(rowA[idxTanggal]));
+                const response = await fetch(GAS_URL);
+                const data = await response.json();
                 
-                tbody.innerHTML = ''; 
-                cardContainerMobile.innerHTML = '';
-                let bulanAktif = "";
-
-                for (let i = 0; i < barisData.length; i++) {
-                    const col = barisData[i];
-                    const dateObj = parseTanggalKeDateObject(col[idxTanggal]);
-                    const bulanTahunData = dapatkanNamaBulanTahun(dateObj);
-                    const tanggalTampilan = col[idxTanggal].replace(/\/+/g, '/').trim();
-
-                    // Ambil data secara aman berdasarkan indeks judulnya (jika kolom tidak ketemu, default ke "" atau 0)
-                    const valPertemuan = idxPertemuan !== -1 ? col[idxPertemuan] : '';
-                    const valBapak = idxBapak !== -1 ? (col[idxBapak] || 0) : 0;
-                    const valIbu = idxIbu !== -1 ? (col[idxIbu] || 0) : 0;
-                    const valPemuda = idxPemuda !== -1 ? (col[idxPemuda] || 0) : 0;
-                    const valPemudi = idxPemudi !== -1 ? (col[idxPemudi] || 0) : 0;
-                    const valAnak = idxAnak !== -1 ? (col[idxAnak] || 0) : 0;
-                    const valTotal = idxTotal !== -1 ? (col[idxTotal] || 0) : 0;
-                    const valKeterangan = idxKeterangan !== -1 ? (col[idxKeterangan] || '') : ''; // Data keterangan
-                    const valPelapor = idxPelapor !== -1 ? (col[idxPelapor] || '') : '';
-
-                    // Render header bulan pembatas
-                    if (bulanTahunData !== bulanAktif) {
-                        bulanAktif = bulanTahunData;
-                        tbody.innerHTML += `<tr class="bg-indigo-50/70 border-y border-indigo-100/80"><td colspan="10" class="py-2.5 px-6 font-bold text-xs uppercase tracking-wider text-indigo-800">📅 ${bulanAktif}</td></tr>`;
-                        cardContainerMobile.innerHTML += `<div class="bg-indigo-100 text-indigo-900 px-4 py-2 font-bold text-xs rounded-lg uppercase tracking-wider mt-4 first:mt-0">📅 ${bulanAktif}</div>`;
-                    }
-                    
-                    // Render versi TABLE (Desktop) - Menampilkan Keterangan sebelum Pelapor
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3.5 px-6 font-medium text-slate-900">${tanggalTampilan}</td>
-                            <td class="py-3.5 px-6"><span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-md text-xs font-semibold">${valPertemuan}</span></td>
-                            <td class="py-3.5 px-6 text-center">${valBapak}</td>
-                            <td class="py-3.5 px-6 text-center">${valIbu}</td>
-                            <td class="py-3.5 px-6 text-center">${valPemuda}</td>
-                            <td class="py-3.5 px-6 text-center">${valPemudi}</td>
-                            <td class="py-3.5 px-6 text-center">${valAnak}</td>
-                            <td class="py-3.5 px-6 text-center font-bold text-indigo-600 bg-indigo-50/30">${valTotal}</td>
-                            <td class="py-3.5 px-6 text-slate-500 text-xs italic">${valKeterangan}</td>
-                            <td class="py-3.5 px-6 text-slate-500 font-medium">${valPelapor}</td>
-                        </tr>`;
-
-                    // Render versi CARD (Mobile) - Menampilkan Keterangan sebelum Pelapor
-                    cardContainerMobile.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl shadow-2xs border border-slate-100 flex flex-col gap-3 text-sm mt-3">
-                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                                <span class="font-bold text-slate-900">${tanggalTampilan}</span>
-                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-800 rounded-md text-xs font-bold">${valPertemuan}</span>
-                            </div>
-                            <div class="grid grid-cols-5 gap-1.5 text-center bg-slate-50 p-2 rounded-lg">
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-500">Bpk</span>
-                                    <span class="font-bold text-slate-800 text-sm">${valBapak}</span>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-500">Ibu</span>
-                                    <span class="font-bold text-slate-800 text-sm">${valIbu}</span>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-500">PMD</span>
-                                    <span class="font-bold text-slate-800 text-sm">${valPemuda}</span>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-500">PMI</span>
-                                    <span class="font-bold text-slate-800 text-sm">${valPemudi}</span>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-500">Anak</span>
-                                    <span class="font-bold text-slate-800 text-sm">${valAnak}</span>
-                                </div>
-                            </div>
-                            ${valKeterangan ? `<div class="text-xs text-slate-500 bg-slate-50 p-2 rounded border border-dashed border-slate-200">💡 <b>Ket:</b> <i>${valKeterangan}</i></div>` : ''}
-                            <div class="flex justify-between items-center text-xs text-slate-500 pt-1">
-                                <div>Pelapor: <span class="font-semibold text-slate-700">${valPelapor}</span></div>
-                                <div class="font-bold text-indigo-600 bg-indigo-50/70 px-2 py-0.5 rounded-sm">Total: ${valTotal} Org</div>
-                            </div>
-                        </div>`;
-                }
+                dataKehadiranCache = data;
+                data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                
+                renderTabelKehadiran(data);
             } catch (error) {
-                console.error("Error fetching data:", error);
-                tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-red-500">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</td></tr>`;
-                cardContainerMobile.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</div>`;
+                console.error("Gagal memuat data kehadiran:", error);
             } finally {
-                if(btnRefresh && refreshText) { btnRefresh.disabled = false; refreshText.innerText = "🔄 Refresh Data"; }
+                if(btnRefresh) btnRefresh.textContent = '🔄 Refresh Data';
             }
         }
 
-        // ==========================================
-// PENANGANAN INPUT & PENGIRIMAN DATA FORMULIR (SINKRON & FIXED)
-// ==========================================
-document.getElementById('laporanForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = "⏳ Mengirim Laporan...";
+        function renderTabelKehadiran(data) {
+            const tbody = document.getElementById('tabelBody');
+            const mobileContainer = document.getElementById('tabelCardMobile');
+            
+            if(!tbody || !mobileContainer) return;
+            
+            tbody.innerHTML = '';
+            mobileContainer.innerHTML = '';
+            
+            if(data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" class="p-8 text-center text-slate-400">Belum ada data kehadiran terdaftar.</td></tr>`;
+                mobileContainer.innerHTML = `<div class="p-6 text-center text-slate-400 bg-white rounded-xl border">Belum ada data kehadiran terdaftar.</div>`;
+                return;
+            }
+            
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-4 font-medium text-slate-700 whitespace-nowrap">${formatKeTanggalLokal(item.tanggal)}</td>
+                    <td class="p-4 font-medium text-slate-900">${item.pertemuan}</td>
+                    <td class="p-4 text-center">${item.bapak}</td>
+                    <td class="p-4 text-center">${item.ibu}</td>
+                    <td class="p-4 text-center">${item.pemuda}</td>
+                    <td class="p-4 text-center">${item.pemudi}</td>
+                    <td class="p-4 text-center">${item.anak}</td>
+                    <td class="p-4 text-center bg-indigo-50/30 text-indigo-600 font-bold">${item.total}</td>
+                    <td class="p-4 max-w-xs truncate" title="${item.keterangan || '-'}">${item.keterangan || '-'}</td>
+                    <td class="p-4 text-slate-500 whitespace-nowrap">${item.pelapor}</td>
+                    <td class="p-4 text-center whitespace-nowrap">
+                        <div class="flex items-center justify-center gap-1.5">
+                            <button onclick="bukaModalEdit(${item.rowId})" class="px-2 py-1 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded border border-amber-200 transition-all">Edit</button>
+                            <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-2 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-all">Hapus</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+                
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl shadow-xs border border-slate-100 space-y-3";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 block">${formatKeTanggalLokal(item.tanggal)}</span>
+                            <h4 class="font-bold text-slate-800">${item.pertemuan}</h4>
+                        </div>
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-bold">Total: ${item.total}</span>
+                    </div>
+                    <div class="grid grid-cols-5 text-center text-xs bg-slate-50 p-2 rounded-lg gap-1 border border-slate-100">
+                        <div><span class="block text-slate-400 font-medium">Bpk</span><span class="font-semibold text-slate-700">${item.bapak}</span></div>
+                        <div><span class="block text-slate-400 font-medium">Ibu</span><span class="font-semibold text-slate-700">${item.ibu}</span></div>
+                        <div><span class="block text-slate-400 font-medium">Pmd</span><span class="font-semibold text-slate-700">${item.pemuda}</span></div>
+                        <div><span class="block text-slate-400 font-medium">Pmi</span><span class="font-semibold text-slate-700">${item.pemudi}</span></div>
+                        <div><span class="block text-slate-400 font-medium">Anak</span><span class="font-semibold text-slate-700">${item.anak}</span></div>
+                    </div>
+                    <div class="text-xs text-slate-500">
+                        <p><span class="font-medium text-slate-400">Keterangan:</span> ${item.keterangan || '-'}</p>
+                        <p class="mt-0.5"><span class="font-medium text-slate-400">Pelapor:</span> ${item.pelapor}</p>
+                    </div>
+                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                        <button onclick="bukaModalEdit(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 rounded-lg border border-amber-100 w-1/2">Edit</button>
+                        <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg border border-red-100 w-1/2">Hapus</button>
+                    </div>
+                `;
+                mobileContainer.appendChild(card);
+            });
+        }
 
-    // Mengambil value berdasarkan ID yang benar di HTML Anda
-    const tglInput = document.getElementById('tanggal').value; // HTML: id="tanggal"
-    const pertemuan = document.getElementById('pertemuan').value; // HTML: id="pertemuan"
-    const bapak = parseInt(document.getElementById('bapak').value) || 0; // HTML: id="bapak"
-    const ibu = parseInt(document.getElementById('ibu').value) || 0; // HTML: id="ibu"
-    const pemuda = document.getElementById('pemuda') ? (parseInt(document.getElementById('pemuda').value) || 0) : 0; // HTML: id="pemuda"
-    const pemudi = document.getElementById('pemudi') ? (parseInt(document.getElementById('pemudi').value) || 0) : 0; // HTML: id="pemudi"
-    const anak = parseInt(document.getElementById('anak').value) || 0; // HTML: id="anak"
-    
-    // Perbaikan deteksi keterangan: Cek langsung ke 'inputKeterangan'
-    const keteranganEl = document.getElementById('inputKeterangan'); // HTML: id="inputKeterangan"
-    const keterangan = keteranganEl ? keteranganEl.value.trim() : '';
-    
-    const pelapor = document.getElementById('pelapor').value.trim(); // HTML: id="pelapor"
+        function bukaModalEdit(rowId) {
+            const item = dataKehadiranCache.find(x => x.rowId === rowId);
+            if(!item) return;
+            
+            let formattedDate = "";
+            try {
+                const d = new Date(item.tanggal);
+                if(!isNaN(d.getTime())) {
+                    formattedDate = d.toISOString().split('T')[0];
+                }
+            } catch(e) { console.error(e); }
+            
+            // Mengamankan pemanggilan elemen agar tidak crash jika salah satu bernilai null
+            const elRowId = document.getElementById('editRowId');
+            const elTanggal = document.getElementById('editTanggal');
+            const elPertemuan = document.getElementById('editPertemuan');
+            const elBapak = document.getElementById('editBapak');
+            const elIbu = document.getElementById('editIbu');
+            const elPemuda = document.getElementById('editPemuda');
+            const elPemudi = document.getElementById('editPemudi');
+            const elAnak = document.getElementById('editAnak');
+            const elKeterangan = document.getElementById('editKeterangan');
+            const elPelapor = document.getElementById('editPelapor');
 
-    const total = bapak + ibu + pemuda + pemudi + anak;
+            if(elRowId) elRowId.value = item.rowId;
+            if(elTanggal) elTanggal.value = formattedDate;
+            if(elPertemuan) elPertemuan.value = item.pertemuan;
+            if(elBapak) elBapak.value = item.bapak;
+            if(elIbu) elIbu.value = item.ibu;
+            if(elPemuda) elPemuda.value = item.pemuda;
+            if(elPemudi) elPemudi.value = item.pemudi;
+            if(elAnak) elAnak.value = item.anak;
+            if(elKeterangan) elKeterangan.value = item.keterangan || "";
+            if(elPelapor) elPelapor.value = item.pelapor;
+            
+            const modal = document.getElementById('editModal');
+            if(modal) modal.classList.remove('hidden');
+        }
 
-    let tanggalFormatted = "";
-    if (tglInput) {
-        const parts = tglInput.split('-');
-        tanggalFormatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
+        function tutupModalEdit() {
+            const modal = document.getElementById('editModal');
+            if(modal) modal.classList.add('hidden');
+            const form = document.getElementById('editLaporanForm');
+            if(form) form.reset();
+        }
 
-    const payload = {
-        tanggal: tanggalFormatted,
-        pertemuan: pertemuan,
-        bapak: bapak,
-        ibu: ibu,
-        pemuda: pemuda,
-        pemudi: pemudi,
-        anak: anak,
-        total: total,
-        keterangan: keterangan,
-        pelapor: pelapor
-    };
+        // Amankan penambahan Event Listener modal edit
+        const editForm = document.getElementById('editLaporanForm');
+        if(editForm) {
+            editForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btnSimpan = document.getElementById('btnSimpanEdit');
+                if(btnSimpan) {
+                    btnSimpan.disabled = true;
+                    btnSimpan.textContent = 'Menyimpan...';
+                }
+                
+                const payload = {
+                    action: "update",
+                    rowId: document.getElementById('editRowId').value,
+                    tanggal: document.getElementById('editTanggal').value,
+                    pertemuan: document.getElementById('editPertemuan').value,
+                    bapak: document.getElementById('editBapak').value,
+                    ibu: document.getElementById('editIbu').value,
+                    pemuda: document.getElementById('editPemuda').value,
+                    pemudi: document.getElementById('editPemudi').value,
+                    anak: document.getElementById('editAnak').value,
+                    keterangan: document.getElementById('editKeterangan').value,
+                    pelapor: document.getElementById('editPelapor').value
+                };
+                
+                try {
+                    await fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    alert("Perintah edit data berhasil dikirim ke server!");
+                    tutupModalEdit();
+                    setTimeout(fetchData, 1500); 
+                } catch (err) {
+                    alert("Terjadi masalah saat mengubah data.");
+                    console.error(err);
+                } finally {
+                    if(btnSimpan) {
+                        btnSimpan.disabled = false;
+                        btnSimpan.textContent = 'Simpan Perubahan';
+                    }
+                }
+            });
+        }
 
-    try {
-        // Mengirim data menggunakan mode no-cors untuk bypass kendala CORS Google Apps Script
-        await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        async function hapusEntryKehadiran(rowId) {
+            if(!confirm("Apakah Anda yakin ingin menghapus data laporan kehadiran ini?")) return;
+            
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: "delete", rowId: rowId })
+                });
+                
+                alert("Perintah hapus data berhasil dikirim ke server!");
+                setTimeout(fetchData, 1500);
+            } catch (err) {
+                alert("Gagal menghapus entri.");
+                console.error(err);
+            }
+        }
 
-        // Karena no-cors tidak mengembalikan respon yang bisa dibaca (opaque), 
-        // kita langsung asumsikan berhasil jika fetch tidak melempar error koneksi.
-        alert("✅ Laporan kehadiran berhasil dikirim!");
-        
-        // Reset form input setelah sukses menggunakan ID yang benar sesuai HTML Anda
-        document.getElementById('bapak').value = 0;
-        document.getElementById('ibu').value = 0;
-        if(document.getElementById('pemuda')) document.getElementById('pemuda').value = 0;
-        if(document.getElementById('pemudi')) document.getElementById('pemudi').value = 0;
-        document.getElementById('anak').value = 0;
-        if(keteranganEl) keteranganEl.value = "";
-        document.getElementById('pelapor').value = ""; 
-        
-        // Refresh tabel data secara otomatis
-        fetchData();
-    } catch (error) {
-        console.error("Error sending data:", error);
-        alert("❌ Gagal mengirim laporan. Periksa koneksi internet Anda.");
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-    }
-});
+        // Event Listener Form Laporan Utama
+        const mainForm = document.getElementById('laporanForm');
+        if(mainForm) {
+            mainForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn ? submitBtn.innerHTML : "Lapor";
+                if(submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = "⏳ Mengirim Laporan...";
+                }
+
+                const tglInput = document.getElementById('tanggal').value;
+                const pertemuan = document.getElementById('pertemuan').value;
+                const bapak = parseInt(document.getElementById('bapak').value) || 0;
+                const ibu = parseInt(document.getElementById('ibu').value) || 0;
+                const pemuda = document.getElementById('pemuda') ? (parseInt(document.getElementById('pemuda').value) || 0) : 0;
+                const pemudi = document.getElementById('pemudi') ? (parseInt(document.getElementById('pemudi').value) || 0) : 0;
+                const anak = parseInt(document.getElementById('anak').value) || 0;
+                
+                const keteranganEl = document.getElementById('inputKeterangan');
+                const keterangan = keteranganEl ? keteranganEl.value.trim() : '';
+                const pelapor = document.getElementById('pelapor').value.trim();
+
+                const total = bapak + ibu + pemuda + pemudi + anak;
+
+                let tanggalFormatted = "";
+                if (tglInput) {
+                    const parts = tglInput.split('-');
+                    tanggalFormatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
+                const payload = {
+                    action: "insert",
+                    tanggal: tanggalFormatted,
+                    pertemuan: pertemuan,
+                    bapak: bapak,
+                    ibu: ibu,
+                    pemuda: pemuda,
+                    pemudi: pemudi,
+                    anak: anak,
+                    total: total,
+                    keterangan: keterangan,
+                    pelapor: pelapor
+                };
+
+                try {
+                    await fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    alert("✅ Laporan kehadiran berhasil dikirim!");
+                    
+                    document.getElementById('bapak').value = 0;
+                    document.getElementById('ibu').value = 0;
+                    if(document.getElementById('pemuda')) document.getElementById('pemuda').value = 0;
+                    if(document.getElementById('pemudi')) document.getElementById('pemudi').value = 0;
+                    document.getElementById('anak').value = 0;
+                    if(keteranganEl) keteranganEl.value = "";
+                    document.getElementById('pelapor').value = ""; 
+                    
+                    fetchData();
+
+                } catch (error) {
+                    console.error("Error sending data:", error);
+                    alert("❌ Gagal mengirim laporan. Periksa koneksi internet Anda.");
+                } finally {
+                    if(submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                }
+            });
+        }
 
         // =========================================================================
-        // SCRIPTS ENGINE UNTUK TAB 2: KALENDER JADWAL (SOURCE 2)
+        // SCRIPTS TAB 2: KALENDER JADWAL
         // =========================================================================
         const CSV_URL_JADWAL_BULANAN = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv';
         const namaBulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -843,7 +909,8 @@ document.getElementById('laporanForm').addEventListener('submit', async function
                 if (!targetKey) { const skrg = new Date(); targetKey = `${skrg.getFullYear()}-${skrg.getMonth()}`; }
 
                 const [targetYear, targetMonth] = targetKey.split('-').map(Number);
-                document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+                const headerText = document.getElementById('textHeaderBulan');
+                if(headerText) headerText.innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
                 namaFileDownload = `jadwal_${namaBulanIndo[targetMonth].toLowerCase()}_${targetYear}`;
 
                 generateCalendar(targetYear, targetMonth, parsedEvents[targetKey] || {});
@@ -852,7 +919,10 @@ document.getElementById('laporanForm').addEventListener('submit', async function
         }
 
         function generateCalendar(year, month, dynamicEvents) {
-            const calendarBody = document.getElementById('calendarBody'); calendarBody.innerHTML = '';
+            const calendarBody = document.getElementById('calendarBody'); 
+            if(!calendarBody) return;
+            calendarBody.innerHTML = '';
+            
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
             let dateCounter = 1; let htmlRows = '';
@@ -883,98 +953,93 @@ document.getElementById('laporanForm').addEventListener('submit', async function
                 if (hasCellsInRow) htmlRows += rowCells;
             }
             calendarBody.innerHTML = htmlRows;
-            
-            // Atur skala setelah kalender berhasil ter-render sempurna
             setTimeout(adjustCalendarScale, 100);
         }
 
-        document.getElementById('downloadBtn').addEventListener('click', () => {
-            // Reset skala sementara menjadi 1 agar html2canvas memotret objek asli dengan ketajaman penuh tanpa efek CSS scale
-            const container = document.querySelector('.calendar-outer-container');
-            const wrapper = document.getElementById('calendarWrapper');
-            const originalTransform = wrapper.style.transform;
-            const originalHeight = container.style.height;
-            
-            wrapper.style.transform = 'none';
-            container.style.height = 'auto';
-
-            html2canvas(wrapper, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = canvas.toDataURL('image/jpeg', 0.9);
-                downloadLink.download = `${namaFileDownload}.jpg`;
-                document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
+        const downloadBtn = document.getElementById('downloadBtn');
+        if(downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                const container = document.querySelector('.calendar-outer-container');
+                const wrapper = document.getElementById('calendarWrapper');
+                if(!container || !wrapper) return;
                 
-                // Kembalikan efek skala responsif setelah screenshot selesai
-                wrapper.style.transform = originalTransform;
-                container.style.height = originalHeight;
-            }).catch(err => {
-                alert("Terjadi kendala saat menyiapkan file gambar.");
-                wrapper.style.transform = originalTransform;
-                container.style.height = originalHeight;
+                const originalTransform = wrapper.style.transform;
+                const originalHeight = container.style.height;
+                
+                wrapper.style.transform = 'none';
+                container.style.height = 'auto';
+
+                html2canvas(wrapper, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = canvas.toDataURL('image/jpeg', 0.9);
+                    downloadLink.download = `${namaFileDownload}.jpg`;
+                    document.body.appendChild(downloadLink); 
+                    downloadLink.click(); 
+                    document.body.removeChild(downloadLink);
+                    
+                    wrapper.style.transform = originalTransform;
+                    container.style.height = originalHeight;
+                }).catch(err => {
+                    alert("Terjadi kendala saat menyiapkan file gambar.");
+                    wrapper.style.transform = originalTransform;
+                    container.style.height = originalHeight;
+                });
             });
-        });
+        }
 
-// 1. Definisikan URL CSV untuk tab harisokagakkai (Ganti dengan URL hasil Publish to Web Anda)
-const CSV_URL_HARI_PENTING = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1886703270&single=true&output=csv';
+        const CSV_URL_HARI_PENTING = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1886703270&single=true&output=csv';
 
-// 2. Buat fungsi untuk memuat data hari besar/penting secara dinamis
-async function loadHariPenting(targetMonth) {
-    const container = document.getElementById('containerHariPenting');
-    try {
-        const response = await fetch(CSV_URL_HARI_PENTING);
-        const csvData = await response.text();
-        
-        // Parse CSV manual (Metode yang sama seperti sistem Anda yang lain)
-        const lines = csvData.split("\n");
-        let htmlContent = "";
-        let count = 0;
+        async function loadHariPenting(targetMonth) {
+            const container = document.getElementById('containerHariPenting');
+            if(!container) return;
+            try {
+                const response = await fetch(CSV_URL_HARI_PENTING);
+                const csvData = await response.text();
+                
+                const lines = csvData.split("\n");
+                let htmlContent = "";
+                let count = 0;
 
-        // Looping baris data (lewati header baris indeks 0)
-        for (let i = 1; i < lines.length; i++) {
-            if (!lines[i].trim()) continue;
-            
-            // Atasi pemisahan kolom koma
-            const columns = lines[i].split(",");
-            if (columns.length < 2) continue;
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const columns = lines[i].split(",");
+                    if (columns.length < 2) continue;
 
-            const tglRaw = columns[0].trim(); // Contoh: "03/07" atau "03-07"
-            const namaHariBesar = columns[1].replace(/"/g, "").trim(); // Nama acaranya
+                    const tglRaw = columns[0].trim();
+                    const namaHariBesar = columns[1].replace(/"/g, "").trim();
 
-            if (!tglRaw || !namaHariBesar) continue;
+                    if (!tglRaw || !namaHariBesar) continue;
 
-            // Ekstrak hari dan bulan dari sheet (format DD/MM atau DD-MM)
-            const separator = tglRaw.includes('/') ? '/' : '-';
-            const parts = tglRaw.split(separator);
-            
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1; // Bulan JS dimulai dari 0 (Januari = 0)
+                    const separator = tglRaw.includes('/') ? '/' : '-';
+                    const parts = tglRaw.split(separator);
+                    
+                    const day = parseInt(parts[0], 10);
+                    const month = parseInt(parts[1], 10) - 1;
 
-            // Validasi: Hanya tampilkan jika bulannya COCOK dengan bulan kalender yang sedang aktif!
-            if (month === targetMonth) {
-                // Format tanggal agar selalu 2 digit (misal: 3 Juli -> 03 Juli)
-                const displayDay = day < 10 ? '0' + day : day;
-                const namaBulanSaja = namaBulanIndo[targetMonth];
+                    if (month === targetMonth) {
+                        const displayDay = day < 10 ? '0' + day : day;
+                        const namaBulanSaja = namaBulanIndo[targetMonth];
 
-                htmlContent += `${displayDay} ${namaBulanSaja} : ${namaHariBesar}<br>`;
-                count++;
+                        htmlContent += `${displayDay} ${namaBulanSaja} : ${namaHariBesar}<br>`;
+                        count++;
+                    }
+                }
+
+                if (count === 0) {
+                    container.innerHTML = "Tidak ada hari besar di bulan ini.";
+                } else {
+                    container.innerHTML = htmlContent;
+                }
+
+            } catch (error) {
+                console.error("Gagal menyedot data hari penting:", error);
+                container.innerHTML = "Gagal memuat data hari penting.";
             }
         }
 
-        // Jika tidak ada hari penting di bulan tersebut
-        if (count === 0) {
-            container.innerHTML = "Tidak ada hari besar di bulan ini.";
-        } else {
-            container.innerHTML = htmlContent;
-        }
-
-    } catch (error) {
-        console.error("Gagal menyedot data hari penting:", error);
-        container.innerHTML = "Gagal memuat data hari penting.";
-    }
-}
-
         // =========================================================================
-        // SCRIPTS ENGINE UNTUK TAB 3: DATABASE ANGGOTA (SOURCE 3)
+        // SCRIPTS TAB 3: DATABASE ANGGOTA
         // =========================================================================
         let members = []; let currentPage = 1; const rowsPerPage = 15;
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
@@ -985,7 +1050,8 @@ async function loadHariPenting(targetMonth) {
                 if (!response.ok) throw new Error("Gagal cloud response.");
                 const data = await response.json();
                 if (Array.isArray(data)) {
-                    members = data; localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+                    members = data; 
+                    localStorage.setItem('shibuMembersTree', JSON.stringify(members));
                     renderTable();
                 }
             } catch (error) {
@@ -1041,22 +1107,27 @@ async function loadHariPenting(targetMonth) {
                     </div>`;
             };
 
-            document.getElementById('stat-tanahmas').innerHTML = renderBoxHTML(stats['Tanah Mas'], false);
-            document.getElementById('stat-gajahmada').innerHTML = renderBoxHTML(stats['Gajah Mada'], false);
-            document.getElementById('stat-majapahit').innerHTML = renderBoxHTML(stats['Majapahit'], false);
-            document.getElementById('stat-shibu-total').innerHTML = renderBoxHTML(grandTotalShibu, true);
+            const tmBox = document.getElementById('stat-tanahmas');
+            const gmBox = document.getElementById('stat-gajahmada');
+            const mpBox = document.getElementById('stat-majapahit');
+            const totalBox = document.getElementById('stat-shibu-total');
+
+            if(tmBox) tmBox.innerHTML = renderBoxHTML(stats['Tanah Mas'], false);
+            if(gmBox) gmBox.innerHTML = renderBoxHTML(stats['Gajah Mada'], false);
+            if(mpBox) mpBox.innerHTML = renderBoxHTML(stats['Majapahit'], false);
+            if(totalBox) totalBox.innerHTML = renderBoxHTML(grandTotalShibu, true);
         }
 
         function buildStructuredData(isForStatsCompute = false) {
-            const searchKeyword = document.getElementById('searchFilter').value.toLowerCase();
-            const chikuFilter = document.getElementById('chikuFilter').value;
-            const bagianFilter = document.getElementById('bagianFilter').value;
-            const jabatanFilter = document.getElementById('jabatanFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
-            const showCalon = document.getElementById('showCalon').checked;
-            const showLuarKota = document.getElementById('showLuarKota').checked;
-            const showTaiten = document.getElementById('showTaiten').checked;
-            const showMeninggal = document.getElementById('showMeninggal').checked;
+            const searchKeyword = document.getElementById('searchFilter') ? document.getElementById('searchFilter').value.toLowerCase() : "";
+            const chikuFilter = document.getElementById('chikuFilter') ? document.getElementById('chikuFilter').value : "";
+            const bagianFilter = document.getElementById('bagianFilter') ? document.getElementById('bagianFilter').value : "";
+            const jabatanFilter = document.getElementById('jabatanFilter') ? document.getElementById('jabatanFilter').value : "";
+            const statusFilter = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : "";
+            const showCalon = document.getElementById('showCalon') ? document.getElementById('showCalon').checked : false;
+            const showLuarKota = document.getElementById('showLuarKota') ? document.getElementById('showLuarKota').checked : false;
+            const showTaiten = document.getElementById('showTaiten') ? document.getElementById('showTaiten').checked : false;
+            const showMeninggal = document.getElementById('showMeninggal') ? document.getElementById('showMeninggal').checked : false;
 
             let filteredRaw = members.filter(m => {
                 const currentJabatan = m.jabatan || 'Anggota'; const currentStatus = m.status || 'Aktif';
@@ -1066,7 +1137,7 @@ async function loadHariPenting(targetMonth) {
                     if (!showTaiten && currentStatus.toLowerCase() === 'taiten') return false;
                     if (!showMeninggal && currentStatus.toLowerCase() === 'meninggal') return false;
                 }
-                const matchSearch = m.nama.toLowerCase().includes(searchKeyword) || m.alamat.toLowerCase().includes(searchKeyword) || m.keterangan.toLowerCase().includes(searchKeyword);
+                const matchSearch = (m.nama || "").toLowerCase().includes(searchKeyword) || (m.alamat || "").toLowerCase().includes(searchKeyword) || (m.keterangan || "").toLowerCase().includes(searchKeyword);
                 const matchChiku = chikuFilter === "" || m.chiku === chikuFilter;
                 const matchBagian = bagianFilter === "" || m.bagian === bagianFilter;
                 let matchJabatan = jabatanFilter === "" || (jabatanFilter === "Pimpinan_Inti" ? (currentJabatan === "Pimpinan" || currentJabatan === "Inti") : currentJabatan === jabatanFilter);
@@ -1119,11 +1190,10 @@ async function loadHariPenting(targetMonth) {
                     if (jabatan === 'Anggota') return 5;
                     return 1; 
                 }
-				const jabA = a.jabatan || 'Anggota';
-const ketA = (a.keterangan || '').toLowerCase();
-
-const jabB = b.jabatan || 'Anggota';
-const ketB = (b.keterangan || '').toLowerCase();
+                const jabA = a.jabatan || 'Anggota';
+                const ketA = (a.keterangan || '').toLowerCase();
+                const jabB = b.jabatan || 'Anggota';
+                const ketB = (b.keterangan || '').toLowerCase();
                 const scoreA = getHierarchyScore(a, jabA, ketA);
                 const scoreB = getHierarchyScore(b, jabB, ketB);
 
@@ -1178,18 +1248,24 @@ const ketB = (b.keterangan || '').toLowerCase();
             const tbody = document.getElementById('memberTableBody');
             const cardContainer = document.getElementById('memberCardContainer');
             
+            if(!tbody || !cardContainer) return;
+            
             tbody.innerHTML = '';
             cardContainer.innerHTML = '';
 
             const processedData = buildStructuredData(false);
-            document.getElementById('totalData').innerText = `Total Hasil: ${processedData.length} Records`;
+            const totalDataEl = document.getElementById('totalData');
+            if(totalDataEl) totalDataEl.innerText = `Total Hasil: ${processedData.length} Records`;
 
             if (processedData.length === 0) {
                 const emptyHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data anggota yang cocok dengan filter.</div>`;
                 tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
                 cardContainer.innerHTML = emptyHTML;
-                document.getElementById('pageInfo').innerText = "Menampilkan 0 - 0 dari 0 data";
-                document.getElementById('paginationButtons').innerHTML = '';
+                
+                const pageInfo = document.getElementById('pageInfo');
+                if(pageInfo) pageInfo.innerText = "Menampilkan 0 - 0 dari 0 data";
+                const paginationButtons = document.getElementById('paginationButtons');
+                if(paginationButtons) paginationButtons.innerHTML = '';
                 return;
             }
 
@@ -1204,7 +1280,6 @@ const ketB = (b.keterangan || '').toLowerCase();
                 const currentJabatan = member.jabatan || 'Anggota';
                 const currentStatus = member.status || 'Aktif';
 
-                // --- GENERATE LAYOUT TABEL (UNTUK LAPTOP / TABLET) ---
                 const tr = document.createElement('tr');
                 tr.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
                 tr.innerHTML = `
@@ -1232,7 +1307,6 @@ const ketB = (b.keterangan || '').toLowerCase();
                 `;
                 tbody.appendChild(tr);
 
-                // --- GENERATE LAYOUT CARD (OPTIMAL UNTUK HP / PONSEL) ---
                 const card = document.createElement('div');
                 card.className = `p-4 rounded-xl shadow-xs border transition flex flex-col gap-2.5 ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'}`;
                 card.innerHTML = `
@@ -1256,23 +1330,32 @@ const ketB = (b.keterangan || '').toLowerCase();
                         <div><span class="text-gray-400 block text-[10px] uppercase">Thn Lahir</span><span class="font-medium">${member.tahunLahir}</span></div>
                         <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Hub. Keluarga</span><span class="font-medium text-amber-900">${member.hubungan}</span></div>
                         <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="font-medium text-blue-600 underline">${member.telepon}</a></div>
-                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat}</p></div>
-                        <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan}</p></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat || "-"}</p></div>
+                        <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan || "-"}</p></div>
                     </div>
                 `;
                 cardContainer.appendChild(card);
             });
 
-            document.getElementById('pageInfo').innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
+            const pageInfo = document.getElementById('pageInfo');
+            if(pageInfo) pageInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
             renderPaginationControls(totalPages);
         }
 
         function renderPaginationControls(totalPages) {
-            const container = document.getElementById('paginationButtons'); container.innerHTML = '';
+            const container = document.getElementById('paginationButtons'); 
+            if(!container) return;
+            container.innerHTML = '';
+            
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button'); btn.innerText = i;
                 btn.className = `min-w-[36px] h-9 px-2 text-sm font-medium rounded-md border cursor-pointer transition ${i === currentPage ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`;
-                btn.onclick = () => { currentPage = i; renderTable(); document.getElementById('filterContainer').scrollIntoView({ behavior: 'smooth' }); };
+                btn.onclick = () => { 
+                    currentPage = i; 
+                    renderTable(); 
+                    const filterContainer = document.getElementById('filterContainer');
+                    if(filterContainer) filterContainer.scrollIntoView({ behavior: 'smooth' }); 
+                };
                 container.appendChild(btn);
             }
         }
@@ -1305,12 +1388,11 @@ const ketB = (b.keterangan || '').toLowerCase();
             printWindow.document.close();
         }
 
-        // --- GLOBAL INITIALIZATION ENGINE ---
+        // --- GLOBAL INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Set tanggal form default hari ini
-            document.getElementById('tanggal').valueAsDate = new Date();
+            const tanggalEl = document.getElementById('tanggal');
+            if(tanggalEl) tanggalEl.valueAsDate = new Date();
             
-            // Jalankan loader data internal masing-masing sistem asal
             fetchData();
             initCalendar();
             initDatabase();
