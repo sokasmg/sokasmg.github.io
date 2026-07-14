@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Integrasi Shibu Semarang</title>
+    <!-- CDN CSS & JS dari Dokumen Asal -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        /* CSS Khusus Tab Kalender (Source 2) */
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .calendar-table th {
+            border: 2px solid #000;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+            background-color: #fff;
+            color: #000;
+        }
+        .calendar-table td {
+            border: 2px solid #000;
+            height: 120px;
+            vertical-align: top;
+            padding: 6px;
+            position: relative;
+            background-color: #fff;
+            color: #000;
+        }
+        .date-number {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 4px;
+        }
+        .calendar-table th:first-child,
+        .calendar-table td:first-child .date-number {
+            color: red;
+        }
+        .event-list {
+            font-size: 11px;
+            line-height: 1.3;
+            color: #000;
+        }
+        .event-item {
+            margin-bottom: 6px;
+        }
+        
+        /* CSS Khusus Tab Database (Source 3) */
+        .overflow-x-auto {
+            overflow-x: auto;
+        }
+        @media (max-width: 767px) {
+            .hide-on-mobile {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen">
+
+    <!-- NAVIGASI TAB UTAMA -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16 border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                      <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto">
+                    <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG APP</span>
+                    <span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v2026</span>
+                </div>
+                <!-- Menu Tab Button -->
+                <nav class="flex space-x-2" aria-label="Tabs">
+                    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
+                        Laporan Kehadiran
+                    </button>
+                    <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+                        Jadwal Kalender
+                    </button>
+                    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+                        Database Anggota
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
+    <main class="max-w-7xl mx-auto p-4 md:p-6">
+
+        <!-- ========================================================================= -->
+        <!-- TAB 1: LAPORAN KEHADIRAN (SOURCE 1)                                      -->
+        <!-- ========================================================================= -->
+        <div id="tab-kehadiran" class="tab-content space-y-6">
+            <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
+                    LAPORAN KEHADIRAN
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Sistem pencatatan kehadiran anggota</p>
+            </div>
+
+            <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
+                        <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
+                        <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                            <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
+                            <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
+                            <option value="Chiku Majapahit">Chiku Majapahit</option>
+                            <option value="Salatiga">Salatiga</option>
+                            <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
+                            <option value="Pertemuan Bagian">Pertemuan Bagian</option>
+                            <option value="Shodaikai">Shodaikai</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
+                        <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
+                        <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
+                        <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
+                        <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
+                        <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
+                        <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                    </div>
+                </div>
+                <div class="flex justify-end border-t border-slate-100 pt-4">
+                    <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
+                        <span id="btnText">Lapor</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
+                    <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
+                    <button type="button" id="btnRefresh" onclick="fetchData()" class="relative z-20 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer">
+                        <span id="refreshText">🔄 Refresh Data</span>
+                    </button>
+                </div>
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full border-collapse text-left table-auto">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold tracking-wider border-b border-slate-100">
+                                <th class="py-4 px-6">Tanggal</th>
+                                <th class="py-4 px-6">Pertemuan</th>
+                                <th class="py-4 px-6 text-center">Bapak</th>
+                                <th class="py-4 px-6 text-center">Ibu</th>
+                                <th class="py-4 px-6 text-center">Pemuda</th>
+                                <th class="py-4 px-6 text-center">Pemudi</th>
+                                <th class="py-4 px-6 text-center">Anak</th>
+                                <th class="py-4 px-6 text-center bg-indigo-50/50 text-indigo-700">Total</th>
+                                <th class="py-4 px-6">Pelapor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                            <tr>
+                                <td colspan="9" class="py-8 text-center text-slate-400">Memuat data dari Google Sheets...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 2: KALENDER JADWAL (SOURCE 2)                                         -->
+        <!-- ========================================================================= -->
+        <div id="tab-jadwal" class="tab-content hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow-xs text-center">
+                <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-2 px-6 rounded-lg transition text-sm cursor-pointer shadow-sm">
+                    📥 Download Jadwal Gambar (JPEG)
+                </button>
+            </div>
+
+            <div id="calendarWrapper" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+                <!-- Layout Header Kalender -->
+                <table class="w-full border-collapse mb-4 text-black">
+                    <tr>
+                        <td class="text-[44px] md:text-[56px] font-bold tracking-wider w-[35%] align-bottom leading-none">SEMARANG</td>
+                        <td class="w-[30%] align-middle">
+    <div class="flex flex-col items-center justify-center text-center">
+        <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-16 h-auto mb-1">
+        <div class="text-xs md:text-sm font-bold tracking-wider whitespace-nowrap">SOKA GAKKAI INDONESIA</div>
+    </div>
+</td>
+                        <td class="text-right text-lg md:text-2xl font-bold w-[35%] align-bottom uppercase tracking-wide" id="textHeaderBulan">JADWAL BULANAN</td>
+                    </tr>
+                </table>
+
+                <!-- Kalender Grid -->
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Minggu</th>
+                            <th>Senin</th>
+                            <th>Selasa</th>
+                            <th>Rabu</th>
+                            <th>Kamis</th>
+                            <th>Jumat</th>
+                            <th>Sabtu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendarBody"></tbody>
+                </table>
+
+                <!-- Footer Kalender -->
+                <div class="mt-4 text-xs font-bold text-black border-t border-slate-300 pt-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="leading-relaxed text-left">
+                        03 Juli : Hari guru dan murid<br>
+                        11 Juli : Hari Divisi Pemuda<br>
+                        19 Juli : Hari Divisi Pemuda, Hari Ikeda Kayokai
+                    </div>
+                    <div class="text-center text-sm px-4 py-2 bg-amber-50 rounded-lg border border-amber-200">
+                        Setiap hari kamis jam 19.00 ada Shodaikai umum
+                    </div>
+                    <div class="text-right font-mono text-[10px] text-slate-400">
+                        <img src="jadwal_1.jpeg" alt="Banner Soka Gakkai">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 3: DATABASE ANGGOTA (SOURCE 3)                                       -->
+        <!-- ========================================================================= -->
+        <div id="tab-database" class="tab-content hidden space-y-4 md:space-y-6">
+            <div id="monitorHeader" class="bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Database Anggota Shibu Semarang v2.5</h1>
+                        <p class="text-xs md:text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
+                        <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026 (Viewer Mode)</p>
+                    </div>
+                    <div class="w-full sm:w-auto">
+                        <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 1.252a1.125 1.125 0 0 1-1.107 1.328H7.218a1.125 1.125 0 0 1-1.107-1.328L6.34 18m11.32 0t-.115-.723m0 0a3.24 3.24 0 0 0-3.138-2.736H9.533a3.24 3.24 0 0 0-3.138 2.736m11.32 0H6.34M18 7.5h.008v.008H18V7.5Z" />
+                            </svg>
+                            Print / Cetak (Landscape)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
+                    <div id="box-tanahmas" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Tanah Mas</h4>
+                        <div id="stat-tanahmas" class="text-xs text-gray-600 space-y-1"></div>
+                    </div>
+                    <div id="box-gajahmada" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Gajah Mada</h4>
+                        <div id="stat-gajahmada" class="text-xs text-gray-600 space-y-1"></div>
+                    </div>
+                    <div id="box-majapahit" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Majapahit</h4>
+                        <div id="stat-majapahit" class="text-xs text-gray-600 space-y-1"></div>
+                    </div>
+                    <div id="box-total" class="p-3.5 bg-blue-50 rounded-xl border border-blue-100 shadow-2xs">
+                        <h4 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2 pb-1 border-b border-blue-200">Grand Total Shibu</h4>
+                        <div id="stat-shibu-total" class="text-xs text-gray-700 space-y-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filterContainer" class="bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
+                        <input type="text" id="searchFilter" oninput="currentPage=1; renderTable();" placeholder="Ketik untuk mencari..." class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Chiku</label>
+                        <select id="chikuFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Chiku</option>
+                            <option value="Tanah Mas">Tanah Mas</option>
+                            <option value="Gajah Mada">Gajah Mada</option>
+                            <option value="Majapahit">Majapahit</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Bagian</label>
+                        <select id="bagianFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Bagian</option>
+                            <option value="Bapak">Bapak</option>
+                            <option value="Ibu">Ibu</option>
+                            <option value="Pemuda">Pemuda</option>
+                            <option value="Pemudi">Pemudi</option>
+                            <option value="Anak">Anak</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Jabatan</label>
+                        <select id="jabatanFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Jabatan</option>
+                            <option value="Pimpinan_Inti">Pimpinan & Inti (Gabungan)</option>
+                            <option value="Pimpinan">Pimpinan</option>
+                            <option value="Inti">Inti</option>
+                            <option value="Anggota">Anggota</option>
+                            <option value="Calon">Calon</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Status</label>
+                        <select id="statusFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Status</option>
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                            <option value="Luar Kota/LN">Luar Kota/LN</option>
+                            <option value="Meninggal">Meninggal</option>
+                            <option value="Taiten">Taiten</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
+                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
+                    <div class="flex flex-wrap gap-x-4 gap-y-2">
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                            <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                            Calon
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                            <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                            Luar Kota/LN
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                            <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                            Taiten
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                            <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                            Meninggal
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 class="font-semibold text-gray-700 text-sm md:text-base">Struktur & Daftar Anggota</h3>
+                    <span id="totalData" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">Total: 0 Orang</span>
+                </div>
+                
+                <div class="overflow-x-auto hidden md:block">
+                    <table class="w-full text-left text-sm text-gray-600 border-collapse">
+                        <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 w-12 text-center">No</th>
+                                <th class="px-4 py-3 min-w-[180px]">Nama Anggota</th>
+                                <th class="px-4 py-3">Chiku</th>
+                                <th class="px-4 py-3">Bagian</th>
+                                <th class="px-4 py-3">Jabatan</th>
+                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3">Gohonzon</th>
+                                <th class="px-4 py-3">Lahir</th>
+                                <th class="px-4 py-3">Hubungan</th>
+                                <th class="px-4 py-3 text-xs">Telepon</th>
+                                <th class="px-4 py-3 min-w-[150px]">Alamat</th>
+                                <th class="px-4 py-3 min-w-[150px]">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+
+                <div id="memberCardContainer" class="block md:hidden p-4 space-y-3 bg-gray-50/50"></div>
+
+                <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col items-center gap-4 bg-gray-50 w-full">
+                    <span id="pageInfo" class="text-xs text-gray-500">Menampilkan 0 - 0 dari 0 data</span>
+                    <div class="flex flex-wrap justify-center gap-1.5 max-w-full" id="paginationButtons"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- LOGIKA CORE ENGINE SCRIPT INTEGRASI JAVASCRIPT                            -->
+    <!-- ========================================================================= -->
+    <script>
+        // --- 0. FUNGSI CONTROL SYSTEM TAB UTAMA ---
+        function switchTab(tabId) {
+            // Sembunyikan semua tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Reset style state button tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+
+            // Aktifkan style button tab terpilih
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        }
+
+        // =========================================================================
+        // SCRIPTS ENGINE UNTUK TAB 1: LAPORAN KEHADIRAN (SOURCE 1)
+        // =========================================================================
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv';
+
+        function formatKeTanggalLokal(tanggalInput) {
+            if (!tanggalInput) return '';
+            const parts = tanggalInput.split('-');
+            if (parts.length === 3) {
+                return `${parseInt(parts[2], 10)}/${parseInt(parts[1], 10)}/${parts[0]}`;
+            }
+            return tanggalInput;
+        }
+
+        function parseTanggalKeDateObject(tanggalString) {
+            if (!tanggalString) return new Date(0);
+            const cleanString = tanggalString.replace(/\/+/g, '/').trim();
+            if (cleanString.includes('-')) {
+                const parts = cleanString.split('-');
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            } else if (cleanString.includes('/')) {
+                const parts = cleanString.split('/');
+                if (parts.length === 3) {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+            }
+            return new Date(0);
+        }
+
+        function dapatkanNamaBulanTahun(dateObj) {
+            if (isNaN(dateObj.getTime()) || dateObj.getTime() === 0) return 'Format Tanggal Lainnya';
+            const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return `${namaBulan[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+        }
+
+        function parseCSV(text) {
+            let lines = []; let row = [""]; let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i]; let next = text[i+1];
+                if (c === '"') {
+                    if (inQuotes && next === '"') { row[row.length - 1] += '"'; i++; } else { inQuotes = !inQuotes; }
+                } else if (c === ',' && !inQuotes) {
+                    row.push('');
+                } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    lines.push(row); row = [''];
+                } else { row[row.length - 1] += c; }
+            }
+            if (row.length > 1 || row[0] !== "") lines.push(row);
+            return lines;
+        }
+
+        async function fetchData() {
+            const tbody = document.getElementById('tabelBody');
+            const btnRefresh = document.getElementById('btnRefresh');
+            const refreshText = document.getElementById('refreshText');
+            if(btnRefresh && refreshText) { btnRefresh.disabled = true; refreshText.innerText = "⏳ Memuat..."; }
+
+            try {
+                const response = await fetch(`${CSV_URL}&t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Gagal mengambil data");
+                const rawText = await response.text();
+                const parsedRows = parseCSV(rawText);
+                const barisData = parsedRows.filter((col, index) => index > 0 && col.length >= 8 && col[0] && col[0].trim() !== "");
+
+                if (barisData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-slate-400">Belum ada data laporan yang masuk.</td></tr>`;
+                    return;
+                }
+
+                barisData.sort((rowA, rowB) => parseTanggalKeDateObject(rowB[0]) - parseTanggalKeDateObject(rowA[0]));
+                tbody.innerHTML = ''; let bulanAktif = "";
+
+                for (let i = 0; i < barisData.length; i++) {
+                    const col = barisData[i];
+                    const dateObj = parseTanggalKeDateObject(col[0]);
+                    const bulanTahunData = dapatkanNamaBulanTahun(dateObj);
+                    const tanggalTampilan = col[0].replace(/\/+/g, '/').trim();
+
+                    if (bulanTahunData !== bulanAktif) {
+                        bulanAktif = bulanTahunData;
+                        tbody.innerHTML += `<tr class="bg-indigo-50/70 border-y border-indigo-100/80"><td colspan="9" class="py-2.5 px-6 font-bold text-xs uppercase tracking-wider text-indigo-800">📅 ${bulanAktif}</td></tr>`;
+                    }
+                    
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3.5 px-6 font-medium text-slate-900">${tanggalTampilan}</td>
+                            <td class="py-3.5 px-6"><span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-md text-xs font-semibold">${col[1] || ''}</span></td>
+                            <td class="py-3.5 px-6 text-center">${col[2] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[3] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[4] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[5] || 0}</td>
+                            <td class="py-3.5 px-6 text-center">${col[6] || 0}</td>
+                            <td class="py-3.5 px-6 text-center font-bold text-indigo-600 bg-indigo-50/30">${col[7] || 0}</td>
+                            <td class="py-3.5 px-6 text-slate-500 font-medium">${col[8] || ''}</td>
+                        </tr>`;
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-red-500">Gagal memuat data dari Google Sheets. Coba klik tombol Refresh Data kembali.</td></tr>`;
+            } finally {
+                if(btnRefresh && refreshText) { btnRefresh.disabled = false; refreshText.innerText = "🔄 Refresh Data"; }
+            }
+        }
+
+        document.getElementById('laporanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnText = document.getElementById('btnText');
+            btnSubmit.disabled = true; btnText.innerText = "Mengirim...";
+
+            const payload = {
+                tanggal: formatKeTanggalLokal(document.getElementById('tanggal').value),
+                pertemuan: document.getElementById('pertemuan').value,
+                bapak: parseInt(document.getElementById('bapak').value) || 0,
+                ibu: parseInt(document.getElementById('ibu').value) || 0,
+                pemuda: parseInt(document.getElementById('pemuda').value) || 0,
+                pemudi: parseInt(document.getElementById('pemudi').value) || 0,
+                anak: parseInt(document.getElementById('anak').value) || 0,
+                pelapor: document.getElementById('pelapor').value
+            };
+
+            try {
+                const response = await fetch(GAS_URL, { redirect: "follow", method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "text/plain;charset=utf-8" } });
+                const result = await response.json();
+                if (result.result === "success") {
+                    document.getElementById('laporanForm').reset();
+                    document.getElementById('tanggal').valueAsDate = new Date();
+                    setTimeout(fetchData, 1500);
+                    alert("Laporan Berhasil Terkirim!");
+                } else { alert("Gagal menyimpan ke Google Sheets: " + result.message); }
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                alert("Laporan berhasil dikirim! Sinkronisasi tabel berjalan...");
+                document.getElementById('laporanForm').reset();
+                document.getElementById('tanggal').valueAsDate = new Date();
+                setTimeout(fetchData, 3000);
+            } finally { btnSubmit.disabled = false; btnText.innerText = "Lapor"; }
+        });
+
+        // =========================================================================
+        // SCRIPTS ENGINE UNTUK TAB 2: KALENDER JADWAL (SOURCE 2)
+        // =========================================================================
+        const CSV_URL_JADWAL_BULANAN = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv';
+        const namaBulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        let namaFileDownload = "kalender_jadwal";
+
+        async function initCalendar() {
+            try {
+                const response = await fetch(CSV_URL_JADWAL_BULANAN);
+                const csvData = await response.text();
+                const rows = []; let currentRow = []; let currentField = ""; let insideQuote = false;
+                const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i]; let nextChar = normalizedData[i + 1];
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') { currentField += '"'; i++; } else { insideQuote = !insideQuote; }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField); currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField); rows.push(currentRow); currentRow = []; currentField = "";
+                    } else { currentField += char; }
+                }
+                if (currentField || currentRow.length > 0) { currentRow.push(currentField); rows.push(currentRow); }
+
+                const parsedEvents = {}; const hitungBulanTahun = {};
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i]; if (!row || row.length < 3 || !row[0]) continue;
+                    const tglString = row[0].trim(); const jamString = row[1] ? row[1].trim() : ""; const acaraString = row[2] ? row[2].trim() : "";
+                    if (!acaraString) continue;
+
+                    let eventDate;
+                    if (tglString.includes('-')) { eventDate = new Date(tglString); }
+                    else if (tglString.includes('/')) { const parts = tglString.split('/'); eventDate = new Date(parts[2], parts[1] - 1, parts[0]); }
+                    else { eventDate = new Date(tglString); }
+
+                    if (isNaN(eventDate.getTime())) continue;
+                    const keyKey = `${eventDate.getFullYear()}-${eventDate.getMonth()}`;
+                    hitungBulanTahun[keyKey] = (hitungBulanTahun[keyKey] || 0) + 1;
+
+                    const dayNum = eventDate.getDate();
+                    if (!parsedEvents[keyKey]) parsedEvents[keyKey] = {};
+                    if (!parsedEvents[keyKey][dayNum]) parsedEvents[keyKey][dayNum] = [];
+                    parsedEvents[keyKey][dayNum].push({ jam: jamString, acara: acaraString });
+                }
+
+                let targetKey = ""; let maxCount = 0;
+                for (const key in hitungBulanTahun) { if (hitungBulanTahun[key] > maxCount) { maxCount = hitungBulanTahun[key]; targetKey = key; } }
+                if (!targetKey) { const skrg = new Date(); targetKey = `${skrg.getFullYear()}-${skrg.getMonth()}`; }
+
+                const [targetYear, targetMonth] = targetKey.split('-').map(Number);
+                document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+                namaFileDownload = `jadwal_${namaBulanIndo[targetMonth].toLowerCase()}_${targetYear}`;
+
+                generateCalendar(targetYear, targetMonth, parsedEvents[targetKey] || {});
+            } catch (error) { console.error("Gagal memuat jadwal:", error); }
+        }
+
+        function generateCalendar(year, month, dynamicEvents) {
+            const calendarBody = document.getElementById('calendarBody'); calendarBody.innerHTML = '';
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            let dateCounter = 1; let htmlRows = '';
+
+            for (let i = 0; i < 6; i++) {
+                let rowCells = '<tr>'; let hasCellsInRow = false;
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDayIndex) { rowCells += '<td></td>'; }
+                    else if (dateCounter > totalDays) { rowCells += '<td></td>'; }
+                    else {
+                        hasCellsInRow = true; let eventHtml = ''; let dayEvents = [];
+                        if (j === 4) dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
+                        if (dynamicEvents[dateCounter]) {
+                            dynamicEvents[dateCounter].forEach(e => {
+                                if (!(j === 4 && e.acara.toLowerCase().includes('shodaikai'))) dayEvents.push(e);
+                            });
+                        }
+                        if (dayEvents.length > 0) {
+                            eventHtml += '<div class="event-list">';
+                            dayEvents.forEach(e => { eventHtml += `<div class="event-item">${e.jam ? `<b>${e.jam}</b> ` : ""}${e.acara}</div>`; });
+                            eventHtml += '</div>';
+                        }
+                        rowCells += `<td><div class="date-number">${dateCounter}</div>${eventHtml}</td>`;
+                        dateCounter++;
+                    }
+                }
+                rowCells += '</tr>';
+                if (hasCellsInRow) htmlRows += rowCells;
+            }
+            calendarBody.innerHTML = htmlRows;
+        }
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            html2canvas(document.getElementById('calendarWrapper'), { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = canvas.toDataURL('image/jpeg', 0.9);
+                downloadLink.download = `${namaFileDownload}.jpg`;
+                document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
+            }).catch(err => alert("Terjadi kendala saat menyiapkan file gambar."));
+        });
+
+        // =========================================================================
+        // SCRIPTS ENGINE UNTUK TAB 3: DATABASE ANGGOTA (SOURCE 3)
+        // =========================================================================
+        let members = []; let currentPage = 1; const rowsPerPage = 15;
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
+
+        async function initDatabase() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) throw new Error("Gagal cloud response.");
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    members = data; localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+                    renderTable();
+                }
+            } catch (error) {
+                members = JSON.parse(localStorage.getItem('shibuMembersTree')) || [];
+                renderTable();
+            }
+        }
+
+        function updateStatistics() {
+            const createStatStructure = () => ({ bapak: 0, ibu: 0, pemuda: 0, pemudi: 0, anak: 0, total: 0, pimpinan: 0, inti: 0, anggota: 0, tidakaktif: 0, luarkota: 0, calon: 0, taiten: 0, meninggal: 0 });
+            let stats = { 'Tanah Mas': createStatStructure(), 'Gajah Mada': createStatStructure(), 'Majapahit': createStatStructure() };
+            let grandTotalShibu = createStatStructure();
+
+            members.forEach(m => {
+                const bagianKey = m.bagian ? m.bagian.toLowerCase() : ''; const chikuKey = m.chiku; const jabatanKey = m.jabatan ? m.jabatan.toLowerCase() : ''; const statusKey = m.status ? m.status.toLowerCase() : 'aktif';
+                let currentChiku = stats[chikuKey];
+
+                const processMetrics = (targetObj) => {
+                    const isTidakAktif = (statusKey === 'tidak aktif'); const isLuarKotaAtauLN = (statusKey === 'luar kota/ln'); const isCalon = (jabatanKey === 'calon'); const isTaiten = (statusKey === 'taiten'); const isMeninggal = (statusKey === 'meninggal');
+                    const isKondisiKhusus = (isTidakAktif || isLuarKotaAtauLN || isTaiten || isMeninggal || isCalon);
+
+                    if (isTidakAktif) targetObj.tidakaktif++; if (isLuarKotaAtauLN) targetObj.luarkota++; if (isCalon) targetObj.calon++; if (isTaiten) targetObj.taiten++; if (isMeninggal) targetObj.meninggal++;
+                    if (!isKondisiKhusus) {
+                        if (targetObj.hasOwnProperty(bagianKey)) { targetObj[bagianKey]++; targetObj.total++; }
+                        if (jabatanKey === 'pimpinan') targetObj.pimpinan++; if (jabatanKey === 'inti') targetObj.inti++; if (jabatanKey === 'anggota') targetObj.anggota++;
+                    } else {
+                        if (jabatanKey === 'pimpinan') targetObj.pimpinan++; if (jabatanKey === 'inti') targetObj.inti++;
+                    }
+                };
+                if (currentChiku) processMetrics(currentChiku);
+                processMetrics(grandTotalShibu);
+            });
+
+            const renderBoxHTML = (obj, isGrandTotal = false) => {
+                const borderStyle = isGrandTotal ? 'border-blue-200' : 'border-purple-200/60';
+                const textStyle = isGrandTotal ? 'text-blue-900' : 'text-purple-900';
+                return `
+                    <div class="space-y-0.5">
+                        <div class="flex justify-between"><span>Bapak: ${obj.bapak}</span> <span>Ibu: ${obj.ibu}</span></div>
+                        <div class="flex justify-between"><span>Pemuda: ${obj.pemuda}</span> <span>Pemudi: ${obj.pemudi}</span></div>
+                        <div class="flex justify-between"><span>Anak: ${obj.anak}</span></div>
+                        <div class="flex justify-between font-bold border-t ${borderStyle} mt-1 pt-0.5 ${textStyle}"><span>TOTAL AKTIF:</span> <span>${obj.total} Org</span></div>
+                    </div>
+                    <div class="border-t ${borderStyle} mt-1.5 pt-1 space-y-0.5 text-gray-700">
+                        <div class="flex justify-between"><span>Pimpinan:</span> <span class="font-semibold">${obj.pimpinan}</span></div>
+                        <div class="flex justify-between"><span>Inti:</span> <span class="font-semibold">${obj.inti}</span></div>
+                        <div class="flex justify-between"><span>Anggota:</span> <span class="font-semibold text-blue-600">${obj.anggota}</span></div>
+                    </div>
+                    <div class="border-t ${borderStyle} mt-1.5 pt-1 space-y-0.5 text-[11px]">
+                        <div class="flex justify-between text-rose-700"><span>Tidak Aktif: ${obj.tidakaktif}</span> <span class="text-indigo-600">Luar Kota/LN: ${obj.luarkota}</span></div>
+                        <div class="flex justify-between text-teal-700"><span>Calon: ${obj.calon}</span> <span class="text-amber-700">Taiten: ${obj.taiten}</span></div>
+                        <div class="flex justify-between text-red-600"><span>Meninggal:</span> <span class="font-semibold">${obj.meninggal}</span></div>
+                    </div>`;
+            };
+
+            document.getElementById('stat-tanahmas').innerHTML = renderBoxHTML(stats['Tanah Mas'], false);
+            document.getElementById('stat-gajahmada').innerHTML = renderBoxHTML(stats['Gajah Mada'], false);
+            document.getElementById('stat-majapahit').innerHTML = renderBoxHTML(stats['Majapahit'], false);
+            document.getElementById('stat-shibu-total').innerHTML = renderBoxHTML(grandTotalShibu, true);
+        }
+
+        function buildStructuredData(isForStatsCompute = false) {
+            const searchKeyword = document.getElementById('searchFilter').value.toLowerCase();
+            const chikuFilter = document.getElementById('chikuFilter').value;
+            const bagianFilter = document.getElementById('bagianFilter').value;
+            const jabatanFilter = document.getElementById('jabatanFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const showCalon = document.getElementById('showCalon').checked;
+            const showLuarKota = document.getElementById('showLuarKota').checked;
+            const showTaiten = document.getElementById('showTaiten').checked;
+            const showMeninggal = document.getElementById('showMeninggal').checked;
+
+            let filteredRaw = members.filter(m => {
+                const currentJabatan = m.jabatan || 'Anggota'; const currentStatus = m.status || 'Aktif';
+                if (!isForStatsCompute) {
+                    if (!showCalon && currentJabatan.toLowerCase() === 'calon') return false;
+                    if (!showLuarKota && currentStatus.toLowerCase() === 'luar kota/ln') return false;
+                    if (!showTaiten && currentStatus.toLowerCase() === 'taiten') return false;
+                    if (!showMeninggal && currentStatus.toLowerCase() === 'meninggal') return false;
+                }
+                const matchSearch = m.nama.toLowerCase().includes(searchKeyword) || m.alamat.toLowerCase().includes(searchKeyword) || m.keterangan.toLowerCase().includes(searchKeyword);
+                const matchChiku = chikuFilter === "" || m.chiku === chikuFilter;
+                const matchBagian = bagianFilter === "" || m.bagian === bagianFilter;
+                let matchJabatan = jabatanFilter === "" || (jabatanFilter === "Pimpinan_Inti" ? (currentJabatan === "Pimpinan" || currentJabatan === "Inti") : currentJabatan === jabatanFilter);
+                return matchSearch && matchChiku && matchBagian && matchJabatan && (statusFilter === "" || currentStatus === statusFilter);
+            });
+
+            filteredRaw.sort((a, b) => {
+                const getHierarchyScore = (member, jabatan, ket) => {
+                    if (jabatan === 'Pimpinan') {
+                        const isWakil = ket.includes('wakil');
+                        if (ket.includes('shibu')) return isWakil ? 190 : 200;
+                        if (ket.includes('chiku')) return isWakil ? 155 : 160;
+                        return 120;
+                    }
+                    return jabatan === 'Inti' ? 10 : (jabatan === 'Anggota' ? 5 : 1);
+                };
+                const scoreA = getHierarchyScore(a, a.jabatan || 'Anggota', a.keterangan.toLowerCase());
+                const scoreB = getHierarchyScore(b, b.jabatan || 'Anggota', b.keterangan.toLowerCase());
+                return scoreA !== scoreB ? scoreB - scoreA : (a.chiku !== b.chiku ? a.chiku.localeCompare(b.chiku) : a.nama.localeCompare(b.nama));
+            });
+
+            let finalOrderedList = []; let headMembers = filteredRaw.filter(m => !m.parentId);
+            const getFamilyPriority = (h) => { if (!h) return 99; const hl = h.toLowerCase(); return hl==='suami'||hl==='istri' ? 1 : (hl.includes('anak') ? 2 : (hl.includes('cucu') ? 3 : 4)); };
+
+            headMembers.forEach(head => {
+                head.isChildRender = false; finalOrderedList.push(head);
+                let familyMembers = filteredRaw.filter(m => m.parentId === head.id).sort((a,b) => getFamilyPriority(a.hubungan) - getFamilyPriority(b.hubungan));
+                familyMembers.forEach(child => { child.isChildRender = true; finalOrderedList.push(child); });
+            });
+            filteredRaw.forEach(m => { if (!finalOrderedList.find(x => x.id === m.id)) { m.isChildRender = false; finalOrderedList.push(m); } });
+            return finalOrderedList;
+        }
+
+        function renderTable() {
+            updateStatistics();
+            const tbody = document.getElementById('memberTableBody'); const cardContainer = document.getElementById('memberCardContainer');
+            tbody.innerHTML = ''; cardContainer.innerHTML = '';
+            const processedData = buildStructuredData(false);
+            document.getElementById('totalData').innerText = `Total Hasil: ${processedData.length} Records`;
+
+            if (processedData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data.</td></tr>`;
+                cardContainer.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data.</div>`;
+                document.getElementById('pageInfo').innerText = "Menampilkan 0 - 0 dari 0 data";
+                document.getElementById('paginationButtons').innerHTML = ''; return;
+            }
+
+            const totalPages = Math.ceil(processedData.length / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const paginatedItems = processedData.slice(startIndex, startIndex + rowsPerPage);
+
+            paginatedItems.forEach((member, index) => {
+                const tr = document.createElement('tr');
+                tr.className = member.isChildRender ? "bg-amber-50/30 text-gray-600 text-xs" : "bg-white font-medium text-xs";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 text-center">${startIndex + index + 1}</td>
+                    <td class="px-4 py-3"><div class="flex items-center">${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}<span class="${member.isChildRender ? '' : 'font-bold text-gray-900'}">${member.nama}</span></div></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] bg-purple-100 text-purple-800">${member.chiku}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getJabatanClass(member.jabatan)}">${member.jabatan || 'Anggota'}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${getStatusClass(member.status)}">${member.status || 'Aktif'}</span></td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${member.gohonzon}</span></td>
+                    <td class="px-4 py-3">${member.tahunLahir}</td>
+                    <td class="px-4 py-3">${member.hubungan}</td>
+                    <td class="px-4 py-3">${member.telepon}</td>
+                    <td class="px-4 py-3 break-all">${member.alamat}</td>
+                    <td class="px-4 py-3 break-all">${member.keterangan}</td>`;
+                tbody.appendChild(tr);
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'} text-xs flex flex-col gap-2`;
+                card.innerHTML = `
+                    <div class="flex justify-between font-bold"><div>${member.isChildRender ? '↳ ' : ''}${member.nama}</div><div class="text-gray-400">#${startIndex + index + 1}</div></div>
+                    <div class="flex flex-wrap gap-1"><span class="px-1.5 py-0.5 bg-purple-100 rounded text-purple-800">${member.chiku}</span><span class="px-1.5 py-0.5 rounded ${getBagianClass(member.bagian)}">${member.bagian}</span><span class="px-1.5 py-0.5 rounded ${getStatusClass(member.status)}">${member.status || 'Aktif'}</span></div>
+                    <div class="grid grid-cols-2 gap-1 text-gray-600 border-t pt-2">
+                        <div><span class="text-gray-400 block text-[9px]">TELP</span><a href="tel:${member.telepon}" class="text-blue-600 underline">${member.telepon}</a></div>
+                        <div><span class="text-gray-400 block text-[9px]">HUB</span><span class="text-amber-900">${member.hubungan}</span></div>
+                        <div class="col-span-2"><span class="text-gray-400 block text-[9px]">ALAMAT</span><p class="text-gray-800">${member.alamat}</p></div>
+                    </div>`;
+                cardContainer.appendChild(card);
+            });
+
+            document.getElementById('pageInfo').innerText = `Menampilkan ${startIndex + 1} - ${Math.min(startIndex + rowsPerPage, processedData.length)} dari ${processedData.length} hasil`;
+            renderPaginationControls(totalPages);
+        }
+
+        function renderPaginationControls(totalPages) {
+            const container = document.getElementById('paginationButtons'); container.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button'); btn.innerText = i;
+                btn.className = `min-w-[36px] h-9 px-2 text-sm font-medium rounded-md border cursor-pointer transition ${i === currentPage ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`;
+                btn.onclick = () => { currentPage = i; renderTable(); document.getElementById('filterContainer').scrollIntoView({ behavior: 'smooth' }); };
+                container.appendChild(btn);
+            }
+        }
+
+        function getBagianClass(b) { return b==='Bapak'?'bg-blue-100 text-blue-800':(b==='Ibu'?'bg-pink-100 text-pink-800':(b==='Pemuda'?'bg-emerald-100 text-emerald-800':(b==='Pemudi'?'bg-amber-100 text-amber-800':'bg-gray-100 text-gray-800'))); }
+        function getJabatanClass(j) { return j==='Pimpinan'?'bg-red-100 text-red-800 font-bold':(j==='Inti'?'bg-indigo-100 text-indigo-800 font-semibold':(j==='Calon'?'bg-teal-100 text-teal-800 font-medium':'bg-slate-100 text-slate-600')); }
+        function getStatusClass(s) { return s==='Aktif'?'bg-emerald-100 text-emerald-800':(s==='Tidak Aktif'?'bg-rose-100 text-rose-800':(s==='Luar Kota/LN'?'bg-sky-100 text-sky-800':(s==='Meninggal'?'bg-neutral-200 text-neutral-700':(s==='Taiten'?'bg-amber-100 text-amber-700':'bg-gray-100 text-gray-800')))); }
+
+        function printData() {
+            const processedData = buildStructuredData(true); if (processedData.length === 0) { alert("Tidak ada data."); return; }
+            let printStats = { bapak: 0, ibu: 0, pemuda: 0, pemudi: 0, anak: 0, total: 0 };
+            processedData.forEach(m => {
+                const bk = m.bagian ? m.bagian.toLowerCase() : ''; const sk = m.status ? m.status.toLowerCase() : 'aktif'; const jk = m.jabatan ? m.jabatan.toLowerCase() : '';
+                if (!((sk === 'tidak aktif' || sk === 'luar kota/ln' || sk === 'taiten' || sk === 'meninggal' || jk === 'calon')) && printStats.hasOwnProperty(bk)) { printStats[bk]++; printStats.total++; }
+            });
+
+            let tableRowsHtml = '';
+            processedData.forEach((member, index) => {
+                tableRowsHtml += `
+                    <tr style="background-color: #ffffff; ${member.isChildRender ? 'font-weight:normal;' : 'font-weight:bold;'}">
+                        <td style="text-align:center;">${index + 1}</td>
+                        <td>${member.isChildRender ? '↳ ' : ''}${member.nama}</td>
+                        <td>${member.chiku}</td><td>${member.bagian}</td><td>${member.jabatan || 'Anggota'}</td><td>${member.status || 'Aktif'}</td><td>${member.gohonzon}</td>
+                        <td style="text-align:center;">${member.tahunLahir}</td><td>${member.hubungan}</td><td>${member.telepon}</td><td>${member.alamat}</td><td>${member.keterangan}</td>
+                    </tr>`;
+            });
+
+            const printWindow = window.open('', '_blank', 'width=1100,height=850');
+            printWindow.document.write(`<html><head><title>Print Landscape</title><style>@page { size: landscape; margin: 10mm; } body { font-family: system-ui, sans-serif; font-size: 9px; } table { width:100%; border-collapse:collapse; margin-top:10px; } th, td { border:1px solid #000; padding:4px; text-align:left; }</style></head><body><h1>Daftar Anggota Shibu Semarang</h1><p>Total Aktif: ${printStats.total} (B: ${printStats.bapak}, I: ${printStats.ibu}, PA: ${printStats.pemuda}, PI: ${printStats.pemudi}, A: ${printStats.anak})</p><table><thead><tr><th>No</th><th>Nama</th><th>Chiku</th><th>Bagian</th><th>Jabatan</th><th>Status</th><th>Gohonzon</th><th>Lahir</th><th>Hubungan</th><th>Telepon</th><th>Alamat</th><th>Keterangan</th></tr></thead><tbody>${tableRowsHtml}</tbody></table><script>setTimeout(function() { window.print(); }, 500);<\/script></body></html>`);
+            printWindow.document.close();
+        }
+
+        // --- GLOBAL INITIALIZATION ENGINE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set tanggal form default hari ini
+            document.getElementById('tanggal').valueAsDate = new Date();
+            
+            // Jalankan loader data internal masing-masing sistem asal
+            fetchData();
+            initCalendar();
+            initDatabase();
+        });
+    </script>
+</body>
+</html>
