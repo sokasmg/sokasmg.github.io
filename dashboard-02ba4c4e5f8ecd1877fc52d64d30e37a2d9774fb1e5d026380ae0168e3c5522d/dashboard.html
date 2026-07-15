@@ -2221,7 +2221,7 @@ function setupPreviewFromBase64Story(inputId, previewId, sizeId) {
 }
 
 async function deleteStory(rowIndex) {
-    if(confirm(`Hapus permanen cerita kemenangan di baris ke-${rowIndex}?`)) {
+    if(confirm(`Hapus permanen cerita kemenangan?`)) {
         showGlobalLoading(true, "Menghapus data dari Google Sheets...");
         
         const searchParams = new URLSearchParams();
