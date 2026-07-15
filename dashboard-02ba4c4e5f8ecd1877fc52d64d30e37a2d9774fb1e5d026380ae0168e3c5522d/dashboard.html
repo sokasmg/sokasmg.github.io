@@ -3075,9 +3075,10 @@ function renderDataKunjungan() {
         let photosHTML = '';
         if (item.foto1 || item.foto2 || item.foto3) {
             photosHTML += '<div class="flex gap-2 flex-wrap mb-4">';
-            if (item.foto1) photosHTML += `<img src="${item.foto1}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
-            if (item.foto2) photosHTML += `<img src="${item.foto2}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
-            if (item.foto3) photosHTML += `<img src="${item.foto3}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
+            // Masing-masing onclick diubah untuk memanggil fungsi modal kustom kita
+            if (item.foto1) photosHTML += `<img src="${item.foto1}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
+            if (item.foto2) photosHTML += `<img src="${item.foto2}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
+            if (item.foto3) photosHTML += `<img src="${item.foto3}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
             photosHTML += '</div>';
         }
 
@@ -3219,6 +3220,46 @@ function escapeHTMLKunjungan(str) {
 
 // Panggil fungsi inisialisasi di dalam penanganan pergantian tab dashboard Anda:
 // loadDataDariSheetKunjungan();
+
+// Fungsi membuka modal zoom gambar
+function openGlobalPhotoModal(imgSrc) {
+    const modal = document.getElementById('globalPhotoModal');
+    const modalImg = document.getElementById('modalTargetImage');
+    
+    if (!imgSrc || imgSrc === "-" || imgSrc.includes("No Img")) return;
+    
+    modalImg.src = imgSrc;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Memberikan jeda mikro agar efek transisi CSS (opacity) berjalan mulus
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+    }, 10);
+}
+
+// Fungsi menutup modal
+function closeGlobalPhotoModal() {
+    const modal = document.getElementById('globalPhotoModal');
+    modal.classList.add('opacity-0');
+    
+    // Sembunyikan elemen setelah durasi transisi (300ms) selesai
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+
     </script>
+    <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
+    <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+        <button type="button" onclick="closeGlobalPhotoModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 text-2xl bg-black/40 w-10 h-10 rounded-full flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="modalTargetImage" src="" alt="Zoom Foto" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl border border-white/10">
+    </div>
+</div>
+
 </body>
 </html>
