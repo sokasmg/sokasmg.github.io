@@ -10,6 +10,237 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
+    /* --- Tambahan Style untuk Halaman Laporan Kunjungan --- */
+.collapsible-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-top: 15px;
+}
+.collapsible-header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.2s;
+}
+.collapsible-header:hover {
+    background-color: #34495e;
+}
+.collapsible-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+.toggle-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+.collapsible-content {
+    max-height: 2000px;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    padding: 25px;
+}
+.collapsible-wrapper.collapsed .collapsible-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+.collapsible-wrapper.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.required::after {
+    content: " *";
+    color: #e74c3c;
+}
+input[type="text"], input[type="date"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+textarea {
+    resize: vertical;
+}
+.char-count {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: right;
+    margin-top: 2px;
+}
+.input-group {
+    display: flex;
+    gap: 8px;
+}
+.btn-browse {
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+.btn-browse:hover {
+    background-color: #626567;
+}
+.photo-helper-zone {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+.img-preview {
+    width: 60px;
+    height: 60px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    font-size: 11px;
+    color: #aaa;
+}
+.img-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.size-label {
+    font-size: 12px;
+    font-weight: 600;
+}
+.text-amber { color: #d35400; }
+.text-green { color: #27ae60; }
+
+button.btn-submit {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+button.btn-submit:hover {
+    background-color: #2980b9;
+}
+.card-list {
+    margin-top: 20px;
+}
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid #3498db;
+    position: relative;
+}
+.card-meta {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-bottom: 8px;
+}
+.card-meta strong {
+    color: #2c3e50;
+}
+.card-keterangan {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+}
+.card-photos {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.card-photo-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.card-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.btn-action {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+.btn-edit { background-color: #f39c12; color: white; }
+.btn-edit:hover { background-color: #d68910; }
+.btn-delete { background-color: #e74c3c; color: white; }
+.btn-delete:hover { background-color: #c0392b; }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+.btn-page {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.btn-page.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+.btn-page:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+    color: #aaa;
+}
+.empty-state {
+    text-align: center;
+    color: #95a5a6;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+}
+
         /* CSS Khusus Tab Kalender (Source 2) */
         .calendar-table {
             width: 100%;
@@ -90,8 +321,8 @@
                 </div>
                 
                 <!-- Menu Tab Button & Tombol Beranda -->
+<!-- Menu Tab Button & Tombol Beranda -->
 <nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
-    <!-- Tombol Beranda mengambil 2 kolom penuh di HP, jadi flex di laptop -->
     <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -104,8 +335,11 @@
     <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Materi & Pelajaran
     </button>
-    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran
+    </button>
+    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+        Laporan Kunjungan/Shakubuku
     </button>
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender
@@ -114,6 +348,7 @@
         Database Anggota
     </button>
 </nav>
+
 
             </div>
         </div>
@@ -494,6 +729,98 @@
                 </div>
             </div>
         </div>
+        
+<!-- ========================================================================= -->
+<!-- TAB: KUNJUNGAN & SHAKUBUKU                                               -->
+<!-- ========================================================================= -->
+<div id="tab-kunjungan" class="tab-content max-w-4xl mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-people-roof text-emerald-600"></i> Laporan Kunjungan & Shakubuku
+    </h1>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8" id="formWrapper">
+        <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-700 transition" id="formHeader">
+            <h3 class="font-semibold text-lg flex items-center gap-2" id="headerTitle">
+                <i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru
+            </h3>
+            <span class="text-sm transition-transform duration-300" id="toggleIcon">
+                <i class="fa-solid fa-chevron-up"></i>
+            </span>
+        </div>
+        
+        <div class="p-6 transition-all duration-300" id="formContainerKunjungan">
+            <form id="laporanFormKunjungan" class="space-y-4">
+                <input type="hidden" id="entryIdKunjungan">
+
+                <div>
+                    <label for="tanggalKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Tanggal <span class="text-red-500">*</span></label>
+                    <input type="date" id="tanggalKunjungan" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
+                </div>
+
+                <div>
+                    <label for="pelaporKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Pelapor <span class="text-red-500">*</span></label>
+                    <input type="text" id="pelaporKunjungan" placeholder="Nama pelapor..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
+                </div>
+
+                <div>
+                    <label for="keteranganKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Keterangan <span class="text-red-500">*</span></label>
+                    <textarea id="keteranganKunjungan" rows="5" maxlength="500" placeholder="Tulis keterangan di sini (maksimal 500 karakter)..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required></textarea>
+                    <div class="text-right text-xs text-slate-400 mt-1"><span id="charCount">0</span>/500 karakter</div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 1 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto1" placeholder="Base64 / URL foto 1..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto1').click()">Browse</button>
+                        <input type="file" id="file-foto1" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto1', 'preview-foto1')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto1">No img</div>
+                        <span id="size-foto1" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 2 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto2" placeholder="Base64 / URL foto 2..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto2').click()">Browse</button>
+                        <input type="file" id="file-foto2" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto2', 'preview-foto2')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto2">No img</div>
+                        <span id="size-foto2" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 3 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto3" placeholder="Base64 / URL foto 3..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto3').click()">Browse</button>
+                        <input type="file" id="file-foto3" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto3', 'preview-foto3')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto3">No img</div>
+                        <span id="size-foto3" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold transition shadow-md shadow-emerald-100" id="btnSubmitKunjungan">Kirim Laporan</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-list-check text-slate-500"></i> Daftar Laporan
+    </h2>
+    
+    <div id="cardListKunjungan" class="space-y-4 mb-6"></div>
+    
+    <div id="paginationKunjungan" class="flex justify-center items-center gap-2"></div>
+</div>
+
 
         <!-- ========================================================================= -->
         <!-- TAB 2: KALENDER JADWAL                                                    -->
@@ -2528,7 +2855,369 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 });
+// ==========================================
+// KODE INTEGRASI LAPORAN KUNJUNGAN
+// ==========================================
 
+// Ganti dengan SCRIPT_URL GAS Anda yang aktif
+const SCRIPT_URL_KUNJUNGAN = "https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec";
+
+// Global State Kunjungan (Nama unik agar tidak bentrok)
+let dataLaporanKunjungan = [];
+let currentPageKunjungan = 1;
+const itemsPerPageKunjungan = 10;
+
+// DOM Selector Kunjungan
+const formKunjungan = document.getElementById('laporanFormKunjungan'); 
+const textareaKunjungan = document.getElementById('keteranganKunjungan'); 
+const charCountKunjungan = document.getElementById('charCount');
+const containerCardList = document.getElementById('cardListKunjungan'); // <-- Diubah
+const containerPagination = document.getElementById('paginationKunjungan'); // <-- Diubah
+const inputEntryIdKunjungan = document.getElementById('entryIdKunjungan'); // <-- Diubah
+const wrapperFormKunjungan = document.getElementById('formWrapper');
+const headerFormKunjungan = document.getElementById('formHeader');
+const titleHeaderKunjungan = document.getElementById('headerTitle');
+const buttonSubmitKunjungan = document.getElementById('btnSubmitKunjungan');
+
+// Toggle Collapsible Form
+if (headerFormKunjungan) {
+    headerFormKunjungan.addEventListener('click', () => {
+        const formContainer = document.getElementById('formContainerKunjungan');
+        const iconToggle = document.querySelector('#toggleIcon i');
+        if (formContainer.classList.contains('hidden')) {
+            formContainer.classList.remove('hidden');
+            iconToggle.className = "fa-solid fa-chevron-up";
+        } else {
+            formContainer.classList.add('hidden');
+            iconToggle.className = "fa-solid fa-chevron-down";
+        }
+    });
+}
+
+if (textareaKunjungan) {
+    textareaKunjungan.addEventListener('input', () => {
+        charCountKunjungan.textContent = textareaKunjungan.value.length;
+    });
+}
+
+// Gunakan fungsi loading bawaan Dashboard jika sudah ada, atau buat fallback ini
+function showLocalKunjunganLoading(show, message = "Memuat...") {
+    // Jika dashboard memiliki fungsi loading global sendiri (misal: showLoading() ), panggil itu di sini.
+    // Jika tidak, kita gunakan alert/loading standar dashboard Anda.
+    console.log(`[Loading] ${show} - ${message}`);
+}
+
+function clearPreviewsKunjungan() {
+    ['foto1', 'foto2', 'foto3'].forEach(id => {
+        const preview = document.getElementById(`preview-${id}`);
+        const sizeLabel = document.getElementById(`size-${id}`);
+        const fileInput = document.getElementById(`file-${id}`);
+        if (preview) preview.innerHTML = "No img";
+        if (sizeLabel) sizeLabel.innerText = "";
+        if (fileInput) fileInput.value = "";
+    });
+}
+
+// Canvas & Compression
+function processImageKunjungan(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    showLocalKunjunganLoading(true, "Mengompresi gambar...");
+    let sizeLabelId = `size-${targetInputId}`;
+
+    try {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                try {
+                    const maxDimension = 480;
+                    let targetWidth, targetHeight;
+
+                    if (img.width > img.height) {
+                        targetWidth = maxDimension;
+                        targetHeight = Math.round((maxDimension / img.width) * img.height);
+                    } else {
+                        targetHeight = maxDimension;
+                        targetWidth = Math.round((maxDimension / img.height) * img.width);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 30) {
+                            sizeLabel.className = "text-xs font-semibold text-amber-600";
+                            sizeLabel.innerText += " (>30KB)";
+                        } else {
+                            sizeLabel.className = "text-xs font-semibold text-green-600";
+                        }
+                    }
+                    showLocalKunjunganLoading(false);
+                } catch (innerError) {
+                    showLocalKunjunganLoading(false);
+                    alert("Gagal memproses gambar: " + innerError.message);
+                }
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        showLocalKunjunganLoading(false);
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+// Ambil Data dari Google Sheets
+async function loadDataDariSheetKunjungan() {
+    showLocalKunjunganLoading(true, "Mengambil data...");
+    try {
+        const response = await fetch(`${SCRIPT_URL_KUNJUNGAN}?type=kunjungan`);
+        const data = await response.json();
+        dataLaporanKunjungan = data.reverse(); 
+        renderDataKunjungan();
+    } catch (error) {
+        console.error("Gagal memuat data dari Sheet:", error);
+    } finally {
+        showLocalKunjunganLoading(false);
+    }
+}
+
+// Submit ke Google Sheets
+if (formKunjungan) {
+    formKunjungan.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const id = inputEntryIdKunjungan.value; 
+        const data = {
+            type: "kunjungan", 
+            action: id ? "update" : "insert",
+            rowId: id ? parseInt(id) : null,
+            tanggal: document.getElementById('tanggal').value,
+            pelapor: document.getElementById('pelapor').value,
+            keterangan: textareaKunjungan.value,
+            foto1: document.getElementById('foto1').value.trim(),
+            foto2: document.getElementById('foto2').value.trim(),
+            foto3: document.getElementById('foto3').value.trim()
+        };
+
+        showLocalKunjunganLoading(true, "Menyimpan data...");
+
+        try {
+            const response = await fetch(SCRIPT_URL_KUNJUNGAN, {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+
+            if (result.result === "success") {
+                alert(result.message);
+                formKunjungan.reset();
+                charCountKunjungan.textContent = 0;
+                clearPreviewsKunjungan(); 
+                
+                inputEntryIdKunjungan.value = "";
+                buttonSubmitKunjungan.textContent = "Kirim Laporan";
+                titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
+                
+                await loadDataDariSheetKunjungan();
+            } else {
+                alert("Gagal: " + result.message);
+            }
+        } catch (error) {
+            alert("Terjadi kesalahan jaringan: " + error.message);
+        } finally {
+            showLocalKunjunganLoading(false);
+        }
+    });
+}
+
+// Render data kartu (Card) dengan gaya Tailwind yang mewah
+function renderDataKunjungan() {
+    containerCardList.innerHTML = "";
+    
+    if (dataLaporanKunjungan.length === 0) {
+        containerCardList.innerHTML = '<div class="text-center text-slate-400 py-8 bg-white border rounded-xl">Belum ada data laporan yang dimasukkan.</div>';
+        containerPagination.innerHTML = "";
+        return;
+    }
+
+    const totalPages = Math.ceil(dataLaporanKunjungan.length / itemsPerPageKunjungan);
+    if (currentPageKunjungan > totalPages) currentPageKunjungan = totalPages;
+    if (currentPageKunjungan < 1) currentPageKunjungan = 1;
+
+    const startIndex = (currentPageKunjungan - 1) * itemsPerPageKunjungan;
+    const endIndex = startIndex + itemsPerPageKunjungan;
+    const paginatedItems = dataLaporanKunjungan.slice(startIndex, endIndex);
+
+    paginatedItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow relative border-l-4 border-emerald-500';
+
+        let photosHTML = '';
+        if (item.foto1 || item.foto2 || item.foto3) {
+            photosHTML += '<div class="flex gap-2 flex-wrap mb-4">';
+            if (item.foto1) photosHTML += `<img src="${item.foto1}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
+            if (item.foto2) photosHTML += `<img src="${item.foto2}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
+            if (item.foto3) photosHTML += `<img src="${item.foto3}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="window.open(this.src)">`;
+            photosHTML += '</div>';
+        }
+
+        card.innerHTML = `
+            <div class="text-xs text-slate-500 mb-2 flex items-center gap-2">
+                <span><i class="fa-regular fa-calendar"></i> ${formatTanggalKunjungan(item.tanggal)}</span>
+                <span class="text-slate-300">|</span>
+                <span><i class="fa-regular fa-user"></i> Pelapor: <strong class="text-slate-700">${escapeHTMLKunjungan(item.pelapor)}</strong></span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
+            ${photosHTML}
+            <div class="flex justify-end gap-2 border-t pt-3">
+                <button class="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition" onclick="editEntryKunjungan(${item.rowId})">
+                    <i class="fa-solid fa-pencil"></i> Edit
+                </button>
+                <button class="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-semibold transition" onclick="deleteEntryKunjungan(${item.rowId})">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+            </div>
+        `;
+        containerCardList.appendChild(card);
+    });
+
+    renderPaginationControlsKunjungan(totalPages);
+}
+
+function renderPaginationControlsKunjungan(totalPages) {
+    containerPagination.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'px-3 py-1.5 border rounded-lg hover:bg-slate-50 transition text-sm disabled:opacity-50 disabled:cursor-not-allowed';
+    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+    prevBtn.disabled = currentPageKunjungan === 1;
+    prevBtn.onclick = () => { currentPageKunjungan--; renderDataKunjungan(); };
+    containerPagination.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `px-3 py-1 border rounded-lg text-sm transition ${i === currentPageKunjungan ? 'bg-emerald-600 text-white border-emerald-600' : 'hover:bg-slate-50'}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => { currentPageKunjungan = i; renderDataKunjungan(); };
+        containerPagination.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'px-3 py-1.5 border rounded-lg hover:bg-slate-50 transition text-sm disabled:opacity-50 disabled:cursor-not-allowed';
+    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    nextBtn.disabled = currentPageKunjungan === totalPages;
+    nextBtn.onclick = () => { currentPageKunjungan++; renderDataKunjungan(); };
+    containerPagination.appendChild(nextBtn);
+}
+
+function editEntryKunjungan(id) {
+    const item = dataLaporanKunjungan.find(entry => entry.rowId === id);
+    if (!item) return;
+
+    inputEntryIdKunjungan.value = item.rowId;
+    document.getElementById('tanggal').value = item.tanggal;
+    document.getElementById('pelapor').value = item.pelapor;
+    textareaKunjungan.value = item.keterangan;
+    charCountKunjungan.textContent = item.keterangan.length;
+    
+    document.getElementById('foto1').value = item.foto1;
+    document.getElementById('foto2').value = item.foto2;
+    document.getElementById('foto3').value = item.foto3;
+
+    ['foto1', 'foto2', 'foto3'].forEach(id => {
+        const val = item[id];
+        const prev = document.getElementById(`preview-${id}`);
+        if (prev) {
+            if (val) {
+                prev.innerHTML = `<img src="${val}" class="w-full h-full object-cover">`;
+            } else {
+                prev.innerHTML = "No img";
+            }
+        }
+        const sizeLbl = document.getElementById(`size-${id}`);
+        if (sizeLbl) sizeLbl.innerText = "";
+    });
+
+    buttonSubmitKunjungan.textContent = "Simpan Perubahan";
+    titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pencil"></i> Edit Laporan (Sedang Berjalan)`;
+    
+    // Pastikan container form tampil
+    document.getElementById('formContainerKunjungan').classList.remove('hidden');
+    document.querySelector('#toggleIcon i').className = "fa-solid fa-chevron-up";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteEntryKunjungan(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus laporan ini?")) {
+        showLocalKunjunganLoading(true, "Menghapus data...");
+        try {
+            const response = await fetch(SCRIPT_URL_KUNJUNGAN, {
+                method: "POST",
+                body: JSON.stringify({
+                    type: "kunjungan",
+                    action: "delete",
+                    rowId: id
+                })
+            });
+            const result = await response.json();
+            
+            if (result.result === "success") {
+                alert(result.message);
+                if (inputEntryIdKunjungan.value == id) {
+                    formKunjungan.reset();
+                    clearPreviewsKunjungan();
+                    inputEntryIdKunjungan.value = "";
+                    buttonSubmitKunjungan.textContent = "Kirim Laporan";
+                    titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
+                    charCountKunjungan.textContent = 0;
+                }
+                await loadDataDariSheetKunjungan();
+            } else {
+                alert("Gagal menghapus: " + result.message);
+            }
+        } catch (error) {
+            alert("Kesalahan jaringan: " + error.message);
+        } finally {
+            showLocalKunjunganLoading(false);
+        }
+    }
+}
+
+function formatTanggalKunjungan(dateString) {
+    if(!dateString) return "-";
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+}
+
+function escapeHTMLKunjungan(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
+
+// Panggil fungsi inisialisasi di dalam penanganan pergantian tab dashboard Anda:
+// loadDataDariSheetKunjungan();
     </script>
 </body>
 </html>
