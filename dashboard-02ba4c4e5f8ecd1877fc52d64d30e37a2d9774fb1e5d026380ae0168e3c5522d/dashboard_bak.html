@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Integrasi Shibu Semarang</title>
     <!-- CDN CSS & JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
@@ -89,33 +90,185 @@
                 </div>
                 
                 <!-- Menu Tab Button & Tombol Beranda -->
-                <nav class="flex flex-wrap items-center justify-center gap-2" aria-label="Tabs">
-                    <!-- Tombol Kembali Ke Beranda -->
-                    <a href="https://sokasmg.github.io" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        Beranda
-                    </a>
-                    <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+<nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
+    <!-- Tombol Beranda mengambil 2 kolom penuh di HP, jadi flex di laptop -->
+    <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        Beranda
+    </a>
+    <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Cerita Kemenangan
+    </button>
+    <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Materi & Pelajaran
     </button>
-                    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
-                        Laporan Kehadiran
-                    </button>
-                    <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
-                        Jadwal Kalender
-                    </button>
-                    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
-                        Database Anggota
-                    </button>
-                </nav>
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+        Laporan Kehadiran
+    </button>
+    <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Jadwal Kalender
+    </button>
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="col-span-2 md:col-span-1 tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Database Anggota
+    </button>
+</nav>
+
             </div>
         </div>
     </header>
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6">
+    <main class="max-w-7xl mx-auto p-4 md:p-6"><!-- ========================================================================= -->
+    <!-- TAB BARU: CERITA KEMENANGAN                                          -->
+    <!-- ========================================================================= -->
+<div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
+    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
+            🏆 Editor Cerita Kemenangan
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
+    </div>
+    
+    <section class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+        <button onclick="toggleFormStory()" class="w-full flex justify-between items-center p-5 font-semibold text-lg text-slate-700 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+            <span id="form-title-status-story"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru</span>
+            <i id="collapse-icon-story" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+        </button>
+
+        <div id="form-container-story" class="p-6 border-t border-slate-100 hidden">
+            <form id="story-form" onsubmit="handleFormSubmitStory(event)" class="space-y-4">
+                <input type="hidden" id="edit-row-index-story">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Nama</label>
+                        <input type="text" id="input-nama-story" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Judul Cerita</label>
+                        <input type="text" id="input-judul-story" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto Profil (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-urlfotoprofil-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-urlfotoprofil-story', 'preview-profil-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-profil-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-profil-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto 1 (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-foto1-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-foto1-story', 'preview-foto1-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-foto1-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-foto1-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto 2 (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-foto2-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-foto2-story', 'preview-foto2-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-foto2-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-foto2-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Isi Cerita</label>
+                    <textarea id="input-isicerita-story" rows="5" required placeholder="Tuliskan cerita kemenangan di sini..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-between items-center pt-2">
+    <div class="flex items-start space-x-3 max-w-[60%]">
+<button type="button" id="btn-ai-helper" onclick="runAIHelper()" class="px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition cursor-pointer shrink-0 disabled:bg-slate-400 disabled:cursor-not-allowed">
+    <span id="text-ai-helper"><i class="fa-solid fa-robot mr-1.5"></i>AI Helper</span>
+</button>
+        
+        <label style="color: #b0b0b0; font-size: 12px; text-align: left; line-height: 1.4;" class="block max-w-[280px]">
+            AI Helper berfungsi untuk memperbaiki tata bahasa cerita kemenangan dan membuat judul otomatis sesuai dengan isi cerita.
+        </label>
+    </div>
+
+    <div class="flex space-x-3">
+        <button type="button" onclick="resetFormStory(true)" class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer">
+            Batal
+        </button>
+        <button type="submit" id="btn-submit-story" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer">
+            Post Cerita
+        </button>
+    </div>
+</div>
+            </form>
+        </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow-md border border-slate-100 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> Daftar Cerita Kemenangan
+            </h2>
+            <button onclick="fetchStoriesFromSheets()" class="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition cursor-pointer">
+                <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        <th class="py-3 px-4 w-12 text-center">No</th>
+                        <th class="py-3 px-4">Nama &amp; Judul</th>
+                        <th class="py-3 px-4">Preview Foto</th>
+                        <th class="py-3 px-4">Isi Cerita</th>
+                        <th class="py-3 px-4 text-center w-28">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="story-list-table" class="divide-y divide-slate-100 text-sm text-slate-700">
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-slate-400">Sedang memuat data dari Google Sheets...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="empty-state-story" class="text-center py-12 hidden">
+            <i class="fa-regular fa-folder-open text-4xl text-slate-300 mb-3"></i>
+            <p class="text-slate-400">Belum ada cerita kemenangan terdaftar.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 mt-4 border-t border-slate-100">
+            <div class="text-xs text-slate-500" id="pagination-info-story">Menampilkan 0 sampai 0 dari 0 data</div>
+            <div class="flex items-center space-x-2" id="pagination-buttons-story"></div>
+        </div>
+    </section>
+</div>
+    
     <!-- ========================================================================= -->
 <!-- TAB BARU: MATERI & PELAJARAN                                              -->
 <!-- ========================================================================= -->
@@ -163,7 +316,7 @@
                     </div>
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Q&A, dll." 
+                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Dasar-Dasar Buddhisme, dll." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
                     </div>
                 </div>
@@ -1869,6 +2022,501 @@ window.deleteArticleDirectMateri = async function(rowIndex) {
 };
 
 document.addEventListener('DOMContentLoaded', fetchArticlesMateri);
+
+// =========================================================================
+// JAVASCRIPT MODUL: CERITA KEMENANGAN
+// =========================================================================
+const GAS_WEB_APP_URL_STORY = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec";
+
+let stories = [];
+let currentStoryPage = 1;
+const itemsPerStoryPage = 10;
+let isStoryFormOpen = false;
+
+// Memanfaatkan Loading Overlay Global yang sudah ada di dashboard Anda
+function showGlobalLoading(show, message = "Memproses data...") {
+    // Jika dashboard Anda memiliki fungsi loading sendiri (misalnya showLoading), pastikan fungsinya disamakan.
+    // Jika tidak, script di bawah ini akan memanipulasi overlay bawaan cerita_kemenangan:
+    const overlay = document.getElementById('loading-overlay');
+    const textEl = document.getElementById('loading-text');
+    if (overlay && textEl) {
+        textEl.innerText = message;
+        if (show) overlay.classList.remove('hidden');
+        else overlay.classList.add('hidden');
+    }
+}
+
+function toggleFormStory(forceOpen = false) {
+    const container = document.getElementById('form-container-story');
+    const icon = document.getElementById('collapse-icon-story');
+    if (forceOpen) isStoryFormOpen = false;
+    
+    if (isStoryFormOpen) {
+        container.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+        isStoryFormOpen = false;
+    } else {
+        container.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+        isStoryFormOpen = true;
+    }
+}
+
+function processImageFileStory(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    showGlobalLoading(true, "Mengompresi gambar...");
+
+    let sizeLabelId = "";
+    if (targetInputId === "input-urlfotoprofil-story") sizeLabelId = "size-profil-story";
+    else if (targetInputId === "input-foto1-story") sizeLabelId = "size-foto1-story";
+    else if (targetInputId === "input-foto2-story") sizeLabelId = "size-foto2-story";
+
+    try {
+        const reader = new FileReader();
+        reader.onerror = function() {
+            showGlobalLoading(false);
+            alert("Gagal membaca file dari perangkat Anda.");
+        };
+
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onerror = function() {
+                showGlobalLoading(false);
+                alert("File yang Anda pilih bukan gambar yang valid.");
+            };
+
+            img.onload = function() {
+                try {
+                    const maxDimension = 480;
+                    let targetWidth, targetHeight;
+
+                    if (img.width > img.height) {
+                        targetWidth = maxDimension;
+                        targetHeight = Math.round((maxDimension / img.width) * img.height);
+                    } else {
+                        targetHeight = maxDimension;
+                        targetWidth = Math.round((maxDimension / img.height) * img.width);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 30) {
+                            sizeLabel.className = "text-2xs font-semibold text-amber-600";
+                            sizeLabel.innerText += " (>30KB)";
+                        } else {
+                            sizeLabel.className = "text-2xs font-semibold text-green-600";
+                        }
+                    }
+                    showGlobalLoading(false);
+                } catch (innerError) {
+                    showGlobalLoading(false);
+                    alert("Gagal memproses gambar pada Canvas: " + innerError.message);
+                }
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        showGlobalLoading(false);
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+async function fetchStoriesFromSheets() {
+    try {
+        const response = await fetch(`${GAS_WEB_APP_URL_STORY}?sheet=ceritakemenangan`);
+        const data = await response.json();
+        if(Array.isArray(data)) {
+            stories = data;
+            renderStoryTable();
+        }
+    } catch (error) {
+        console.error("Gagal memuat data:", error);
+        document.getElementById('story-list-table').innerHTML = `
+            <tr><td colspan="5" class="text-center py-8 text-red-500"><i class="fa-solid fa-circle-exclamation mr-1"></i> Gagal memuat data cerita.</td></tr>
+        `;
+    }
+}
+
+async function handleFormSubmitStory(e) {
+    e.preventDefault();
+    showGlobalLoading(true, "Sedang mengirim cerita kemenangan ke Google Sheets...");
+    
+    const rowIndex = document.getElementById('edit-row-index-story').value;
+    const action = rowIndex ? "update" : "post";
+
+    const searchParams = new URLSearchParams();
+    searchParams.append("target_sheet", "ceritakemenangan");
+    searchParams.append("action", action);
+    searchParams.append("row_index", rowIndex || "");
+    searchParams.append("nama", document.getElementById('input-nama-story').value.trim());
+    searchParams.append("judul", document.getElementById('input-judul-story').value.trim());
+    searchParams.append("urlfotoprofil", document.getElementById('input-urlfotoprofil-story').value);
+    searchParams.append("foto1", document.getElementById('input-foto1-story').value);
+    searchParams.append("foto2", document.getElementById('input-foto2-story').value);
+    searchParams.append("isicerita", document.getElementById('input-isicerita-story').value.trim());
+
+    try {
+        await fetch(GAS_WEB_APP_URL_STORY, {
+            method: "POST",
+            mode: "no-cors", 
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: searchParams.toString()
+        });
+        
+        setTimeout(async () => {
+            resetFormStory();
+            await fetchStoriesFromSheets();
+            showGlobalLoading(false);
+            alert(action === "update" ? "Cerita berhasil diperbarui!" : "Cerita baru berhasil diposting!");
+        }, 1500);
+    } catch (error) {
+        showGlobalLoading(false);
+        alert("Terjadi kesalahan transmisi data.");
+    }
+}
+
+function editStory(rowIndex) {
+    const story = stories.find(item => item.row_index === rowIndex);
+    if (!story) return;
+
+    document.getElementById('edit-row-index-story').value = story.row_index;
+    document.getElementById('input-nama-story').value = story.nama || "";
+    document.getElementById('input-judul-story').value = story.judul || "";
+    document.getElementById('input-urlfotoprofil-story').value = story.urlfotoprofil || "";
+    document.getElementById('input-foto1-story').value = story.foto1 || "";
+    document.getElementById('input-foto2-story').value = story.foto2 || "";
+    document.getElementById('input-isicerita-story').value = story.isicerita || "";
+
+    setupPreviewFromBase64Story('input-urlfotoprofil-story', 'preview-profil-story', 'size-profil-story');
+    setupPreviewFromBase64Story('input-foto1-story', 'preview-foto1-story', 'size-foto1-story');
+    setupPreviewFromBase64Story('input-foto2-story', 'preview-foto2-story', 'size-foto2-story');
+
+    document.getElementById('btn-submit-story').innerText = "Update Cerita";
+    document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i>Edit Cerita Baris #${story.row_index}`;
+    
+    toggleFormStory(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setupPreviewFromBase64Story(inputId, previewId, sizeId) {
+    const val = document.getElementById(inputId).value;
+    const previewContainer = document.getElementById(previewId);
+    const sizeContainer = document.getElementById(sizeId);
+    
+    if(val && val.startsWith('data:image')) {
+        previewContainer.innerHTML = `<img src="${val}" class="w-full h-full object-cover">`;
+        const kb = ((val.length - val.indexOf(',') - 1) * 3 / 4) / 1024;
+        sizeContainer.innerText = `${kb.toFixed(1)} KB`;
+        sizeContainer.className = "text-2xs font-semibold text-green-600";
+    } else {
+        previewContainer.innerHTML = "No Img";
+        sizeContainer.innerText = "0 KB";
+        sizeContainer.className = "text-2xs text-slate-400";
+    }
+}
+
+async function deleteStory(rowIndex) {
+    if(confirm(`Hapus permanen cerita kemenangan?`)) {
+        showGlobalLoading(true, "Menghapus data dari Google Sheets...");
+        
+        const searchParams = new URLSearchParams();
+        searchParams.append("target_sheet", "ceritakemenangan");
+        searchParams.append("action", "delete");
+        searchParams.append("row_index", rowIndex);
+
+        try {
+            await fetch(GAS_WEB_APP_URL_STORY, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: searchParams.toString()
+            });
+
+            setTimeout(async () => {
+                await fetchStoriesFromSheets();
+                showGlobalLoading(false);
+                alert("Data cerita berhasil dihapus permanen!");
+            }, 2000);
+        } catch (error) {
+            showGlobalLoading(false);
+            alert("Terjadi kesalahan sistem saat mencoba menghapus.");
+        }
+    }
+}
+
+function resetFormStory(closeAfterReset = false) {
+    document.getElementById('story-form').reset();
+    document.getElementById('edit-row-index-story').value = "";
+    document.getElementById('btn-submit-story').innerText = "Post Cerita";
+    document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru`;
+    
+    ['preview-profil-story', 'preview-foto1-story', 'preview-foto2-story'].forEach(id => document.getElementById(id).innerHTML = "No Img");
+    ['size-profil-story', 'size-foto1-story', 'size-foto2-story'].forEach(id => {
+        document.getElementById(id).innerText = "0 KB";
+        document.getElementById(id).className = "text-2xs text-slate-400";
+    });
+
+    if(closeAfterReset) toggleFormStory();
+}
+
+function renderStoryTable() {
+    const tbody = document.getElementById('story-list-table');
+    const emptyState = document.getElementById('empty-state-story');
+    tbody.innerHTML = "";
+
+    if (stories.length === 0) {
+        emptyState.classList.remove('hidden');
+        updateStoryPaginationControls(0);
+        return;
+    } else {
+        emptyState.classList.add('hidden');
+    }
+
+    const startIndex = (currentStoryPage - 1) * itemsPerStoryPage;
+    const endIndex = Math.min(startIndex + itemsPerStoryPage, stories.length);
+    const paginatedItems = stories.slice(startIndex, startIndex + itemsPerStoryPage);
+
+    paginatedItems.forEach((story, index) => {
+        const globalIndex = startIndex + index + 1;
+        
+        const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
+        const hasF1 = story.foto1 && story.foto1.startsWith('data:image');
+        const hasF2 = story.foto2 && story.foto2.startsWith('data:image');
+
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-4 px-4 text-center font-medium text-slate-400">${globalIndex}</td>
+                <td class="py-4 px-4">
+                    <div class="font-semibold text-slate-900">${story.judul || '-'}</div>
+                    <div class="text-xs text-indigo-600 font-medium">Oleh: ${story.nama || '-'}</div>
+                </td>
+                <td class="py-4 px-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-full border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Profil">
+                            ${hasProfil ? `<img src="${story.urlfotoprofil}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user"></i>`}
+                        </div>
+                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 1">
+                            ${hasF1 ? `<img src="${story.foto1}" class="w-full h-full object-cover">` : `F1`}
+                        </div>
+                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 2">
+                            ${hasF2 ? `<img src="${story.foto2}" class="w-full h-full object-cover">` : `F2`}
+                        </div>
+                    </div>
+                </td>
+                <td class="py-4 px-4">
+                    <p class="line-clamp-2 text-xs text-slate-500 max-w-xs md:max-w-md">${story.isicerita || '-'}</p>
+                </td>
+                <td class="py-4 px-4 text-center">
+                    <div class="inline-flex space-x-2">
+                        <button onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteStory(${story.row_index})" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition cursor-pointer">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    updateStoryPaginationControls(stories.length, startIndex, endIndex);
+}
+
+function updateStoryPaginationControls(totalItems, start = 0, end = 0) {
+    const infoText = document.getElementById('pagination-info-story');
+    const btnContainer = document.getElementById('pagination-buttons-story');
+    btnContainer.innerHTML = "";
+
+    if (totalItems === 0) return;
+
+    infoText.innerText = `Menampilkan ${start + 1} sampai ${end} dari ${totalItems} data`;
+    const totalPages = Math.ceil(totalItems / itemsPerStoryPage);
+
+    const prevBtn = document.createElement('button');
+    prevBtn.innerHTML = `<i class="fa-solid fa-chevron-left"></i>`;
+    prevBtn.className = `p-2 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === 1 ? 'border-slate-200 text-slate-300 pointer-events-none' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+    prevBtn.onclick = () => { if(currentStoryPage > 1) { currentStoryPage--; renderStoryTable(); } };
+    btnContainer.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.innerText = i;
+        pageBtn.className = `px-3 py-1.5 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === i ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+        pageBtn.onclick = () => { currentStoryPage = i; renderStoryTable(); };
+        btnContainer.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.innerHTML = `<i class="fa-solid fa-chevron-right"></i>`;
+    nextBtn.className = `p-2 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === totalPages ? 'border-slate-200 text-slate-300 pointer-events-none' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+    nextBtn.onclick = () => { if(currentStoryPage < totalPages) { currentStoryPage++; renderStoryTable(); } };
+    btnContainer.appendChild(nextBtn);
+}
+
+// Tambahkan inisialisasi di event DOMContentLoaded bawaan dashboard Anda:
+document.addEventListener("DOMContentLoaded", () => {
+    fetchStoriesFromSheets();
+});
+// Kumpulan API Keys Anda
+const KEY_POOL = [
+    "AQ.Ab8RN6LRJW2WUhoktvvcHLfVHck8TFmfNNHCAg0j06pKvxyFyw", 
+    "AQ.Ab8RN6KP4KY8rS8x8Kg4nGc8XxRDrTi4u9t9oXlQY9yFddaM8w",
+    "AQ.Ab8RN6L5ngybmA2d_9ipOn2y-NJB64FLp6A4pW8uIYJsDNxlLA",
+    "AQ.Ab8RN6IRCv3NsQo-fsTVeBxq2K_E7jgzcmJ92bOXZgli-koWyw",
+    "AQ.Ab8RN6Khv6K-QnzXgr7M81NheApUS47GIB5GnTflSzHmIhUs2A",
+    "AIzaSyAMnTnHbxUx1WGux79uUTxAYp3HX8B9QvQ"
+];
+
+/**
+ * Memanggil API Google Gemini dengan fitur Auto-Rotate Robust seperti di Suno DAW
+ */
+async function callGeminiAPIWithFallback(promptText) {
+    let lastError = "Tidak ada API key yang berhasil digunakan.";
+
+    for (let i = 0; i < KEY_POOL.length; i++) {
+        const currentKey = KEY_POOL[i];
+        if (!currentKey) continue;
+
+        // Menggunakan model gemini-2.5-flash yang super cepat & cerdas
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentKey}`;
+
+        try {
+            console.log(`Mencoba memproses dengan API Key indeks ke-${i}...`);
+            
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: promptText }]
+                    }]
+                })
+            });
+
+            // Jika error 400 (Bad Request/Invalid Key), 403, atau 429 (Limit)
+            if (response.status === 400 || response.status === 403 || response.status === 429) {
+                const errorData = await response.json().catch(() => ({}));
+                const errMsg = errorData.error?.message || `Status ${response.status}`;
+                console.warn(`Key indeks ke-${i} tidak dapat digunakan (${errMsg}). Mencoba key berikutnya...`);
+                lastError = `[Key ${i}] ${errMsg}`;
+                continue; // Langsung lompat ke key berikutnya tanpa crash
+            }
+
+            if (!response.ok) {
+                console.warn(`Key indeks ke-${i} mengembalikan status non-OK: ${response.status}`);
+                continue;
+            }
+
+            const data = await response.json();
+            
+            // Validasi struktur kembalian dari Gemini
+            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                console.log(`Sukses menggunakan API Key indeks ke-${i}!`);
+                return data.candidates[0].content.parts[0].text.trim();
+            }
+
+        } catch (err) {
+            console.error(`Error koneksi/parsing pada Key indeks ke-${i}:`, err);
+            lastError = err.message;
+            continue; // Lanjut jika ada kendala jaringan
+        }
+    }
+
+    // Jika perulangan selesai dan tidak ada yang berhasil
+    return null;
+}
+
+/**
+ * Fungsi Utama AI Helper untuk memperbaiki tata bahasa dan otomatisasi judul
+ */
+async function runAIHelper() {
+    const isiCeritaInput = document.getElementById("input-isicerita-story");
+    const judulInput = document.getElementById("input-judul-story");
+    const btnHelper = document.getElementById("btn-ai-helper");
+    const textHelper = document.getElementById("text-ai-helper");
+
+    const originalStory = isiCeritaInput.value.trim();
+
+    if (!originalStory) {
+        alert("Silakan ketikkan terlebih dahulu isi cerita kemenangan pada kotak input di bawah!");
+        isiCeritaInput.focus();
+        return;
+    }
+
+    // Set UI State ke mode Memuat (Loading)
+    btnHelper.disabled = true;
+    textHelper.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Memproses AI...`;
+
+    try {
+        // --- PROSES 1: Perbaiki Tata Bahasa ---
+        const promptTatabahasa = `
+        Kamu adalah editor bahasa Indonesia profesional untuk website organisasi Buddhis Soka Gakkai.
+        Tugasmu adalah memperbaiki tata bahasa, ejaan (sesuai EYD), tanda baca, dan struktur kalimat dari cerita kemenangan di bawah ini agar rapi, mengalir, menyentuh hati, profesional, namun tetap mempertahankan esensi cerita asli dan nama-nama tokoh di dalamnya tanpa mengubah makna aslinya sama sekali. Jangan berikan komentar pembuka atau penutup, langsung berikan teks hasil perbaikannya saja.
+
+        Teks cerita asli:
+        "${originalStory}"
+        `;
+
+        const improvedStory = await callGeminiAPIWithFallback(promptTatabahasa);
+        
+        if (!improvedStory) {
+            throw new Error("Gagal mendapatkan respon perbaikan teks dari AI. Semua API key di pool kemungkinan tidak valid atau limit.");
+        }
+
+        // Masukkan hasil perbaikan langsung ke textarea
+        isiCeritaInput.value = improvedStory;
+
+        // --- PROSES 2: Generate Judul Otomatis ---
+        const promptJudul = `
+        Berdasarkan cerita kemenangan yang telah diperbaiki ini, buatlah satu buah judul artikel yang sangat menarik, inspiratif, ringkas (maksimal 6-8 kata), dan mewakili esensi perjuangan atau kemenangannya. Jangan berikan tanda kutip di awal dan di akhir, jangan berikan teks tambahan apa pun, cukup berikan judulnya saja.
+
+        Teks cerita:
+        "${improvedStory}"
+        `;
+
+        const generatedTitle = await callGeminiAPIWithFallback(promptJudul);
+        
+        if (generatedTitle) {
+            // Masukkan hasil judul ke input judul & bersihkan dari tanda kutip liar jika ada
+            judulInput.value = generatedTitle.replace(/^"|"$/g, ''); 
+            alert("✨ Sukses! AI telah berhasil memperbaiki tata bahasa cerita dan merumuskan judul.");
+        } else {
+            alert("⚠️ Perbaikan cerita berhasil, namun pembuatan judul otomatis gagal karena batas limit API.");
+        }
+
+    } catch (error) {
+        console.error("AI Helper Fatal Error: ", error);
+        alert("Gagal memproses AI Helper:\n" + error.message + "\n\nSilakan periksa koneksi internet Anda atau pastikan KEY_POOL Anda memiliki saldo/kuota aktif.");
+    } finally {
+        // Kembalikan tombol ke keadaan semula
+        btnHelper.disabled = false;
+        textHelper.innerHTML = `<i class="fa-solid fa-robot mr-1.5"></i>AI Helper`;
+    }
+}
 
     </script>
 </body>
