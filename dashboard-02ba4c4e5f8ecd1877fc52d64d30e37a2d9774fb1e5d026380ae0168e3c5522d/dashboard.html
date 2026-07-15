@@ -204,10 +204,26 @@
                     <textarea id="input-isicerita-story" rows="5" required placeholder="Tuliskan cerita kemenangan di sini..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
                 </div>
 
-                <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="resetFormStory(true)" class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer">Batal</button>
-                    <button type="submit" id="btn-submit-story" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer">Post Cerita</button>
-                </div>
+                <div class="flex justify-between items-center pt-2">
+    <div class="flex items-start space-x-3 max-w-[60%]">
+<button type="button" id="btn-ai-helper" onclick="runAIHelper()" class="px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition cursor-pointer shrink-0 disabled:bg-slate-400 disabled:cursor-not-allowed">
+    <span id="text-ai-helper"><i class="fa-solid fa-robot mr-1.5"></i>AI Helper</span>
+</button>
+        
+        <label style="color: #b0b0b0; font-size: 12px; text-align: left; line-height: 1.4;" class="block max-w-[280px]">
+            AI Helper berfungsi untuk memperbaiki tata bahasa cerita kemenangan dan membuat judul otomatis sesuai dengan isi cerita.
+        </label>
+    </div>
+
+    <div class="flex space-x-3">
+        <button type="button" onclick="resetFormStory(true)" class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer">
+            Batal
+        </button>
+        <button type="submit" id="btn-submit-story" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer">
+            Post Cerita
+        </button>
+    </div>
+</div>
             </form>
         </div>
     </section>
@@ -300,7 +316,7 @@
                     </div>
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Q&A, dll." 
+                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Dasar-Dasar Buddhisme, dll." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
                     </div>
                 </div>
@@ -2363,6 +2379,144 @@ function updateStoryPaginationControls(totalItems, start = 0, end = 0) {
 document.addEventListener("DOMContentLoaded", () => {
     fetchStoriesFromSheets();
 });
+// Kumpulan API Keys Anda
+const KEY_POOL = [
+    "AQ.Ab8RN6LRJW2WUhoktvvcHLfVHck8TFmfNNHCAg0j06pKvxyFyw", 
+    "AQ.Ab8RN6KP4KY8rS8x8Kg4nGc8XxRDrTi4u9t9oXlQY9yFddaM8w",
+    "AQ.Ab8RN6L5ngybmA2d_9ipOn2y-NJB64FLp6A4pW8uIYJsDNxlLA",
+    "AQ.Ab8RN6IRCv3NsQo-fsTVeBxq2K_E7jgzcmJ92bOXZgli-koWyw",
+    "AQ.Ab8RN6Khv6K-QnzXgr7M81NheApUS47GIB5GnTflSzHmIhUs2A",
+    "AIzaSyAMnTnHbxUx1WGux79uUTxAYp3HX8B9QvQ"
+];
+
+/**
+ * Memanggil API Google Gemini dengan fitur Auto-Rotate Robust seperti di Suno DAW
+ */
+async function callGeminiAPIWithFallback(promptText) {
+    let lastError = "Tidak ada API key yang berhasil digunakan.";
+
+    for (let i = 0; i < KEY_POOL.length; i++) {
+        const currentKey = KEY_POOL[i];
+        if (!currentKey) continue;
+
+        // Menggunakan model gemini-2.5-flash yang super cepat & cerdas
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentKey}`;
+
+        try {
+            console.log(`Mencoba memproses dengan API Key indeks ke-${i}...`);
+            
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: promptText }]
+                    }]
+                })
+            });
+
+            // Jika error 400 (Bad Request/Invalid Key), 403, atau 429 (Limit)
+            if (response.status === 400 || response.status === 403 || response.status === 429) {
+                const errorData = await response.json().catch(() => ({}));
+                const errMsg = errorData.error?.message || `Status ${response.status}`;
+                console.warn(`Key indeks ke-${i} tidak dapat digunakan (${errMsg}). Mencoba key berikutnya...`);
+                lastError = `[Key ${i}] ${errMsg}`;
+                continue; // Langsung lompat ke key berikutnya tanpa crash
+            }
+
+            if (!response.ok) {
+                console.warn(`Key indeks ke-${i} mengembalikan status non-OK: ${response.status}`);
+                continue;
+            }
+
+            const data = await response.json();
+            
+            // Validasi struktur kembalian dari Gemini
+            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                console.log(`Sukses menggunakan API Key indeks ke-${i}!`);
+                return data.candidates[0].content.parts[0].text.trim();
+            }
+
+        } catch (err) {
+            console.error(`Error koneksi/parsing pada Key indeks ke-${i}:`, err);
+            lastError = err.message;
+            continue; // Lanjut jika ada kendala jaringan
+        }
+    }
+
+    // Jika perulangan selesai dan tidak ada yang berhasil
+    return null;
+}
+
+/**
+ * Fungsi Utama AI Helper untuk memperbaiki tata bahasa dan otomatisasi judul
+ */
+async function runAIHelper() {
+    const isiCeritaInput = document.getElementById("input-isicerita-story");
+    const judulInput = document.getElementById("input-judul-story");
+    const btnHelper = document.getElementById("btn-ai-helper");
+    const textHelper = document.getElementById("text-ai-helper");
+
+    const originalStory = isiCeritaInput.value.trim();
+
+    if (!originalStory) {
+        alert("Silakan ketikkan terlebih dahulu isi cerita kemenangan pada kotak input di bawah!");
+        isiCeritaInput.focus();
+        return;
+    }
+
+    // Set UI State ke mode Memuat (Loading)
+    btnHelper.disabled = true;
+    textHelper.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Memproses AI...`;
+
+    try {
+        // --- PROSES 1: Perbaiki Tata Bahasa ---
+        const promptTatabahasa = `
+        Kamu adalah editor bahasa Indonesia profesional untuk website organisasi Buddhis Soka Gakkai.
+        Tugasmu adalah memperbaiki tata bahasa, ejaan (sesuai EYD), tanda baca, dan struktur kalimat dari cerita kemenangan di bawah ini agar rapi, mengalir, menyentuh hati, profesional, namun tetap mempertahankan esensi cerita asli dan nama-nama tokoh di dalamnya tanpa mengubah makna aslinya sama sekali. Jangan berikan komentar pembuka atau penutup, langsung berikan teks hasil perbaikannya saja.
+
+        Teks cerita asli:
+        "${originalStory}"
+        `;
+
+        const improvedStory = await callGeminiAPIWithFallback(promptTatabahasa);
+        
+        if (!improvedStory) {
+            throw new Error("Gagal mendapatkan respon perbaikan teks dari AI. Semua API key di pool kemungkinan tidak valid atau limit.");
+        }
+
+        // Masukkan hasil perbaikan langsung ke textarea
+        isiCeritaInput.value = improvedStory;
+
+        // --- PROSES 2: Generate Judul Otomatis ---
+        const promptJudul = `
+        Berdasarkan cerita kemenangan yang telah diperbaiki ini, buatlah satu buah judul artikel yang sangat menarik, inspiratif, ringkas (maksimal 6-8 kata), dan mewakili esensi perjuangan atau kemenangannya. Jangan berikan tanda kutip di awal dan di akhir, jangan berikan teks tambahan apa pun, cukup berikan judulnya saja.
+
+        Teks cerita:
+        "${improvedStory}"
+        `;
+
+        const generatedTitle = await callGeminiAPIWithFallback(promptJudul);
+        
+        if (generatedTitle) {
+            // Masukkan hasil judul ke input judul & bersihkan dari tanda kutip liar jika ada
+            judulInput.value = generatedTitle.replace(/^"|"$/g, ''); 
+            alert("✨ Sukses! AI telah berhasil memperbaiki tata bahasa cerita dan merumuskan judul.");
+        } else {
+            alert("⚠️ Perbaikan cerita berhasil, namun pembuatan judul otomatis gagal karena batas limit API.");
+        }
+
+    } catch (error) {
+        console.error("AI Helper Fatal Error: ", error);
+        alert("Gagal memproses AI Helper:\n" + error.message + "\n\nSilakan periksa koneksi internet Anda atau pastikan KEY_POOL Anda memiliki saldo/kuota aktif.");
+    } finally {
+        // Kembalikan tombol ke keadaan semula
+        btnHelper.disabled = false;
+        textHelper.innerHTML = `<i class="fa-solid fa-robot mr-1.5"></i>AI Helper`;
+    }
+}
 
     </script>
 </body>
