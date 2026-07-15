@@ -2045,14 +2045,49 @@ button.btn-submit:hover {
         }
 
         // --- GLOBAL INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const tanggalEl = document.getElementById('tanggal');
-            if(tanggalEl) tanggalEl.valueAsDate = new Date();
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Logika pengisian tanggal otomatis (Bawaan Anda)
+    const tanggalEl = document.getElementById('tanggal');
+    if(tanggalEl) tanggalEl.valueAsDate = new Date();
+    
+    // 2. Logika autocomplete & kunci input Pelapor di Berbagai Tab
+    const savedUsername = localStorage.getItem('soka_user_name');
+
+    // Tulis semua ID input text dari berbagai tab Anda di dalam array ini:
+    const daftarIdPelapor = [
+        'pelaporKunjungan',
+        'pelapor',
+        'pengirim'
+        // <-- Tambahkan ID input dari tab lain di sini jika ada, pisahkan dengan koma
+    ];
+
+    if (savedUsername && savedUsername.trim() !== "") {
+        // Lakukan perulangan untuk setiap ID yang didaftarkan di atas
+        daftarIdPelapor.forEach(id => {
+            const inputElement = document.getElementById(id);
             
-            fetchData();
-            initCalendar();
-            initDatabase();
+            // Jika elemen input tersebut ditemukan di halaman/tab saat ini
+            if (inputElement) {
+                inputElement.value = savedUsername; // Isi otomatis
+                inputElement.readOnly = true;       // Kunci input agar readonly
+                
+                // Beri efek abu-abu & kursor dilarang (Tailwind)
+                inputElement.classList.add('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
+                inputElement.classList.remove('focus:ring-2', 'focus:ring-emerald-500');
+            }
         });
+    } else {
+        // Jika belum login, hentikan proses dan tendang kembali ke index.html
+        alert("Sesi Anda telah habis atau Anda belum login. Silakan login kembali.");
+        window.location.href = "index.html"; 
+        return; 
+    }
+
+    // 3. Fungsi inisialisasi lainnya (Bawaan Anda)
+    fetchData();
+    initCalendar();
+    initDatabase();
+});
         
 // =========================================================================
 // JAVASCRIPT UNTUK TAB MATERI & PELAJARAN (VERSI PERBAIKAN BENTROK VARIABEL)
