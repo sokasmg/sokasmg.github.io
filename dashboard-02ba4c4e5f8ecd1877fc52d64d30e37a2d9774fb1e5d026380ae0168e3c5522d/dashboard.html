@@ -744,11 +744,11 @@ button.btn-submit:hover {
                 <i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru
             </h3>
             <span class="text-sm transition-transform duration-300" id="toggleIcon">
-                <i class="fa-solid fa-chevron-up"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </span>
         </div>
         
-        <div class="p-6 transition-all duration-300" hidden id="formContainerKunjungan">
+        <div class="p-6 transition-all duration-300 hidden" id="formContainerKunjungan">
             <form id="laporanFormKunjungan" class="space-y-4">
                 <input type="hidden" id="entryIdKunjungan">
 
@@ -828,7 +828,7 @@ button.btn-submit:hover {
         <div id="tab-jadwal" class="tab-content hidden space-y-4">
 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
     <label for="catatanJadwal" class="block text-sm font-semibold text-gray-700 mb-1">
-        <i class="fa-solid fa-file-pen mr-2 text-indigo-600"></i>Tambah Catatan / Informasi Jadwal (GAS)
+        <i class="fa-solid fa-file-pen mr-2 text-indigo-600"></i>Tambah Catatan:
     </label>
     
     <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
@@ -836,7 +836,8 @@ button.btn-submit:hover {
             <i class="fa-solid fa-info-circle mr-1"></i> <strong>Contoh format penulisan jadwal:</strong><br>
             06/1/2026, 10:00 WIB, pertemuan kemenangan<br>
             12/1/2026, 19.00 WIB, shodaikai<br>
-            15/1/2026, 10.00 WIB, pertemuan salatiga
+            15/1/2026, 10.00 WIB, pertemuan salatiga<br>
+            dst...
         </p>
     </div>
 
@@ -851,7 +852,7 @@ button.btn-submit:hover {
             id="btnKirimCatatan" 
             onclick="kirimCatatanKeGAS()"
             class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition-colors duration-200 flex items-center gap-2 text-sm">
-            <i class="fa-solid fa-paper-plane"></i> Kirim Ke Sheet
+            <i class="fa-solid fa-paper-plane"></i> Generate Jadwal Bulanan
         </button>
     </div>
 </div>
