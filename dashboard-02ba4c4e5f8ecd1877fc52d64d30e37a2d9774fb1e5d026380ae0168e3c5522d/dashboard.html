@@ -335,8 +335,9 @@ button.btn-submit:hover {
 </div>
 
 <nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
-<button onclick="switchTab('tab-profil'); loadProfil();" id="btn-tab-profil" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
-        Profil
+    <button onclick="switchTab('tab-profil'); loadProfil();" id="btn-tab-profil" 
+        class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+    Profil
     </button>
     <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Cerita Kemenangan
@@ -372,7 +373,10 @@ button.btn-submit:hover {
     <!-- TAB BARU: PROFIL                                         -->
     <!-- ========================================================================= -->
     <div id="tab-profil" class="tab-content hidden">
-    <h2 class="text-xl font-bold mb-4">Profil Anggota</h2>
+    <div class="text-center mb-6">
+    <h2 class="text-xl font-bold">Profil Anggota</h2>
+    <p class="italic text-gray-500 mt-1">Selamat datang, <span id="p-nama-header">...</span></p>
+</div>
     <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
         <div id="profil-container" class="space-y-4">
             <!-- Foto (Bisa Diklik) -->
@@ -384,7 +388,7 @@ button.btn-submit:hover {
                 <!-- Hidden input untuk simpan data base64 -->
                 <input type="hidden" id="p-foto-base64">
             </div>
-            <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama" class="font-bold"></div></div>
+            <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama-detil" class="font-bold"></div></div>
             <div><label class="block text-gray-500 text-xs">Chiku</label><div id="p-chiku"></div></div>
             <div><label class="block text-gray-500 text-xs">Bagian</label><div id="p-bagian"></div></div>
             <div><label class="block text-gray-500 text-xs">Status</label><div id="p-jabatan"></div></div>
@@ -3843,7 +3847,8 @@ function loadProfil() {
             const user = data.find(item => item.nama === userName);
             if (user) {
                 document.getElementById('p-foto').src = user.foto || 'default-avatar.png';
-                document.getElementById('p-nama').innerText = user.nama;
+                document.getElementById('p-nama-detil').innerText = user.nama;
+                document.getElementById('p-nama-header').innerText = user.nama;
                 document.getElementById('p-chiku').innerText = user.chiku;
                 document.getElementById('p-bagian').innerText = user.bagian;
                 document.getElementById('p-jabatan').innerText = user.jabatan;
@@ -3941,9 +3946,21 @@ function checkPermissions() {
 
 // Panggil fungsi ini saat halaman selesai dimuat
 window.onload = function() {
-    checkPermissions();
-    // ... panggil fungsi lain seperti loadProfil() jika perlu
+    // 1. Terapkan aturan akses admin
+    checkPermissions(); 
+    
+    // 2. Paksa buka tab profil secara default saat halaman dimuat
+    switchTab('tab-profil');
+    loadProfil();
+    
+    // 3. Pastikan tombol profil mendapatkan gaya aktif
+    const btnProfil = document.getElementById('btn-tab-profil');
+    if (btnProfil) {
+        btnProfil.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        btnProfil.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    }
 };
+
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
