@@ -3933,14 +3933,23 @@ function updateProfil() {
 }
 
 function checkPermissions() {
-    // Ambil jabatan dari localStorage (pastikan saat login Anda sudah menyimpan jabatan ke localStorage)
-    const savedJabatan = localStorage.getItem("soka_user_jabatan"); // Sesuaikan key-nya
+    // 1. Ambil jabatan
+    const savedJabatan = localStorage.getItem("soka_user_jabatan");
     
-    // Jika jabatan BUKAN Pimpinan, sembunyikan tombol admin-only
+    // 2. Jika bukan Pimpinan, jalankan logika sembunyi
     if (savedJabatan !== "Pimpinan" && savedJabatan !== "Pimpinan (Admin)") {
+        
+        // A. Sembunyikan tombol (Kode Anda yang lama)
         const adminButtons = document.querySelectorAll('.admin-only');
         adminButtons.forEach(btn => {
-            btn.style.display = 'none'; // Sembunyikan tombol
+            btn.style.display = 'none';
+        });
+
+        // B. Tambahan: Hapus opsi dropdown (Logika baru yang aman)
+        const adminOptions = ['opt-kehadiran', 'opt-database'];
+        adminOptions.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.remove();
         });
     }
 }
