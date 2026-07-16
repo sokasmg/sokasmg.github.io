@@ -317,7 +317,7 @@ button.btn-submit:hover {
                 <div class="flex items-center gap-2">
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
-					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v4.1</span>
+					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v4.2</span>
 					</span>
                 </div>
                 
@@ -326,7 +326,7 @@ button.btn-submit:hover {
     <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
         <option value="tab-ceritakemenangan">🏆 Cerita Kemenangan</option>
         <option value="tab-materi">📚 Materi & Pelajaran</option>
-		<option value="tab-quoteoftheday">☀️ Quote of the Day</option>
+        <option value="tab-quoteoftheday">☀️ Quote of the Day</option>
         <option value="tab-kehadiran">📊 Laporan Kehadiran</option>
         <option value="tab-kunjungan" selected>🚗 Laporan Kunjungan/Shakubuku</option>
         <option value="tab-jadwal">📅 Jadwal Kalender</option>
@@ -335,6 +335,9 @@ button.btn-submit:hover {
 </div>
 
 <nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
+<button onclick="switchTab('tab-profil'); loadProfil();" id="btn-tab-profil" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
+        Profil
+    </button>
     <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Cerita Kemenangan
     </button>
@@ -344,7 +347,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-quoteoftheday')" id="btn-tab-quoteoftheday" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
         Quote of the Day
     </button>
-    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran
     </button>
     <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
@@ -353,7 +356,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
 </nav>
@@ -364,18 +367,54 @@ button.btn-submit:hover {
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
     <main class="max-w-7xl mx-auto p-4 md:p-6">
-<!-- ========================================================================= -->
+    
+    <!-- ========================================================================= -->
+    <!-- TAB BARU: PROFIL                                         -->
+    <!-- ========================================================================= -->
+    <div id="tab-profil" class="tab-content hidden">
+    <h2 class="text-xl font-bold mb-4">Profil Anggota</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+        <div id="profil-container" class="space-y-4">
+            <!-- Foto (Bisa Diklik) -->
+            <div class="flex justify-center mb-4 cursor-pointer" onclick="document.getElementById('p-file-input').click()">
+                <div id="p-foto-container" class="w-32 h-32 rounded-full overflow-hidden border border-gray-300">
+                    <img id="p-foto" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
+                </div>
+                <input type="file" id="p-file-input" class="hidden" accept="image/*" onchange="processProfilImage(this)">
+                <!-- Hidden input untuk simpan data base64 -->
+                <input type="hidden" id="p-foto-base64">
+            </div>
+            <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama" class="font-bold"></div></div>
+            <div><label class="block text-gray-500 text-xs">Chiku</label><div id="p-chiku"></div></div>
+            <div><label class="block text-gray-500 text-xs">Bagian</label><div id="p-bagian"></div></div>
+            <div><label class="block text-gray-500 text-xs">Status</label><div id="p-jabatan"></div></div>
+            <div><label class="block text-gray-500 text-xs">Gohonzon</label><div id="p-gohonzon"></div></div>
+            <div><label class="block text-gray-500 text-xs">Keterangan</label><div id="p-keterangan"></div></div>
+            
+            <!-- Editables -->
+            <div><label class="block text-gray-700 text-sm">No Telepon</label>
+                 <input type="text" id="p-telepon" class="w-full border rounded p-2"></div>
+            <div><label class="block text-gray-700 text-sm">Alamat</label>
+                 <textarea id="p-alamat" class="w-full border rounded p-2"></textarea></div>
+            
+            <button onclick="updateProfil()" class="w-full bg-indigo-600 text-white p-2 rounded">Update</button>
+        </div>
+    </div>
+</div>
+
+    
+    <!-- ========================================================================= -->
     <!-- TAB BARU: CERITA KEMENANGAN                                          -->
     <!-- ========================================================================= -->
 <div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
-    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
             🏆 Editor Cerita Kemenangan
         </h1>
         <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
     </div>
     
-    <section class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
         <button onclick="toggleFormStory()" class="w-full flex justify-between items-center p-5 font-semibold text-lg text-slate-700 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
             <span id="form-title-status-story"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru</span>
             <i id="collapse-icon-story" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
@@ -549,7 +588,7 @@ button.btn-submit:hover {
 <!-- TAB: QUOTE OF THE DAY (CRUD OPERATIONAL)                                  -->
 <!-- ========================================================================= -->
 <div id="tab-quoteoftheday" class="tab-content hidden space-y-6">
-    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase" id="quote-tab-main-title">
             🏆 Editor Quote of the Day
         </h1>
@@ -557,7 +596,7 @@ button.btn-submit:hover {
     </div>
     
     <!-- Bagian Form Input (Create/Update) -->
-    <section class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
         <div class="p-5 font-semibold text-lg text-slate-700 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
             <span id="form-title-status-quote"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Quote Baru</span>
         </div>
@@ -631,7 +670,7 @@ button.btn-submit:hover {
 <!-- ========================================================================= -->
 <div id="tab-materi" class="tab-content hidden space-y-6">
         <!-- Header -->
-        <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
+        <header class="admin-only mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
             <div>
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-3">
                     <span class="p-2 bg-emerald-500 text-white rounded-lg shadow-sm"><i class="fas fa-book-open text-xl"></i></span>
@@ -964,12 +1003,12 @@ button.btn-submit:hover {
         <!-- TAB 2: KALENDER JADWAL                                                    -->
         <!-- ========================================================================= -->
         <div id="tab-jadwal" class="tab-content hidden space-y-4">
-<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
+<div class="admin-only bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
     <label for="catatanJadwal" class="block text-sm font-semibold text-gray-700 mb-1">
         <i class="fa-solid fa-file-pen mr-2 text-indigo-600"></i>Tambah Catatan:
     </label>
     
-    <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
+    <div class="admin-only bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
         <p class="text-xs text-amber-800 font-medium">
             <i class="fa-solid fa-info-circle mr-1"></i> <strong>Contoh format penulisan jadwal:</strong><br>
             06/1/2026, 10:00 WIB, pertemuan kemenangan<br>
@@ -982,10 +1021,10 @@ button.btn-submit:hover {
     <textarea 
         id="catatanInput" 
         rows="15" 
-        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-y font-mono"
+        class="admin-only w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-y font-mono"
         placeholder="Ketik jadwal di sini mengikuti format contoh di atas.&#10;Contoh:&#10;06/1/2026, 10:00 WIB, pertemuan kemenangan&#10;12/1/2026, 19.00 WIB, shodaikai"></textarea>
     
-    <div class="mt-3 flex justify-end">
+    <div class="admin-only mt-3 flex justify-end">
         <button 
             id="btnKirimCatatan" 
             onclick="kirimCatatanKeGAS()"
@@ -3790,6 +3829,121 @@ function resetQuoteForm(isCancelClick) {
     document.getElementById("btn-submit-quote").innerText = "Kirim Quote";
     setupQuoteSenderName();
 }
+
+// ==========================================
+// KODE INTEGRASI PROFIL
+// ==========================================
+function loadProfil() {
+    const userName = localStorage.getItem("soka_user_name");
+    if (!userName) return;
+
+    fetch(APPS_SCRIPT_URL) // Menggunakan URL endpoint yang sudah ada
+        .then(res => res.json())
+        .then(data => {
+            const user = data.find(item => item.nama === userName);
+            if (user) {
+                document.getElementById('p-foto').src = user.foto || 'default-avatar.png';
+                document.getElementById('p-nama').innerText = user.nama;
+                document.getElementById('p-chiku').innerText = user.chiku;
+                document.getElementById('p-bagian').innerText = user.bagian;
+                document.getElementById('p-jabatan').innerText = user.jabatan;
+                document.getElementById('p-gohonzon').innerText = user.gohonzon;
+                document.getElementById('p-keterangan').innerText = user.keterangan;
+                document.getElementById('p-telepon').value = user.telepon;
+                document.getElementById('p-alamat').value = user.alamat;
+            }
+        });
+}
+
+// Fungsi Update
+function updateProfil() {
+    const payload = {
+        action: "updateProfil",
+        nama: localStorage.getItem("soka_user_name"),
+        telepon: document.getElementById('p-telepon').value,
+        alamat: document.getElementById('p-alamat').value
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    }).then(res => res.json()).then(res => {
+        alert(res.message);
+    });
+}
+
+// Proses foto profil
+function processProfilImage(inputElement) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const size = 300; // Ukuran tetap 300x300
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Logika Crop 1:1 (Memotong bagian tengah gambar)
+            let sourceSize = Math.min(img.width, img.height);
+            let xOffset = (img.width - sourceSize) / 2;
+            let yOffset = (img.height - sourceSize) / 2;
+
+            // Menggambar gambar ke canvas dengan area potong di tengah
+            ctx.drawImage(img, xOffset, yOffset, sourceSize, sourceSize, 0, 0, size, size);
+            
+            // Konversi ke base64
+            const base64 = canvas.toDataURL('image/jpeg', 0.5);
+            
+            // Update tampilan dan hidden input
+            document.getElementById('p-foto').src = base64;
+            document.getElementById('p-foto-base64').value = base64;
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// Update Profil (Mengirim foto ke GAS)
+function updateProfil() {
+    const payload = {
+        action: "updateProfil",
+        nama: localStorage.getItem("soka_user_name"),
+        telepon: document.getElementById('p-telepon').value,
+        alamat: document.getElementById('p-alamat').value,
+        foto: document.getElementById('p-foto-base64').value // Foto base64
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => alert(res.message))
+    .catch(err => alert("Gagal update"));
+}
+
+function checkPermissions() {
+    // Ambil jabatan dari localStorage (pastikan saat login Anda sudah menyimpan jabatan ke localStorage)
+    const savedJabatan = localStorage.getItem("soka_user_jabatan"); // Sesuaikan key-nya
+    
+    // Jika jabatan BUKAN Pimpinan, sembunyikan tombol admin-only
+    if (savedJabatan !== "Pimpinan" && savedJabatan !== "Pimpinan (Admin)") {
+        const adminButtons = document.querySelectorAll('.admin-only');
+        adminButtons.forEach(btn => {
+            btn.style.display = 'none'; // Sembunyikan tombol
+        });
+    }
+}
+
+// Panggil fungsi ini saat halaman selesai dimuat
+window.onload = function() {
+    checkPermissions();
+    // ... panggil fungsi lain seperti loadProfil() jika perlu
+};
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
