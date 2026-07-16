@@ -322,8 +322,20 @@ button.btn-submit:hover {
                 
                 <!-- Menu Tab Button & Tombol Beranda -->
 <!-- Menu Tab Button & Tombol Beranda -->
-<nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
-    <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
+<div class="block md:hidden w-full px-2">
+    <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
+        <option value="https://sokasmg.github.io">🏠 Beranda</option>
+        <option value="tab-ceritakemenangan">🏆 Cerita Kemenangan</option>
+        <option value="tab-materi">📚 Materi & Pelajaran</option>
+        <option value="tab-kehadiran">📊 Laporan Kehadiran</option>
+        <option value="tab-kunjungan" selected>🚗 Laporan Kunjungan/Shakubuku</option>
+        <option value="tab-jadwal">📅 Jadwal Kalender</option>
+        <option value="tab-database">👥 Database Anggota</option>
+    </select>
+</div>
+
+<nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
+    <a href="https://sokasmg.github.io" class="flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
         </svg>
@@ -338,16 +350,17 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran
     </button>
-    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kunjungan/Shakubuku
     </button>
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="col-span-2 md:col-span-1 tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
 </nav>
+
             </div>
         </div>
     </header>
@@ -1181,7 +1194,11 @@ button.btn-submit:hover {
             if (tabId === 'tab-jadwal') {
                 adjustCalendarScale();
             }
-        }
+                const mobileSelect = document.getElementById('tabs-select');
+    if (mobileSelect && mobileSelect.value !== tabId) {
+        mobileSelect.value = tabId;
+    }
+}
 
         function adjustCalendarScale() {
             const container = document.querySelector('.calendar-outer-container');
