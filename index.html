@@ -1110,19 +1110,23 @@
                     btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
                 }
 
-                if (floatingBtn && floatingLink && floatingText) {
-                    if (savedJabatan === "Pimpinan") {
-                        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
-                        floatingText.innerText = "🦁";
-                        floatingBtn.classList.remove('hidden');
-                    } else if (savedJabatan === "Pimpinan (Admin)") {
-                        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
-                        floatingText.innerText = "💻";
-                        floatingBtn.classList.remove('hidden');
-                    } else {
-                        floatingBtn.classList.add('hidden');
-                    }
-                }
+if (floatingBtn && floatingLink && floatingText) {
+    if (savedJabatan === "Pimpinan") {
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "🦁";
+        floatingBtn.classList.remove('hidden');
+    } else if (savedJabatan === "Anggota") { // Perbaikan: else if diletakkan setelah tutup kurung kurawal }
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "😺";
+        floatingBtn.classList.remove('hidden');
+    } else if (savedJabatan === "Pimpinan (Admin)") {
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "💻";
+        floatingBtn.classList.remove('hidden');
+    } else {
+        floatingBtn.classList.add('hidden');
+    }
+}
 
                 if (savedPinStatus === "kosong") {
                     floatingPinWarningBtn.classList.remove('hidden');
@@ -2164,39 +2168,59 @@ function scrollHorisontal(containerId, arah) {
 
     // Penarik Data Hari Penting Dinamis dari tab harisokagakkai[span_4](start_span)[span_4](end_span)
     async function loadHariPenting(targetMonth) {
-        const container = document.getElementById('containerHariPenting');
-        try {
-            const response = await fetch(CSV_URL_HARI_PENTING);
-            const csvData = await response.text();
-            const lines = csvData.split("\n");
-            let htmlContent = ""; let count = 0;
+    const container = document.getElementById('containerHariPenting');
+    try {
+        const response = await fetch(CSV_URL_HARI_PENTING);
+        const csvData = await response.text();
+        
+        // Parse CSV manual (Metode yang sama seperti sistem Anda yang lain)
+        const lines = csvData.split("\n");
+        let htmlContent = "";
+        let count = 0;
 
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const columns = lines[i].split(",");
-                if (columns.length < 2) continue;
+        // Looping baris data (lewati header baris indeks 0)
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            
+            // Atasi pemisahan kolom koma
+            const columns = lines[i].split(",");
+            if (columns.length < 2) continue;
 
-                const tglRaw = columns[0].trim();
-                const namaHariBesar = columns[1].replace(/"/g, "").trim();
-                if (!tglRaw || !namaHariBesar) continue;
+            const tglRaw = columns[0].trim(); // Contoh: "03/07" atau "03-07"
+            const namaHariBesar = columns[1].replace(/"/g, "").trim(); // Nama acaranya
 
-                const separator = tglRaw.includes('/') ? '/' : '-';
-                const parts = tglRaw.split(separator);
-                const day = parseInt(parts[0], 10);
-                const month = parseInt(parts[1], 10) - 1;
+            if (!tglRaw || !namaHariBesar) continue;
 
-                if (month === targetMonth) {
-                    const displayDay = day < 10 ? '0' + day : day;
-                    htmlContent += `${displayDay} ${namaBulanIndo[targetMonth]} : ${namaHariBesar}<br>`;
-                    count++;
-                }
+            // Ekstrak hari dan bulan dari sheet (format DD/MM atau DD-MM)
+            const separator = tglRaw.includes('/') ? '/' : '-';
+            const parts = tglRaw.split(separator);
+            
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; // Bulan JS dimulai dari 0 (Januari = 0)
+
+            // Validasi: Hanya tampilkan jika bulannya COCOK dengan bulan kalender yang sedang aktif!
+            if (month === targetMonth) {
+                // Format tanggal agar selalu 2 digit (misal: 3 Juli -> 03 Juli)
+                const displayDay = day < 10 ? '0' + day : day;
+                const namaBulanSaja = namaBulanIndo[targetMonth];
+
+                htmlContent += `${displayDay} ${namaBulanSaja} : ${namaHariBesar}<br>`;
+                count++;
             }
-            container.innerHTML = count === 0 ? "Tidak ada hari besar di bulan ini." : htmlContent;
-            setTimeout(adjustCalendarScale, 100);
-        } catch (error) {
-            container.innerHTML = "Gagal memuat hari penting.";
         }
+
+        // Jika tidak ada hari penting di bulan tersebut
+        if (count === 0) {
+            container.innerHTML = "Tidak ada hari besar di bulan ini.";
+        } else {
+            container.innerHTML = htmlContent;
+        }
+
+    } catch (error) {
+        console.error("Gagal menyedot data hari penting:", error);
+        container.innerHTML = "Gagal memuat data hari penting.";
     }
+}
 
     // Fungsi Pengunduh Gambar Otomatis (Aman dari skala layar rusak)
     document.getElementById('downloadBtn').addEventListener('click', () => {
