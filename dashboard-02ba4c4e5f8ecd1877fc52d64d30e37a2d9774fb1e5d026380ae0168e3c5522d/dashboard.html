@@ -3389,7 +3389,7 @@ function renderDataKunjungan() {
                 <span class="text-slate-300">|</span>
                 <span><i class="fa-regular fa-user"></i> Pelapor: <strong class="text-slate-700">${escapeHTMLKunjungan(item.pelapor)}</strong></span>
             </div>
-            <p class="text-slate-600 text-sm mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
+            <p class="text-slate-600 text-base mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
             ${photosHTML}
             <div class="flex justify-end gap-2 border-t pt-3">
                 <button class="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition" onclick="editEntryKunjungan(${item.rowId})">
@@ -3642,7 +3642,7 @@ function renderQuoteListItems() {
                 <div class="text-slate-400 text-xs flex items-center space-x-1">
                     <i class="fa-solid fa-quote-left text-lg text-indigo-400"></i>
                 </div>
-                <p class="text-slate-700 font-medium text-sm italic leading-relaxed text-justify">"${textVal}"</p>
+                <p class="text-slate-700 font-medium text-base italic leading-relaxed text-justify">"${textVal}"</p>
                 <div class="text-xs font-semibold text-slate-800 tracking-wide pt-1 border-t border-slate-100 flex items-center justify-between">
                     <span>— ${authorVal}</span>
                 </div>
