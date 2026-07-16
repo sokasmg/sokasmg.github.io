@@ -5,10 +5,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Integrasi Shibu Semarang</title>
     <!-- CDN CSS & JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
+    /* --- Tambahan Style untuk Halaman Laporan Kunjungan --- */
+.collapsible-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-top: 15px;
+}
+.collapsible-header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.2s;
+}
+.collapsible-header:hover {
+    background-color: #34495e;
+}
+.collapsible-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+.toggle-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+.collapsible-content {
+    max-height: 2000px;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    padding: 25px;
+}
+.collapsible-wrapper.collapsed .collapsible-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+.collapsible-wrapper.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.required::after {
+    content: " *";
+    color: #e74c3c;
+}
+input[type="text"], input[type="date"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+textarea {
+    resize: vertical;
+}
+.char-count {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: right;
+    margin-top: 2px;
+}
+.input-group {
+    display: flex;
+    gap: 8px;
+}
+.btn-browse {
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+.btn-browse:hover {
+    background-color: #626567;
+}
+.photo-helper-zone {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+.img-preview {
+    width: 60px;
+    height: 60px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    font-size: 11px;
+    color: #aaa;
+}
+.img-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.size-label {
+    font-size: 12px;
+    font-weight: 600;
+}
+.text-amber { color: #d35400; }
+.text-green { color: #27ae60; }
+
+button.btn-submit {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+button.btn-submit:hover {
+    background-color: #2980b9;
+}
+.card-list {
+    margin-top: 20px;
+}
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid #3498db;
+    position: relative;
+}
+.card-meta {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-bottom: 8px;
+}
+.card-meta strong {
+    color: #2c3e50;
+}
+.card-keterangan {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+}
+.card-photos {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.card-photo-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.card-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.btn-action {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+.btn-edit { background-color: #f39c12; color: white; }
+.btn-edit:hover { background-color: #d68910; }
+.btn-delete { background-color: #e74c3c; color: white; }
+.btn-delete:hover { background-color: #c0392b; }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+.btn-page {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.btn-page.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+.btn-page:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+    color: #aaa;
+}
+.empty-state {
+    text-align: center;
+    color: #95a5a6;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+}
+
         /* CSS Khusus Tab Kalender (Source 2) */
         .calendar-table {
             width: 100%;
@@ -89,33 +321,179 @@
                 </div>
                 
                 <!-- Menu Tab Button & Tombol Beranda -->
-                <nav class="flex flex-wrap items-center justify-center gap-2" aria-label="Tabs">
-                    <!-- Tombol Kembali Ke Beranda -->
-                    <a href="https://sokasmg.github.io" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        Beranda
-                    </a>
-                    <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+<!-- Menu Tab Button & Tombol Beranda -->
+<nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
+    <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        Beranda
+    </a>
+    <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Cerita Kemenangan
+    </button>
+    <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Materi & Pelajaran
     </button>
-                    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm">
-                        Laporan Kehadiran
-                    </button>
-                    <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
-                        Jadwal Kalender
-                    </button>
-                    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
-                        Database Anggota
-                    </button>
-                </nav>
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Laporan Kehadiran
+    </button>
+    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+        Laporan Kunjungan/Shakubuku
+    </button>
+    <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Jadwal Kalender
+    </button>
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="col-span-2 md:col-span-1 tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Database Anggota
+    </button>
+</nav>
             </div>
         </div>
     </header>
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6">
+    <main class="max-w-7xl mx-auto p-4 md:p-6"><!-- ========================================================================= -->
+    <!-- TAB BARU: CERITA KEMENANGAN                                          -->
+    <!-- ========================================================================= -->
+<div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
+    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
+            🏆 Editor Cerita Kemenangan
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
+    </div>
+    
+    <section class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+        <button onclick="toggleFormStory()" class="w-full flex justify-between items-center p-5 font-semibold text-lg text-slate-700 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+            <span id="form-title-status-story"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru</span>
+            <i id="collapse-icon-story" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+        </button>
+
+        <div id="form-container-story" class="p-6 border-t border-slate-100 hidden">
+            <form id="story-form" onsubmit="handleFormSubmitStory(event)" class="space-y-4">
+                <input type="hidden" id="edit-row-index-story">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Nama</label>
+                        <input type="text" id="input-nama-story" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Judul Cerita</label>
+                        <input type="text" id="input-judul-story" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto Profil (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-urlfotoprofil-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-urlfotoprofil-story', 'preview-profil-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-profil-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-profil-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto 1 (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-foto1-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-foto1-story', 'preview-foto1-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-foto1-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-foto1-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Foto 2 (Max 30KB)</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="input-foto2-story" readonly placeholder="Base64 Data..." class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-500 truncate outline-none">
+                            <label class="px-3 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer shrink-0 shadow-xs">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <input type="file" accept="image/*" class="hidden" onchange="processImageFileStory(this, 'input-foto2-story', 'preview-foto2-story')">
+                            </label>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between">
+                            <div id="preview-foto2-story" class="h-12 w-18 bg-slate-100 border border-slate-200 rounded-md overflow-hidden flex items-center justify-center text-xs text-slate-400">No Img</div>
+                            <span id="size-foto2-story" class="text-2xs text-slate-400">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Isi Cerita</label>
+                    <textarea id="input-isicerita-story" rows="5" required placeholder="Tuliskan cerita kemenangan di sini..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                </div>
+                <div class="flex justify-between items-center pt-2">
+    <div class="flex items-start space-x-3 max-w-[60%]">
+    </div>
+
+    <div class="flex space-x-3">
+        <button type="button" onclick="resetFormStory(true)" class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer">
+            Batal
+        </button>
+        <button type="submit" id="btn-submit-story" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer">
+            Post Cerita
+        </button>
+    </div>
+</div>
+            </form>
+        </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow-md border border-slate-100 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> Daftar Cerita Kemenangan
+            </h2>
+            <button onclick="fetchStoriesFromSheets()" class="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition cursor-pointer">
+                <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        <th class="py-3 px-4 w-12 text-center">No</th>
+                        <th class="py-3 px-4">Nama &amp; Judul</th>
+                        <th class="py-3 px-4">Preview Foto</th>
+                        <th class="py-3 px-4">Isi Cerita</th>
+                        <th class="py-3 px-4 text-center w-28">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="story-list-table" class="divide-y divide-slate-100 text-sm text-slate-700">
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-slate-400">Sedang memuat data dari Google Sheets...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="empty-state-story" class="text-center py-12 hidden">
+            <i class="fa-regular fa-folder-open text-4xl text-slate-300 mb-3"></i>
+            <p class="text-slate-400">Belum ada cerita kemenangan terdaftar.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 mt-4 border-t border-slate-100">
+            <div class="text-xs text-slate-500" id="pagination-info-story">Menampilkan 0 sampai 0 dari 0 data</div>
+            <div class="flex items-center space-x-2" id="pagination-buttons-story"></div>
+        </div>
+    </section>
+</div>
+    
     <!-- ========================================================================= -->
 <!-- TAB BARU: MATERI & PELAJARAN                                              -->
 <!-- ========================================================================= -->
@@ -163,7 +541,7 @@
                     </div>
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
-                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Q&A, dll." 
+                        <input type="text" id="kategori" required placeholder="Contoh: Bimbingan Sensei, Dasar-Dasar Buddhisme, dll." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
                     </div>
                 </div>
@@ -224,13 +602,11 @@
         </div>
     </div>
 </div>
-
-    
     
         <!-- ========================================================================= -->
         <!-- TAB 1: LAPORAN KEHADIRAN                                                 -->
         <!-- ========================================================================= -->
-        <div id="tab-kehadiran" class="tab-content space-y-6">
+        <div id="tab-kehadiran" class="tab-content hidden space-y-6">
             <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
                 <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
                     LAPORAN KEHADIRAN
@@ -297,20 +673,13 @@
                     </div>
                     
                     <!-- Pelapor -->
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
                         <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                </div>
-                
-                <div class="flex justify-end border-t border-slate-100 pt-4">
-                    <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
+                          <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
                         <span id="btnText">Lapor</span>
                     </button>
                 </div>
+  
             </form>
-
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
@@ -349,11 +718,133 @@
                 </div>
             </div>
         </div>
+        
+<!-- ========================================================================= -->
+<!-- TAB: KUNJUNGAN & SHAKUBUKU                                               -->
+<!-- ========================================================================= -->
+<div id="tab-kunjungan" class="tab-content max-w-4xl mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-people-roof text-emerald-600"></i> Laporan Kunjungan & Shakubuku
+    </h1>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8" id="formWrapper">
+        <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-700 transition" id="formHeader">
+            <h3 class="font-semibold text-lg flex items-center gap-2" id="headerTitle">
+                <i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru
+            </h3>
+            <span class="text-sm transition-transform duration-300" id="toggleIcon">
+                <i class="fa-solid fa-chevron-down"></i>
+            </span>
+        </div>
+        
+        <div class="p-6 transition-all duration-300 hidden" id="formContainerKunjungan">
+            <form id="laporanFormKunjungan" class="space-y-4">
+                <input type="hidden" id="entryIdKunjungan">
+
+                <div>
+                    <label for="tanggalKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Tanggal <span class="text-red-500">*</span></label>
+                    <input type="date" id="tanggalKunjungan" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
+                </div>
+
+                <div>
+                    <label for="pelaporKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Pelapor <span class="text-red-500">*</span></label>
+                    <input type="text" id="pelaporKunjungan" placeholder="Nama pelapor..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
+                </div>
+
+                <div>
+                    <label for="keteranganKunjungan" class="block text-sm font-semibold text-slate-700 mb-1">Keterangan <span class="text-red-500">*</span></label>
+                    <textarea id="keteranganKunjungan" rows="5" maxlength="500" placeholder="Tulis keterangan di sini (maksimal 500 karakter)..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required></textarea>
+                    <div class="text-right text-xs text-slate-400 mt-1"><span id="charCount">0</span>/500 karakter</div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 1 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto1" placeholder="Base64 / URL foto 1..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto1').click()">Browse</button>
+                        <input type="file" id="file-foto1" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto1', 'preview-foto1')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto1">No img</div>
+                        <span id="size-foto1" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 2 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto2" placeholder="Base64 / URL foto 2..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto2').click()">Browse</button>
+                        <input type="file" id="file-foto2" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto2', 'preview-foto2')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto2">No img</div>
+                        <span id="size-foto2" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Foto 3 (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="foto3" placeholder="Base64 / URL foto 3..." class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-xs text-slate-500" readonly>
+                        <button type="button" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition shrink-0" onclick="document.getElementById('file-foto3').click()">Browse</button>
+                        <input type="file" id="file-foto3" class="hidden" accept="image/*" onchange="processImageKunjungan(this, 'foto3', 'preview-foto3')">
+                    </div>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="w-16 h-16 border border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50 text-xs text-slate-400 overflow-hidden" id="preview-foto3">No img</div>
+                        <span id="size-foto3" class="text-xs font-semibold"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold transition shadow-md shadow-emerald-100" id="btnSubmitKunjungan">Kirim Laporan</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-list-check text-slate-500"></i> Daftar Laporan
+    </h2>
+    
+    <div id="cardListKunjungan" class="space-y-4 mb-6"></div>
+    
+    <div id="paginationKunjungan" class="flex justify-center items-center gap-2"></div>
+</div>
 
         <!-- ========================================================================= -->
         <!-- TAB 2: KALENDER JADWAL                                                    -->
         <!-- ========================================================================= -->
         <div id="tab-jadwal" class="tab-content hidden space-y-4">
+<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
+    <label for="catatanJadwal" class="block text-sm font-semibold text-gray-700 mb-1">
+        <i class="fa-solid fa-file-pen mr-2 text-indigo-600"></i>Tambah Catatan:
+    </label>
+    
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
+        <p class="text-xs text-amber-800 font-medium">
+            <i class="fa-solid fa-info-circle mr-1"></i> <strong>Contoh format penulisan jadwal:</strong><br>
+            06/1/2026, 10:00 WIB, pertemuan kemenangan<br>
+            12/1/2026, 19.00 WIB, shodaikai<br>
+            15/1/2026, 10.00 WIB, pertemuan salatiga<br>
+            dst...
+        </p>
+    </div>
+
+    <textarea 
+        id="catatanInput" 
+        rows="15" 
+        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-y font-mono"
+        placeholder="Ketik jadwal di sini mengikuti format contoh di atas.&#10;Contoh:&#10;06/1/2026, 10:00 WIB, pertemuan kemenangan&#10;12/1/2026, 19.00 WIB, shodaikai"></textarea>
+    
+    <div class="mt-3 flex justify-end">
+        <button 
+            id="btnKirimCatatan" 
+            onclick="kirimCatatanKeGAS()"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition-colors duration-200 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-paper-plane"></i> Generate Jadwal Bulanan
+        </button>
+    </div>
+</div>
+
             <div class="bg-white p-4 rounded-xl shadow-xs text-center">
                 <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-2 px-6 rounded-lg transition text-sm cursor-pointer shadow-sm">
                     📥 Download Jadwal
@@ -408,7 +899,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- ========================================================================= -->
         <!-- TAB 3: DATABASE ANGGOTA                                                  -->
@@ -1542,82 +2032,126 @@
         }
 
         // --- GLOBAL INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const tanggalEl = document.getElementById('tanggal');
-            if(tanggalEl) tanggalEl.valueAsDate = new Date();
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Logika pengisian tanggal otomatis (Bawaan Anda)
+    const tanggalEl = document.getElementById('tanggal');
+    if(tanggalEl) tanggalEl.valueAsDate = new Date();
+    
+    // 2. Logika autocomplete & menyembunyikan input Pelapor di Berbagai Tab
+    const savedUsername = localStorage.getItem('soka_user_name');
+
+    // Tulis semua ID input text dari berbagai tab Anda di dalam array ini:
+    const daftarIdPelapor = [
+        'pelaporKunjungan',
+        'pelapor',
+        'pengirim'
+    ];
+
+    if (savedUsername && savedUsername.trim() !== "") {
+        // Lakukan perulangan untuk setiap ID yang didaftarkan di atas
+        daftarIdPelapor.forEach(id => {
+            const inputElement = document.getElementById(id);
             
-            fetchData();
-            initCalendar();
-            initDatabase();
+            // Jika elemen input tersebut ditemukan di halaman/tab saat ini
+            if (inputElement) {
+                inputElement.value = savedUsername; // Isi otomatis di belakang layar
+                inputElement.readOnly = true;       // Kunci input sebagai tindakan preventif
+                
+                // --- UPDATE BARU: Sembunyikan Input ---
+                inputElement.classList.add('hidden'); 
+                
+                // --- UPDATE BARU: Cari label pasangannya dan sembunyikan juga ---
+                // Kode ini mencari elemen <label for="ID_INPUT"> yang terkait
+                const labelElement = document.querySelector(`label[for="${id}"]`);
+                if (labelElement) {
+                    labelElement.classList.add('hidden');
+                }
+
+                // Tambahan opsional: Jika input dibungkus dalam div container (misal pembungkus margin 'mb-4')
+                // Anda juga bisa menyembunyikan div pembungkusnya agar tidak ada jarak kosong aneh di form.
+                // Caranya, aktifkan baris di bawah ini jika struktur HTML Anda memiliki div pembungkus:
+                // if (inputElement.parentElement) { inputElement.parentElement.classList.add('hidden'); }
+            }
         });
+    } else {
+        // Jika belum login, hentikan proses dan tendang kembali ke index.html
+        alert("Sesi Anda telah habis atau Anda belum login. Silakan login kembali.");
+        window.location.href = "index.html"; 
+        return; 
+    }
+
+    // 3. Fungsi inisialisasi lainnya (Bawaan Anda)
+    fetchData();
+    initCalendar();
+    initDatabase();
+});
         
-        // =========================================================================
-// JAVASCRIPT UNTUK TAB MATERI & PELAJARAN
+// =========================================================================
+// JAVASCRIPT UNTUK TAB MATERI & PELAJARAN (VERSI PERBAIKAN BENTROK VARIABEL)
 // =========================================================================
 
-// Menggunakan URL Apps Script Anda dengan parameter eksplisit untuk memanggil sheet pelajaran
 const WEB_APP_URL_MATERI = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec?sheet=materipelajaran";
 
-let articles = [];
+// MENGGUNAKAN NAMA VARIABEL UNIK AGAR TIDAK BENTROK
+let dataArticlesMateri = []; 
 let currentPageMateri = 1;
 const itemsPerPageMateri = 10;
 
-// Elemen DOM (Menggunakan nama variabel unik agar tidak bentrok dengan script bawaan tab lain)
-const formContainer = document.getElementById('formContainer');
-const articleForm = document.getElementById('articleForm');
-const btnToggleForm = document.getElementById('btnToggleForm');
-const btnCancelForm = document.getElementById('btnCancelForm');
-const btnRefresh = document.getElementById('btnRefresh');
-const toggleIcon = document.getElementById('toggleIcon');
-const toggleText = document.getElementById('toggleText');
-const formTitle = document.getElementById('formTitle');
-const btnSubmit = document.getElementById('btnSubmit');
-const editRowIndexInput = document.getElementById('editRowIndex');
-const articlesContainer = document.getElementById('articlesContainer');
-const totalBadge = document.getElementById('totalBadge');
-const paginationInfo = document.getElementById('paginationInfo');
-const paginationControls = document.getElementById('paginationControls');
-const btnReset = document.getElementById('btnReset');
-const loadingState = document.getElementById('loadingState');
+// Elemen DOM dengan nama variabel unik
+const formContainerMateri = document.getElementById('formContainer');
+const articleFormMateri = document.getElementById('articleForm');
+const btnToggleFormMateri = document.getElementById('btnToggleForm');
+const btnCancelFormMateri = document.getElementById('btnCancelForm');
+const btnRefreshMateri = document.getElementById('btnRefresh');
+const toggleIconMateri = document.getElementById('toggleIcon');
+const toggleTextMateri = document.getElementById('toggleText');
+const formTitleMateri = document.getElementById('formTitle');
+const btnSubmitMateri = document.getElementById('btnSubmit');
+const editRowIndexInputMateri = document.getElementById('editRowIndex');
+const articlesContainerMateri = document.getElementById('articlesContainer');
+const totalBadgeMateri = document.getElementById('totalBadge');
+const paginationInfoMateri = document.getElementById('paginationInfo');
+const paginationControlsMateri = document.getElementById('paginationControls');
+const btnResetMateri = document.getElementById('btnReset');
+const loadingStateMateri = document.getElementById('loadingState');
 
 // Toggle form (collapsible)
-function toggleForm(show = null) {
-    const isHidden = formContainer.classList.contains('hidden');
+function toggleFormMateri(show = null) {
+    const isHidden = formContainerMateri.classList.contains('hidden');
     const shouldShow = show !== null ? show : isHidden;
 
     if (shouldShow) {
-        formContainer.classList.remove('hidden');
-        toggleIcon.className = 'fas fa-minus';
-        toggleText.innerText = 'Tutup Form';
+        formContainerMateri.classList.remove('hidden');
+        toggleIconMateri.className = 'fas fa-minus';
+        toggleTextMateri.innerText = 'Tutup Form';
     } else {
-        formContainer.classList.add('hidden');
-        toggleIcon.className = 'fas fa-plus';
-        toggleText.innerText = 'Tulis Artikel Baru';
-        resetForm();
+        formContainerMateri.classList.add('hidden');
+        toggleIconMateri.className = 'fas fa-plus';
+        toggleTextMateri.innerText = 'Tulis Artikel Baru';
+        resetFormMateri();
     }
 }
 
-if(btnToggleForm) btnToggleForm.addEventListener('click', () => toggleForm());
-if(btnCancelForm) btnCancelForm.addEventListener('click', () => toggleForm(false));
-if(btnReset) btnReset.addEventListener('click', () => resetForm());
-if(btnRefresh) btnRefresh.addEventListener('click', fetchArticles);
+if(btnToggleFormMateri) btnToggleFormMateri.addEventListener('click', () => toggleFormMateri());
+if(btnCancelFormMateri) btnCancelFormMateri.addEventListener('click', () => toggleFormMateri(false));
+if(btnResetMateri) btnResetMateri.addEventListener('click', () => resetFormMateri());
+if(btnRefreshMateri) btnRefreshMateri.addEventListener('click', fetchArticlesMateri);
 
-function resetForm() {
-    articleForm.reset();
-    editRowIndexInput.value = '';
-    formTitle.innerHTML = '<i class="fas fa-pen-to-square"></i> Buat Postingan Baru';
-    btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
-    btnSubmit.disabled = false;
+function resetFormMateri() {
+    articleFormMateri.reset();
+    editRowIndexInputMateri.value = '';
+    formTitleMateri.innerHTML = '<i class="fas fa-pen-to-square"></i> Buat Postingan Baru';
+    btnSubmitMateri.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
+    btnSubmitMateri.disabled = false;
 }
 
 // Ambil Data menggunakan Fetch API
-async function fetchArticles() {
-    if (!loadingState) return;
-    loadingState.classList.remove('hidden');
-    articlesContainer.innerHTML = '';
+async function fetchArticlesMateri() {
+    if (!loadingStateMateri) return;
+    loadingStateMateri.classList.remove('hidden');
+    articlesContainerMateri.innerHTML = '';
     
     try {
-        // Percobaan 1: Mengambil langsung (Direct Fetch)
         const response = await fetch(WEB_APP_URL_MATERI, {
             method: 'GET',
             redirect: 'follow' 
@@ -1625,74 +2159,67 @@ async function fetchArticles() {
         
         if (!response.ok) throw new Error("Gagal direct fetch");
         
-        articles = await response.json();
-        articles.reverse(); 
+        dataArticlesMateri = await response.json();
+        dataArticlesMateri.reverse(); 
         currentPageMateri = 1;
-        renderArticles();
+        renderArticlesMateri();
     } catch (error) {
         console.warn("Direct fetch gagal/CORS. Mencoba proxy...", error);
         
-        // Percobaan 2: Fallback menggunakan Proxy yang lebih stabil (allorigins)
         try {
             const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(WEB_APP_URL_MATERI);
             const responseProxy = await fetch(proxyUrl);
             if (!responseProxy.ok) throw new Error("Proxy bermasalah");
             
             const dataProxy = await responseProxy.json();
-            
-            // Membersihkan data string kiriman proxy sebelum diubah jadi JSON objek
             let rawContents = dataProxy.contents;
-            articles = JSON.parse(rawContents);
+            dataArticlesMateri = JSON.parse(rawContents);
             
-            if (Array.isArray(articles)) {
-                articles.reverse(); 
+            if (Array.isArray(dataArticlesMateri)) {
+                dataArticlesMateri.reverse(); 
                 currentPageMateri = 1;
-                renderArticles();
+                renderArticlesMateri();
             } else {
                 throw new Error("Data yang diterima bukan Array");
             }
             
         } catch (proxyError) {
             console.error("Semua metode fetch gagal:", proxyError);
-            loadingState.classList.add('hidden');
-            articlesContainer.innerHTML = `
+            loadingStateMateri.classList.add('hidden');
+            articlesContainerMateri.innerHTML = `
                 <div class="bg-red-50 text-red-800 p-5 rounded-xl border border-red-200 text-sm shadow-sm">
-                    <div class="font-bold text-base mb-1"><i class="fas fa-exclamation-triangle mr-2"></i> Koneksi Tertahan / Mengalami Masalah</div>
-                    <p class="text-gray-600 mb-3">Sistem tidak bisa membaca data dari Google Sheets. Coba ikuti 2 langkah pengecekan ini:</p>
-                    <ol class="list-decimal pl-5 space-y-1 text-gray-600 text-xs">
-                        <li>Buka URL Web App Anda langsung di tab baru browser. Apakah keluar data teks tulisan/JSON? Jika meminta login atau kosong, berarti setelan <b>Who has access</b> belum diubah ke <b>Anyone</b> saat Deploy.</li>
-                        <li>Pastikan di Google Sheets Anda, nama tab sheet paling bawah sudah benar-benar tertulis <b>pelajaran</b> (huruf kecil semua, tanpa spasi tambahan).</li>
-                    </ol>
+                    <div class="font-bold text-base mb-1"><i class="fas fa-exclamation-triangle mr-2"></i> Koneksi Tertahan</div>
+                    <p class="text-gray-600 mb-3">Sistem tidak bisa membaca data dari Google Sheets.</p>
                 </div>
             `;
         }
     } finally {
-        loadingState.classList.add('hidden');
+        loadingStateMateri.classList.add('hidden');
     }
 }
 
-// RENDER DATA ARTIKEL KE LAYAR (Dengan Fitur Collapse/Expand Isi Artikel)
-function renderArticles() {
-    articlesContainer.innerHTML = '';
-    totalBadge.innerText = articles.length;
+// RENDER DATA ARTIKEL
+function renderArticlesMateri() {
+    articlesContainerMateri.innerHTML = '';
+    totalBadgeMateri.innerText = dataArticlesMateri.length;
 
-    if (articles.length === 0) {
-        articlesContainer.innerHTML = `
+    if (dataArticlesMateri.length === 0) {
+        articlesContainerMateri.innerHTML = `
             <div class="bg-white rounded-xl p-8 text-center border border-gray-200 text-gray-500 shadow-sm">
-                <i class="fas fa-folder-open text-4xl text-gray-300 mb-3 block"></i> Belum ada data artikel di Google Sheets.
+                <i class="fas fa-folder-open text-4xl text-gray-300 mb-3 block"></i> Belum ada data artikel.
             </div>
         `;
-        paginationInfo.innerText = "Menampilkan 0 - 0 dari 0 artikel";
-        paginationControls.innerHTML = '';
+        paginationInfoMateri.innerText = "Menampilkan 0 - 0 dari 0 artikel";
+        paginationControlsMateri.innerHTML = '';
         return;
     }
 
-    const totalPages = Math.ceil(articles.length / itemsPerPageMateri);
+    const totalPages = Math.ceil(dataArticlesMateri.length / itemsPerPageMateri);
     const startIndex = (currentPageMateri - 1) * itemsPerPageMateri;
-    const endIndex = Math.min(startIndex + itemsPerPageMateri, articles.length);
-    const paginatedItems = articles.slice(startIndex, endIndex);
+    const endIndex = Math.min(startIndex + itemsPerPageMateri, dataArticlesMateri.length);
+    const paginatedItems = dataArticlesMateri.slice(startIndex, endIndex);
 
-    paginationInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${articles.length} artikel`;
+    paginationInfoMateri.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${dataArticlesMateri.length} artikel`;
 
     paginatedItems.forEach((article, index) => {
         const uniqueId = `isi-${article.row_index}-${index}`;
@@ -1725,18 +2252,18 @@ function renderArticles() {
             </div>
             
             <div class="flex justify-end gap-2 pt-3 border-t border-gray-50">
-                <button onclick="editArticleDirect('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs font-medium rounded-md border border-amber-200 transition">
+                <button onclick="editArticleDirectMateri('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs font-medium rounded-md border border-amber-200 transition">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <button onclick="deleteArticleDirect('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-medium rounded-md border border-red-200 transition">
+                <button onclick="deleteArticleDirectMateri('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-medium rounded-md border border-red-200 transition">
                     <i class="fas fa-trash-alt"></i> Delete
                 </button>
             </div>
         `;
-        articlesContainer.appendChild(card);
+        articlesContainerMateri.appendChild(card);
     });
 
-    renderPaginationControls(totalPages);
+    renderPaginationControlsMateri(totalPages);
 }
 
 // Buka-Tutup (Collapse) Artikel
@@ -1757,46 +2284,46 @@ window.toggleReadMore = function(containerId, buttonId) {
     }
 };
 
-function renderPaginationControls(totalPages) {
-    paginationControls.innerHTML = '';
+function renderPaginationControlsMateri(totalPages) {
+    paginationControlsMateri.innerHTML = '';
     if (totalPages <= 1) return;
 
     const prevBtn = document.createElement('button');
     prevBtn.className = `px-3 py-1.5 rounded-md border font-medium text-xs transition ${currentPageMateri === 1 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
     prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
     prevBtn.disabled = currentPageMateri === 1;
-    prevBtn.addEventListener('click', () => { if (currentPageMateri > 1) { currentPageMateri--; renderArticles(); } });
-    paginationControls.appendChild(prevBtn);
+    prevBtn.addEventListener('click', () => { if (currentPageMateri > 1) { currentPageMateri--; renderArticlesMateri(); } });
+    paginationControlsMateri.appendChild(prevBtn);
 
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.className = `px-3 py-1.5 rounded-md border text-xs font-semibold transition ${currentPageMateri === i ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
         pageBtn.innerText = i;
-        pageBtn.addEventListener('click', () => { currentPageMateri = i; renderArticles(); });
-        paginationControls.appendChild(pageBtn);
+        pageBtn.addEventListener('click', () => { currentPageMateri = i; renderArticlesMateri(); });
+        paginationControlsMateri.appendChild(pageBtn);
     }
 
     const nextBtn = document.createElement('button');
     nextBtn.className = `px-3 py-1.5 rounded-md border font-medium text-xs transition ${currentPageMateri === totalPages ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`;
     nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
     nextBtn.disabled = currentPageMateri === totalPages;
-    nextBtn.addEventListener('click', () => { if (currentPageMateri < totalPages) { currentPageMateri++; renderArticles(); } });
-    paginationControls.appendChild(nextBtn);
+    nextBtn.addEventListener('click', () => { if (currentPageMateri < totalPages) { currentPageMateri++; renderArticlesMateri(); } });
+    paginationControlsMateri.appendChild(nextBtn);
 }
 
 // Kirim Data Postingan Baru / Update
-if (articleForm) {
-    articleForm.addEventListener('submit', async (e) => {
+if (articleFormMateri) {
+    articleFormMateri.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const judul = document.getElementById('judul').value.trim();
         const kategori = document.getElementById('kategori').value.trim();
         const pengirim = document.getElementById('pengirim').value.trim();
         const isi = document.getElementById('isi').value.trim();
-        const editRowIndex = editRowIndexInput.value;
+        const editRowIndex = editRowIndexInputMateri.value;
 
-        btnSubmit.disabled = true;
-        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+        btnSubmitMateri.disabled = true;
+        btnSubmitMateri.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
 
         const formData = new URLSearchParams();
         formData.append('judul', judul);
@@ -1819,44 +2346,44 @@ if (articleForm) {
                 body: formData.toString()
             });
             
-            alert(editRowIndex !== '' ? 'Perubahan berhasil disimpan ke Google Sheets!' : 'Artikel berhasil diposting ke Google Sheets!');
-            toggleForm(false);
-            setTimeout(fetchArticles, 1800);
+            alert(editRowIndex !== '' ? 'Perubahan berhasil disimpan!' : 'Artikel berhasil diposting!');
+            toggleFormMateri(false);
+            setTimeout(fetchArticlesMateri, 1800);
         } catch (error) {
             console.error("Error Form:", error);
             alert('Terjadi kesalahan saat menyimpan data.');
-            btnSubmit.disabled = false;
-            btnSubmit.innerHTML = editRowIndex !== '' ? '<i class="fas fa-save mr-2"></i>Simpan' : '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
+            btnSubmitMateri.disabled = false;
+            btnSubmitMateri.innerHTML = editRowIndex !== '' ? '<i class="fas fa-save mr-2"></i>Simpan' : '<i class="fas fa-paper-plane mr-2"></i>Post Artikel';
         }
     });
 }
 
-window.editArticleDirect = function(rowIndex) {
-    const item = articles.find(a => a.row_index == rowIndex);
+window.editArticleDirectMateri = function(rowIndex) {
+    const item = dataArticlesMateri.find(a => a.row_index == rowIndex);
     if (item) {
         document.getElementById('judul').value = item.judul || '';
         document.getElementById('kategori').value = item.kategori || '';
         document.getElementById('pengirim').value = item.pengirim || '';
         document.getElementById('isi').value = item.isi || '';
-        editRowIndexInput.value = rowIndex;
+        editRowIndexInputMateri.value = rowIndex;
 
-        formTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Artikel (Baris: ' + rowIndex + ')';
-        btnSubmit.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
-        toggleForm(true);
+        formTitleMateri.innerHTML = '<i class="fas fa-edit"></i> Edit Artikel (Baris: ' + rowIndex + ')';
+        btnSubmitMateri.innerHTML = '<i class="fas fa-save mr-2"></i>Simpan';
+        toggleFormMateri(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 
-window.deleteArticleDirect = async function(rowIndex) {
-    if (confirm("Apakah Anda yakin ingin menghapus artikel ini dari Google Sheets?")) {
+window.deleteArticleDirectMateri = async function(rowIndex) {
+    if (confirm("Apakah Anda yakin ingin menghapus artikel ini?")) {
         const formData = new URLSearchParams();
         formData.append('action', 'delete');
         formData.append('row_index', rowIndex);
 
         try {
-            articlesContainer.innerHTML = `
+            articlesContainerMateri.innerHTML = `
                 <div class="text-center py-6 text-gray-500 text-sm">
-                    <i class="fas fa-spinner fa-spin mr-2 text-red-500"></i> Menghapus baris ke-${rowIndex}...
+                    <i class="fas fa-spinner fa-spin mr-2 text-red-500"></i> Menghapus...
                 </div>`;
             
             await fetch(WEB_APP_URL_MATERI, {
@@ -1867,18 +2394,904 @@ window.deleteArticleDirect = async function(rowIndex) {
             });
 
             alert('Artikel berhasil dihapus!');
-            setTimeout(fetchArticles, 1800);
+            setTimeout(fetchArticlesMateri, 1800);
         } catch (error) {
             console.error("Error Delete:", error);
             alert('Gagal menghapus data.');
-            fetchArticles();
+            fetchArticlesMateri();
         }
     }
 };
 
-// Menjalankan fetch data otomatis saat halaman selesai dimuat
-document.addEventListener('DOMContentLoaded', fetchArticles);
+document.addEventListener('DOMContentLoaded', fetchArticlesMateri);
+
+// =========================================================================
+// JAVASCRIPT MODUL: CERITA KEMENANGAN
+// =========================================================================
+const GAS_WEB_APP_URL_STORY = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec";
+
+let stories = [];
+let currentStoryPage = 1;
+const itemsPerStoryPage = 10;
+let isStoryFormOpen = false;
+
+// Memanfaatkan Loading Overlay Global yang sudah ada di dashboard Anda
+function showGlobalLoading(show, message = "Memproses data...") {
+    // Jika dashboard Anda memiliki fungsi loading sendiri (misalnya showLoading), pastikan fungsinya disamakan.
+    // Jika tidak, script di bawah ini akan memanipulasi overlay bawaan cerita_kemenangan:
+    const overlay = document.getElementById('loading-overlay');
+    const textEl = document.getElementById('loading-text');
+    if (overlay && textEl) {
+        textEl.innerText = message;
+        if (show) overlay.classList.remove('hidden');
+        else overlay.classList.add('hidden');
+    }
+}
+
+function toggleFormStory(forceOpen = false) {
+    const container = document.getElementById('form-container-story');
+    const icon = document.getElementById('collapse-icon-story');
+    if (forceOpen) isStoryFormOpen = false;
+    
+    if (isStoryFormOpen) {
+        container.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+        isStoryFormOpen = false;
+    } else {
+        container.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+        isStoryFormOpen = true;
+    }
+}
+
+function processImageFileStory(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    showGlobalLoading(true, "Mengompresi gambar...");
+
+    let sizeLabelId = "";
+    if (targetInputId === "input-urlfotoprofil-story") sizeLabelId = "size-profil-story";
+    else if (targetInputId === "input-foto1-story") sizeLabelId = "size-foto1-story";
+    else if (targetInputId === "input-foto2-story") sizeLabelId = "size-foto2-story";
+
+    try {
+        const reader = new FileReader();
+        reader.onerror = function() {
+            showGlobalLoading(false);
+            alert("Gagal membaca file dari perangkat Anda.");
+        };
+
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onerror = function() {
+                showGlobalLoading(false);
+                alert("File yang Anda pilih bukan gambar yang valid.");
+            };
+
+            img.onload = function() {
+                try {
+                    const maxDimension = 480;
+                    let targetWidth, targetHeight;
+
+                    if (img.width > img.height) {
+                        targetWidth = maxDimension;
+                        targetHeight = Math.round((maxDimension / img.width) * img.height);
+                    } else {
+                        targetHeight = maxDimension;
+                        targetWidth = Math.round((maxDimension / img.height) * img.width);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 30) {
+                            sizeLabel.className = "text-2xs font-semibold text-amber-600";
+                            sizeLabel.innerText += " (>30KB)";
+                        } else {
+                            sizeLabel.className = "text-2xs font-semibold text-green-600";
+                        }
+                    }
+                    showGlobalLoading(false);
+                } catch (innerError) {
+                    showGlobalLoading(false);
+                    alert("Gagal memproses gambar pada Canvas: " + innerError.message);
+                }
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        showGlobalLoading(false);
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+async function fetchStoriesFromSheets() {
+    try {
+        const response = await fetch(`${GAS_WEB_APP_URL_STORY}?sheet=ceritakemenangan`);
+        const data = await response.json();
+        if(Array.isArray(data)) {
+            stories = data;
+            renderStoryTable();
+        }
+    } catch (error) {
+        console.error("Gagal memuat data:", error);
+        document.getElementById('story-list-table').innerHTML = `
+            <tr><td colspan="5" class="text-center py-8 text-red-500"><i class="fa-solid fa-circle-exclamation mr-1"></i> Gagal memuat data cerita.</td></tr>
+        `;
+    }
+}
+
+async function handleFormSubmitStory(e) {
+    e.preventDefault();
+    showGlobalLoading(true, "Sedang mengirim cerita kemenangan ke Google Sheets...");
+    
+    const rowIndex = document.getElementById('edit-row-index-story').value;
+    const action = rowIndex ? "update" : "post";
+
+    const searchParams = new URLSearchParams();
+    searchParams.append("target_sheet", "ceritakemenangan");
+    searchParams.append("action", action);
+    searchParams.append("row_index", rowIndex || "");
+    searchParams.append("nama", document.getElementById('input-nama-story').value.trim());
+    searchParams.append("judul", document.getElementById('input-judul-story').value.trim());
+    searchParams.append("urlfotoprofil", document.getElementById('input-urlfotoprofil-story').value);
+    searchParams.append("foto1", document.getElementById('input-foto1-story').value);
+    searchParams.append("foto2", document.getElementById('input-foto2-story').value);
+    searchParams.append("isicerita", document.getElementById('input-isicerita-story').value.trim());
+
+    try {
+        await fetch(GAS_WEB_APP_URL_STORY, {
+            method: "POST",
+            mode: "no-cors", 
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: searchParams.toString()
+        });
+        
+        setTimeout(async () => {
+            resetFormStory();
+            await fetchStoriesFromSheets();
+            showGlobalLoading(false);
+            alert(action === "update" ? "Cerita berhasil diperbarui!" : "Cerita baru berhasil diposting!");
+        }, 1500);
+    } catch (error) {
+        showGlobalLoading(false);
+        alert("Terjadi kesalahan transmisi data.");
+    }
+}
+
+function editStory(rowIndex) {
+    const story = stories.find(item => item.row_index === rowIndex);
+    if (!story) return;
+
+    document.getElementById('edit-row-index-story').value = story.row_index;
+    document.getElementById('input-nama-story').value = story.nama || "";
+    document.getElementById('input-judul-story').value = story.judul || "";
+    document.getElementById('input-urlfotoprofil-story').value = story.urlfotoprofil || "";
+    document.getElementById('input-foto1-story').value = story.foto1 || "";
+    document.getElementById('input-foto2-story').value = story.foto2 || "";
+    document.getElementById('input-isicerita-story').value = story.isicerita || "";
+
+    setupPreviewFromBase64Story('input-urlfotoprofil-story', 'preview-profil-story', 'size-profil-story');
+    setupPreviewFromBase64Story('input-foto1-story', 'preview-foto1-story', 'size-foto1-story');
+    setupPreviewFromBase64Story('input-foto2-story', 'preview-foto2-story', 'size-foto2-story');
+
+    document.getElementById('btn-submit-story').innerText = "Update Cerita";
+    document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i>Edit Cerita Baris #${story.row_index}`;
+    
+    toggleFormStory(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setupPreviewFromBase64Story(inputId, previewId, sizeId) {
+    const val = document.getElementById(inputId).value;
+    const previewContainer = document.getElementById(previewId);
+    const sizeContainer = document.getElementById(sizeId);
+    
+    if(val && val.startsWith('data:image')) {
+        previewContainer.innerHTML = `<img src="${val}" class="w-full h-full object-cover">`;
+        const kb = ((val.length - val.indexOf(',') - 1) * 3 / 4) / 1024;
+        sizeContainer.innerText = `${kb.toFixed(1)} KB`;
+        sizeContainer.className = "text-2xs font-semibold text-green-600";
+    } else {
+        previewContainer.innerHTML = "No Img";
+        sizeContainer.innerText = "0 KB";
+        sizeContainer.className = "text-2xs text-slate-400";
+    }
+}
+
+async function deleteStory(rowIndex) {
+    if(confirm(`Hapus permanen cerita kemenangan?`)) {
+        showGlobalLoading(true, "Menghapus data dari Google Sheets...");
+        
+        const searchParams = new URLSearchParams();
+        searchParams.append("target_sheet", "ceritakemenangan");
+        searchParams.append("action", "delete");
+        searchParams.append("row_index", rowIndex);
+
+        try {
+            await fetch(GAS_WEB_APP_URL_STORY, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: searchParams.toString()
+            });
+
+            setTimeout(async () => {
+                await fetchStoriesFromSheets();
+                showGlobalLoading(false);
+                alert("Data cerita berhasil dihapus permanen!");
+            }, 2000);
+        } catch (error) {
+            showGlobalLoading(false);
+            alert("Terjadi kesalahan sistem saat mencoba menghapus.");
+        }
+    }
+}
+
+function resetFormStory(closeAfterReset = false) {
+    document.getElementById('story-form').reset();
+    document.getElementById('edit-row-index-story').value = "";
+    document.getElementById('btn-submit-story').innerText = "Post Cerita";
+    document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru`;
+    
+    ['preview-profil-story', 'preview-foto1-story', 'preview-foto2-story'].forEach(id => document.getElementById(id).innerHTML = "No Img");
+    ['size-profil-story', 'size-foto1-story', 'size-foto2-story'].forEach(id => {
+        document.getElementById(id).innerText = "0 KB";
+        document.getElementById(id).className = "text-2xs text-slate-400";
+    });
+
+    if(closeAfterReset) toggleFormStory();
+}
+
+function renderStoryTable() {
+    const tbody = document.getElementById('story-list-table');
+    const emptyState = document.getElementById('empty-state-story');
+    tbody.innerHTML = "";
+
+    if (stories.length === 0) {
+        emptyState.classList.remove('hidden');
+        updateStoryPaginationControls(0);
+        return;
+    } else {
+        emptyState.classList.add('hidden');
+    }
+
+    const startIndex = (currentStoryPage - 1) * itemsPerStoryPage;
+    const endIndex = Math.min(startIndex + itemsPerStoryPage, stories.length);
+    const paginatedItems = stories.slice(startIndex, startIndex + itemsPerStoryPage);
+
+    paginatedItems.forEach((story, index) => {
+        const globalIndex = startIndex + index + 1;
+        
+        const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
+        const hasF1 = story.foto1 && story.foto1.startsWith('data:image');
+        const hasF2 = story.foto2 && story.foto2.startsWith('data:image');
+
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-4 px-4 text-center font-medium text-slate-400">${globalIndex}</td>
+                <td class="py-4 px-4">
+                    <div class="font-semibold text-slate-900">${story.judul || '-'}</div>
+                    <div class="text-xs text-indigo-600 font-medium">Oleh: ${story.nama || '-'}</div>
+                </td>
+                <td class="py-4 px-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-full border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Profil">
+                            ${hasProfil ? `<img src="${story.urlfotoprofil}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user"></i>`}
+                        </div>
+                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 1">
+                            ${hasF1 ? `<img src="${story.foto1}" class="w-full h-full object-cover">` : `F1`}
+                        </div>
+                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 2">
+                            ${hasF2 ? `<img src="${story.foto2}" class="w-full h-full object-cover">` : `F2`}
+                        </div>
+                    </div>
+                </td>
+                <td class="py-4 px-4">
+                    <p class="line-clamp-2 text-xs text-slate-500 max-w-xs md:max-w-md">${story.isicerita || '-'}</p>
+                </td>
+                <td class="py-4 px-4 text-center">
+                    <div class="inline-flex space-x-2">
+                        <button onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteStory(${story.row_index})" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition cursor-pointer">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    updateStoryPaginationControls(stories.length, startIndex, endIndex);
+}
+
+function updateStoryPaginationControls(totalItems, start = 0, end = 0) {
+    const infoText = document.getElementById('pagination-info-story');
+    const btnContainer = document.getElementById('pagination-buttons-story');
+    btnContainer.innerHTML = "";
+
+    if (totalItems === 0) return;
+
+    infoText.innerText = `Menampilkan ${start + 1} sampai ${end} dari ${totalItems} data`;
+    const totalPages = Math.ceil(totalItems / itemsPerStoryPage);
+
+    const prevBtn = document.createElement('button');
+    prevBtn.innerHTML = `<i class="fa-solid fa-chevron-left"></i>`;
+    prevBtn.className = `p-2 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === 1 ? 'border-slate-200 text-slate-300 pointer-events-none' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+    prevBtn.onclick = () => { if(currentStoryPage > 1) { currentStoryPage--; renderStoryTable(); } };
+    btnContainer.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.innerText = i;
+        pageBtn.className = `px-3 py-1.5 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === i ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+        pageBtn.onclick = () => { currentStoryPage = i; renderStoryTable(); };
+        btnContainer.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.innerHTML = `<i class="fa-solid fa-chevron-right"></i>`;
+    nextBtn.className = `p-2 text-xs font-medium rounded border transition cursor-pointer ${currentStoryPage === totalPages ? 'border-slate-200 text-slate-300 pointer-events-none' : 'border-slate-300 text-slate-600 hover:bg-slate-50'}`;
+    nextBtn.onclick = () => { if(currentStoryPage < totalPages) { currentStoryPage++; renderStoryTable(); } };
+    btnContainer.appendChild(nextBtn);
+}
+
+// Tambahkan inisialisasi di event DOMContentLoaded bawaan dashboard Anda:
+document.addEventListener("DOMContentLoaded", () => {
+    fetchStoriesFromSheets();
+    loadDataDariSheetKunjungan();
+});
+
+/**
+ * Memanggil API Google Gemini dengan fitur Auto-Rotate Robust seperti di Suno DAW
+ */
+async function callGeminiAPIWithFallback(promptText) {
+    let lastError = "Tidak ada API key yang berhasil digunakan.";
+
+    for (let i = 0; i < KEY_POOL.length; i++) {
+        const currentKey = KEY_POOL[i];
+        if (!currentKey) continue;
+
+        // Menggunakan model gemini-2.5-flash yang super cepat & cerdas
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentKey}`;
+
+        try {
+            console.log(`Mencoba memproses dengan API Key indeks ke-${i}...`);
+            
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: promptText }]
+                    }]
+                })
+            });
+
+            // Jika error 400 (Bad Request/Invalid Key), 403, atau 429 (Limit)
+            if (response.status === 400 || response.status === 403 || response.status === 429) {
+                const errorData = await response.json().catch(() => ({}));
+                const errMsg = errorData.error?.message || `Status ${response.status}`;
+                console.warn(`Key indeks ke-${i} tidak dapat digunakan (${errMsg}). Mencoba key berikutnya...`);
+                lastError = `[Key ${i}] ${errMsg}`;
+                continue; // Langsung lompat ke key berikutnya tanpa crash
+            }
+
+            if (!response.ok) {
+                console.warn(`Key indeks ke-${i} mengembalikan status non-OK: ${response.status}`);
+                continue;
+            }
+
+            const data = await response.json();
+            
+            // Validasi struktur kembalian dari Gemini
+            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                console.log(`Sukses menggunakan API Key indeks ke-${i}!`);
+                return data.candidates[0].content.parts[0].text.trim();
+            }
+
+        } catch (err) {
+            console.error(`Error koneksi/parsing pada Key indeks ke-${i}:`, err);
+            lastError = err.message;
+            continue; // Lanjut jika ada kendala jaringan
+        }
+    }
+
+    // Jika perulangan selesai dan tidak ada yang berhasil
+    return null;
+}
+
+// Memastikan fungsi terdaftar secara global agar onclick="kirimCatatanKeGAS()" bisa membaca
+async function kirimCatatanKeGAS() {
+    const API_URL_GAS = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec";
+
+    const catatanInput = document.getElementById("catatanInput");
+    const btnKirim = document.getElementById("btnKirimCatatan"); 
+    
+    if (!catatanInput || !btnKirim) {
+        console.error("Elemen catatanInput atau btnKirimCatatan tidak ditemukan di HTML!");
+        alert("⚠️ Komponen halaman tidak lengkap. Periksa ID catatanInput atau btnKirimCatatan.");
+        return;
+    }
+
+    const isiCatatan = catatanInput.value.trim();
+
+    if (!isiCatatan) {
+        alert("⚠️ Silakan isi teks jadwal terlebih dahulu.");
+        return;
+    }
+
+    const yakin = confirm("⚠️ Mengirim jadwal baru akan MENGHAPUS SEMUA DATA JADWAL LAMA di spreadsheet Anda.\nApakah Anda yakin ingin melanjutkan?");
+    if (!yakin) return;
+
+    // Kunci tombol & ubah teks ke mode loading
+    btnKirim.disabled = true;
+    btnKirim.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1.5"></i> Memproses...`;
+
+    // Menggunakan URLSearchParams untuk pengiriman no-cors
+    const formData = new URLSearchParams();
+    formData.append("target_sheet", "jadwalbulanan");
+    formData.append("action", "post");
+    formData.append("teks_jadwal", isiCatatan);
+
+    try {
+        await fetch(API_URL_GAS, {
+            method: "POST",
+            mode: "no-cors", 
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString()
+        });
+
+        alert("✨ Sukses! Data jadwal yang baru telah dikirim ke Google Sheets.");
+        catatanInput.value = ""; 
+
+    } catch (error) {
+        console.error("Gagal mengirim data jadwal:", error);
+        alert("⚠️ Terjadi kesalahan saat mengirim jadwal:\n" + error.message);
+    } finally {
+        btnKirim.disabled = false;
+        btnKirim.innerHTML = `<i class="fa-solid fa-paper-plane mr-1.5"></i> Kirim Ke Sheet`;
+    }
+}
+
+// BACKUP PENGAMAN: Jika onclick di HTML gagal memanggil fungsi secara global karena aturan scope,
+// blok event listener di bawah ini akan memaksa tombol mendeteksi klik secara otomatis.
+document.addEventListener("DOMContentLoaded", function() {
+    const backupBtn = document.getElementById("btnKirimCatatan");
+    if (backupBtn) {
+        backupBtn.onclick = function() {
+            kirimCatatanKeGAS();
+        };
+    }
+});
+// ==========================================
+// KODE INTEGRASI LAPORAN KUNJUNGAN
+// ==========================================
+
+// Ganti dengan SCRIPT_URL GAS Anda yang aktif
+const SCRIPT_URL_KUNJUNGAN = "https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec";
+
+// Global State Kunjungan (Nama unik agar tidak bentrok)
+let dataLaporanKunjungan = [];
+let currentPageKunjungan = 1;
+const itemsPerPageKunjungan = 10;
+
+// DOM Selector Kunjungan
+const formKunjungan = document.getElementById('laporanFormKunjungan'); 
+const textareaKunjungan = document.getElementById('keteranganKunjungan'); 
+const charCountKunjungan = document.getElementById('charCount');
+const containerCardList = document.getElementById('cardListKunjungan'); // <-- Diubah
+const containerPagination = document.getElementById('paginationKunjungan'); // <-- Diubah
+const inputEntryIdKunjungan = document.getElementById('entryIdKunjungan'); // <-- Diubah
+const wrapperFormKunjungan = document.getElementById('formWrapper');
+const headerFormKunjungan = document.getElementById('formHeader');
+const titleHeaderKunjungan = document.getElementById('headerTitle');
+const buttonSubmitKunjungan = document.getElementById('btnSubmitKunjungan');
+
+// Toggle Collapsible Form
+if (headerFormKunjungan) {
+    headerFormKunjungan.addEventListener('click', () => {
+        const formContainer = document.getElementById('formContainerKunjungan');
+        const iconToggle = document.querySelector('#toggleIcon i');
+        if (formContainer.classList.contains('hidden')) {
+            formContainer.classList.remove('hidden');
+            iconToggle.className = "fa-solid fa-chevron-up";
+        } else {
+            formContainer.classList.add('hidden');
+            iconToggle.className = "fa-solid fa-chevron-down";
+        }
+    });
+}
+
+if (textareaKunjungan) {
+    textareaKunjungan.addEventListener('input', () => {
+        charCountKunjungan.textContent = textareaKunjungan.value.length;
+    });
+}
+
+// Gunakan fungsi loading bawaan Dashboard jika sudah ada, atau buat fallback ini
+function showLocalKunjunganLoading(show, message = "Memuat...") {
+    // Jika dashboard memiliki fungsi loading global sendiri (misal: showLoading() ), panggil itu di sini.
+    // Jika tidak, kita gunakan alert/loading standar dashboard Anda.
+    console.log(`[Loading] ${show} - ${message}`);
+}
+
+function clearPreviewsKunjungan() {
+    ['foto1', 'foto2', 'foto3'].forEach(id => {
+        const preview = document.getElementById(`preview-${id}`);
+        const sizeLabel = document.getElementById(`size-${id}`);
+        const fileInput = document.getElementById(`file-${id}`);
+        if (preview) preview.innerHTML = "No img";
+        if (sizeLabel) sizeLabel.innerText = "";
+        if (fileInput) fileInput.value = "";
+    });
+}
+
+// Canvas & Compression
+function processImageKunjungan(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    showLocalKunjunganLoading(true, "Mengompresi gambar...");
+    let sizeLabelId = `size-${targetInputId}`;
+
+    try {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                try {
+                    const maxDimension = 480;
+                    let targetWidth, targetHeight;
+
+                    if (img.width > img.height) {
+                        targetWidth = maxDimension;
+                        targetHeight = Math.round((maxDimension / img.width) * img.height);
+                    } else {
+                        targetHeight = maxDimension;
+                        targetWidth = Math.round((maxDimension / img.height) * img.width);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 30) {
+                            sizeLabel.className = "text-xs font-semibold text-amber-600";
+                            sizeLabel.innerText += " (>30KB)";
+                        } else {
+                            sizeLabel.className = "text-xs font-semibold text-green-600";
+                        }
+                    }
+                    showLocalKunjunganLoading(false);
+                } catch (innerError) {
+                    showLocalKunjunganLoading(false);
+                    alert("Gagal memproses gambar: " + innerError.message);
+                }
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        showLocalKunjunganLoading(false);
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+// Ambil Data dari Google Sheets
+async function loadDataDariSheetKunjungan() {
+    showLocalKunjunganLoading(true, "Mengambil data...");
+    try {
+        const response = await fetch(`${SCRIPT_URL_KUNJUNGAN}?type=kunjungan`);
+        const data = await response.json();
+        dataLaporanKunjungan = data.reverse(); 
+        renderDataKunjungan();
+    } catch (error) {
+        console.error("Gagal memuat data dari Sheet:", error);
+    } finally {
+        showLocalKunjunganLoading(false);
+    }
+}
+
+// Submit ke Google Sheets
+if (formKunjungan) {
+    formKunjungan.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const id = inputEntryIdKunjungan.value; 
+        const data = {
+            type: "kunjungan", 
+            action: id ? "update" : "insert",
+            rowId: id ? parseInt(id) : null,
+            tanggal: document.getElementById('tanggal').value,
+            pelapor: document.getElementById('pelapor').value,
+            keterangan: textareaKunjungan.value,
+            foto1: document.getElementById('foto1').value.trim(),
+            foto2: document.getElementById('foto2').value.trim(),
+            foto3: document.getElementById('foto3').value.trim()
+        };
+
+        showLocalKunjunganLoading(true, "Menyimpan data...");
+
+        try {
+            const response = await fetch(SCRIPT_URL_KUNJUNGAN, {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+
+            if (result.result === "success") {
+                alert(result.message);
+                formKunjungan.reset();
+                charCountKunjungan.textContent = 0;
+                clearPreviewsKunjungan(); 
+                
+                inputEntryIdKunjungan.value = "";
+                buttonSubmitKunjungan.textContent = "Kirim Laporan";
+                titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
+                
+                await loadDataDariSheetKunjungan();
+            } else {
+                alert("Gagal: " + result.message);
+            }
+        } catch (error) {
+            alert("Terjadi kesalahan jaringan: " + error.message);
+        } finally {
+            showLocalKunjunganLoading(false);
+        }
+    });
+}
+
+// Render data kartu (Card) dengan gaya Tailwind yang mewah
+function renderDataKunjungan() {
+    containerCardList.innerHTML = "";
+    
+    if (dataLaporanKunjungan.length === 0) {
+        containerCardList.innerHTML = '<div class="text-center text-slate-400 py-8 bg-white border rounded-xl">Belum ada data laporan yang dimasukkan.</div>';
+        containerPagination.innerHTML = "";
+        return;
+    }
+
+    const totalPages = Math.ceil(dataLaporanKunjungan.length / itemsPerPageKunjungan);
+    if (currentPageKunjungan > totalPages) currentPageKunjungan = totalPages;
+    if (currentPageKunjungan < 1) currentPageKunjungan = 1;
+
+    const startIndex = (currentPageKunjungan - 1) * itemsPerPageKunjungan;
+    const endIndex = startIndex + itemsPerPageKunjungan;
+    const paginatedItems = dataLaporanKunjungan.slice(startIndex, endIndex);
+
+    paginatedItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow transition-shadow relative border-l-4 border-emerald-500';
+
+        let photosHTML = '';
+        if (item.foto1 || item.foto2 || item.foto3) {
+            photosHTML += '<div class="flex gap-2 flex-wrap mb-4">';
+            // Masing-masing onclick diubah untuk memanggil fungsi modal kustom kita
+            if (item.foto1) photosHTML += `<img src="${item.foto1}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
+            if (item.foto2) photosHTML += `<img src="${item.foto2}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
+            if (item.foto3) photosHTML += `<img src="${item.foto3}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
+            photosHTML += '</div>';
+        }
+
+        card.innerHTML = `
+            <div class="text-xs text-slate-500 mb-2 flex items-center gap-2">
+                <span><i class="fa-regular fa-calendar"></i> ${formatTanggalKunjungan(item.tanggal)}</span>
+                <span class="text-slate-300">|</span>
+                <span><i class="fa-regular fa-user"></i> Pelapor: <strong class="text-slate-700">${escapeHTMLKunjungan(item.pelapor)}</strong></span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
+            ${photosHTML}
+            <div class="flex justify-end gap-2 border-t pt-3">
+                <button class="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition" onclick="editEntryKunjungan(${item.rowId})">
+                    <i class="fa-solid fa-pencil"></i> Edit
+                </button>
+                <button class="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-semibold transition" onclick="deleteEntryKunjungan(${item.rowId})">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+            </div>
+        `;
+        containerCardList.appendChild(card);
+    });
+
+    renderPaginationControlsKunjungan(totalPages);
+}
+
+function renderPaginationControlsKunjungan(totalPages) {
+    containerPagination.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'px-3 py-1.5 border rounded-lg hover:bg-slate-50 transition text-sm disabled:opacity-50 disabled:cursor-not-allowed';
+    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+    prevBtn.disabled = currentPageKunjungan === 1;
+    prevBtn.onclick = () => { currentPageKunjungan--; renderDataKunjungan(); };
+    containerPagination.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `px-3 py-1 border rounded-lg text-sm transition ${i === currentPageKunjungan ? 'bg-emerald-600 text-white border-emerald-600' : 'hover:bg-slate-50'}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => { currentPageKunjungan = i; renderDataKunjungan(); };
+        containerPagination.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'px-3 py-1.5 border rounded-lg hover:bg-slate-50 transition text-sm disabled:opacity-50 disabled:cursor-not-allowed';
+    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    nextBtn.disabled = currentPageKunjungan === totalPages;
+    nextBtn.onclick = () => { currentPageKunjungan++; renderDataKunjungan(); };
+    containerPagination.appendChild(nextBtn);
+}
+
+function editEntryKunjungan(id) {
+    const item = dataLaporanKunjungan.find(entry => entry.rowId === id);
+    if (!item) return;
+
+    inputEntryIdKunjungan.value = item.rowId;
+    document.getElementById('tanggal').value = item.tanggal;
+    document.getElementById('pelapor').value = item.pelapor;
+    textareaKunjungan.value = item.keterangan;
+    charCountKunjungan.textContent = item.keterangan.length;
+    
+    document.getElementById('foto1').value = item.foto1;
+    document.getElementById('foto2').value = item.foto2;
+    document.getElementById('foto3').value = item.foto3;
+
+    ['foto1', 'foto2', 'foto3'].forEach(id => {
+        const val = item[id];
+        const prev = document.getElementById(`preview-${id}`);
+        if (prev) {
+            if (val) {
+                prev.innerHTML = `<img src="${val}" class="w-full h-full object-cover">`;
+            } else {
+                prev.innerHTML = "No img";
+            }
+        }
+        const sizeLbl = document.getElementById(`size-${id}`);
+        if (sizeLbl) sizeLbl.innerText = "";
+    });
+
+    buttonSubmitKunjungan.textContent = "Simpan Perubahan";
+    titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pencil"></i> Edit Laporan (Sedang Berjalan)`;
+    
+    // Pastikan container form tampil
+    document.getElementById('formContainerKunjungan').classList.remove('hidden');
+    document.querySelector('#toggleIcon i').className = "fa-solid fa-chevron-up";
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteEntryKunjungan(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus laporan ini?")) {
+        showLocalKunjunganLoading(true, "Menghapus data...");
+        try {
+            const response = await fetch(SCRIPT_URL_KUNJUNGAN, {
+                method: "POST",
+                body: JSON.stringify({
+                    type: "kunjungan",
+                    action: "delete",
+                    rowId: id
+                })
+            });
+            const result = await response.json();
+            
+            if (result.result === "success") {
+                alert(result.message);
+                if (inputEntryIdKunjungan.value == id) {
+                    formKunjungan.reset();
+                    clearPreviewsKunjungan();
+                    inputEntryIdKunjungan.value = "";
+                    buttonSubmitKunjungan.textContent = "Kirim Laporan";
+                    titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
+                    charCountKunjungan.textContent = 0;
+                }
+                await loadDataDariSheetKunjungan();
+            } else {
+                alert("Gagal menghapus: " + result.message);
+            }
+        } catch (error) {
+            alert("Kesalahan jaringan: " + error.message);
+        } finally {
+            showLocalKunjunganLoading(false);
+        }
+    }
+}
+
+function formatTanggalKunjungan(dateString) {
+    if(!dateString) return "-";
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+}
+
+function escapeHTMLKunjungan(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
+
+// Panggil fungsi inisialisasi di dalam penanganan pergantian tab dashboard Anda:
+// loadDataDariSheetKunjungan();
+
+// Fungsi membuka modal zoom gambar
+function openGlobalPhotoModal(imgSrc) {
+    const modal = document.getElementById('globalPhotoModal');
+    const modalImg = document.getElementById('modalTargetImage');
+    
+    if (!imgSrc || imgSrc === "-" || imgSrc.includes("No Img")) return;
+    
+    modalImg.src = imgSrc;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Memberikan jeda mikro agar efek transisi CSS (opacity) berjalan mulus
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+    }, 10);
+}
+
+// Fungsi menutup modal
+function closeGlobalPhotoModal() {
+    const modal = document.getElementById('globalPhotoModal');
+    modal.classList.add('opacity-0');
+    
+    // Sembunyikan elemen setelah durasi transisi (300ms) selesai
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 300);
+}
 
     </script>
+    <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
+    <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+        <button type="button" onclick="closeGlobalPhotoModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 text-2xl bg-black/40 w-10 h-10 rounded-full flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="modalTargetImage" src="" alt="Zoom Foto" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl border border-white/10">
+    </div>
+</div>
+
 </body>
 </html>
