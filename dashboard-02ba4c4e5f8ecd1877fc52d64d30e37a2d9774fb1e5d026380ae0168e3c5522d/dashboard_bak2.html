@@ -322,8 +322,20 @@ button.btn-submit:hover {
                 
                 <!-- Menu Tab Button & Tombol Beranda -->
 <!-- Menu Tab Button & Tombol Beranda -->
-<nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
-    <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
+<div class="block md:hidden w-full px-2">
+    <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
+        <option value="https://sokasmg.github.io">🏠 Beranda</option>
+        <option value="tab-ceritakemenangan">🏆 Cerita Kemenangan</option>
+        <option value="tab-materi">📚 Materi & Pelajaran</option>
+        <option value="tab-kehadiran">📊 Laporan Kehadiran</option>
+        <option value="tab-kunjungan" selected>🚗 Laporan Kunjungan/Shakubuku</option>
+        <option value="tab-jadwal">📅 Jadwal Kalender</option>
+        <option value="tab-database">👥 Database Anggota</option>
+    </select>
+</div>
+
+<nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
+    <a href="https://sokasmg.github.io" class="flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
         </svg>
@@ -338,22 +350,24 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran
     </button>
-    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kunjungan/Shakubuku
     </button>
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="col-span-2 md:col-span-1 tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
 </nav>
+
             </div>
         </div>
     </header>
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6"><!-- ========================================================================= -->
+    <main class="max-w-7xl mx-auto p-4 md:p-6">
+<!-- ========================================================================= -->
     <!-- TAB BARU: CERITA KEMENANGAN                                          -->
     <!-- ========================================================================= -->
 <div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
@@ -463,24 +477,14 @@ button.btn-submit:hover {
             </button>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        <th class="py-3 px-4 w-12 text-center">No</th>
-                        <th class="py-3 px-4">Nama &amp; Judul</th>
-                        <th class="py-3 px-4">Preview Foto</th>
-                        <th class="py-3 px-4">Isi Cerita</th>
-                        <th class="py-3 px-4 text-center w-28">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="story-list-table" class="divide-y divide-slate-100 text-sm text-slate-700">
-                    <tr>
-                        <td colspan="5" class="text-center py-8 text-slate-400">Sedang memuat data dari Google Sheets...</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="w-full">
+    <div id="story-card-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
+        <div class="col-span-full text-center py-12 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-500 mb-2"></i>
+            <p class="text-sm font-medium">Sedang memuat data cerita kemenangan...</p>
         </div>
+    </div>
+</div>
 
         <div id="empty-state-story" class="text-center py-12 hidden">
             <i class="fa-regular fa-folder-open text-4xl text-slate-300 mb-3"></i>
@@ -492,6 +496,54 @@ button.btn-submit:hover {
             <div class="flex items-center space-x-2" id="pagination-buttons-story"></div>
         </div>
     </section>
+</div>
+
+<!-- modal cerita pengalaman -->
+<div id="detailStoryModal" class="fixed inset-0 bg-slate-900/60 z-[999] hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeDetailStoryModal()">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+        
+        <div class="px-6 py-4 bg-slate-800 text-white flex justify-between items-center border-b border-slate-700">
+            <h3 class="text-lg font-bold whitespace-normal break-words leading-snug pr-4" id="modalStoryTitle">Detail Cerita Kemenangan</h3>
+            <button type="button" onclick="closeDetailStoryModal()" class="text-slate-400 hover:text-white transition text-xl cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="p-6 overflow-y-auto space-y-6 invisible-scrollbar">
+            <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <img id="modalStoryAvatar" src="" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm cursor-pointer hover:opacity-90">
+                <div>
+                    <h4 class="font-bold text-slate-800 text-base" id="modalStoryAuthor">-</h4>
+                    <i class="text-xs text-slate-400 mt-0.5" id="modalStoryMeta">-</i>
+                </div>
+            </div>
+
+            <div>
+                <div id="modalStoryContent" class="text-slate-600 text-s leading-relaxed whitespace-pre-line bg-slate-50/50 p-4 rounded-xl border border-slate-100 text-justify">
+                    </div>
+            </div>
+
+            <div>
+                <h5 class="text-2xs font-bold text-slate-400 uppercase tracking-wider mb-3">Foto Dokumentasi</h5>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col items-center bg-slate-50 p-2 rounded-xl border border-slate-100">
+                        <span class="text-2xs font-semibold text-slate-400 mb-1.5">Foto Dokumentasi 1</span>
+                        <img id="modalStoryImg1" src="" alt="Dokumentasi 1" class="w-full h-44 object-cover rounded-lg border border-slate-200 shadow-2xs cursor-pointer hover:opacity-90 transition">
+                    </div>
+                    <div class="flex flex-col items-center bg-gray-50 p-2 rounded-xl border border-slate-100">
+                        <span class="text-2xs font-semibold text-slate-400 mb-1.5">Foto Dokumentasi 2</span>
+                        <img id="modalStoryImg2" src="" alt="Dokumentasi 2" class="w-full h-44 object-cover rounded-lg border border-slate-200 shadow-2xs cursor-pointer hover:opacity-90 transition">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-end">
+            <button type="button" onclick="closeDetailStoryModal()" class="px-4 py-2 bg-slate-200 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-300 transition cursor-pointer">
+                Tutup Halaman
+            </button>
+        </div>
+    </div>
 </div>
     
     <!-- ========================================================================= -->
@@ -509,7 +561,7 @@ button.btn-submit:hover {
                 <p class="text-gray-500 mt-1">Bimbingan Sensei, Gosho, atau Dasar-Dasar Buddhisme</p>
             </div>
             <div class="mt-4 md:mt-0 flex gap-2">
-                <button id="btnRefresh" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-lg transition duration-200">
+                <button id="btnRefreshMateri" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-lg transition duration-200">
                     <i class="fas fa-sync-alt"></i> Refresh Data
                 </button>
                 <button id="btnToggleForm" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg shadow transition duration-200">
@@ -562,7 +614,7 @@ button.btn-submit:hover {
                     <button type="button" id="btnReset" class="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
                         Batal / Reset
                     </button>
-                    <button type="submit" id="btnSubmit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm transition disabled:bg-gray-400">
+                    <button type="submit" id="btnSubmitMateri" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm transition disabled:bg-gray-400">
                         <i class="fas fa-paper-plane mr-2"></i>Post Artikel
                     </button>
                 </div>
@@ -635,7 +687,7 @@ button.btn-submit:hover {
                             <option value="Pertemuan Bagian">Pertemuan Bagian</option>
                             <option value="Shodaikai">Shodaikai</option>
                             <option value="Pertemuan Belajar Gosho">Pertemuan Belajar Gosho</option>
-                            <option value="">Pertemuan Menonton Honbukanbukai</option>
+                            <option value="Pertemuan Menonton Honbukanbukai">Pertemuan Menonton Honbukanbukai</option>
                             <option value="Pertemuan Khusus (PFK/Sokai)">Pertemuan Khusus (PFK/Sokai)</option>
                         </select>
                     </div>
@@ -1142,7 +1194,11 @@ button.btn-submit:hover {
             if (tabId === 'tab-jadwal') {
                 adjustCalendarScale();
             }
-        }
+                const mobileSelect = document.getElementById('tabs-select');
+    if (mobileSelect && mobileSelect.value !== tabId) {
+        mobileSelect.value = tabId;
+    }
+}
 
         function adjustCalendarScale() {
             const container = document.querySelector('.calendar-outer-container');
@@ -2102,11 +2158,11 @@ const formContainerMateri = document.getElementById('formContainer');
 const articleFormMateri = document.getElementById('articleForm');
 const btnToggleFormMateri = document.getElementById('btnToggleForm');
 const btnCancelFormMateri = document.getElementById('btnCancelForm');
-const btnRefreshMateri = document.getElementById('btnRefresh');
+const btnRefreshMateri = document.getElementById('btnRefreshMateri');
 const toggleIconMateri = document.getElementById('toggleIcon');
 const toggleTextMateri = document.getElementById('toggleText');
 const formTitleMateri = document.getElementById('formTitle');
-const btnSubmitMateri = document.getElementById('btnSubmit');
+const btnSubmitMateri = document.getElementById('btnSubmitMateri');
 const editRowIndexInputMateri = document.getElementById('editRowIndex');
 const articlesContainerMateri = document.getElementById('articlesContainer');
 const totalBadgeMateri = document.getElementById('totalBadge');
@@ -2412,7 +2468,7 @@ const GAS_WEB_APP_URL_STORY = "https://script.google.com/macros/s/AKfycbyDre0T52
 
 let stories = [];
 let currentStoryPage = 1;
-const itemsPerStoryPage = 10;
+const itemsPerStoryPage = 9;
 let isStoryFormOpen = false;
 
 // Memanfaatkan Loading Overlay Global yang sudah ada di dashboard Anda
@@ -2546,6 +2602,17 @@ async function handleFormSubmitStory(e) {
     
     const rowIndex = document.getElementById('edit-row-index-story').value;
     const action = rowIndex ? "update" : "post";
+    
+    const formEl = document.getElementById('story-form');
+    const originalSender = formEl ? formEl.getAttribute('data-original-sender') : "";
+    
+    let namaPengirim = "";
+    if (action === "update" && originalSender) {
+        namaPengirim = originalSender;
+    } else {
+        const savedUsername = localStorage.getItem('soka_user_name');
+        namaPengirim = savedUsername ? savedUsername.trim() : "Anonim";
+    }
 
     const searchParams = new URLSearchParams();
     searchParams.append("target_sheet", "ceritakemenangan");
@@ -2557,6 +2624,7 @@ async function handleFormSubmitStory(e) {
     searchParams.append("foto1", document.getElementById('input-foto1-story').value);
     searchParams.append("foto2", document.getElementById('input-foto2-story').value);
     searchParams.append("isicerita", document.getElementById('input-isicerita-story').value.trim());
+    searchParams.append("pengirim", namaPengirim);
 
     try {
         await fetch(GAS_WEB_APP_URL_STORY, {
@@ -2589,6 +2657,11 @@ function editStory(rowIndex) {
     document.getElementById('input-foto1-story').value = story.foto1 || "";
     document.getElementById('input-foto2-story').value = story.foto2 || "";
     document.getElementById('input-isicerita-story').value = story.isicerita || "";
+    
+    const formEl = document.getElementById('story-form');
+    if (formEl) {
+        formEl.setAttribute('data-original-sender', story.pengirim || "");
+    }
 
     setupPreviewFromBase64Story('input-urlfotoprofil-story', 'preview-profil-story', 'size-profil-story');
     setupPreviewFromBase64Story('input-foto1-story', 'preview-foto1-story', 'size-foto1-story');
@@ -2650,6 +2723,8 @@ async function deleteStory(rowIndex) {
 function resetFormStory(closeAfterReset = false) {
     document.getElementById('story-form').reset();
     document.getElementById('edit-row-index-story').value = "";
+    const formEl = document.getElementById('story-form');
+    if (formEl) formEl.removeAttribute('data-original-sender');
     document.getElementById('btn-submit-story').innerText = "Post Cerita";
     document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru`;
     
@@ -2663,64 +2738,78 @@ function resetFormStory(closeAfterReset = false) {
 }
 
 function renderStoryTable() {
-    const tbody = document.getElementById('story-list-table');
+    const container = document.getElementById('story-card-container');
     const emptyState = document.getElementById('empty-state-story');
-    tbody.innerHTML = "";
+    
+    if (!container) return;
+    container.innerHTML = "";
 
     if (stories.length === 0) {
-        emptyState.classList.remove('hidden');
+        if (emptyState) emptyState.classList.remove('hidden');
         updateStoryPaginationControls(0);
         return;
     } else {
-        emptyState.classList.add('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
     }
 
     const startIndex = (currentStoryPage - 1) * itemsPerStoryPage;
     const endIndex = Math.min(startIndex + itemsPerStoryPage, stories.length);
-    const paginatedItems = stories.slice(startIndex, startIndex + itemsPerStoryPage);
+    const paginatedItems = stories.slice(startIndex, startIndex + itemsPerStoryPage).reverse();
 
-    paginatedItems.forEach((story, index) => {
+        paginatedItems.forEach((story, index) => {
         const globalIndex = startIndex + index + 1;
+        const namaAnggota = story.nama ? story.nama.trim() : "Anggota";
+        
+        // Ambil data pengirim dari Google Sheets (kolom G) yang dibaca sebagai properti story.pengirim
+        const pengirimCerita = story.pengirim ? story.pengirim.trim() : "Anonim";
         
         const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
-        const hasF1 = story.foto1 && story.foto1.startsWith('data:image');
-        const hasF2 = story.foto2 && story.foto2.startsWith('data:image');
+        
+        // JIKA TIDAK ADA FOTO: Pakai API inisial nama seperti di index.html
+        const imgProfilSrc = hasProfil 
+            ? story.urlfotoprofil 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(namaAnggota)}&background=002F6C&color=fff&size=128`;
 
-        tbody.innerHTML += `
-            <tr class="hover:bg-slate-50/70 transition">
-                <td class="py-4 px-4 text-center font-medium text-slate-400">${globalIndex}</td>
-                <td class="py-4 px-4">
-                    <div class="font-semibold text-slate-900">${story.judul || '-'}</div>
-                    <div class="text-xs text-indigo-600 font-medium">Oleh: ${story.nama || '-'}</div>
-                </td>
-                <td class="py-4 px-4">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-full border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Profil">
-                            ${hasProfil ? `<img src="${story.urlfotoprofil}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user"></i>`}
-                        </div>
-                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 1">
-                            ${hasF1 ? `<img src="${story.foto1}" class="w-full h-full object-cover">` : `F1`}
-                        </div>
-                        <div class="w-10 h-7 rounded border border-slate-200 bg-slate-100 overflow-hidden flex items-center justify-center text-3xs text-slate-400" title="Foto 2">
-                            ${hasF2 ? `<img src="${story.foto2}" class="w-full h-full object-cover">` : `F2`}
-                        </div>
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-xl shadow-md border border-slate-100 p-5 flex flex-col justify-between hover:shadow-lg transition duration-200 relative";
+        
+        const storyDataString = JSON.stringify(story).replace(/"/g, '&quot;');
+
+        card.innerHTML = `
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-full border border-slate-200 bg-slate-100 overflow-hidden shrink-0 shadow-2xs">
+                        <img src="${imgProfilSrc}" class="w-full h-full object-cover cursor-pointer" onclick="if('${hasProfil}'==='true') viewGlobalPhoto('${story.urlfotoprofil}')">
                     </div>
-                </td>
-                <td class="py-4 px-4">
-                    <p class="line-clamp-2 text-xs text-slate-500 max-w-xs md:max-w-md">${story.isicerita || '-'}</p>
-                </td>
-                <td class="py-4 px-4 text-center">
-                    <div class="inline-flex space-x-2">
-                        <button onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button onclick="deleteStory(${story.row_index})" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition cursor-pointer">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-slate-800 truncate" title="Tokoh Cerita: ${namaAnggota}">${namaAnggota}</h4>
+                        <p class="text-3xs text-slate-400 truncate mt-0.5" title="Pengirim: ${pengirimCerita}">
+                        <i class="text-xs">${pengirimCerita}</i>
+                        </p>
                     </div>
-                </td>
-            </tr>
+                </div>
+                
+                <h3 class="text-sm font-bold text-slate-900 mb-1.5 line-clamp-1">${story.judul || 'Cerita Kemenangan'}</h3>
+                <p class="text-s text-slate-500 line-clamp-3 mb-4 whitespace-pre-line text-justify">${story.isicerita || '-'}</p>
+            </div>
+            
+            <div class="border-t border-slate-100 pt-3 mt-auto flex items-center justify-between">
+                <button type="button" onclick="openDetailStoryCardModal(${storyDataString})" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center transition cursor-pointer">
+                    Baca Selengkapnya <i class="fa-solid fa-arrow-right text-3xs ml-1"></i>
+                </button>
+                
+                <div class="flex space-x-1">
+                    <button type="button" onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Ubah data">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" onclick="deleteStory(${story.row_index})" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition cursor-pointer" title="Hapus data">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
         `;
+        
+        container.appendChild(card);
     });
 
     updateStoryPaginationControls(stories.length, startIndex, endIndex);
@@ -2762,67 +2851,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchStoriesFromSheets();
     loadDataDariSheetKunjungan();
 });
-
-/**
- * Memanggil API Google Gemini dengan fitur Auto-Rotate Robust seperti di Suno DAW
- */
-async function callGeminiAPIWithFallback(promptText) {
-    let lastError = "Tidak ada API key yang berhasil digunakan.";
-
-    for (let i = 0; i < KEY_POOL.length; i++) {
-        const currentKey = KEY_POOL[i];
-        if (!currentKey) continue;
-
-        // Menggunakan model gemini-2.5-flash yang super cepat & cerdas
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentKey}`;
-
-        try {
-            console.log(`Mencoba memproses dengan API Key indeks ke-${i}...`);
-            
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: promptText }]
-                    }]
-                })
-            });
-
-            // Jika error 400 (Bad Request/Invalid Key), 403, atau 429 (Limit)
-            if (response.status === 400 || response.status === 403 || response.status === 429) {
-                const errorData = await response.json().catch(() => ({}));
-                const errMsg = errorData.error?.message || `Status ${response.status}`;
-                console.warn(`Key indeks ke-${i} tidak dapat digunakan (${errMsg}). Mencoba key berikutnya...`);
-                lastError = `[Key ${i}] ${errMsg}`;
-                continue; // Langsung lompat ke key berikutnya tanpa crash
-            }
-
-            if (!response.ok) {
-                console.warn(`Key indeks ke-${i} mengembalikan status non-OK: ${response.status}`);
-                continue;
-            }
-
-            const data = await response.json();
-            
-            // Validasi struktur kembalian dari Gemini
-            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-                console.log(`Sukses menggunakan API Key indeks ke-${i}!`);
-                return data.candidates[0].content.parts[0].text.trim();
-            }
-
-        } catch (err) {
-            console.error(`Error koneksi/parsing pada Key indeks ke-${i}:`, err);
-            lastError = err.message;
-            continue; // Lanjut jika ada kendala jaringan
-        }
-    }
-
-    // Jika perulangan selesai dan tidak ada yang berhasil
-    return null;
-}
 
 // Memastikan fungsi terdaftar secara global agar onclick="kirimCatatanKeGAS()" bisa membaca
 async function kirimCatatanKeGAS() {
@@ -2889,6 +2917,74 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 });
+
+// Fungsi Membuka Modal Detail khusus Object Story
+function openDetailStoryCardModal(story) {
+    const modal = document.getElementById('detailStoryModal');
+    const modalContentContainer = modal.querySelector('.transform');
+    
+    const namaAnggota = story.nama ? story.nama.trim() : "Anggota";
+    const pengirimCerita = story.pengirim ? story.pengirim.trim() : "Anonim";
+    document.getElementById('modalStoryTitle').innerText = story.judul || 'Cerita Kemenangan';
+    document.getElementById('modalStoryAuthor').innerText = namaAnggota;
+    document.getElementById('modalStoryMeta').innerText = `Dikirim oleh: ${pengirimCerita}`;
+    document.getElementById('modalStoryContent').innerText = story.isicerita || '-';
+    const avatarImg = document.getElementById('modalStoryAvatar');
+    const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
+    
+    avatarImg.src = hasProfil 
+        ? story.urlfotoprofil 
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(namaAnggota)}&background=002F6C&color=fff&size=128`;
+        
+    avatarImg.onclick = () => { if(hasProfil) viewGlobalPhoto(story.urlfotoprofil); };
+
+    // Set Lampiran Foto 1
+    const img1 = document.getElementById('modalStoryImg1');
+    const hasF1 = story.foto1 && story.foto1.startsWith('data:image');
+    if (hasF1) {
+        img1.src = story.foto1;
+        img1.parentElement.style.display = 'flex';
+        img1.onclick = () => viewGlobalPhoto(story.foto1);
+    } else {
+        img1.parentElement.style.display = 'none';
+    }
+    
+    // Set Lampiran Foto 2
+    const img2 = document.getElementById('modalStoryImg2');
+    const hasF2 = story.foto2 && story.foto2.startsWith('data:image');
+    if (hasF2) {
+        img2.src = story.foto2;
+        img2.parentElement.style.display = 'flex';
+        img2.onclick = () => viewGlobalPhoto(story.foto2);
+    } else {
+        img2.parentElement.style.display = 'none';
+    }
+    
+    // Tampilkan Modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContentContainer.classList.remove('scale-95');
+        modalContentContainer.classList.add('scale-100');
+    }, 10);
+}
+
+// Fungsi Menutup Modal Detail Cerita
+function closeDetailStoryModal() {
+    const modal = document.getElementById('detailStoryModal');
+    const modalContentContainer = modal.querySelector('.transform');
+    
+    modal.classList.add('opacity-0');
+    modalContentContainer.classList.remove('scale-100');
+    modalContentContainer.classList.add('scale-95');
+    
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 300);
+}
+
 // ==========================================
 // KODE INTEGRASI LAPORAN KUNJUNGAN
 // ==========================================
