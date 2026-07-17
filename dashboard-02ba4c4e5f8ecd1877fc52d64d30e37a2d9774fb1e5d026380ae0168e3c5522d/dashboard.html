@@ -317,21 +317,21 @@ button.btn-submit:hover {
                 <div class="flex items-center gap-2">
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
-					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v4.2</span>
+					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v4.3</span>
 					</span>
                 </div>
                 
 <!-- Menu Tab Button & Tombol Beranda -->
 <div class="block md:hidden w-full px-2">
     <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
-        <option id="opt-profil" value="tab-profil">👤 Profil</option>
-	    <option id="opt-ceritakemenangan" value="tab-ceritakemenangan">🏆 Cerita Kemenangan</option>
-        <option id="opt-materi" value="tab-materi">📚 Materi & Pelajaran</option>
-        <option id="opt-quote" value="tab-quoteoftheday">☀️ Quote of the Day</option>
-        <option id="opt-kehadiran" value="tab-kehadiran">📊 Laporan Kehadiran</option>
-        <option id="opt-kunjungan" value="tab-kunjungan" selected>🚗 Laporan Kunjungan/Shakubuku</option>
-        <option id="opt-jadwal" value="tab-jadwal">📅 Jadwal Kalender</option>
-        <option id="opt-database" value="tab-database">👥 Database Anggota</option>
+        <option id="opt-profil" value="tab-profil"> Profil</option>
+	    <option id="opt-ceritakemenangan" value="tab-ceritakemenangan"> Cerita Kemenangan</option>
+        <option id="opt-materi" value="tab-materi"> Materi & Pelajaran</option>
+        <option id="opt-quote" value="tab-quoteoftheday"> Quote of the Day</option>
+        <option id="opt-kehadiran" value="tab-kehadiran"> Laporan Kehadiran</option>
+        <option id="opt-kunjungan" value="tab-kunjungan" selected> Laporan Kunjungan/Shakubuku</option>
+        <option id="opt-jadwal" value="tab-jadwal"> Jadwal Kalender</option>
+        <option id="opt-database" value="tab-database"> Database Anggota</option>
     </select>
 </div>
 
@@ -414,7 +414,7 @@ button.btn-submit:hover {
 <div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
     <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
-            🏆 Editor Cerita Kemenangan
+             Editor Cerita Kemenangan
         </h1>
         <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
     </div>
@@ -595,7 +595,7 @@ button.btn-submit:hover {
 <div id="tab-quoteoftheday" class="tab-content hidden space-y-6">
     <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase" id="quote-tab-main-title">
-            🏆 Editor Quote of the Day
+             Editor Quote of the Day
         </h1>
         <p class="text-sm text-slate-500 mt-1">Kelola kutipan harian bimbingan Shibu Semarang</p>
     </div>
@@ -785,7 +785,7 @@ button.btn-submit:hover {
                 <img id="modalMateriAvatar" class="w-12 h-12 rounded-full border bg-slate-100 object-cover" src="">
                 <div>
                     <h3 id="modalMateriTitle" class="text-base font-bold text-slate-900 line-clamp-1"></h3>
-                    <p class="text-xs text-slate-500"><span id="modalMateriAuthor" class="font-semibold"></span> • <span id="modalMateriMeta"></span></p>
+                    <p class="text-xs text-slate-500"><span id="modalMateriAuthor" class="font-semibold"></span> � <span id="modalMateriMeta"></span></p>
                 </div>
             </div>
             <button onclick="closeDetailMateriModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-50 transition">
@@ -878,7 +878,7 @@ button.btn-submit:hover {
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
                     <button type="button" id="btnRefresh" onclick="fetchData()" class="relative z-20 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer">
-                        <span id="refreshText">🔄 Refresh Data</span>
+                        <span id="refreshText"> Refresh Data</span>
                     </button>
                 </div>
 
@@ -1041,7 +1041,7 @@ button.btn-submit:hover {
 
             <div class="bg-white p-4 rounded-xl shadow-xs text-center">
                 <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-2 px-6 rounded-lg transition text-sm cursor-pointer shadow-sm">
-                    📥 Download Jadwal
+                     Download Jadwal
                 </button>
             </div>
 
@@ -1077,7 +1077,7 @@ button.btn-submit:hover {
 
                     <div class="mt-6 border-t border-slate-300 pt-4 flex flex-row justify-between items-center gap-4 text-black w-full">
                         <div id="containerHariPenting" class="text-[11px] font-bold leading-relaxed text-left w-[35%]">
-                            ⏳ Memuat hari penting...
+                             Memuat hari penting...
                         </div>
                         
                         <div class="w-[30%] flex items-center justify-center">
@@ -1315,6 +1315,7 @@ button.btn-submit:hover {
     <!-- JAVASCRIPT ENGINE                                                         -->
     <!-- ========================================================================= -->
     <script>
+    const namaUserAktif = localStorage.getItem('soka_user_name') || "Anonim";
         // --- 0. FUNGSI TAB & RESPONSIVITAS ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(content => {
@@ -1394,7 +1395,7 @@ button.btn-submit:hover {
 
         async function fetchData() {
             const btnRefresh = document.getElementById('btnRefresh');
-            if(btnRefresh) btnRefresh.textContent = '⏳ Memuat...';
+            if(btnRefresh) btnRefresh.textContent = ' Memuat...';
             
             try {
                 const response = await fetch(GAS_URL);
@@ -1417,7 +1418,7 @@ button.btn-submit:hover {
             } catch (error) {
                 console.error("Gagal memuat data kehadiran:", error);
             } finally {
-                if(btnRefresh) btnRefresh.textContent = '🔄 Refresh Data';
+                if(btnRefresh) btnRefresh.textContent = ' Refresh Data';
             }
         }
 
@@ -1581,7 +1582,13 @@ button.btn-submit:hover {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    
+                    // KIRIM LOG UBAH DATA
+// KIRIM LOG UBAH DATA
+kirimLogAktivitas(
+    'UPDATE', 
+    'Laporan Kehadiran', 
+    `${payload.pelapor} mengubah laporan kehadiran "${payload.pertemuan}" tanggal ${formatKeTanggalLokal(payload.tanggal)} (ID: ${payload.rowId})`
+);
                     alert("Perintah edit data berhasil dikirim ke server!");
                     tutupModalEdit();
                     setTimeout(fetchData, 1500); 
@@ -1597,24 +1604,41 @@ button.btn-submit:hover {
             });
         }
 
-        async function hapusEntryKehadiran(rowId) {
-            if(!confirm("Apakah Anda yakin ingin menghapus data laporan kehadiran ini?")) return;
-            
-            try {
-                await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "delete", rowId: rowId })
-                });
-                
-                alert("Perintah hapus data berhasil dikirim ke server!");
-                setTimeout(fetchData, 1500);
-            } catch (err) {
-                alert("Gagal menghapus entri.");
-                console.error(err);
-            }
-        }
+async function hapusEntryKehadiran(rowId) {
+    if(!confirm("Apakah Anda yakin ingin menghapus data laporan kehadiran ini?")) return;
+    
+    // 1. CARI DATA NYA DI CACHE TERLEBIH DAHULU BERDASARKAN rowId
+    const itemTerpilih = dataKehadiranCache.find(x => x.rowId === rowId);
+    
+    // 2. BUAT TEKS DESKRIPSI LOG JIKA DATA DITEMUKAN
+    let detailLog = `dengan ID ${rowId}`;
+    if (itemTerpilih) {
+        const tanggalIndo = formatKeTanggalLokal(itemTerpilih.tanggal);
+        detailLog = `"${itemTerpilih.pertemuan}" tanggal ${tanggalIndo}`;
+    }
+
+    try {
+        await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: "delete", rowId: rowId })
+        });
+        
+        // 3. KIRIM LOG MENGGUNAKAN TEKS DESKRIPSI YANG SUDAH JADI
+        kirimLogAktivitas(
+            'DELETE', 
+            'Laporan Kehadiran', 
+            `${namaUserAktif} menghapus data laporan kehadiran ${detailLog}`
+        );
+        
+        alert("Perintah hapus data berhasil dikirim ke server!");
+        setTimeout(fetchData, 1500);
+    } catch (err) {
+        alert("Gagal menghapus entri.");
+        console.error(err);
+    }
+}
 
         const mainForm = document.getElementById('laporanForm');
         if(mainForm) {
@@ -1671,8 +1695,13 @@ button.btn-submit:hover {
                         },
                         body: JSON.stringify(payload)
                     });
-
-                    alert("✅ Laporan kehadiran berhasil dikirim!");
+// KIRIM LOG TAMBAH DATA (Menggunakan nama pelapor dari form)
+            kirimLogAktivitas(
+                'INSERT', 
+                'Laporan Kehadiran', 
+                `${pelapor || namaUserAktif} menambahkan laporan kehadiran baru untuk "${pertemuan}" tanggal ${tanggalFormatted} dengan total anggota: ${total}`
+            );
+                    alert(" Laporan kehadiran berhasil dikirim!");
                     
                     document.getElementById('bapak').value = 0;
                     document.getElementById('ibu').value = 0;
@@ -1687,7 +1716,7 @@ button.btn-submit:hover {
 
                 } catch (error) {
                     console.error("Error sending data:", error);
-                    alert("❌ Gagal mengirim laporan. Periksa koneksi internet Anda.");
+                    alert(" Gagal mengirim laporan. Periksa koneksi internet Anda.");
                 } finally {
                     if(submitBtn) {
                         submitBtn.disabled = false;
@@ -1696,7 +1725,6 @@ button.btn-submit:hover {
                 }
             });
         }
-
 
         // =========================================================================
         // SCRIPTS TAB 2: KALENDER JADWAL
@@ -2127,7 +2155,7 @@ button.btn-submit:hover {
                     <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
                     <td class="px-4 py-3">
                         <div class="flex items-center">
-                            ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}
+                            ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3"></span>' : ''}
                             <span class="${member.isChildRender ? 'text-gray-700 font-normal' : 'text-gray-900 font-bold'}">${member.nama}</span>
                         </div>
                     </td>
@@ -2153,7 +2181,7 @@ button.btn-submit:hover {
                 card.innerHTML = `
                     <div class="flex justify-between items-start gap-2">
                         <div class="flex items-center gap-1.5">
-                            ${member.isChildRender ? '<span class="text-amber-500 font-bold">↳</span>' : ''}
+                            ${member.isChildRender ? '<span class="text-amber-500 font-bold"></span>' : ''}
                             <h4 class="font-bold text-gray-900 text-base">${member.nama}</h4>
                         </div>
                         <span class="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">#${startIndex + index + 1}</span>
@@ -2218,7 +2246,7 @@ button.btn-submit:hover {
                 tableRowsHtml += `
                     <tr style="background-color: #ffffff; ${member.isChildRender ? 'font-weight:normal;' : 'font-weight:bold;'}">
                         <td style="text-align:center;">${index + 1}</td>
-                        <td>${member.isChildRender ? '↳ ' : ''}${member.nama}</td>
+                        <td>${member.isChildRender ? ' ' : ''}${member.nama}</td>
                         <td>${member.chiku}</td><td>${member.bagian}</td><td>${member.jabatan || 'Anggota'}</td><td>${member.status || 'Aktif'}</td><td>${member.gohonzon}</td>
                         <td style="text-align:center;">${member.tahunLahir}</td><td>${member.hubungan}</td><td>${member.telepon}</td><td>${member.alamat}</td><td>${member.keterangan}</td>
                     </tr>`;
@@ -2573,7 +2601,13 @@ if (articleFormMateri) {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             });
-            
+            // --- TAMBAHKAN LOG DI SINI ---
+    const logAction = editRowIndex !== '' ? 'UPDATE' : 'CREATE';
+    const logDesc = editRowIndex !== '' 
+        ? `${pengirim} Mengubah artikel materi "${judul}" (Baris: ${editRowIndex})` 
+        : `${pengirim} Membuat artikel materi baru berjudul "${judul}"`;
+    kirimLogAktivitas(logAction, 'Materi & Pelajaran', logDesc);
+    // -----------------------------
             alert(editRowIndex !== '' ? 'Perubahan berhasil disimpan!' : 'Artikel berhasil diposting!');
             toggleFormMateri(false);
             setTimeout(fetchArticlesMateri, 1800);
@@ -2603,7 +2637,14 @@ window.editArticleDirectMateri = function(rowIndex) {
 };
 
 window.deleteArticleDirectMateri = async function(rowIndex) {
-    if (confirm("Apakah Anda yakin ingin menghapus artikel ini?")) {
+    // 1. CARI DATA ARTIKEL DI MEMORI LOKAL DULU AGAR VARIABELNYA TERSEDIA
+    const item = dataArticlesMateri.find(a => a.row_index == rowIndex);
+    const judulArtikel = item && item.judul ? item.judul.trim() : "Tanpa Judul";
+    const kategoriArtikel = item && item.kategori ? item.kategori.trim() : "Materi";
+    const pengirimArtikel = item && item.pengirim ? item.pengirim.trim() : "Anonim";
+
+    // 2. Gunakan variabelnya di konfirmasi biar lebih informatif
+    if (confirm(`Apakah Anda yakin ingin menghapus artikel "${judulArtikel}" (${kategoriArtikel})?`)) {
         const formData = new URLSearchParams();
         formData.append('action', 'delete');
         formData.append('row_index', rowIndex);
@@ -2621,6 +2662,16 @@ window.deleteArticleDirectMateri = async function(rowIndex) {
                 body: formData.toString()
             });
 
+            // =========================================================================
+            // LOG KHUSUS DELETE DENGAN FORMAT LEBIH MANUSIAWI (Variabel sudah aman)
+            // =========================================================================
+            kirimLogAktivitas(
+                'DELETE', 
+                'Materi & Pelajaran', 
+                `${pengirimArtikel} Menghapus materi [${kategoriArtikel}] "${judulArtikel}" (Baris: ${rowIndex})`
+            );
+            // =========================================================================
+            
             alert('Artikel berhasil dihapus!');
             setTimeout(fetchArticlesMateri, 1800);
         } catch (error) {
@@ -2630,6 +2681,7 @@ window.deleteArticleDirectMateri = async function(rowIndex) {
         }
     }
 };
+
 
 document.addEventListener('DOMContentLoaded', fetchArticlesMateri);
 
@@ -2786,19 +2838,28 @@ async function handleFormSubmitStory(e) {
         namaPengirim = savedUsername ? savedUsername.trim() : "Anonim";
     }
 
+    // Ambil value sekali saja di sini agar bersih
+    const judulCerita = document.getElementById('input-judul-story').value.trim();
+    const namaTokoh = document.getElementById('input-nama-story').value.trim();
+    const urlFotoProfil = document.getElementById('input-urlfotoprofil-story').value;
+    const foto1 = document.getElementById('input-foto1-story').value;
+    const foto2 = document.getElementById('input-foto2-story').value;
+    const isiCerita = document.getElementById('input-isicerita-story').value.trim();
+
     const searchParams = new URLSearchParams();
     searchParams.append("target_sheet", "ceritakemenangan");
     searchParams.append("action", action);
     searchParams.append("row_index", rowIndex || "");
-    searchParams.append("nama", document.getElementById('input-nama-story').value.trim());
-    searchParams.append("judul", document.getElementById('input-judul-story').value.trim());
-    searchParams.append("urlfotoprofil", document.getElementById('input-urlfotoprofil-story').value);
-    searchParams.append("foto1", document.getElementById('input-foto1-story').value);
-    searchParams.append("foto2", document.getElementById('input-foto2-story').value);
-    searchParams.append("isicerita", document.getElementById('input-isicerita-story').value.trim());
+    searchParams.append("nama", namaTokoh);
+    searchParams.append("judul", judulCerita);
+    searchParams.append("urlfotoprofil", urlFotoProfil);
+    searchParams.append("foto1", foto1);
+    searchParams.append("foto2", foto2);
+    searchParams.append("isicerita", isiCerita);
     searchParams.append("pengirim", namaPengirim);
 
     try {
+        // 1. Jalankan fetch utama untuk save data ke Sheets Cerita Kemenangan
         await fetch(GAS_WEB_APP_URL_STORY, {
             method: "POST",
             mode: "no-cors", 
@@ -2806,17 +2867,30 @@ async function handleFormSubmitStory(e) {
             body: searchParams.toString()
         });
         
+        // 2. Kirim log ditaruh setelah fetch utama berhasil dilewati agar aman dari bentrokan jaringan
+        const logAction = action === "update" ? "UPDATE" : "CREATE";
+        const logDesc = action === "update" 
+            ? `${namaPengirim} Mengubah cerita kemenangan "${judulCerita}" milik ${namaTokoh} (Baris: ${rowIndex})` 
+            : `${namaPengirim} Membuat cerita kemenangan baru berjudul "${judulCerita}" untuk ${namaTokoh}`;
+        
+        kirimLogAktivitas(logAction, 'Cerita Kemenangan', logDesc);
+
+        // 3. Beri jeda agar data di server Google Sheets selesai diproses secara asinkronus
         setTimeout(async () => {
             resetFormStory();
             await fetchStoriesFromSheets();
             showGlobalLoading(false);
             alert(action === "update" ? "Cerita berhasil diperbarui!" : "Cerita baru berhasil diposting!");
-        }, 1500);
+        }, 1800);
+
     } catch (error) {
+        console.error("Error Submit Story:", error);
         showGlobalLoading(false);
         alert("Terjadi kesalahan transmisi data.");
     }
 }
+
+
 
 function editStory(rowIndex) {
     const story = stories.find(item => item.row_index === rowIndex);
@@ -2864,7 +2938,13 @@ function setupPreviewFromBase64Story(inputId, previewId, sizeId) {
 }
 
 async function deleteStory(rowIndex) {
-    if(confirm(`Hapus permanen cerita kemenangan?`)) {
+    // Gunakan == agar jika rowIndex berupa string "9" dan item.row_index berupa number 9 tetap cocok
+    const storyItem = stories.find(item => item.row_index == rowIndex);
+    const judulCerita = storyItem && storyItem.judul ? storyItem.judul.trim() : "Tanpa Judul";
+    const namaTokoh = storyItem && storyItem.nama ? storyItem.nama.trim() : "Anggota";
+    const namaUserAktif = localStorage.getItem('soka_user_name') || "Anonim";
+
+    if(confirm(`Apakah Anda yakin ingin menghapus permanen cerita "${judulCerita}" milik ${namaTokoh}?`)) {
         showGlobalLoading(true, "Menghapus data...");
         
         const searchParams = new URLSearchParams();
@@ -2880,17 +2960,26 @@ async function deleteStory(rowIndex) {
                 body: searchParams.toString()
             });
 
+            // Kirim log aktivitas
+            kirimLogAktivitas(
+                'DELETE', 
+                'Cerita Kemenangan', 
+                `${namaUserAktif} Menghapus cerita kemenangan "${judulCerita}" milik ${namaTokoh} (Baris: ${rowIndex})`
+            );
+
             setTimeout(async () => {
                 await fetchStoriesFromSheets();
                 showGlobalLoading(false);
                 alert("Data cerita berhasil dihapus permanen!");
-            }, 2000);
+            }, 1800);
         } catch (error) {
+            console.error("Error Delete Story:", error);
             showGlobalLoading(false);
             alert("Terjadi kesalahan sistem saat mencoba menghapus.");
         }
     }
 }
+
 
 function resetFormStory(closeAfterReset = false) {
     document.getElementById('story-form').reset();
@@ -3033,19 +3122,48 @@ async function kirimCatatanKeGAS() {
     
     if (!catatanInput || !btnKirim) {
         console.error("Elemen catatanInput atau btnKirimCatatan tidak ditemukan di HTML!");
-        alert("⚠️ Komponen halaman tidak lengkap. Periksa ID catatanInput atau btnKirimCatatan.");
+        alert(" Komponen halaman tidak lengkap. Periksa ID catatanInput atau btnKirimCatatan.");
         return;
     }
 
     const isiCatatan = catatanInput.value.trim();
 
     if (!isiCatatan) {
-        alert("⚠️ Silakan isi teks jadwal terlebih dahulu.");
+        alert(" Silakan isi teks jadwal terlebih dahulu.");
         return;
     }
 
-    const yakin = confirm("⚠️ Mengirim jadwal baru akan MENGHAPUS SEMUA DATA JADWAL LAMA di spreadsheet Anda.\nApakah Anda yakin ingin melanjutkan?");
+    const yakin = confirm(" Mengirim jadwal baru akan MENGHAPUS SEMUA DATA JADWAL LAMA di spreadsheet Anda.\nApakah Anda yakin ingin melanjutkan?");
     if (!yakin) return;
+
+    // ==========================================
+    // LOGIKA PENCARIAN BULAN DAN TAHUN DARI TEKS
+    // ==========================================
+    const namaUserAktif = localStorage.getItem("soka_user_name") || "Anonim";
+    let bulanIni = "Bulan Ini"; // Fallback jika tidak ditemukan tanggal sama sekali
+
+    // Mencari pola dd/mm/yy atau dd/mm/yyyy di dalam teks catatan
+    const polaTanggal = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/;
+    const cocok = isiCatatan.match(polaTanggal);
+
+    if (cocok) {
+        const angkaBulan = parseInt(cocok[2], 10);
+        let angkaTahun = cocok[3];
+        
+        // Jika tahun ditulis 2 digit (misal: "26"), ubah menjadi 4 digit ("2026")
+        if (angkaTahun.length === 2) {
+            angkaTahun = "20" + angkaTahun;
+        }
+
+        const daftarBulan = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        if (angkaBulan >= 1 && angkaBulan <= 12) {
+            bulanIni = `${daftarBulan[angkaBulan - 1]} ${angkaTahun}`;
+        }
+    }
 
     // Kunci tombol & ubah teks ke mode loading
     btnKirim.disabled = true;
@@ -3067,12 +3185,19 @@ async function kirimCatatanKeGAS() {
             body: formData.toString()
         });
 
-        alert("✨ Sukses! Data jadwal yang baru telah dikirim...");
+        // KIRIM LOG BUAT JADWAL
+        kirimLogAktivitas(
+            'INSERT', 
+            'Jadwal Bulanan', 
+            `${namaUserAktif} membuat jadwal bulanan untuk ${bulanIni}`
+        );
+
+        alert(" Sukses! Data jadwal yang baru telah dikirim...");
         catatanInput.value = ""; 
 
     } catch (error) {
         console.error("Gagal mengirim data jadwal:", error);
-        alert("⚠️ Terjadi kesalahan saat mengirim jadwal:\n" + error.message);
+        alert(" Terjadi kesalahan saat mengirim jadwal:\n" + error.message);
     } finally {
         btnKirim.disabled = false;
         btnKirim.innerHTML = `<i class="fa-solid fa-paper-plane mr-1.5"></i> Kirim Ke Sheet`;
@@ -3173,9 +3298,9 @@ const itemsPerPageKunjungan = 10;
 const formKunjungan = document.getElementById('laporanFormKunjungan'); 
 const textareaKunjungan = document.getElementById('keteranganKunjungan'); 
 const charCountKunjungan = document.getElementById('charCount');
-const containerCardList = document.getElementById('cardListKunjungan'); // <-- Diubah
-const containerPagination = document.getElementById('paginationKunjungan'); // <-- Diubah
-const inputEntryIdKunjungan = document.getElementById('entryIdKunjungan'); // <-- Diubah
+const containerCardList = document.getElementById('cardListKunjungan'); 
+const containerPagination = document.getElementById('paginationKunjungan'); 
+const inputEntryIdKunjungan = document.getElementById('entryIdKunjungan'); 
 const wrapperFormKunjungan = document.getElementById('formWrapper');
 const headerFormKunjungan = document.getElementById('formHeader');
 const titleHeaderKunjungan = document.getElementById('headerTitle');
@@ -3204,9 +3329,12 @@ if (textareaKunjungan) {
 
 // Gunakan fungsi loading bawaan Dashboard jika sudah ada, atau buat fallback ini
 function showLocalKunjunganLoading(show, message = "Memuat...") {
-    // Jika dashboard memiliki fungsi loading global sendiri (misal: showLoading() ), panggil itu di sini.
-    // Jika tidak, kita gunakan alert/loading standar dashboard Anda.
-    console.log(`[Loading] ${show} - ${message}`);
+    // Menyelaraskan dengan fungsi loading global dashboard Anda jika tersedia
+    if (typeof showGlobalLoading === "function") {
+        showGlobalLoading(show, message);
+    } else {
+        console.log(`[Loading] ${show} - ${message}`);
+    }
 }
 
 function clearPreviewsKunjungan() {
@@ -3302,22 +3430,32 @@ async function loadDataDariSheetKunjungan() {
     }
 }
 
-// Submit ke Google Sheets
+// Submit ke Google Sheets dengan Perekaman Log Aktivitas (CREATE & UPDATE)
 if (formKunjungan) {
     formKunjungan.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const id = inputEntryIdKunjungan.value; 
+        const action = id ? "update" : "insert";
+        
+        // Simpan nilai input ke variabel lokal agar aman dari manipulasi form saat proses asinkronus berjalan
+        const tanggalVal = document.getElementById('tanggal').value;
+        const pelaporVal = document.getElementById('pelapor').value.trim();
+        const keteranganVal = textareaKunjungan.value.trim();
+        const foto1Val = document.getElementById('foto1').value.trim();
+        const foto2Val = document.getElementById('foto2').value.trim();
+        const foto3Val = document.getElementById('foto3').value.trim();
+
         const data = {
             type: "kunjungan", 
-            action: id ? "update" : "insert",
+            action: action,
             rowId: id ? parseInt(id) : null,
-            tanggal: document.getElementById('tanggal').value,
-            pelapor: document.getElementById('pelapor').value,
-            keterangan: textareaKunjungan.value,
-            foto1: document.getElementById('foto1').value.trim(),
-            foto2: document.getElementById('foto2').value.trim(),
-            foto3: document.getElementById('foto3').value.trim()
+            tanggal: tanggalVal,
+            pelapor: pelaporVal,
+            keterangan: keteranganVal,
+            foto1: foto1Val,
+            foto2: foto2Val,
+            foto3: foto3Val
         };
 
         showLocalKunjunganLoading(true, "Menyimpan data...");
@@ -3330,7 +3468,19 @@ if (formKunjungan) {
             const result = await response.json();
 
             if (result.result === "success") {
-                alert(result.message);
+                // Jalankan Log Aktivitas setelah transmisi data utama berhasil
+                const logAction = action === "update" ? "UPDATE" : "CREATE";
+                const ringkasanKeterangan = keteranganVal.length > 40 ? keteranganVal.substring(0, 40) + "..." : keteranganVal;
+                const logDesc = action === "update" 
+                    ? `Mengubah laporan kunjungan oleh ${pelaporVal} (ID: ${id}) - "${ringkasanKeterangan}"`
+                    : `Membuat laporan kunjungan baru oleh ${pelaporVal} - "${ringkasanKeterangan}"`;
+
+                // Panggil modul kirimLogAktivitas global Anda
+                if (typeof kirimLogAktivitas === "function") {
+                    kirimLogAktivitas(logAction, 'Laporan Kunjungan', logDesc);
+                }
+
+                // Reset Form UI
                 formKunjungan.reset();
                 charCountKunjungan.textContent = 0;
                 clearPreviewsKunjungan(); 
@@ -3339,19 +3489,25 @@ if (formKunjungan) {
                 buttonSubmitKunjungan.textContent = "Kirim Laporan";
                 titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
                 
-                await loadDataDariSheetKunjungan();
+                // Tambahkan delay aman untuk sinkronisasi server Google Sheets sebelum reload data
+                setTimeout(async () => {
+                    await loadDataDariSheetKunjungan();
+                    showLocalKunjunganLoading(false);
+                    alert(result.message);
+                }, 1500);
+
             } else {
+                showLocalKunjunganLoading(false);
                 alert("Gagal: " + result.message);
             }
         } catch (error) {
-            alert("Terjadi kesalahan jaringan: " + error.message);
-        } finally {
             showLocalKunjunganLoading(false);
+            alert("Terjadi kesalahan jaringan: " + error.message);
         }
     });
 }
 
-// Render data kartu (Card) dengan gaya Tailwind yang mewah
+// Render data kartu (Card) dengan gaya Tailwind
 function renderDataKunjungan() {
     containerCardList.innerHTML = "";
     
@@ -3376,7 +3532,6 @@ function renderDataKunjungan() {
         let photosHTML = '';
         if (item.foto1 || item.foto2 || item.foto3) {
             photosHTML += '<div class="flex gap-2 flex-wrap mb-4">';
-            // Masing-masing onclick diubah untuk memanggil fungsi modal kustom kita
             if (item.foto1) photosHTML += `<img src="${item.foto1}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
             if (item.foto2) photosHTML += `<img src="${item.foto2}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
             if (item.foto3) photosHTML += `<img src="${item.foto3}" class="w-16 h-16 object-cover rounded-lg border hover:scale-105 transition cursor-pointer" onclick="openGlobalPhotoModal(this.src)">`;
@@ -3434,7 +3589,8 @@ function renderPaginationControlsKunjungan(totalPages) {
 }
 
 function editEntryKunjungan(id) {
-    const item = dataLaporanKunjungan.find(entry => entry.rowId === id);
+    // Menggunakan perbandingan longgar (==) untuk mengantisipasi ketidakcocokan tipe data id
+    const item = dataLaporanKunjungan.find(entry => entry.rowId == id);
     if (!item) return;
 
     inputEntryIdKunjungan.value = item.rowId;
@@ -3464,15 +3620,22 @@ function editEntryKunjungan(id) {
     buttonSubmitKunjungan.textContent = "Simpan Perubahan";
     titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pencil"></i> Edit Laporan (Sedang Berjalan)`;
     
-    // Pastikan container form tampil
+    // Tampilkan container form
     document.getElementById('formContainerKunjungan').classList.remove('hidden');
     document.querySelector('#toggleIcon i').className = "fa-solid fa-chevron-up";
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Hapus Laporan Kunjungan dengan Perekaman Log Aktivitas (DELETE)
 async function deleteEntryKunjungan(id) {
-    if (confirm("Apakah Anda yakin ingin menghapus laporan ini?")) {
+    // Menggunakan perbandingan longgar (==) untuk pencarian objek
+    const item = dataLaporanKunjungan.find(entry => entry.rowId == id);
+    const pelaporVal = item && item.pelapor ? item.pelapor.trim() : "Anggota";
+    const keteranganVal = item && item.keterangan ? item.keterangan.trim() : "";
+    const ringkasanKeterangan = keteranganVal.length > 40 ? keteranganVal.substring(0, 40) + "..." : keteranganVal;
+
+    if (confirm(`Apakah Anda yakin ingin menghapus laporan dari "${pelaporVal}"?`)) {
         showLocalKunjunganLoading(true, "Menghapus data...");
         try {
             const response = await fetch(SCRIPT_URL_KUNJUNGAN, {
@@ -3486,7 +3649,15 @@ async function deleteEntryKunjungan(id) {
             const result = await response.json();
             
             if (result.result === "success") {
-                alert(result.message);
+                // Jalankan Log Aktivitas setelah data terhapus di server
+                if (typeof kirimLogAktivitas === "function") {
+                    kirimLogAktivitas(
+                        'DELETE', 
+                        'Laporan Kunjungan', 
+                        `Menghapus laporan kunjungan oleh ${pelaporVal} (ID: ${id}) - "${ringkasanKeterangan}"`
+                    );
+                }
+
                 if (inputEntryIdKunjungan.value == id) {
                     formKunjungan.reset();
                     clearPreviewsKunjungan();
@@ -3495,14 +3666,20 @@ async function deleteEntryKunjungan(id) {
                     titleHeaderKunjungan.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Isi Laporan Baru`;
                     charCountKunjungan.textContent = 0;
                 }
-                await loadDataDariSheetKunjungan();
+
+                // Beri jeda sinkronisasi database server
+                setTimeout(async () => {
+                    await loadDataDariSheetKunjungan();
+                    showLocalKunjunganLoading(false);
+                    alert(result.message);
+                }, 1500);
             } else {
+                showLocalKunjunganLoading(false);
                 alert("Gagal menghapus: " + result.message);
             }
         } catch (error) {
-            alert("Kesalahan jaringan: " + error.message);
-        } finally {
             showLocalKunjunganLoading(false);
+            alert("Kesalahan jaringan: " + error.message);
         }
     }
 }
@@ -3519,9 +3696,6 @@ function escapeHTMLKunjungan(str) {
     );
 }
 
-// Panggil fungsi inisialisasi di dalam penanganan pergantian tab dashboard Anda:
-// loadDataDariSheetKunjungan();
-
 // Fungsi membuka modal zoom gambar
 function openGlobalPhotoModal(imgSrc) {
     const modal = document.getElementById('globalPhotoModal');
@@ -3533,7 +3707,6 @@ function openGlobalPhotoModal(imgSrc) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     
-    // Memberikan jeda mikro agar efek transisi CSS (opacity) berjalan mulus
     setTimeout(() => {
         modal.classList.remove('opacity-0');
     }, 10);
@@ -3544,7 +3717,6 @@ function closeGlobalPhotoModal() {
     const modal = document.getElementById('globalPhotoModal');
     modal.classList.add('opacity-0');
     
-    // Sembunyikan elemen setelah durasi transisi (300ms) selesai
     setTimeout(() => {
         modal.classList.remove('flex');
         modal.classList.add('hidden');
@@ -3644,7 +3816,7 @@ function renderQuoteListItems() {
                 </div>
                 <p class="text-slate-700 font-medium text-base italic leading-relaxed text-justify">"${textVal}"</p>
                 <div class="text-xs font-semibold text-slate-800 tracking-wide pt-1 border-t border-slate-100 flex items-center justify-between">
-                    <span>— ${authorVal}</span>
+                    <span>� ${authorVal}</span>
                 </div>
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-400">
@@ -3861,20 +4033,36 @@ function loadProfil() {
         });
 }
 
-// Fungsi Update
+// Update Profil (Mengirim foto ke GAS + Kirim Log Aktivitas)
 function updateProfil() {
+    const namaUser = localStorage.getItem("soka_user_name") || "Anonim";
     const payload = {
         action: "updateProfil",
-        nama: localStorage.getItem("soka_user_name"),
+        nama: namaUser,
         telepon: document.getElementById('p-telepon').value,
-        alamat: document.getElementById('p-alamat').value
+        alamat: document.getElementById('p-alamat').value,
+        foto: document.getElementById('p-foto-base64').value // Foto base64
     };
 
     fetch(APPS_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify(payload)
-    }).then(res => res.json()).then(res => {
+    })
+    .then(res => res.json())
+    .then(res => {
+        // Tampilkan pesan respons dari server (misal: "Profil berhasil diperbarui")
         alert(res.message);
+        
+        // KIRIM LOG UPDATE PROFIL
+        kirimLogAktivitas(
+            'UPDATE', 
+            'Profil User', 
+            `${namaUser} memperbaharui profilnya`
+        );
+    })
+    .catch(err => {
+        console.error("Error update profil:", err);
+        alert("Gagal update profil.");
     });
 }
 
@@ -3911,25 +4099,6 @@ function processProfilImage(inputElement) {
         img.src = e.target.result;
     };
     reader.readAsDataURL(file);
-}
-
-// Update Profil (Mengirim foto ke GAS)
-function updateProfil() {
-    const payload = {
-        action: "updateProfil",
-        nama: localStorage.getItem("soka_user_name"),
-        telepon: document.getElementById('p-telepon').value,
-        alamat: document.getElementById('p-alamat').value,
-        foto: document.getElementById('p-foto-base64').value // Foto base64
-    };
-
-    fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(res => alert(res.message))
-    .catch(err => alert("Gagal update"));
 }
 
 function checkPermissions() {
@@ -3971,6 +4140,42 @@ window.onload = function() {
     }
 };
 
+// =========================================================================
+// SCRIPT LOGGER AKTIVITAS TERPUSAT (CRUD LOGS)
+// =========================================================================
+
+const WEB_APP_URL_LOGGER = "https://script.google.com/macros/s/AKfycbw8P9LDC592roHHDLMzeB5ngn9u2l7Zg3DXyw1LMVqIRiyJb2nYFArZqx189x52x5yK/exec";
+
+/**
+ * Fungsi utama untuk mengirim log aktivitas ke Google Sheets
+ * @param {string} aksi - Jenis tindakan (CREATE, READ, UPDATE, DELETE)
+ * @param {string} modul - Nama Modul (Materi, Cerita Kemenangan, Jadwal)
+ * @param {string} deskripsi - Detail aktivitas (misal: "Membuat artikel 'Belajar Javascript'")
+ */
+async function kirimLogAktivitas(aksi, modul, deskripsi) {
+    const savedUsername = localStorage.getItem('soka_user_name');
+    const userActive = savedUsername ? savedUsername.trim() : "Anonim";
+
+    const logData = new URLSearchParams();
+    logData.append('action', 'log');
+    logData.append('user', userActive);
+    logData.append('aksi', aksi.toUpperCase());
+    logData.append('modul', modul);
+    logData.append('deskripsi', deskripsi);
+
+    try {
+        // Mengirim data menggunakan mode no-cors agar selaras dengan skrip utama Anda
+        await fetch(WEB_APP_URL_LOGGER, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: logData.toString()
+        });
+        console.log(`[Log Saved] ${aksi} - ${modul}: ${deskripsi}`);
+    } catch (error) {
+        console.warn("Gagal mengirim log aktivitas ke server:", error);
+    }
+}
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
@@ -3984,3 +4189,4 @@ window.onload = function() {
 
 </body>
 </html>
+<!-- bottom -->
