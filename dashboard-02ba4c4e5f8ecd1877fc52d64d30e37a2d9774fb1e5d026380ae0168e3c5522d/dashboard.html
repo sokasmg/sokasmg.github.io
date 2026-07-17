@@ -428,7 +428,7 @@ button.btn-submit:hover {
             <div><label class="block text-gray-700 text-sm">No Telepon</label>
                  <input type="text" id="p-telepon" class="w-full border rounded p-2"></div>
             <div><label class="block text-gray-700 text-sm">Alamat</label>
-                 <textarea id="p-alamat" rows="4" class="w-full border rounded p-2"></textarea></div>
+                 <textarea id="p-alamat" rows= "4" class="w-full border rounded p-2"></textarea></div>
             
             <button onclick="updateProfil()" class="w-full bg-indigo-600 text-white p-2 rounded">Update</button>
         </div>
@@ -4042,11 +4042,11 @@ function loadProfil() {
     const userName = localStorage.getItem("soka_user_name");
     if (!userName) return;
 
-    fetch(APPS_SCRIPT_URL) // Menggunakan URL endpoint yang sudah ada
+    // Kirim parameter nama ke GAS agar server hanya memproses 1 user ini saja
+    fetch(`${APPS_SCRIPT_URL}?action=getProfil&nama=${encodeURIComponent(userName)}`)
         .then(res => res.json())
-        .then(data => {
-            const user = data.find(item => item.nama === userName);
-            if (user) {
+        .then(user => {
+            if (user && !user.error) {
                 document.getElementById('p-foto').src = user.foto || 'default-avatar.png';
                 document.getElementById('p-nama-detil').innerText = user.nama;
                 document.getElementById('p-nama-header').innerText = user.nama;
@@ -4055,9 +4055,15 @@ function loadProfil() {
                 document.getElementById('p-jabatan').innerText = user.jabatan;
                 document.getElementById('p-gohonzon').innerText = user.gohonzon;
                 document.getElementById('p-keterangan').innerText = user.keterangan;
-                document.getElementById('p-telepon').value = user.telepon;
-                document.getElementById('p-alamat').value = user.alamat;
+                document.getElementById('p-telepon').value = user.telepon || '';
+                document.getElementById('p-alamat').value = user.alamat || '';
+            } else {
+                document.getElementById('p-nama-detil').innerText = "Data tidak ditemukan";
             }
+        })
+        .catch(err => {
+            console.error("Error load profil:", err);
+            document.getElementById('p-nama-detil').innerText = "Gagal memuat profil";
         });
 }
 
