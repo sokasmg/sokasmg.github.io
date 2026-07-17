@@ -315,57 +315,111 @@ button.btn-submit:hover {
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center py-4 md:h-16 gap-4 border-b border-slate-200">
                 <div class="flex items-center gap-2">
-                    <img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto">
-                    <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG APP</span>
-                    <span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v2026</span>
+                <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
+                    <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
+					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium">v4.2</span>
+					</span>
                 </div>
                 
-                <!-- Menu Tab Button & Tombol Beranda -->
 <!-- Menu Tab Button & Tombol Beranda -->
-<nav class="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto" aria-label="Tabs">
-    <a href="https://sokasmg.github.io" class="col-span-2 md:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 shadow-xs transition-all text-center">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-        </svg>
-        Beranda
-    </a>
+<div class="block md:hidden w-full px-2">
+    <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
+        <option id="opt-profil" value="tab-profil">👤 Profil</option>
+	    <option id="opt-ceritakemenangan" value="tab-ceritakemenangan">🏆 Cerita Kemenangan</option>
+        <option id="opt-materi" value="tab-materi">📚 Materi & Pelajaran</option>
+        <option id="opt-quote" value="tab-quoteoftheday">☀️ Quote of the Day</option>
+        <option id="opt-kehadiran" value="tab-kehadiran">📊 Laporan Kehadiran</option>
+        <option id="opt-kunjungan" value="tab-kunjungan" selected>🚗 Laporan Kunjungan/Shakubuku</option>
+        <option id="opt-jadwal" value="tab-jadwal">📅 Jadwal Kalender</option>
+        <option id="opt-database" value="tab-database">👥 Database Anggota</option>
+    </select>
+</div>
+
+<nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
+    <button onclick="switchTab('tab-profil'); loadProfil();" id="btn-tab-profil" 
+        class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+    Profil
+    </button>
     <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Cerita Kemenangan
     </button>
     <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Materi & Pelajaran
     </button>
-    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-quoteoftheday')" id="btn-tab-quoteoftheday" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
+        Quote of the Day
+    </button>
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran
     </button>
-    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent bg-indigo-600 text-white shadow-sm text-center">
+    <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kunjungan/Shakubuku
     </button>
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="col-span-2 md:col-span-1 tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
 </nav>
+
             </div>
         </div>
     </header>
 
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
     <main class="max-w-7xl mx-auto p-4 md:p-6">
-<!-- ========================================================================= -->
+    
+    <!-- ========================================================================= -->
+    <!-- TAB BARU: PROFIL                                         -->
+    <!-- ========================================================================= -->
+    <div id="tab-profil" class="tab-content hidden">
+    <div class="text-center mb-6">
+    <h2 class="text-xl font-bold">Profil Anggota</h2>
+    <p class="italic text-gray-500 mt-1">Selamat datang, <span id="p-nama-header">...</span></p>
+</div>
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+        <div id="profil-container" class="space-y-4">
+            <!-- Foto (Bisa Diklik) -->
+            <div class="flex justify-center mb-4 cursor-pointer" onclick="document.getElementById('p-file-input').click()">
+                <div id="p-foto-container" class="w-32 h-32 rounded-full overflow-hidden border border-gray-300">
+                    <img id="p-foto" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
+                </div>
+                <input type="file" id="p-file-input" class="hidden" accept="image/*" onchange="processProfilImage(this)">
+                <!-- Hidden input untuk simpan data base64 -->
+                <input type="hidden" id="p-foto-base64">
+            </div>
+            <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama-detil" class="font-bold"></div></div>
+            <div><label class="block text-gray-500 text-xs">Chiku</label><div id="p-chiku"></div></div>
+            <div><label class="block text-gray-500 text-xs">Bagian</label><div id="p-bagian"></div></div>
+            <div><label class="block text-gray-500 text-xs">Status</label><div id="p-jabatan"></div></div>
+            <div><label class="block text-gray-500 text-xs">Gohonzon</label><div id="p-gohonzon"></div></div>
+            <div><label class="block text-gray-500 text-xs">Keterangan</label><div id="p-keterangan"></div></div>
+            
+            <!-- Editables -->
+            <div><label class="block text-gray-700 text-sm">No Telepon</label>
+                 <input type="text" id="p-telepon" class="w-full border rounded p-2"></div>
+            <div><label class="block text-gray-700 text-sm">Alamat</label>
+                 <textarea id="p-alamat" class="w-full border rounded p-2"></textarea></div>
+            
+            <button onclick="updateProfil()" class="w-full bg-indigo-600 text-white p-2 rounded">Update</button>
+        </div>
+    </div>
+</div>
+
+    
+    <!-- ========================================================================= -->
     <!-- TAB BARU: CERITA KEMENANGAN                                          -->
     <!-- ========================================================================= -->
 <div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
-    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
             🏆 Editor Cerita Kemenangan
         </h1>
         <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
     </div>
     
-    <section class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
         <button onclick="toggleFormStory()" class="w-full flex justify-between items-center p-5 font-semibold text-lg text-slate-700 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
             <span id="form-title-status-story"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru</span>
             <i id="collapse-icon-story" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
@@ -490,7 +544,9 @@ button.btn-submit:hover {
     <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
         
         <div class="px-6 py-4 bg-slate-800 text-white flex justify-between items-center border-b border-slate-700">
-            <h3 class="text-lg font-bold truncate" id="modalStoryTitle">Detail Cerita Kemenangan</h3>
+    <h3 class="text-lg font-bold whitespace-normal break-words leading-snug pr-4" id="modalStoryTitle">
+    Detail Cerita Kemenangan
+</h3>
             <button type="button" onclick="closeDetailStoryModal()" class="text-slate-400 hover:text-white transition text-xl cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -501,12 +557,12 @@ button.btn-submit:hover {
                 <img id="modalStoryAvatar" src="" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm cursor-pointer hover:opacity-90">
                 <div>
                     <h4 class="font-bold text-slate-800 text-base" id="modalStoryAuthor">-</h4>
-                    <p class="text-xs text-slate-400 mt-0.5" id="modalStoryMeta">-</p>
+                    <i class="text-xs text-slate-400 mt-0.5" id="modalStoryMeta">-</i>
                 </div>
             </div>
 
             <div>
-                <div id="modalStoryContent" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line bg-slate-50/50 p-4 rounded-xl border border-slate-100 text-justify">
+                <div id="modalStoryContent" class="text-slate-600 text-s leading-relaxed whitespace-pre-line bg-slate-50/50 p-4 rounded-xl border border-slate-100 text-justify">
                     </div>
             </div>
 
@@ -532,14 +588,94 @@ button.btn-submit:hover {
         </div>
     </div>
 </div>
+
+<!-- ========================================================================= -->
+<!-- TAB: QUOTE OF THE DAY (CRUD OPERATIONAL)                                  -->
+<!-- ========================================================================= -->
+<div id="tab-quoteoftheday" class="tab-content hidden space-y-6">
+    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase" id="quote-tab-main-title">
+            🏆 Editor Quote of the Day
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">Kelola kutipan harian bimbingan Shibu Semarang</p>
+    </div>
     
-    <!-- ========================================================================= -->
+    <!-- Bagian Form Input (Create/Update) -->
+    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+        <div class="p-5 font-semibold text-lg text-slate-700 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+            <span id="form-title-status-quote"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Quote Baru</span>
+        </div>
+
+        <div class="p-6">
+            <form id="quote-form" onsubmit="handleQuoteFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="edit-row-index-quote">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1 required">Isi Teks Quote</label>
+                        <textarea id="input-text-quote" required placeholder="Masukkan kata-kata bimbingan/quote harian..." rows="3" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"></textarea>
+                    </div>
+                    <div class="flex flex-col justify-between space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1 required">Author / Tokoh</label>
+                            <input type="text" id="input-author-quote" required placeholder="Contoh: Daisaku Ikeda, Nichiren Daishonin" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="resetQuoteForm(true)" class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" id="btn-submit-quote" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer">
+                        Kirim Quote
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Bagian Tampilan Data List View -->
+    <section class="bg-white rounded-xl shadow-md border border-slate-100 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> Daftar Riwayat Quote
+            </h2>
+            <button onclick="fetchQuotesFromSheets()" class="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition cursor-pointer">
+                <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
+            </button>
+        </div>
+
+        <!-- Render List Data -->
+        <div class="w-full">
+            <div id="quote-card-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
+                <!-- Loader bawaan awal -->
+                <div class="col-span-full text-center py-12 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-500 mb-2"></i>
+                    <p class="text-sm font-medium">Sedang memuat data dari sheet bimbingan...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="empty-state-quote" class="text-center py-12 hidden">
+            <i class="fa-regular fa-comment-dots text-4xl text-slate-300 mb-3"></i>
+            <p class="text-slate-400">Belum ada data quote yang masuk di sheet bimbingan.</p>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 mt-4 border-t border-slate-100">
+            <div class="text-xs text-slate-500" id="pagination-info-quote">Menampilkan 0 sampai 0 dari 0 data</div>
+            <div class="flex items-center space-x-2" id="pagination-buttons-quote"></div>
+        </div>
+    </section>
+</div>
+    
+<!-- ========================================================================= -->
 <!-- TAB BARU: MATERI & PELAJARAN                                              -->
 <!-- ========================================================================= -->
 <div id="tab-materi" class="tab-content hidden space-y-6">
-    <div class="max-w-5xl mx-auto">
         <!-- Header -->
-        <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
+        <header class="admin-only mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
             <div>
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-3">
                     <span class="p-2 bg-emerald-500 text-white rounded-lg shadow-sm"><i class="fas fa-book-open text-xl"></i></span>
@@ -548,7 +684,7 @@ button.btn-submit:hover {
                 <p class="text-gray-500 mt-1">Bimbingan Sensei, Gosho, atau Dasar-Dasar Buddhisme</p>
             </div>
             <div class="mt-4 md:mt-0 flex gap-2">
-                <button id="btnRefresh" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-lg transition duration-200">
+                <button id="btnRefreshMateri" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-lg transition duration-200">
                     <i class="fas fa-sync-alt"></i> Refresh Data
                 </button>
                 <button id="btnToggleForm" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg shadow transition duration-200">
@@ -601,7 +737,7 @@ button.btn-submit:hover {
                     <button type="button" id="btnReset" class="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
                         Batal / Reset
                     </button>
-                    <button type="submit" id="btnSubmit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm transition disabled:bg-gray-400">
+                    <button type="submit" id="btnSubmitMateri" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm transition disabled:bg-gray-400">
                         <i class="fas fa-paper-plane mr-2"></i>Post Artikel
                     </button>
                 </div>
@@ -621,11 +757,11 @@ button.btn-submit:hover {
             <!-- Loading Spinner -->
             <div id="loadingState" class="hidden text-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
                 <i class="fas fa-spinner fa-spin text-3xl text-emerald-500 mb-2"></i>
-                <p class="text-gray-500 text-sm">Mengambil data dari Google Sheets...</p>
+                <p class="text-gray-500 text-sm">Mengambil data...</p>
             </div>
 
             <!-- Container List -->
-            <div id="articlesContainer" class="space-y-4">
+            <div id="articlesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>            
                 <!-- Data akan di-render menggunakan JavaScript -->
             </div>
 
@@ -640,8 +776,27 @@ button.btn-submit:hover {
             </div>
         </div>
     </div>
-</div>
     
+<!-- Modal Materi & Pelajaran -->
+<div id="detailMateriModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center space-x-3">
+                <img id="modalMateriAvatar" class="w-12 h-12 rounded-full border bg-slate-100 object-cover" src="">
+                <div>
+                    <h3 id="modalMateriTitle" class="text-base font-bold text-slate-900 line-clamp-1"></h3>
+                    <p class="text-xs text-slate-500"><span id="modalMateriAuthor" class="font-semibold"></span> • <span id="modalMateriMeta"></span></p>
+                </div>
+            </div>
+            <button onclick="closeDetailMateriModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-50 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="py-4 overflow-y-auto text-base text-slate-600 leading-relaxed whitespace-pre-line text-justify" id="modalMateriContent">
+            </div>
+    </div>
+</div>
+
         <!-- ========================================================================= -->
         <!-- TAB 1: LAPORAN KEHADIRAN                                                 -->
         <!-- ========================================================================= -->
@@ -753,7 +908,7 @@ button.btn-submit:hover {
 
                 <!-- TAMPILAN CARD LAYOUT (Mobile) -->
                 <div id="tabelCardMobile" class="block md:hidden p-4 space-y-4 bg-slate-50/50 divide-y divide-slate-100">
-                    <div class="text-center py-8 text-slate-400 text-sm">Memuat data dari Google Sheets...</div>
+                    <div class="text-center py-8 text-slate-400 text-sm">Memuat data...</div>
                 </div>
             </div>
         </div>
@@ -853,12 +1008,12 @@ button.btn-submit:hover {
         <!-- TAB 2: KALENDER JADWAL                                                    -->
         <!-- ========================================================================= -->
         <div id="tab-jadwal" class="tab-content hidden space-y-4">
-<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
+<div class="admin-only bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
     <label for="catatanJadwal" class="block text-sm font-semibold text-gray-700 mb-1">
         <i class="fa-solid fa-file-pen mr-2 text-indigo-600"></i>Tambah Catatan:
     </label>
     
-    <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
+    <div class="admin-only bg-amber-50 border-l-4 border-amber-500 p-2.5 mb-3 rounded-r-lg">
         <p class="text-xs text-amber-800 font-medium">
             <i class="fa-solid fa-info-circle mr-1"></i> <strong>Contoh format penulisan jadwal:</strong><br>
             06/1/2026, 10:00 WIB, pertemuan kemenangan<br>
@@ -871,10 +1026,10 @@ button.btn-submit:hover {
     <textarea 
         id="catatanInput" 
         rows="15" 
-        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-y font-mono"
+        class="admin-only w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-y font-mono"
         placeholder="Ketik jadwal di sini mengikuti format contoh di atas.&#10;Contoh:&#10;06/1/2026, 10:00 WIB, pertemuan kemenangan&#10;12/1/2026, 19.00 WIB, shodaikai"></textarea>
     
-    <div class="mt-3 flex justify-end">
+    <div class="admin-only mt-3 flex justify-end">
         <button 
             id="btnKirimCatatan" 
             onclick="kirimCatatanKeGAS()"
@@ -1144,9 +1299,9 @@ button.btn-submit:hover {
                     <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Keterangan</label>
                     <input type="text" id="editKeterangan" class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
                 </div>
-                <div>
+                <div id="editcontainerPelapor" class="hidden">
                     <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pelapor</label>
-                    <input type="text" id="editPelapor" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+                    <input type="text" id="editPelapor" required readonly class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
                 </div>
                 <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
                     <button type="button" onclick="tutupModalEdit()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
@@ -1181,7 +1336,11 @@ button.btn-submit:hover {
             if (tabId === 'tab-jadwal') {
                 adjustCalendarScale();
             }
-        }
+                const mobileSelect = document.getElementById('tabs-select');
+    if (mobileSelect && mobileSelect.value !== tabId) {
+        mobileSelect.value = tabId;
+    }
+}
 
         function adjustCalendarScale() {
             const container = document.querySelector('.calendar-outer-container');
@@ -1205,8 +1364,8 @@ button.btn-submit:hover {
 
 
 // =========================================================================
-        // SCRIPTS TAB 1: LAPORAN KEHADIRAN
-        // =========================================================================
+// SCRIPTS TAB 1: LAPORAN KEHADIRAN
+// =========================================================================
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
         
         // Memastikan format YYYY-MM-DD dari server tampil menjadi DD/MM/YYYY di tabel
@@ -1466,7 +1625,7 @@ button.btn-submit:hover {
                 const originalBtnText = submitBtn ? submitBtn.innerHTML : "Lapor";
                 if(submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = "⏳ Mengirim Laporan...";
+                    submitBtn.innerHTML = "Mengirim...";
                 }
 
                 const tglInput = document.getElementById('tanggal').value;
@@ -2141,11 +2300,11 @@ const formContainerMateri = document.getElementById('formContainer');
 const articleFormMateri = document.getElementById('articleForm');
 const btnToggleFormMateri = document.getElementById('btnToggleForm');
 const btnCancelFormMateri = document.getElementById('btnCancelForm');
-const btnRefreshMateri = document.getElementById('btnRefresh');
+const btnRefreshMateri = document.getElementById('btnRefreshMateri');
 const toggleIconMateri = document.getElementById('toggleIcon');
 const toggleTextMateri = document.getElementById('toggleText');
 const formTitleMateri = document.getElementById('formTitle');
-const btnSubmitMateri = document.getElementById('btnSubmit');
+const btnSubmitMateri = document.getElementById('btnSubmitMateri');
 const editRowIndexInputMateri = document.getElementById('editRowIndex');
 const articlesContainerMateri = document.getElementById('articlesContainer');
 const totalBadgeMateri = document.getElementById('totalBadge');
@@ -2228,7 +2387,7 @@ async function fetchArticlesMateri() {
             articlesContainerMateri.innerHTML = `
                 <div class="bg-red-50 text-red-800 p-5 rounded-xl border border-red-200 text-sm shadow-sm">
                     <div class="font-bold text-base mb-1"><i class="fas fa-exclamation-triangle mr-2"></i> Koneksi Tertahan</div>
-                    <p class="text-gray-600 mb-3">Sistem tidak bisa membaca data dari Google Sheets.</p>
+                    <p class="text-gray-600 mb-3">Sistem tidak bisa membaca data...</p>
                 </div>
             `;
         }
@@ -2237,7 +2396,7 @@ async function fetchArticlesMateri() {
     }
 }
 
-// RENDER DATA ARTIKEL
+// RENDER DATA ARTIKEL - CLONE STYLE CERITA KEMENANGAN
 function renderArticlesMateri() {
     articlesContainerMateri.innerHTML = '';
     totalBadgeMateri.innerText = dataArticlesMateri.length;
@@ -2256,72 +2415,102 @@ function renderArticlesMateri() {
     const totalPages = Math.ceil(dataArticlesMateri.length / itemsPerPageMateri);
     const startIndex = (currentPageMateri - 1) * itemsPerPageMateri;
     const endIndex = Math.min(startIndex + itemsPerPageMateri, dataArticlesMateri.length);
+    
+    // Gunakan slice dan reverse jika ingin data terbaru muncul di atas seperti tab Cerita
     const paginatedItems = dataArticlesMateri.slice(startIndex, endIndex);
 
-    paginationInfoMateri.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${dataArticlesMateri.length} artikel`;
+    paginationInfoMateri.innerText = `Menampilkan ${startIndex + 1} sampai ${endIndex} dari ${dataArticlesMateri.length} data`;
 
+    // Pastikan container memiliki class grid layout di HTML-nya (misal: grid grid-cols-1 md:grid-cols-3 gap-6)
     paginatedItems.forEach((article, index) => {
-        const uniqueId = `isi-${article.row_index}-${index}`;
-        const btnId = `btn-toggle-${article.row_index}-${index}`;
-        const formattedIsi = (article.isi || '').toString().replace(/\n/g, '<br>');
+        const namaPengirim = article.pengirim ? article.pengirim.trim() : "Anonim";
+        const kategoriArtikel = article.kategori ? article.kategori.trim() : "Materi";
+        
+        // API Inisial Nama untuk Avatar Dinamis
+        const imgProfilSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaPengirim)}&background=047857&color=fff&size=128`;
         
         const card = document.createElement('div');
-        card.className = "bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition p-5 md:p-6";
+        card.className = "bg-white rounded-xl shadow-md border border-slate-100 p-5 flex flex-col justify-between hover:shadow-lg transition duration-200 relative";
+        
+        // Stringify object data untuk dikirim ke Modal Detail
+        const articleDataString = JSON.stringify(article).replace(/"/g, '&quot;');
+
         card.innerHTML = `
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-md border border-emerald-100">
-                    <i class="fas fa-tags mr-1 text-emerald-500"></i> ${article.kategori || 'Tanpa Kategori'}
-                </span>
-                <span class="text-xs text-gray-400">•</span>
-                <span class="text-xs text-gray-500 flex items-center gap-1">
-                    <i class="fas fa-user text-gray-400"></i> ${article.pengirim || 'Anonim'}
-                </span>
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="flex-1 min-w-0">
+                        <span class="inline-block mt-0.5 px-2 py-0.5 text-3xs font-semibold bg-emerald-50 text-emerald-700 rounded border border-emerald-100">
+                            <i class="fas fa-tags mr-0.5 text-emerald-500"></i> ${kategoriArtikel}
+                        </span>
+                        <i class="text-xs font-bold text-slate-800 truncate" title="Pengirim: ${namaPengirim}">Pengirim: ${namaPengirim}</i>
+                    </div>
+                </div>
+                
+                <h3 class="text-m font-bold text-slate-900 mb-1.5 line-clamp-1">${article.judul || 'Tanpa Judul'}</h3>
+                <p class="text-s text-slate-500 line-clamp-3 mb-4 whitespace-pre-line text-justify">${article.isi || '-'}</p>
             </div>
             
-            <h3 class="text-xl font-bold text-slate-800 mb-3">${article.judul || 'Tanpa Judul'}</h3>
-            
-            <div id="${uniqueId}" class="text-gray-600 text-sm leading-relaxed space-y-2 mb-3 break-words line-clamp-4 transition-all duration-300">
-                ${formattedIsi}
-            </div>
-            
-            <div class="mb-5">
-                <button id="${btnId}" onclick="toggleReadMore('${uniqueId}', '${btnId}')" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition flex items-center gap-1 focus:outline-none">
-                    <span>Baca Selengkapnya</span> <i class="fas fa-chevron-down text-[10px]"></i>
+            <div class="border-t border-slate-100 pt-3 mt-auto flex items-center justify-between">
+                <button type="button" onclick="openDetailMateriCardModal(${articleDataString})" class="text-xs font-semibold text-emerald-600 hover:text-emerald-800 flex items-center transition cursor-pointer">
+                    Baca Selengkapnya <i class="fa-solid fa-arrow-right text-3xs ml-1"></i>
                 </button>
-            </div>
-            
-            <div class="flex justify-end gap-2 pt-3 border-t border-gray-50">
-                <button onclick="editArticleDirectMateri('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs font-medium rounded-md border border-amber-200 transition">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
-                <button onclick="deleteArticleDirectMateri('${article.row_index}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-medium rounded-md border border-red-200 transition">
-                    <i class="fas fa-trash-alt"></i> Delete
-                </button>
+                
+                <div class="admin-only flex space-x-1">
+                    <button type="button" onclick="editArticleDirectMateri('${article.row_index}')" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Ubah data">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" onclick="deleteArticleDirectMateri('${article.row_index}')" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition cursor-pointer" title="Hapus data">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
             </div>
         `;
         articlesContainerMateri.appendChild(card);
     });
-
+    checkPermissions();
     renderPaginationControlsMateri(totalPages);
 }
 
-// Buka-Tutup (Collapse) Artikel
-window.toggleReadMore = function(containerId, buttonId) {
-    const container = document.getElementById(containerId);
-    const button = document.getElementById(buttonId);
-    const btnText = button.querySelector('span');
-    const btnIcon = button.querySelector('i');
-
-    if (container.classList.contains('line-clamp-4')) {
-        container.classList.remove('line-clamp-4');
-        btnText.innerText = 'Sembunyikan';
-        btnIcon.className = 'fas fa-chevron-up text-[10px]';
-    } else {
-        container.classList.add('line-clamp-4');
-        btnText.innerText = 'Baca Selengkapnya';
-        btnIcon.className = 'fas fa-chevron-down text-[10px]';
-    }
+// Fungsi Membuka Modal Detail khusus Object Materi
+window.openDetailMateriCardModal = function(article) {
+    const modal = document.getElementById('detailMateriModal');
+    const modalContentContainer = modal.querySelector('.transform');
+    
+    const namaPengirim = article.pengirim ? article.pengirim.trim() : "Anonim";
+    
+    document.getElementById('modalMateriTitle').innerText = article.judul || 'Tanpa Judul';
+    document.getElementById('modalMateriAuthor').innerText = namaPengirim;
+    document.getElementById('modalMateriMeta').innerText = `Kategori: ${article.kategori || 'Tanpa Kategori'}`;
+    document.getElementById('modalMateriContent').innerText = article.isi || '-';
+    
+    const avatarImg = document.getElementById('modalMateriAvatar');
+    avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaPengirim)}&background=047857&color=fff&size=128`;
+        
+    // Tampilkan Modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContentContainer.classList.remove('scale-95');
+        modalContentContainer.classList.add('scale-100');
+    }, 10);
 };
+
+// Fungsi Menutup Modal Detail Materi
+window.closeDetailMateriModal = function() {
+    const modal = document.getElementById('detailMateriModal');
+    const modalContentContainer = modal.querySelector('.transform');
+    
+    modal.classList.add('opacity-0');
+    modalContentContainer.classList.remove('scale-100');
+    modalContentContainer.classList.add('scale-95');
+    
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 300);
+};
+
 
 function renderPaginationControlsMateri(totalPages) {
     paginationControlsMateri.innerHTML = '';
@@ -2581,10 +2770,21 @@ async function fetchStoriesFromSheets() {
 
 async function handleFormSubmitStory(e) {
     e.preventDefault();
-    showGlobalLoading(true, "Sedang mengirim cerita kemenangan ke Google Sheets...");
+    showGlobalLoading(true, "Sedang mengirim cerita kemenangan...");
     
     const rowIndex = document.getElementById('edit-row-index-story').value;
     const action = rowIndex ? "update" : "post";
+    
+    const formEl = document.getElementById('story-form');
+    const originalSender = formEl ? formEl.getAttribute('data-original-sender') : "";
+    
+    let namaPengirim = "";
+    if (action === "update" && originalSender) {
+        namaPengirim = originalSender;
+    } else {
+        const savedUsername = localStorage.getItem('soka_user_name');
+        namaPengirim = savedUsername ? savedUsername.trim() : "Anonim";
+    }
 
     const searchParams = new URLSearchParams();
     searchParams.append("target_sheet", "ceritakemenangan");
@@ -2596,6 +2796,7 @@ async function handleFormSubmitStory(e) {
     searchParams.append("foto1", document.getElementById('input-foto1-story').value);
     searchParams.append("foto2", document.getElementById('input-foto2-story').value);
     searchParams.append("isicerita", document.getElementById('input-isicerita-story').value.trim());
+    searchParams.append("pengirim", namaPengirim);
 
     try {
         await fetch(GAS_WEB_APP_URL_STORY, {
@@ -2628,6 +2829,11 @@ function editStory(rowIndex) {
     document.getElementById('input-foto1-story').value = story.foto1 || "";
     document.getElementById('input-foto2-story').value = story.foto2 || "";
     document.getElementById('input-isicerita-story').value = story.isicerita || "";
+    
+    const formEl = document.getElementById('story-form');
+    if (formEl) {
+        formEl.setAttribute('data-original-sender', story.pengirim || "");
+    }
 
     setupPreviewFromBase64Story('input-urlfotoprofil-story', 'preview-profil-story', 'size-profil-story');
     setupPreviewFromBase64Story('input-foto1-story', 'preview-foto1-story', 'size-foto1-story');
@@ -2659,7 +2865,7 @@ function setupPreviewFromBase64Story(inputId, previewId, sizeId) {
 
 async function deleteStory(rowIndex) {
     if(confirm(`Hapus permanen cerita kemenangan?`)) {
-        showGlobalLoading(true, "Menghapus data dari Google Sheets...");
+        showGlobalLoading(true, "Menghapus data...");
         
         const searchParams = new URLSearchParams();
         searchParams.append("target_sheet", "ceritakemenangan");
@@ -2689,6 +2895,8 @@ async function deleteStory(rowIndex) {
 function resetFormStory(closeAfterReset = false) {
     document.getElementById('story-form').reset();
     document.getElementById('edit-row-index-story').value = "";
+    const formEl = document.getElementById('story-form');
+    if (formEl) formEl.removeAttribute('data-original-sender');
     document.getElementById('btn-submit-story').innerText = "Post Cerita";
     document.getElementById('form-title-status-story').innerHTML = `<i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru`;
     
@@ -2720,9 +2928,12 @@ function renderStoryTable() {
     const endIndex = Math.min(startIndex + itemsPerStoryPage, stories.length);
     const paginatedItems = stories.slice(startIndex, startIndex + itemsPerStoryPage).reverse();
 
-    paginatedItems.forEach((story, index) => {
+        paginatedItems.forEach((story, index) => {
         const globalIndex = startIndex + index + 1;
         const namaAnggota = story.nama ? story.nama.trim() : "Anggota";
+        
+        // Ambil data pengirim dari Google Sheets (kolom G) yang dibaca sebagai properti story.pengirim
+        const pengirimCerita = story.pengirim ? story.pengirim.trim() : "Anonim";
         
         const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
         
@@ -2743,15 +2954,15 @@ function renderStoryTable() {
                         <img src="${imgProfilSrc}" class="w-full h-full object-cover cursor-pointer" onclick="if('${hasProfil}'==='true') viewGlobalPhoto('${story.urlfotoprofil}')">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-bold text-slate-800 truncate">${namaAnggota}</h4>
+                        <h4 class="text-sm font-bold text-slate-800 truncate" title="Tokoh Cerita: ${namaAnggota}">${namaAnggota}</h4>
+                        <p class="text-3xs text-slate-400 truncate mt-0.5" title="Pengirim: ${pengirimCerita}">
+                        <i class="text-xs">${pengirimCerita}</i>
+                        </p>
                     </div>
-                    <span class="inline-flex px-2 py-0.5 text-3xs font-semibold rounded bg-slate-100 text-slate-500 border border-slate-200">
-                        Cerita Kemenangan
-                    </span>
                 </div>
                 
                 <h3 class="text-sm font-bold text-slate-900 mb-1.5 line-clamp-1">${story.judul || 'Cerita Kemenangan'}</h3>
-                <p class="text-xs text-slate-500 line-clamp-3 mb-4 whitespace-pre-line text-justify">${story.isicerita || '-'}</p>
+                <p class="text-s text-slate-500 line-clamp-3 mb-4 whitespace-pre-line text-justify">${story.isicerita || '-'}</p>
             </div>
             
             <div class="border-t border-slate-100 pt-3 mt-auto flex items-center justify-between">
@@ -2759,7 +2970,7 @@ function renderStoryTable() {
                     Baca Selengkapnya <i class="fa-solid fa-arrow-right text-3xs ml-1"></i>
                 </button>
                 
-                <div class="flex space-x-1">
+                <div class="admin-only flex space-x-1">
                     <button type="button" onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Ubah data">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -2772,7 +2983,7 @@ function renderStoryTable() {
         
         container.appendChild(card);
     });
-
+    checkPermissions();
     updateStoryPaginationControls(stories.length, startIndex, endIndex);
 }
 
@@ -2856,7 +3067,7 @@ async function kirimCatatanKeGAS() {
             body: formData.toString()
         });
 
-        alert("✨ Sukses! Data jadwal yang baru telah dikirim ke Google Sheets.");
+        alert("✨ Sukses! Data jadwal yang baru telah dikirim...");
         catatanInput.value = ""; 
 
     } catch (error) {
@@ -2885,14 +3096,11 @@ function openDetailStoryCardModal(story) {
     const modalContentContainer = modal.querySelector('.transform');
     
     const namaAnggota = story.nama ? story.nama.trim() : "Anggota";
-    
-    // Set teks komponen
+    const pengirimCerita = story.pengirim ? story.pengirim.trim() : "Anonim";
     document.getElementById('modalStoryTitle').innerText = story.judul || 'Cerita Kemenangan';
     document.getElementById('modalStoryAuthor').innerText = namaAnggota;
-    document.getElementById('modalStoryMeta').innerText = `Cerita Kemenangan Anggota`;
+    document.getElementById('modalStoryMeta').innerText = `Dikirim oleh: ${pengirimCerita}`;
     document.getElementById('modalStoryContent').innerText = story.isicerita || '-';
-    
-    // Set Foto Profil / Inisial Nama di Modal
     const avatarImg = document.getElementById('modalStoryAvatar');
     const hasProfil = story.urlfotoprofil && story.urlfotoprofil.startsWith('data:image');
     
@@ -3181,7 +3389,7 @@ function renderDataKunjungan() {
                 <span class="text-slate-300">|</span>
                 <span><i class="fa-regular fa-user"></i> Pelapor: <strong class="text-slate-700">${escapeHTMLKunjungan(item.pelapor)}</strong></span>
             </div>
-            <p class="text-slate-600 text-sm mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
+            <p class="text-slate-600 text-base mb-4 whitespace-pre-wrap leading-relaxed">${escapeHTMLKunjungan(item.keterangan)}</p>
             ${photosHTML}
             <div class="flex justify-end gap-2 border-t pt-3">
                 <button class="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition" onclick="editEntryKunjungan(${item.rowId})">
@@ -3342,6 +3550,427 @@ function closeGlobalPhotoModal() {
         modal.classList.add('hidden');
     }, 300);
 }
+
+// ==========================================
+// KODE INTEGRASI QUOTE OF THE DAY
+// ==========================================
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyDre0T52VZw9dqY66xSyVdw5bu-S8HBFAjKUDA1tQrrO-EXMqXzL3t_0rL3LlgNk_w/exec"; 
+
+let quoteDataMaster = [];
+let quoteCurrentPage = 1;
+const quoteItemsPerPage = 15;
+
+// Jalankan inisialisasi system saat aplikasi selesai di-load DOM nya
+document.addEventListener("DOMContentLoaded", function() {
+    setupQuoteSenderName();
+    fetchQuotesFromSheets();
+});
+
+// Ambil data user login secara dinamis dari localStorage
+function setupQuoteSenderName() {
+    let currentLoggedUser = localStorage.getItem("soka_user_name") || "System Admin";
+    const senderDisplay = document.getElementById("quote-sender-display");
+    if(senderDisplay) {
+        senderDisplay.innerText = currentLoggedUser;
+    }
+    return currentLoggedUser;
+}
+
+// Fetch Data GET: Mengambil data range Sheet bimbingan secara langsung
+function fetchQuotesFromSheets() {
+    const container = document.getElementById("quote-card-container");
+    if(!container) return;
+    
+    container.innerHTML = `
+        <div class="col-span-full text-center py-12 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-500 mb-2"></i>
+            <p class="text-sm font-medium">Sedang memuat data dari sheet bimbingan...</p>
+        </div>
+    `;
+    document.getElementById("empty-state-quote").classList.add("hidden");
+
+    fetch(`${GAS_WEB_APP_URL}?sheet=bimbingan`)
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                // Sesuai Request: Diurutkan data paling akhir berada paling atas
+                quoteDataMaster = data.reverse(); 
+                quoteCurrentPage = 1;
+                renderQuoteListItems();
+            } else {
+                showEmptyQuoteState();
+            }
+        })
+        .catch(err => {
+            console.error("Gagal memuat database quote:", err);
+            container.innerHTML = `
+                <div class="col-span-full text-center py-8 text-red-500 bg-red-50 rounded-xl border border-red-200">
+                    <i class="fa-solid fa-triangle-exclamation text-xl mb-1"></i>
+                    <p class="text-sm font-semibold">Gagal memuat koneksi data sheet bimbingan.</p>
+                </div>
+            `;
+        });
+}
+
+// Menampilkan Item Per Halaman (Pagination 20 data per halaman)
+function renderQuoteListItems() {
+    const container = document.getElementById("quote-card-container");
+    const emptyState = document.getElementById("empty-state-quote");
+    
+    if (quoteDataMaster.length === 0) {
+        showEmptyQuoteState();
+        return;
+    }
+    
+    emptyState.classList.add("hidden");
+    container.innerHTML = "";
+    
+    let startIndex = (quoteCurrentPage - 1) * quoteItemsPerPage;
+    let endIndex = Math.min(startIndex + quoteItemsPerPage, quoteDataMaster.length);
+    let itemsToDisplay = quoteDataMaster.slice(startIndex, endIndex);
+    
+    itemsToDisplay.forEach((item) => {
+        let textVal = item.text || "";
+        let authorVal = item.author || "Unknown";
+        let senderVal = item.pengirim || "Anonim";
+        let rIndex = item.row_index;
+        
+        let cardElement = document.createElement("div");
+        cardElement.className = "bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col justify-between hover:border-indigo-200 transition relative";
+        cardElement.innerHTML = `
+            <div class="space-y-3">
+                <div class="text-slate-400 text-xs flex items-center space-x-1">
+                    <i class="fa-solid fa-quote-left text-lg text-indigo-400"></i>
+                </div>
+                <p class="text-slate-700 font-medium text-base italic leading-relaxed text-justify">"${textVal}"</p>
+                <div class="text-xs font-semibold text-slate-800 tracking-wide pt-1 border-t border-slate-100 flex items-center justify-between">
+                    <span>— ${authorVal}</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-400">
+                <span class="truncate max-w-[120px] text-[10px] italic"><i class="fa-solid fa-user-edit mr-1 not-italic"></i>${senderVal}</span>
+                <div class="admin-only flex space-x-2">
+                    <button type="button" onclick="prepareEditQuote(${rIndex}, '${encodeURIComponent(textVal)}', '${encodeURIComponent(authorVal)}')" class="text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 font-semibold px-2.5 py-1 rounded transition text-2xs cursor-pointer">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
+                    </button>
+                    <button type="button" onclick="handleDeleteQuote(${rIndex})" class="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 font-semibold px-2.5 py-1 rounded transition text-2xs cursor-pointer">
+                        <i class="fa-solid fa-trash-can mr-1"></i>Hapus
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(cardElement);
+    });
+    
+    // Update pagination metadata bar
+    document.getElementById("pagination-info-quote").innerText = `Menampilkan ${startIndex + 1} sampai ${endIndex} dari ${quoteDataMaster.length} data`;
+    renderQuotePaginationButtons();
+}
+
+function showEmptyQuoteState() {
+    document.getElementById("quote-card-container").innerHTML = "";
+    document.getElementById("empty-state-quote").classList.remove("hidden");
+    document.getElementById("pagination-info-quote").innerText = "Menampilkan 0 sampai 0 dari 0 data";
+    document.getElementById("pagination-buttons-quote").innerHTML = "";
+}
+
+// Generate Dinamis Pagination Button
+function renderQuotePaginationButtons() {
+    const btnContainer = document.getElementById("pagination-buttons-quote");
+    btnContainer.innerHTML = "";
+    
+    let totalPages = Math.ceil(quoteDataMaster.length / quoteItemsPerPage);
+    if (totalPages <= 1) return; // Tidak butuh tombol jika data kurang dari batas maksimal per halaman
+    
+    // Tombol Previous
+    let prevBtn = document.createElement("button");
+    prevBtn.className = `px-2.5 py-1 text-xs font-medium border rounded transition ${quoteCurrentPage === 1 ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-white text-slate-700 hover:bg-slate-50 cursor-pointer'}`;
+    prevBtn.innerHTML = `<i class="fa-solid fa-chevron-left"></i>`;
+    prevBtn.disabled = (quoteCurrentPage === 1);
+    prevBtn.onclick = () => { quoteCurrentPage--; renderQuoteListItems(); };
+    btnContainer.appendChild(prevBtn);
+    
+    // Tombol Halaman Angka
+    for (let i = 1; i <= totalPages; i++) {
+        let pageBtn = document.createElement("button");
+        pageBtn.className = `px-2.5 py-1 text-xs font-medium border rounded transition ${quoteCurrentPage === i ? 'bg-indigo-600 text-white border-indigo-600 font-bold' : 'bg-white text-slate-700 hover:bg-slate-50 cursor-pointer'}`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => { quoteCurrentPage = i; renderQuoteListItems(); };
+        btnContainer.appendChild(pageBtn);
+    }
+    
+    // Tombol Next
+    let nextBtn = document.createElement("button");
+    nextBtn.className = `px-2.5 py-1 text-xs font-medium border rounded transition ${quoteCurrentPage === totalPages ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-white text-slate-700 hover:bg-slate-50 cursor-pointer'}`;
+    nextBtn.innerHTML = `<i class="fa-solid fa-chevron-right"></i>`;
+    nextBtn.disabled = (quoteCurrentPage === totalPages);
+    nextBtn.onclick = () => { quoteCurrentPage++; renderQuoteListItems(); };
+    btnContainer.appendChild(nextBtn);
+}
+
+// Menangani Aksi Pengiriman Form Post (Insert/Update)
+function handleQuoteFormSubmit(event) {
+    event.preventDefault();
+    
+    const rIndex = document.getElementById("edit-row-index-quote").value;
+    const txtQuote = document.getElementById("input-text-quote").value.trim();
+    const authQuote = document.getElementById("input-author-quote").value.trim();
+    const senderQuote = setupQuoteSenderName(); 
+    const submitBtn = document.getElementById("btn-submit-quote");
+    
+    let actionType = rIndex ? "update" : "post";
+    
+    // Buat data payload yang siap diposting dengan metode x-www-form-urlencoded default aman CORS
+    let payloadData = {
+        target_sheet: "bimbingan",
+        action: actionType,
+        text: txtQuote,
+        author: authQuote,
+        pengirim: senderQuote
+    };
+    
+    if (rIndex) {
+        payloadData.row_index = rIndex;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Mengirim data...";
+    
+    // Menggunakan stringify body data urlencoded agar aman dari benturan kebijakan CORS server Google
+    let formBody = [];
+    for (let property in payloadData) {
+        let encodedKey = encodeURIComponent(property);
+        let encodedValue = encodeURIComponent(payloadData[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+    })
+    .then(res => res.json())
+    .then(response => {
+        if(response.status === "success") {
+            alert(rIndex ? "Quote berhasil diperbarui!" : "Quote baru berhasil ditambahkan!");
+            resetQuoteForm(false);
+            fetchQuotesFromSheets();
+        } else {
+            alert("Error: " + response.message);
+        }
+    })
+    .catch(err => {
+        console.error("Gagal melakukan post data:", err);
+        alert("Terjadi kegagalan transmisi data. Cek status deployment web app.");
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Kirim Quote";
+    });
+}
+
+// Persiapan Menyalurkan Data ke Form untuk Proses Mode Edit
+function prepareEditQuote(rowIndex, encText, encAuthor) {
+    document.getElementById("edit-row-index-quote").value = rowIndex;
+    document.getElementById("input-text-quote").value = decodeURIComponent(encText);
+    document.getElementById("input-author-quote").value = decodeURIComponent(encAuthor);
+    
+    document.getElementById("form-title-status-quote").innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i>Edit Quote Terpilih (Baris #${rowIndex})`;
+    document.getElementById("btn-submit-quote").className = "px-6 py-2.5 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition shadow-sm cursor-pointer";
+    document.getElementById("btn-submit-quote").innerText = "Update Quote";
+    
+    // Scroll mulus otomatis ke posisi formulir penulisan
+    document.getElementById("quote-tab-main-title").scrollIntoView({ behavior: 'smooth' });
+}
+
+// Menangani Aksi Penghapusan (Delete)
+function handleDeleteQuote(rowIndex) {
+    if(!confirm("Apakah Anda yakin ingin menghapus data quote ini secara permanen?")) return;
+    
+    let payloadData = {
+        target_sheet: "bimbingan",
+        action: "delete",
+        row_index: rowIndex
+    };
+    
+    let formBody = [];
+    for (let property in payloadData) {
+        formBody.push(encodeURIComponent(property) + "=" + encodeURIComponent(payloadData[property]));
+    }
+    formBody = formBody.join("&");
+    
+    fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+    })
+    .then(res => res.json())
+    .then(response => {
+        if(response.status === "success") {
+            alert("Quote berhasil dihapus!");
+            fetchQuotesFromSheets();
+        } else {
+            alert("Gagal menghapus: " + response.message);
+        }
+    })
+    .catch(err => {
+        console.error("Error saat menghapus:", err);
+        alert("Gagal menghubungi server untuk menghapus data.");
+    });
+}
+
+// Reset Formulir Input Kembali ke Keadaan Kosong/Awal
+function resetQuoteForm(isCancelClick) {
+    document.getElementById("edit-row-index-quote").value = "";
+    document.getElementById("quote-form").reset();
+    
+    document.getElementById("form-title-status-quote").innerHTML = `<i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Quote Baru`;
+    document.getElementById("btn-submit-quote").className = "px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm cursor-pointer";
+    document.getElementById("btn-submit-quote").innerText = "Kirim Quote";
+    setupQuoteSenderName();
+}
+
+// ==========================================
+// KODE INTEGRASI PROFIL
+// ==========================================
+function loadProfil() {
+    const userName = localStorage.getItem("soka_user_name");
+    if (!userName) return;
+
+    fetch(APPS_SCRIPT_URL) // Menggunakan URL endpoint yang sudah ada
+        .then(res => res.json())
+        .then(data => {
+            const user = data.find(item => item.nama === userName);
+            if (user) {
+                document.getElementById('p-foto').src = user.foto || 'default-avatar.png';
+                document.getElementById('p-nama-detil').innerText = user.nama;
+                document.getElementById('p-nama-header').innerText = user.nama;
+                document.getElementById('p-chiku').innerText = user.chiku;
+                document.getElementById('p-bagian').innerText = user.bagian;
+                document.getElementById('p-jabatan').innerText = user.jabatan;
+                document.getElementById('p-gohonzon').innerText = user.gohonzon;
+                document.getElementById('p-keterangan').innerText = user.keterangan;
+                document.getElementById('p-telepon').value = user.telepon;
+                document.getElementById('p-alamat').value = user.alamat;
+            }
+        });
+}
+
+// Fungsi Update
+function updateProfil() {
+    const payload = {
+        action: "updateProfil",
+        nama: localStorage.getItem("soka_user_name"),
+        telepon: document.getElementById('p-telepon').value,
+        alamat: document.getElementById('p-alamat').value
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    }).then(res => res.json()).then(res => {
+        alert(res.message);
+    });
+}
+
+// Proses foto profil
+function processProfilImage(inputElement) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const size = 300; // Ukuran tetap 300x300
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Logika Crop 1:1 (Memotong bagian tengah gambar)
+            let sourceSize = Math.min(img.width, img.height);
+            let xOffset = (img.width - sourceSize) / 2;
+            let yOffset = (img.height - sourceSize) / 2;
+
+            // Menggambar gambar ke canvas dengan area potong di tengah
+            ctx.drawImage(img, xOffset, yOffset, sourceSize, sourceSize, 0, 0, size, size);
+            
+            // Konversi ke base64
+            const base64 = canvas.toDataURL('image/jpeg', 0.5);
+            
+            // Update tampilan dan hidden input
+            document.getElementById('p-foto').src = base64;
+            document.getElementById('p-foto-base64').value = base64;
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// Update Profil (Mengirim foto ke GAS)
+function updateProfil() {
+    const payload = {
+        action: "updateProfil",
+        nama: localStorage.getItem("soka_user_name"),
+        telepon: document.getElementById('p-telepon').value,
+        alamat: document.getElementById('p-alamat').value,
+        foto: document.getElementById('p-foto-base64').value // Foto base64
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => alert(res.message))
+    .catch(err => alert("Gagal update"));
+}
+
+function checkPermissions() {
+    // 1. Ambil jabatan
+    const savedJabatan = localStorage.getItem("soka_user_jabatan");
+    
+    // 2. Jika bukan Pimpinan, jalankan logika sembunyi
+    if (savedJabatan !== "Pimpinan" && savedJabatan !== "Pimpinan (Admin)") {
+        
+        // A. Sembunyikan tombol (Kode Anda yang lama)
+        const adminButtons = document.querySelectorAll('.admin-only');
+        adminButtons.forEach(btn => {
+            btn.style.display = 'none';
+        });
+
+        // B. Tambahan: Hapus opsi dropdown (Logika baru yang aman)
+        const adminOptions = ['opt-kehadiran', 'opt-database'];
+        adminOptions.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        });
+    }
+}
+
+// Panggil fungsi ini saat halaman selesai dimuat
+window.onload = function() {
+    // 1. Terapkan aturan akses admin
+    checkPermissions(); 
+    
+    // 2. Paksa buka tab profil secara default saat halaman dimuat
+    switchTab('tab-profil');
+    loadProfil();
+    
+    // 3. Pastikan tombol profil mendapatkan gaya aktif
+    const btnProfil = document.getElementById('btn-tab-profil');
+    if (btnProfil) {
+        btnProfil.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        btnProfil.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    }
+};
+
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
