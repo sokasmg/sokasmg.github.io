@@ -4252,22 +4252,6 @@ async function kirimLogAktivitas(aksi, modul, deskripsi) {
         console.warn("Gagal mengirim log aktivitas ke server:", error);
     }
 }
-
-// =========================================================================
-// SCRIPT CHECK AUTH
-// =========================================================================
-  // Fungsi untuk mengecek sesi
-  function checkAuth() {
-    const userSession = localStorage.getItem('namaUser'); // Sesuaikan dengan key yang Anda pakai di login
-    
-    // Jika tidak ada data sesi, lempar ke index.html
-    if (!userSession) {
-      window.location.href = '../index.html';
-    }
-  }
-
-  // Jalankan fungsi saat halaman dimuat
-  checkAuth();
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
     <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
