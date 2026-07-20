@@ -318,7 +318,7 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v4.3</button></span>
+       			v4.4</button></span>
 					</span>
                 </div>
                 
@@ -343,29 +343,29 @@ button.btn-submit:hover {
     Profil
     </button>
     <button onclick="switchTab('tab-ceritakemenangan')" id="btn-tab-ceritakemenangan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Cerita Kemenangan
+        Editor Cerita Kemenangan
     </button>
     <button onclick="switchTab('tab-materi')" id="btn-tab-materi" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Materi & Pelajaran
+        Editor Materi & Pelajaran
     </button>
     <button onclick="switchTab('tab-quoteoftheday')" id="btn-tab-quoteoftheday" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
         Quote of the Day
     </button>
     <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Laporan Kehadiran
+        Laporan Kehadiran Anggota
     </button>
     <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Laporan Kunjungan/Shakubuku
+        Laporan Kunjungan & Shakubuku
     </button>
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Jadwal Kalender
+        Jadwal Kalender Bulanan
     </button>
     <button onclick="switchTab('tab-database')" id="btn-tab-database" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
         </button>
     <button onclick="switchTab('tab-settings');" id="btn-tab-settings" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-        Settings
+        Website Settings
     </button>
 </nav>
 
@@ -511,7 +511,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v4.3
+            Shibu Semarang Website & Dashboard v4.4
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -536,7 +536,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v4.3
+            Shibu Semarang Website & Dashboard v4.4
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -4355,7 +4355,7 @@ window.onload = function() {
     // 2. Paksa buka tab profil secara default saat halaman dimuat
     switchTab('tab-profil');
     loadProfil();
-	autoloadSettingsBanner();
+    autoloadSettingsBanner();
     
     // 3. Pastikan tombol profil mendapatkan gaya aktif
     const btnProfil = document.getElementById('btn-tab-profil');
