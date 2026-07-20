@@ -362,6 +362,10 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-database')" id="btn-tab-database" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
+        </button>
+    <button onclick="switchTab('tab-settings'); autoloadSettingsBanner();" id="btn-tab-settings" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+        Settings
+    </button>
 </nav>
 
             </div>
@@ -371,6 +375,149 @@ button.btn-submit:hover {
     <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
     <main class="max-w-7xl mx-auto p-4 md:p-6">
     
+<!-- ========================================================================= -->
+<!-- TAB: SETTINGS                                                             -->
+<!-- ========================================================================= -->
+<div id="tab-settings" class="tab-content hidden p-4">
+    <h1 class="admin-only text-2xl font-bold mb-4 text-slate-800">Website Settings</h1>
+    
+    <div class="admin-only w-full md:max-h-[80vh] border border-slate-200 rounded-lg overflow-y-auto p-4 shadow-sm bg-white">
+        
+        <!-- SECTION 1: BANNER SETTINGS (Bentuk List Ringkas) -->
+        <div class="mb-6">
+            <h2 class="text-base font-bold text-slate-700 mb-3 pb-1 border-b border-slate-100">Manajemen Banner Slideshow (800x400)</h2>
+            <div class="flex flex-col gap-2">
+                
+                <!-- Baris Banner 1 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
+                    <div class="flex items-center gap-3 min-w-[200px] flex-1">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-200/70 w-6 h-6 rounded-full flex items-center justify-center">1</span>
+                        <div class="flex-1">
+                            <label class="block text-xs font-semibold text-slate-700">Banner 1</label>
+                            <input type="file" accept="image/*" onchange="processSettingsBanner(this, 'input-banner-1', 'preview-banner-1')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span id="size-input-banner-1" class="text-xs font-semibold text-slate-500 whitespace-nowrap bg-white px-2 py-1 rounded border border-slate-200">0 KB</span>
+                        <!-- Mini Preview Box -->
+                        <div id="preview-banner-1" class="w-16 h-10 bg-slate-200 rounded border border-slate-300 flex items-center justify-center text-[10px] text-slate-400 text-center overflow-hidden shrink-0">
+                            No Img
+                        </div>
+                    </div>
+                    <input type="hidden" id="input-banner-1" name="banner1">
+                </div>
+
+                <!-- Baris Banner 2 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
+                    <div class="flex items-center gap-3 min-w-[200px] flex-1">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-200/70 w-6 h-6 rounded-full flex items-center justify-center">2</span>
+                        <div class="flex-1">
+                            <label class="block text-xs font-semibold text-slate-700">Banner 2</label>
+                            <input type="file" accept="image/*" onchange="processSettingsBanner(this, 'input-banner-2', 'preview-banner-2')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span id="size-input-banner-2" class="text-xs font-semibold text-slate-500 whitespace-nowrap bg-white px-2 py-1 rounded border border-slate-200">0 KB</span>
+                        <div id="preview-banner-2" class="w-16 h-10 bg-slate-200 rounded border border-slate-300 flex items-center justify-center text-[10px] text-slate-400 text-center overflow-hidden shrink-0">
+                            No Img
+                        </div>
+                    </div>
+                    <input type="hidden" id="input-banner-2" name="banner2">
+                </div>
+
+                <!-- Baris Banner 3 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
+                    <div class="flex items-center gap-3 min-w-[200px] flex-1">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-200/70 w-6 h-6 rounded-full flex items-center justify-center">3</span>
+                        <div class="flex-1">
+                            <label class="block text-xs font-semibold text-slate-700">Banner 3</label>
+                            <input type="file" accept="image/*" onchange="processSettingsBanner(this, 'input-banner-3', 'preview-banner-3')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span id="size-input-banner-3" class="text-xs font-semibold text-slate-500 whitespace-nowrap bg-white px-2 py-1 rounded border border-slate-200">0 KB</span>
+                        <div id="preview-banner-3" class="w-16 h-10 bg-slate-200 rounded border border-slate-300 flex items-center justify-center text-[10px] text-slate-400 text-center overflow-hidden shrink-0">
+                            No Img
+                        </div>
+                    </div>
+                    <input type="hidden" id="input-banner-3" name="banner3">
+                </div>
+
+                <!-- Baris Banner 4 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
+                    <div class="flex items-center gap-3 min-w-[200px] flex-1">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-200/70 w-6 h-6 rounded-full flex items-center justify-center">4</span>
+                        <div class="flex-1">
+                            <label class="block text-xs font-semibold text-slate-700">Banner 4</label>
+                            <input type="file" accept="image/*" onchange="processSettingsBanner(this, 'input-banner-4', 'preview-banner-4')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span id="size-input-banner-4" class="text-xs font-semibold text-slate-500 whitespace-nowrap bg-white px-2 py-1 rounded border border-slate-200">0 KB</span>
+                        <div id="preview-banner-4" class="w-16 h-10 bg-slate-200 rounded border border-slate-300 flex items-center justify-center text-[10px] text-slate-400 text-center overflow-hidden shrink-0">
+                            No Img
+                        </div>
+                    </div>
+                    <input type="hidden" id="input-banner-4" name="banner4">
+                </div>
+
+                <!-- Baris Banner 5 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
+                    <div class="flex items-center gap-3 min-w-[200px] flex-1">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-200/70 w-6 h-6 rounded-full flex items-center justify-center">5</span>
+                        <div class="flex-1">
+                            <label class="block text-xs font-semibold text-slate-700">Banner 5</label>
+                            <input type="file" accept="image/*" onchange="processSettingsBanner(this, 'input-banner-5', 'preview-banner-5')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span id="size-input-banner-5" class="text-xs font-semibold text-slate-500 whitespace-nowrap bg-white px-2 py-1 rounded border border-slate-200">0 KB</span>
+                        <div id="preview-banner-5" class="w-16 h-10 bg-slate-200 rounded border border-slate-300 flex items-center justify-center text-[10px] text-slate-400 text-center overflow-hidden shrink-0">
+                            No Img
+                        </div>
+                    </div>
+                    <input type="hidden" id="input-banner-5" name="banner5">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECTION 2: TEMPAT UNTUK SETTINGS BARU ANDA -->
+        <div class="mb-6 pt-2">
+            <h2 class="text-base font-bold text-slate-700 mb-3 pb-1 border-b border-slate-100">Pengaturan Umum Lainnya</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Contoh Input Teks Baru -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Aplikasi / Toko</label>
+                    <input type="text" placeholder="Masukkan nama toko..." class="w-full text-sm px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                </div>
+                <!-- Contoh Input Teks Baru 2 -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Hot Line</label>
+                    <input type="tel" placeholder="Contoh: 08123456789" class="w-full text-sm px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol Simpan Ke Google Sheet -->
+        <div class="mt-6 flex justify-end border-t border-slate-100 pt-4">
+            <button onclick="saveSettingsToSheet()" id="btn-save-settings" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs sm:text-sm rounded-lg shadow transition-colors flex items-center gap-2">
+                Simpan Pengaturan
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
+        <p class="text-slate-700 font-semibold text-xs sm:text-sm">
+            Shibu Semarang Website & Dashboard v4.3
+        </p>
+        <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
+            by Didi Chung 2026
+        </p>
+    </div>
+</div>
+
     <!-- ========================================================================= -->
     <!-- TAB: LOG AKTIVITAS                                         -->
     <!-- ========================================================================= -->
@@ -1610,7 +1757,7 @@ button.btn-submit:hover {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    // KIRIM LOG UBAH DATA
+
 // KIRIM LOG UBAH DATA
 kirimLogAktivitas(
     'UPDATE', 
@@ -4252,6 +4399,222 @@ async function kirimLogAktivitas(aksi, modul, deskripsi) {
         console.warn("Gagal mengirim log aktivitas ke server:", error);
     }
 }
+
+// Fungsi pembantu untuk loading indikator (bisa disesuaikan dengan UI Anda)
+function toggleSettingsLoading(isLoading, message = "") {
+    const btn = document.getElementById('btn-save-settings');
+    if (btn) {
+        if (isLoading) {
+            btn.disabled = true;
+            btn.innerText = message || "Memproses...";
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            btn.disabled = false;
+            btn.innerText = "Simpan Pengaturan";
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }
+}
+
+function processSettingsBanner(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    toggleSettingsLoading(true, "Mengolah gambar...");
+    let sizeLabelId = `size-${targetInputId}`;
+
+    try {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                try {
+                    // Target ukuran tetap sesuai request Anda
+                    const targetWidth = 800;
+                    const targetHeight = 400;
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+
+                    // --- ALGORITMA CENTER CROP ---
+                    let sourceX = 0;
+                    let sourceY = 0;
+                    let sourceWidth = img.width;
+                    let sourceHeight = img.height;
+
+                    const targetRatio = targetWidth / targetHeight;
+                    const imgRatio = img.width / img.height;
+
+                    if (imgRatio > targetRatio) {
+                        // Gambar terlalu lebar, potong sisi kiri & kanan
+                        sourceWidth = img.height * targetRatio;
+                        sourceX = (img.width - sourceWidth) / 2;
+                    } else if (imgRatio < targetRatio) {
+                        // Gambar terlalu tinggi, potong sisi atas & bawah
+                        sourceHeight = img.width / targetRatio;
+                        sourceY = (img.height - sourceHeight) / 2;
+                    }
+
+                    // Gambar dipotong dari source dan digambar pas 800x400 di canvas
+                    ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
+
+                    // Kompresi ke WebP kualitas 55% (rentang 50-60%)
+                    const base64Result = canvas.toDataURL('image/webp', 0.55);
+                    
+                    // Hitung estimasi ukuran file
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    // Masukkan ke Hidden Input text
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    // Perbarui Preview
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    // Update Label Ukuran File
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 50) { // Batas peringatan webp bisa disesuaikan
+                            sizeLabel.className = "text-xs font-semibold text-amber-600 whitespace-nowrap";
+                        } else {
+                            sizeLabel.className = "text-xs font-semibold text-green-600 whitespace-nowrap";
+                        }
+                    }
+                    toggleSettingsLoading(false);
+                } catch (innerError) {
+                    toggleSettingsLoading(false);
+                    alert("Gagal memproses gambar: " + innerError.message);
+                }
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        toggleSettingsLoading(false);
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+// Fungsi untuk mengirim data ke Google Apps Script (Google Sheets)
+function saveSettingsToSheet() {
+    toggleSettingsLoading(true, "Menyimpan ke Google Sheet...");
+
+    // Ambil nama user aktif dari localStorage untuk keperluan log
+    const namaUser = localStorage.getItem("soka_user_name") || "Anonim";
+
+    const payload = {
+        banner1: document.getElementById('input-banner-1').value || "",
+        banner2: document.getElementById('input-banner-2').value || "",
+        banner3: document.getElementById('input-banner-3').value || "",
+        banner4: document.getElementById('input-banner-4').value || "",
+        banner5: document.getElementById('input-banner-5').value || ""
+    };
+
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyLeRzVbmSNSW1eRx8NBzHYfIgXvwKJnYLITVjylNa7j5BdS2sS6euOS55btvPf5NneQ/exec"; 
+
+    fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(result => {
+        toggleSettingsLoading(false);
+        if (result.status === "success") {
+            alert("Pengaturan Berhasil Disimpan ke Google Sheet!");
+            
+            // ==========================================
+            // KIRIM LOG AKTIVITAS (Ditambahkan di Sini)
+            // ==========================================
+            kirimLogAktivitas(
+                'UPDATE', 
+                'Website Settings', 
+                `${namaUser} memperbarui pengaturan banner slideshow`
+            );
+            
+        } else {
+            alert("Gagal menyimpan di server: " + result.message);
+        }
+    })
+    .catch(err => {
+        toggleSettingsLoading(false);
+        alert("Gagal mengirim data: " + err.message);
+    });
+}
+
+function autoloadSettingsBanner() {
+    // Gunakan URL yang sama persis dengan fungsi saveSettingsToSheet Anda
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyLeRzVbmSNSW1eRx8NBzHYfIgXvwKJnYLITVjylNa7j5BdS2sS6euOS55btvPf5NneQ/exec"; 
+
+    // Tampilkan indikator loading ringan pada preview box saat data diambil
+    for (let i = 1; i <= 5; i++) {
+        const previewBox = document.getElementById(`preview-banner-${i}`);
+        if (previewBox) previewBox.innerText = "Loading...";
+    }
+
+    // Lakukan fetch langsung menggunakan WEB_APP_URL
+    fetch(`${WEB_APP_URL}?action=getSettings`)
+        .then(res => res.json())
+        .then(settings => {
+            // Jika sheet kosong atau respons berupa array kosong [], reset preview ke awal
+            if (!settings || settings.error || (Array.isArray(settings) && settings.length === 0)) {
+                console.log("Pengaturan belum ada di spreadsheet atau kosong.");
+                resetBannerPreviews("No Img");
+                return;
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const bannerNumber = i + 1;
+                const base64Data = settings[i];
+                
+                const hiddenInput = document.getElementById(`input-banner-${bannerNumber}`);
+                const previewBox = document.getElementById(`preview-banner-${bannerNumber}`);
+                const sizeSpan = document.getElementById(`size-input-banner-${bannerNumber}`);
+
+                if (base64Data && base64Data.trim() !== "" && base64Data.includes("base64")) {
+                    if (hiddenInput) hiddenInput.value = base64Data;
+                    if (previewBox) {
+                        previewBox.innerHTML = `<img src="${base64Data}" class="w-full h-full object-cover" alt="Banner ${bannerNumber}">`;
+                    }
+                    if (sizeSpan) {
+                        const stringLength = base64Data.length - (base64Data.indexOf(',') + 1);
+                        const sizeInKb = Math.round((stringLength * 3) / 4 / 1024);
+                        sizeSpan.innerText = `${sizeInKb} KB`;
+                    }
+                } else {
+                    if (previewBox) previewBox.innerHTML = "No Img";
+                    if (sizeSpan) sizeSpan.innerText = "0 KB";
+                    if (hiddenInput) hiddenInput.value = "";
+                }
+            }
+        })
+        .catch(err => {
+            console.error("Error load settings banner:", err);
+            resetBannerPreviews("Gagal muat");
+        });
+        }
+
+// Fungsi pembantu jika fetch gagal agar tampilan kembali bersih
+function resetBannerPreviews(text) {
+    for (let i = 1; i <= 5; i++) {
+        const previewBox = document.getElementById(`preview-banner-${i}`);
+        const sizeSpan = document.getElementById(`size-input-banner-${i}`);
+        const hiddenInput = document.getElementById(`input-banner-${i}`);
+        
+        if (previewBox) previewBox.innerText = text;
+        if (sizeSpan) sizeSpan.innerText = "0 KB";
+        if (hiddenInput) hiddenInput.value = "";
+    }
+}
+
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
     <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
