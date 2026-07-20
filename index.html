@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soka Gakkai Indonesia - Semarang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom Soka Tricolor Border */
+        .soka-tricolor {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+        .soka-blue { background-color: #002F6C; flex: 1; }
+        .soka-yellow { background-color: #F9A825; flex: 1; }
+        .soka-red { background-color: #C62828; flex: 1; }
+
+        /* Kelas untuk memperbesar font dasar seluruh website saat toggle aktif */
+        body.text-large {
+            font-size: 1.25rem;
+        }
+        body.text-large h1 { font-size: 2.5rem !important; }
+        body.text-large h2 { font-size: 2rem !important; }
+        body.text-large p { font-size: 1.25rem !important; }
+        body.text-large blockquote { font-size: 1.5rem !important; }
+        /* Memaksa jawaban Q&A dan seluruh link di footer ikut membesar secara proporsional */
+        body.text-large #qa-container div[id^="ans-"] { font-size: 1.25rem !important; }
+        body.text-large footer a { font-size: 1.1rem !important; }
+        body.text-large footer h4 { font-size: 1.3rem !important; }
+        
+        /* Animasi fade in untuk modal */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+        /* Menyembunyikan scrollbar untuk pengalaman-container */
+#pengalaman-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+        /* Menyembunyikan scrollbar untuk pengalaman dan materi */
+#pengalaman-container, #materi-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#pengalaman-container::-webkit-scrollbar, #materi-container::-webkit-scrollbar { 
+    display: none;  /* Safari dan Chrome */
+}
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div id="member-announcement-bar" class="bg-[#172554] text-white overflow-hidden py-2 px-4 hidden border-b border-red-800">
+            <div class="max-w-7xl mx-auto flex items-center">
+                <span class="bg-white text-[#172554] text-xs font-black uppercase px-2 py-0.5 rounded mr-3 select-none flex-shrink-0 animate-pulse">PENGUMUMAN</span>
+                <marquee id="announcement-marquee" behavior="scroll" direction="left" class="text-xs md:text-sm font-bold tracking-wide">
+                    Memuat pengumuman jadwal terbaru...
+                </marquee>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 md:h-24">
+                <div class="flex items-center space-x-3 md:space-x-4">
+                    <img src="logo.jpeg" alt="Logo Soka Gakkai" class="h-12 w-12 md:h-16 md:w-16 object-contain">
+                    <div>
+                        <span class="text-xl md:text-3xl font-black text-blue-950 block tracking-wide leading-none">Soka Gakkai Indonesia</span>
+                        <span class="text-xs md:text-base font-bold text-gray-500 block uppercase tracking-widest mt-1">Semarang (Jawa Tengah)</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 font-semibold">
+                    <a href="#beranda" class="text-blue-900 hover:text-blue-700 transition">Beranda</a>
+                    <a href="#tentang" class="text-gray-600 hover:text-blue-700 transition">Tentang Kami</a>
+                    <a href="#kontak" class="text-gray-600 hover:text-blue-700 transition">Kontak</a>
+                    <a id="nav-galeri-desktop" href="dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/galeri.html" class="text-blue-900 hover:text-blue-700 transition hidden">Galeri</a>
+                    
+                    <div class="flex items-center space-x-4 border-l border-gray-200 pl-4">
+                        <span id="user-greeting-desktop" class="text-sm font-bold text-blue-950 hidden"></span>
+                        <button id="btn-auth-desktop" onclick="openLoginModal()" class="bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition">
+                            Login Anggota
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden bg-gray-50 border-t border-gray-100 flex flex-col space-y-2 py-3 px-4">
+            <div class="flex justify-around items-center text-xs font-bold uppercase tracking-wider w-full">
+                <a href="#beranda" class="text-blue-900 px-1 py-1">Beranda</a>
+                <a href="#tentang" class="text-gray-600 px-1 py-1">Tentang</a>
+                <a href="#kontak" class="text-gray-600 px-1 py-1">Kontak</a>
+                <a id="nav-galeri-mobile" href="dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/galeri.html" class="text-blue-900 bg-blue-50 rounded px-2.5 py-1 border border-blue-200 hidden">Galeri</a>
+                <button id="btn-toggle-text" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm">
+                    A+
+                </button>
+            </div>
+            <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-200 text-xs mt-1 shadow-sm">
+                <span id="user-greeting-mobile" class="font-bold text-gray-500 italic">Menu Khusus Anggota:</span>
+                <button id="btn-auth-mobile" onclick="openLoginModal()" class="bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition">
+                    Login
+                </button>
+            </div>
+        </div>
+
+        <div class="soka-tricolor">
+            <div class="soka-blue"></div>
+            <div class="soka-yellow"></div>
+            <div class="soka-red"></div>
+        </div>
+    </nav>
+
+<div id="beranda" class="relative bg-blue-950 h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 w-full h-full">
+        <!-- Kosongkan src dan data-src, biarkan diisi oleh Google Sheet. 
+             Setel semua awal sebagai opacity-0 agar tidak muncul kotak broken image saat loading -->
+        <img alt="Banner 1" fetchpriority="high" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+        <img alt="Banner 2" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+        <img alt="Banner 3" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+        <img alt="Banner 4" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+        <img alt="Banner 5" class="banner-slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out [will-change:opacity]">
+    </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-md">
+                Selamat Datang di Soka Gakkai Semarang
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto drop-shadow mb-8">
+                Membangun perdamaian, pendidikan, dan kebudayaan berdasarkan nilai-nilai kemanusiaan yang luhur dari Buddhisme Nichiren Daishonin.
+            </p>
+            <div class="inline-flex rounded-full overflow-hidden p-[3px] bg-gradient-to-r from-[#002F6C] via-[#F9A825] to-[#C62828] shadow-lg transform hover:scale-105 transition">
+                <a href="#tentang" class="bg-white text-blue-950 px-8 py-3 rounded-full font-bold hover:bg-opacity-90 transition inline-block">
+                    Pelajari Lebih Lanjut
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <section id="tentang" class="py-20 bg-white scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                Tentang Kami
+            </h2>
+            <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+                <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+            </div>
+            <p class="text-gray-600 leading-relaxed text-lg mb-6">
+                Bernaung di bawah Soka Gakkai Indonesia dan Soka Gakkai International, Soka Gakkai Semarang merupakan wadah komunitas yang berkomitmen aktif dalam menyebarkan semangat perdamaian dan kebahagiaan hidup di tengah masyarakat melalui nilai-nilai humanisme berdasarkan Buddhisme Nichiren Daishonin.</p>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Kami percaya bahwa transformasi positif dalam diri setiap individu (revolusi manusia) adalah kunci utama untuk menciptakan keharmonisan dan kemajuan bersama di lingkungan sosial sekitar kita.
+            </p>
+        </div>
+    </section>
+    
+    <section class="py-16 bg-blue-950 text-white relative overflow-hidden">
+        <span class="absolute top-4 left-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">“</span>
+        <span class="absolute bottom-4 right-6 text-white opacity-10 text-6xl md:text-9xl font-serif select-none">”</span>
+        
+        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+            <div class="inline-flex bg-white bg-opacity-10 p-1.5 rounded-full mb-8 border border-white border-opacity-10">
+                <button id="tab-bimbingan" onclick="switchTab('bimbingan')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow">
+                    Bimbingan Hari Ini
+                </button>
+                <button id="tab-gosho" onclick="switchTab('gosho')" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400">
+                    Gosho Hari Ini
+                </button>
+            </div>
+
+            <blockquote id="soka-quote" class="text-xl md:text-2xl font-medium italic leading-relaxed mb-4">
+                Memuat kutipan...
+            </blockquote>
+            <p id="soka-author" class="text-sm font-bold text-blue-200 tracking-wider mb-6">
+                -
+            </p>
+
+            <div class="flex justify-center items-center space-x-4">
+                <button onclick="shareToWhatsApp()" class="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full font-semibold shadow transition transform hover:scale-105">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+                    </svg>
+                    <span>Bagikan ke WA</span>
+                </button>
+
+                <a id="btn-card-creator" href="dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/card_creator.html" class="inline-flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white text-sm px-4 py-2 rounded-full font-semibold border border-white border-opacity-30 shadow transition transform hover:scale-105 hidden">
+                    <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37a1.5 1.5 0 112.122 2.122l-9.37 9.37a1.5 1.5 0 01-1.06.44H7.5v-2.121a1.5 1.5 0 01.44-1.061l1.59-1.59zM7.5 21h12" />
+                    </svg>
+                    <span>Buat Gambar Kartu</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+<section id="jadwal" class="py-16 bg-blue-50 border-t border-b border-blue-100">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold text-blue-950 mb-2">
+            Jadwal Kegiatan Bulanan
+        </h2>
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-6">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+        <p class="text-gray-600 max-w-xl mx-auto mb-8">
+            Mari bergabung bersama kami dalam kegiatan diskusi, doa bersama, dan kegiatan komunitas lainnya. Berikut adalah jadwal terbaru bulan ini:
+        </p>
+
+        <!-- CSS Pendukung Cetakan Kalender Kotak -->
+        <style>
+            .calendar-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            .calendar-table th { border: 2px solid #000; padding: 10px; text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase; background-color: #fff; color: #000; }
+            .calendar-table td { border: 2px solid #000; height: 110px; vertical-align: top; padding: 6px; position: relative; background-color: #fff; color: #000; }
+            .date-number { font-size: 13px; font-weight: bold; text-align: right; margin-bottom: 4px; }
+            .calendar-table th:first-child, .calendar-table td:first-child .date-number { color: red; }
+            .event-list { font-size: 10px; line-height: 1.3; color: #000; text-align: left; }
+            .event-item { margin-bottom: 4px; }
+            
+            /* Pembungkus Skala Otomatis Khusus Layar HP / Komputer */
+            .calendar-outer-container { width: 100%; overflow: hidden; background: transparent; }
+            #calendarWrapper { width: 1024px; transform-origin: top left; transition: transform 0.2s ease; }
+        </style>
+
+        <!-- Wadah Utama Render Kalender -->
+        <div class="calendar-outer-container rounded-2xl shadow-lg border border-gray-100 bg-white mx-auto">
+            <div id="calendarWrapper" class="bg-white p-6 text-black">
+                <!-- Header Kalender -->
+                <table class="w-full border-collapse mb-4 text-black">
+                    <tr>
+                        <td class="text-[44px] font-bold tracking-wider w-[35%] align-bottom leading-none text-left">SEMARANG</td>
+                        <td class="w-[30%] align-middle">
+                            <div class="flex flex-col items-center justify-center text-center">
+                                <img src="logo.jpeg" alt="Logo" class="w-14 h-auto mb-1">
+                                <div class="text-xs font-bold tracking-wider whitespace-nowrap">SOKA GAKKAI INDONESIA</div>
+                            </div>
+                        </td>
+                        <td class="text-right text-xl font-bold w-[35%] align-bottom uppercase tracking-wide" id="textHeaderBulan">JADWAL BULANAN</td>
+                    </tr>
+                </table>
+
+                <!-- Grid Tabel Kalender -->
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Minggu</th><th>Senin</th><th>Selasa</th><th>Rabu</th><th>Kamis</th><th>Jumat</th><th>Sabtu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendarBody">
+                        <tr><td colspan="7" class="text-center py-8 text-slate-400">Memuat data kalender...</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- Footer Kalender (Dinamis Hari Penting) -->
+                <div class="mt-6 border-t border-slate-300 pt-4 flex flex-row justify-between items-center gap-4 text-black w-full">
+                    <div id="containerHariPenting" class="text-[11px] font-bold leading-relaxed text-left w-[35%]">
+                        ⏳ Memuat hari penting...
+                    </div>
+                    <div class="w-[30%] flex items-center justify-center">
+                        <div class="w-full text-center text-[10px] font-bold px-2 py-1.5 bg-amber-50 rounded-lg border border-amber-200">
+                            Setiap hari kamis jam 19.00 ada Shodaikai umum
+                        </div>
+                    </div>
+                    <div class="w-[35%] flex justify-end items-center">
+                        <img src="jadwal_1.jpeg" alt="Banner" class="w-full max-w-[200px] h-auto object-contain">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol Unduh Gambar Jadwal -->
+        <div class="mt-6">
+            <button id="downloadBtn" class="inline-flex items-center space-x-2 bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-800 transition shadow cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Unduh Gambar Jadwal (JPEG)</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+    <div class="soka-tricolor">
+        <div class="soka-blue"></div>
+        <div class="soka-yellow"></div>
+        <div class="soka-red"></div>
+    </div>
+
+    <section id="kegiatan-terakhir" class="py-16 bg-white border-b border-gray-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">Kegiatan Kami</h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+                <p class="text-gray-500 text-sm md:text-base">Dokumentasi momen dan kebersamaan dalam aktivitas komunitas kami.</p>
+            </div>
+            
+            <div class="relative max-w-5xl mx-auto group">
+                <div id="gallery-slider" class="flex space-x-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none py-4 px-2" style="-ms-overflow-style: none; scrollbar-width: none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <div id="gallery-modal" class="fixed inset-0 bg-black/95 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="closeGalleryModal()">
+        <button class="absolute top-6 right-6 text-white text-3xl font-bold hover:text-gray-300">×</button>
+        <img id="modal-zoom-img" src="" alt="Zoomed Image" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+    </div>
+    
+    <section id="pengalaman-section" class="py-12 bg-blue-50 border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION CERITA PENGALAMAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Cerita Kemenangan</h2>
+            </div>
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas agar mobile tetap bersih) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('pengalaman-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('pengalaman-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Cerita Pengalaman -->
+        <div id="pengalaman-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat pengalaman anggota...</div>
+        </div>
+    </div>
+</section>
+
+<div class="soka-tricolor">
+    <div class="soka-blue"></div>
+    <div class="soka-yellow"></div>
+    <div class="soka-red"></div>
+</div>
+
+<section id="materi-section" class="py-12 bg-blue-50 border-b border-gray-100 hidden">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- HEADER SECTION MATERI PELAJARAN (JUDUL TETAP DI TENGAH) -->
+        <div class="relative mb-2 flex items-center justify-center">
+            <!-- Judul & Indikator Centered -->
+            <div class="text-center flex items-baseline justify-center space-x-2">
+                <h2 class="text-2xl font-bold text-[#002F6C]">Materi Pelajaran</h2>
+            </div>
+            
+            <!-- Tombol Navigasi Melayang di Kanan (Hanya muncul di desktop/md ke atas) -->
+            <div class="hidden md:flex absolute right-0 space-x-2">
+                <button onclick="scrollHorisontal('materi-container', 'kiri')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kiri">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button onclick="scrollHorisontal('materi-container', 'kanan')" class="p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 shadow-sm transition-colors focus:outline-none" aria-label="Geser Kanan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Garis Tiga Warna Tetap di Tengah -->
+        <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+            <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+            <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+        </div>
+
+        <!-- Container Materi Pelajaran -->
+        <div id="materi-container" class="flex space-x-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <div class="text-center text-gray-500 w-full py-4 animate-pulse">Memuat materi pelajaran...</div>
+        </div>
+    </div>
+</section>
+
+    <section id="qa-section" class="py-16 bg-white border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">Pertanyaan yang Sering Diajukan (Q&A)</h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+            </div>
+            
+            <div id="qa-container" class="space-y-4 max-w-3xl mx-auto">
+                <p class="text-center text-gray-500 italic">Memuat tanya jawab...</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="kontak" class="py-20 bg-gray-50 scroll-mt-24">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-blue-950 mb-2">
+                    Hubungi Kami
+                </h2>
+                <div class="flex justify-center space-x-1 w-24 mx-auto mb-4">
+                    <span class="w-8 h-1 bg-[#002F6C] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#F9A825] rounded-full"></span>
+                    <span class="w-8 h-1 bg-[#C62828] rounded-full"></span>
+                </div>
+                <p class="text-gray-500">Silakan kunjungi atau hubungi kami untuk informasi lebih lanjut</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-[#002F6C] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-950 mb-6">Informasi Kontak</h3>
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-blue-50 p-3 rounded-lg text-blue-900 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Alamat</h4>
+                                <p class="text-gray-600 mt-1">Jl. Pandean Lamper II no. 1, Kecamatan Semarang Selatan, Kota Semarang, Jawa Tengah 50242</p>
+                                <p class="text-gray-600 mt-1">(024) 8315358</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-red-50 p-3 rounded-lg text-red-700 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-700">Email</h4>
+                                <a href="mailto:sokasmg@gmail.com" class="text-blue-700 hover:underline mt-1 block font-medium">sokasmg@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl shadow-md h-64 md:h-auto min-h-[250px] flex items-center justify-center border-t-4 border-[#C62828]">
+                    <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;"> 
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.108593659948!2d110.43377190983911!3d-6.996490692975512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c98416bb55b%3A0x341ab0705f6b812f!2sSOKA%20GAKKAI%20INDONESIA%20-%20JAWA%20TENGAH!5e0!3m2!1sid!2sid!4v1783658839680!5m2!1sid!2sid" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-blue-950 text-gray-300 py-12 border-t border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Organisasi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sgi-indonesia.or.id" target="_blank" class="hover:text-yellow-500 transition">Soka Gakkai Indonesia</a></li>
+                        <li><a href="https://www.sokaglobal.org" target="_blank" class="hover:text-yellow-500 transition">Soka Global</a></li>
+                        <li><a href="https://www.sokagakkai.jp" target="_blank" class="hover:text-yellow-500 transition">Sokagakkai Japan</a></li>
+                        <li><a href="https://www.sgi-usa.org" target="_blank" class="hover:text-yellow-500 transition">SGI-USA</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pustaka & Referensi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.nichirenlibrary.org" target="_blank" class="hover:text-yellow-500 transition">Nichiren Library</a></li>
+                        <li><a href="https://wwww.worldtribune.org" target="_blank" class="hover:text-yellow-500 transition">World Tribune</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tokoh Pendiri</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.tmakiguchi.org" target="_blank" class="hover:text-yellow-500 transition">Tsunesaburo Makiguchi Website</a></li>
+                        <li><a href="https://www.joseitoda.org" target="_blank" class="hover:text-yellow-500 transition">Josei Toda Website</a></li>
+                        <li><a href="https://www.daisakuikeda.org" target="_blank" class="hover:text-yellow-500 transition">Daisaku Ikeda Website</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Institusi Pendidikan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.soka.ac.jp/en/" target="_blank" class="hover:text-yellow-500 transition">Soka University of Japan</a></li>
+                        <li><a href="https://www.soka.edu" target="_blank" class="hover:text-yellow-500 transition">Soka University of America</a></li>
+                        <li><a href="https://sism.edu.my" target="_blank" class="hover:text-yellow-500 transition">Soka International School Malaysia</a></li>
+                        <li><a href="https://www.sokapreschool.org" target="_blank" class="hover:text-yellow-500 transition">Soka Preschool</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center text-sm border-t border-blue-900 pt-8">
+                <p>© 2026 Soka Gakkai Semarang. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="login-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fade-in">
+            <h3 class="text-xl font-bold text-blue-950 mb-2">Verifikasi Anggota</h3>
+            <p class="text-sm text-gray-500 mb-4">Masukkan nomor ponsel terdaftar dan PIN Keamanan Anda.</p>
+            
+            <div class="space-y-4 mb-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Nomor Ponsel</label>
+                    <input type="tel" id="input-phone" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">PIN Keamanan (6 Digit)</label>
+                    <input type="password" id="input-login-pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Kosongkan jika baru pertama kali login" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-medium text-center tracking-widest font-bold">
+                </div>
+                <p id="login-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
+            </div>
+            
+            <div class="flex space-x-3 justify-end">
+                <button onclick="closeLoginModal()" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700">Batal</button>
+                <button id="btn-submit-login" onclick="processLogin()" class="bg-blue-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition flex items-center justify-center">
+                    Verifikasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pin-setup-modal" class="fixed inset-0 bg-black/60 z-[101] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fade-in">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="bg-red-100 text-red-600 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-blue-950">Amankan Akun Anda</h3>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">Nomor Anda terdeteksi belum memiliki sistem pengunci identitas. Silakan buat PIN baru (6 digit angka) untuk mencegah akun Anda disalahgunakan orang lain saat chatting.</p>
+            
+            <div class="space-y-3 mb-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Buat PIN Baru (6 Digit Angka)</label>
+                    <input type="password" id="input-new-pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Masukkan 6 angka rahasia" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-bold text-center tracking-widest text-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Konfirmasi PIN Baru</label>
+                    <input type="password" id="input-confirm-pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Masukkan ulang 6 angka rahasia" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none font-bold text-center tracking-widest text-lg">
+                </div>
+                <p id="pin-error-msg" class="text-red-500 text-xs mt-1 hidden"></p>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button onclick="closePinSetupModal()" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-700">Batal</button>
+                <button id="btn-submit-pin" onclick="processCreatePin()" class="bg-red-600 text-white px-5 py-3 rounded-xl font-bold hover:bg-red-700 transition flex items-center justify-center shadow-lg flex-1">
+                    Simpan & Aktifkan PIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="floating-chat-btn" class="fixed bottom-6 left-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
+        <button onclick="toggleChatWindow()" class="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-5 py-3 rounded-full shadow-2xl border border-green-500 font-bold text-sm tracking-wide">
+            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.288 1.498 4.76 1.499 5.429 0 9.849-4.388 9.852-9.779.001-2.611-1.015-5.064-2.862-6.915C16.5 2.107 14.079.947 11.992.947c-5.44 0-9.859 4.39-9.863 9.782-.002 1.761.472 3.42 1.371 4.908l-.995 3.637 3.737-.974z"/>
+            </svg>
+            <span>Chat</span>
+        </button>
+    </div>
+
+    <div id="chat-window" class="fixed bottom-24 left-6 z-[100] w-80 md:w-96 h-[420px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col hidden overflow-hidden animate-fade-in">
+        <div class="bg-gradient-to-r from-blue-950 to-indigo-900 text-white p-4 flex justify-between items-center shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="font-bold text-sm tracking-wide">Forum Komunikasi Anggota</span>
+            </div>
+            <button onclick="toggleChatWindow()" class="text-white hover:text-gray-300 font-bold text-xl">×</button>
+        </div>
+        
+        <div id="chat-body" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 text-xs md:text-sm">
+            <p class="text-center text-gray-400 italic">Memuat obrolan...</p>
+        </div>
+        
+        <div class="p-3 bg-white border-t border-gray-150 flex flex-col space-y-1">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="input-chat-msg" maxlength="160" oninput="updateCharCount()" placeholder="Tulis pesan (maks 160 huruf)..." class="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:outline-none text-xs md:text-sm">
+                <button id="btn-send-chat" onclick="submitChat()" class="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl transition shadow flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex justify-between px-1 text-[10px] font-semibold text-gray-400">
+                <span>Klik nama pengirim untuk membalas</span>
+                <span id="char-counter">0/160</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="floating-admin-btn" class="fixed bottom-6 right-6 z-[99] hidden transition-all duration-300 transform hover:scale-105">
+        <a id="floating-btn-link" href="#" class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-indigo-950 text-white px-5 py-3 rounded-full shadow-2xl border border-blue-800 font-bold text-sm tracking-wide">
+            <span id="floating-btn-text">Menu Khusus</span>
+        </a>
+    </div>
+
+    <div id="floating-pin-warning-btn" class="fixed bottom-6 right-6 md:right-48 z-[99] hidden transition-all duration-300 transform hover:scale-105 animate-pulse">
+        <button onclick="openPinSetupModal()" class="flex items-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-5 py-3 rounded-full shadow-2xl border border-red-500 font-black text-sm tracking-wide animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Buat PIN Keamanan!</span>
+        </button>
+    </div>
+
+    <div id="modal-pengalaman" class="fixed inset-0 bg-black/60 z-[150] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" onclick="tutupDetailPengalaman()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] flex flex-col animate-fade-in" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-2.5 h-2.5 bg-[#F9A825] rounded-full"></div>
+                    <h3 id="modal-pengalaman-nama" class="text-xl font-bold text-[#002F6C]">Nama Anggota</h3>
+                </div>
+                <button onclick="tutupDetailPengalaman()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">×</button>
+            </div>
+            <div id="modal-pengalaman-cerita" class="flex-1 overflow-y-auto pr-2 text-gray-700 leading-relaxed text-sm md:text-base text-justify whitespace-pre-line">
+                Isi cerita lengkap akan muncul di sini...
+            </div>
+            <div class="border-t border-gray-150 pt-3 mt-4 flex items-center justify-between">
+                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                    A+
+                </button>
+                <button onclick="tutupDetailPengalaman()" class="bg-[#002F6C] text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-800 transition h-9 flex items-center justify-center shadow-sm">
+                    Selesai Membaca
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="materiModal" class="fixed inset-0 z-[250] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <span id="modalKategori" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">Kategori</span>
+                <button onclick="closeModalMateri()" class="text-slate-400 hover:text-slate-600 transition-colors text-2xl font-bold focus:outline-none">×</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <h3 id="modalJudul" class="font-bold text-slate-800 text-2xl leading-tight">Judul Materi</h3>
+                <p id="modalIsi" class="text-slate-600 text-base leading-relaxed text-justify whitespace-pre-line">Isi materi lengkap akan muncul di sini...</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <button id="btn-toggle-text-modal" onclick="toggleTextSize()" class="bg-yellow-500 text-blue-950 px-3.5 py-2 rounded-xl border border-yellow-600 flex items-center justify-center font-black text-xs md:text-sm focus:outline-none tracking-wide h-9 shadow-sm">
+                    A+
+                </button>
+                <button onclick="closeModalMateri()" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-semibold focus:outline-none">
+                    Selesai membaca
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mencegah zoom melalui gestur cubit layar (Pinch-to-Zoom)
+        document.addEventListener('touchmove', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // Mencegah zoom melalui ketukan ganda cepat (Double Tap to Zoom)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Mencegah zoom di komputer menggunakan tombol pintasan (Ctrl + / Ctrl - / Ctrl + Scroll)
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && (event.key === '+' || event.key === '-' || event.key === '=' || event.key === '0')) {
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener('wheel', function (event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // === KONFIGURASI LINK GOOGLE SHEETS & APPS SCRIPT ===
+        const CSV_URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+        const CSV_URL_MATERI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=903124982&single=true&output=csv";
+        const CSV_URL_GOSHO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=138019442&single=true&output=csv";
+        const CSV_URL_QA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1334989733&single=true&output=csv";
+        const CSV_URL_PENGALAMAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=759975821&single=true&output=csv";
+        const CSV_URL_JADWAL_BULANAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv";
+        
+        // PUSAT KONTROL URL WEB APP
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdmqzKY98-G8T8uX3GbVk3Spg77YEqL1KPnidK92tIOQaBbaEJ1NzCsNgTyfIv-4ET/exec";
+        
+        // Variabel penampung data dari cloud
+        let quoteList = [];
+        let goshoList = [];
+        let qaList = [];
+        let activeTab = 'bimbingan';
+
+        // Fungsi pembaca CSV
+        function parseCSV(text) {
+            const result = [];
+            let row = ["", ""];
+            let inQuotes = false;
+            let colIndex = 0;
+            let currentStr = "";
+
+            const cleanText = text.replace(/\r/g, "");
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    currentStr = "";
+                    colIndex++;
+                } else if (char === '\n' && !inQuotes) {
+                    if (colIndex < 2) row[colIndex] = currentStr.trim();
+                    
+                    if (row[0] && row[0] !== "text" && row[0] !== '"text"' && row[0].toLowerCase() !== "question") {
+                        result.push({ text: row[0], author: row[1] || "Anonim" });
+                    }
+                    
+                    row = ["", ""];
+                    colIndex = 0;
+                    currentStr = "";
+                } else {
+                    currentStr += char;
+                }
+            }
+            
+            if (currentStr || colIndex > 0) {
+                if (colIndex < 2) row[colIndex] = currentStr.trim();
+                if (row[0] && row[0] !== "text" && row[0] !== '"text"') {
+                    result.push({ text: row[0], author: row[1] || "Anonim" });
+                }
+            }
+            return result;
+        }
+
+        async function loadQuotesFromSheets() {
+            document.getElementById('soka-quote').innerText = "Memuat kutipan kalender harian...";
+            try {
+                const [resBimbingan, resGosho, resQA] = await Promise.all([
+                    fetch(CSV_URL_BIMBINGAN).then(res => res.text()),
+                    fetch(CSV_URL_GOSHO).then(res => res.text()),
+                    fetch(CSV_URL_QA).then(res => res.text())
+                ]);
+
+                quoteList = parseCSV(resBimbingan);
+                goshoList = parseCSV(resGosho);
+                qaList = parseCSV(resQA); 
+
+                setQuoteOfTheDay();
+                renderQASearch();
+                
+                updateRunningTextAnnouncement();
+            } catch (error) {
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                document.getElementById('soka-quote').innerText = "Gagal memuat renungan hari ini. Silakan periksa koneksi internet Anda.";
+                document.getElementById('qa-container').innerHTML = "<p class='text-center text-red-500'>Gagal memuat Q&A.</p>";
+            }
+        }
+
+        async function updateRunningTextAnnouncement() {
+            const marqueeEl = document.getElementById('announcement-marquee');
+            const announcementBar = document.getElementById('member-announcement-bar');
+            if (!marqueeEl || !announcementBar) return;
+
+            announcementBar.classList.add('hidden');
+
+            try {
+                const response = await fetch(CSV_URL_JADWAL_BULANAN);
+                const csvData = await response.text();
+                
+                const rows = [];
+                let currentRow = [];
+                let currentField = "";
+                let insideQuote = false;
+                const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i];
+                    let nextChar = normalizedData[i + 1];
+
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') {
+                            currentField += '"'; 
+                            i++;
+                        } else {
+                            insideQuote = !insideQuote; 
+                        }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField);
+                        currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = "";
+                    } else {
+                        currentField += char;
+                    }
+                }
+                if (currentField || currentRow.length > 0) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const upcomingEvents = [];
+                const namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    if (!row || row.length < 3 || !row[0]) continue;
+
+                    const tglString = row[0].trim(); 
+                    const jamString = row[1] ? row[1].trim() : "";
+                    const acaraString = row[2] ? row[2].trim() : "";
+
+                    if (!acaraString) continue;
+
+                    let eventDate;
+                    if (tglString.includes('-')) {
+                        eventDate = new Date(tglString);
+                    } else if (tglString.includes('/')) {
+                        const parts = tglString.split('/');
+                        eventDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                    } else {
+                        eventDate = new Date(tglString);
+                    }
+
+                    if (isNaN(eventDate.getTime())) continue; 
+                    
+                    const hariTeks = namaHari[eventDate.getDay()];
+                    eventDate.setHours(0, 0, 0, 0);
+
+                    if (eventDate >= today) {
+                        upcomingEvents.push({
+                            tanggalRaw: eventDate,
+                            hari: hariTeks,
+                            tanggalTeks: tglString,
+                            jam: jamString,
+                            acara: acaraString
+                        });
+                    }
+                }
+
+                upcomingEvents.sort((a, b) => a.tanggalRaw - b.tanggalRaw);
+
+                if (upcomingEvents.length > 0) {
+                    const teksPengumuman = upcomingEvents.map(ev => {
+                        const waktuTampil = ev.jam ? ` Pukul ${ev.jam}` : "";
+                        return `📢 [${ev.hari}, ${ev.tanggalTeks}${waktuTampil}] : ${ev.acara}`;
+                    }).join("     |     ");
+
+                    marqueeEl.innerText = `JADWAL KEGIATAN MENDATANG: ${teksPengumuman}     |     Tetap semangat melaksanakan revolusi manusia!`;
+                    
+                    const savedName = localStorage.getItem('soka_user_name');
+                    if (savedName) {
+                        announcementBar.classList.remove('hidden');
+                        marqueeEl.stop();
+                        marqueeEl.start();
+                    }
+                } else {
+                    marqueeEl.innerText = "Belum ada jadwal kegiatan baru untuk waktu dekat. Silakan hubungi pimpinan konsolidasi setempat.";
+                    if (localStorage.getItem('soka_user_name')) {
+                        announcementBar.classList.remove('hidden');
+                    }
+                }
+
+            } catch (error) {
+                console.error("Gagal memuat teks berjalan:", error);
+                marqueeEl.innerText = "Gagal memuat jadwal terbaru dari server cloud.";
+            }
+        }
+
+        function renderQASearch() {
+            const container = document.getElementById('qa-container');
+            if (qaList.length === 0) {
+                container.innerHTML = "<p class='text-center text-gray-500'>Tidak ada data Q&A tersedia.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+
+            qaList.forEach((item, index) => {
+                const question = item.text;
+                const answer = item.author;
+
+                const qaItem = document.createElement('div');
+                qaItem.className = "border border-gray-200 rounded-xl bg-gray-50 overflow-hidden transition";
+
+                qaItem.innerHTML = `
+                    <button onclick="toggleAccordion(${index})" class="w-full text-left px-5 py-4 font-bold text-blue-950 flex justify-between items-center hover:bg-gray-100 transition focus:outline-none">
+                        <span>${question}</span>
+                        <svg id="icon-${index}" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="ans-${index}" class="hidden px-5 py-4 bg-white border-t border-gray-100 text-gray-650 leading-relaxed text-sm md:text-base">
+                        ${answer}
+                    </div>
+                `;
+                container.appendChild(qaItem);
+            });
+        }
+
+        function toggleAccordion(index) {
+            const answerDiv = document.getElementById(`ans-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (answerDiv.classList.contains('hidden')) {
+                answerDiv.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                answerDiv.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+        
+        function setQuoteOfTheDay() {
+            if (quoteList.length === 0 || goshoList.length === 0) return;
+
+            const today = new Date();
+            const currentDay = today.getDate(); 
+            let selectedItem = {};
+
+            if (activeTab === 'bimbingan') {
+                const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + currentDay;
+                const quoteIndex = dateSeed % quoteList.length;
+                selectedItem = quoteList[quoteIndex];
+                
+                document.getElementById('soka-quote').innerText = selectedItem.text;
+                document.getElementById('soka-author').innerText = "— " + selectedItem.author;
+            } else {
+                let targetIndex = currentDay - 1;
+                if (targetIndex >= goshoList.length) {
+                    targetIndex = goshoList.length - 1; 
+                }
+                selectedItem = goshoList[targetIndex];
+                
+                document.getElementById('soka-quote').innerText = selectedItem.text;
+                document.getElementById('soka-author').innerText = "— Gosho: " + selectedItem.author;
+            }
+        }
+
+        function switchTab(tabName) {
+            activeTab = tabName;
+            const btnBimbingan = document.getElementById('tab-bimbingan');
+            const btnGosho = document.getElementById('tab-gosho');
+            
+            if (tabName === 'bimbingan') {
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            } else {
+                btnGosho.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 bg-yellow-500 text-blue-950 shadow";
+                btnBimbingan.className = "px-5 py-2 rounded-full text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-300 text-white hover:text-yellow-400";
+            }
+            
+            setQuoteOfTheDay();
+        }
+
+        function shareToWhatsApp() {
+            const quote = document.getElementById('soka-quote').innerText;
+            const author = document.getElementById('soka-author').innerText;
+            const titleHeader = activeTab === 'bimbingan' ? '*Bimbingan Hari Ini - Soka Gakkai Semarang*' : '*Gosho Hari Ini - Soka Gakkai Semarang*';
+            
+            const textMessage = `${titleHeader}\n\n_" ${quote} "_\n\n*${author}*`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+// Konfigurasi Slider
+let currentSlide = 0;
+const slideInterval = 5000;
+let activeSlides = []; // Menyimpan elemen gambar yang berhasil diisi data
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadQuotesFromSheets();
+    checkLoginStatus(); 
+    switchTab('bimbingan');
+
+    // Panggil fungsi untuk mengambil banner dari Google Sheet
+    loadBannersFromSheets();
+});
+
+function loadBannersFromSheets() {
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQGSpVfzpFpAckX98S0x2K01zoNxMJXLYwk9qUIdKE6hAAgiMbsX2mmC-qBxGQxUNwnHRquhQo1mkgD/pub?gid=0&single=true&output=csv";
+
+    fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => {
+            const rows = parseCSV(csvText);
+            
+            // Jika spreadsheet kosong atau hanya ada baris header
+            if (rows.length < 2) {
+                console.warn("Data spreadsheet kosong atau hanya berisi header.");
+                return;
+            }
+
+            // Ambil baris paling terakhir (pengaturan terbaru)
+            const latestSettings = rows[rows.length - 1]; 
+            const slideElements = document.querySelectorAll('.banner-slide');
+
+            activeSlides = []; // Reset array untuk memastikan data bersih
+
+            latestSettings.forEach((base64Data, index) => {
+                if (index < 5 && base64Data) {
+                    // Bersihkan spasi, enter tersembunyi, dan tanda kutip bungkus dari CSV
+                    let cleanBase64 = base64Data.trim().replace(/^"|"$/g, ''); 
+                    
+                    // Validasi string wajib berupa skema Base64 gambar yang valid
+                    if (cleanBase64.startsWith("data:image/")) {
+                        const imgElement = slideElements[index];
+                        if (imgElement) {
+                            imgElement.setAttribute('src', cleanBase64);
+                            activeSlides.push(imgElement);
+                        }
+                    }
+                }
+            });
+
+            // Jalankan animasi jika minimal ada 1 gambar yang valid
+            if (activeSlides.length > 0) {
+                activeSlides[0].classList.remove('opacity-0');
+                activeSlides[0].classList.add('opacity-40');
+
+                if (activeSlides.length > 1) {
+                    setInterval(nextSlide, slideInterval);
+                }
+            } else {
+                console.error("Tidak ada string gambar Base64 yang valid ditemukan di kolom A-E baris terakhir.");
+            }
+        })
+        .catch(err => {
+            console.error("Gagal mengambil atau memproses data dari Google Sheets:", err);
+        });
+}
+
+// Fungsi parser CSV yang jauh lebih presisi untuk teks Base64 bervolume besar
+function parseCSV(text) {
+    let lines = [];
+    let row = [""];
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+        let c = text[i];
+        let next = text[i+1];
+
+        if (c === '"') {
+            if (inQuotes && next === '"') { 
+                row[row.length - 1] += '"'; 
+                i++; 
+            } else { 
+                inQuotes = !inQuotes; 
+            }
+        } else if (c === ',' && !inQuotes) {
+            row.push('');
+        } else if ((c === '\r' || c === '\n') && !inQuotes) {
+            if (c === '\r' && next === '\n') { i++; }
+            lines.push(row);
+            row = [''];
+        } else {
+            row[row.length - 1] += c;
+        }
+    }
+    if (row.length > 1 || row[0] !== '') lines.push(row);
+    return lines;
+}
+
+function nextSlide() {
+    if (activeSlides.length === 0) return;
+
+    const nextIndex = (currentSlide + 1) % activeSlides.length;
+    
+    // Validasi agar tidak nge-blank jika gambar belum selesai loading di browser
+    if (!activeSlides[nextIndex].complete || activeSlides[nextIndex].naturalWidth === 0) return; 
+
+    // Slide lama memudar (hilang)
+    activeSlides[currentSlide].classList.remove('opacity-40');
+    activeSlides[currentSlide].classList.add('opacity-0');
+    
+    // Ganti posisi index aktif
+    currentSlide = nextIndex;
+    
+    // Slide baru muncul (opacity 40)
+    activeSlides[currentSlide].classList.remove('opacity-0');
+    activeSlides[currentSlide].classList.add('opacity-40');
+}
+
+        function toggleTextSize() {
+            const bodyEl = document.body;
+            const btnToggle = document.getElementById('btn-toggle-text');
+            
+            if (bodyEl.classList.contains('text-large')) {
+                bodyEl.classList.remove('text-large');
+                btnToggle.innerText = "A+";
+                btnToggle.className = "bg-yellow-500 text-blue-950 px-2.5 py-1 rounded border border-yellow-600 flex items-center space-x-1 normal-case font-black text-sm";
+            } else {
+                bodyEl.classList.add('text-large');
+                btnToggle.innerText = "A-";
+                btnToggle.className = "bg-blue-950 text-white px-2.5 py-1 rounded border border-blue-900 flex items-center space-x-1 normal-case font-black text-sm";
+            }
+        }
+
+        // --- SISTEM AUTENTIKASI AKSES ANGGOTA ---
+        function checkLoginStatus() {
+            const savedName = localStorage.getItem('soka_user_name');
+            const savedJabatan = localStorage.getItem('soka_user_jabatan'); 
+            const savedPinStatus = localStorage.getItem('soka_user_pin_status'); 
+            
+            const navGaleriDesktop = document.getElementById('nav-galeri-desktop');
+            const navGaleriMobile = document.getElementById('nav-galeri-mobile');
+            const sectionJadwal = document.getElementById('jadwal');
+            const btnCardCreator = document.getElementById('btn-card-creator');
+
+            const sectionMateri = document.getElementById('materi-section');
+            
+            const greetingDesktop = document.getElementById('user-greeting-desktop');
+            const btnAuthDesktop = document.getElementById('btn-auth-desktop');
+            const greetingMobile = document.getElementById('user-greeting-mobile');
+            const btnAuthMobile = document.getElementById('btn-auth-mobile');
+
+            const floatingBtn = document.getElementById('floating-admin-btn');
+            const floatingLink = document.getElementById('floating-btn-link');
+            const floatingText = document.getElementById('floating-btn-text');
+
+            const floatingChatBtn = document.getElementById('floating-chat-btn');
+            const floatingPinWarningBtn = document.getElementById('floating-pin-warning-btn');
+            const memberAnnouncementBar = document.getElementById('member-announcement-bar');
+
+            if (savedName) {
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.remove('hidden');
+                if (navGaleriDesktop) navGaleriDesktop.classList.remove('hidden');
+                if (navGaleriMobile) navGaleriMobile.classList.remove('hidden');
+                if (sectionJadwal) sectionJadwal.classList.remove('hidden');
+                if (btnCardCreator) btnCardCreator.classList.remove('hidden');
+                if (floatingChatBtn) floatingChatBtn.classList.remove('hidden'); 
+
+                if (sectionMateri) sectionMateri.classList.remove('hidden');
+                
+                if (greetingDesktop) {
+                    greetingDesktop.innerText = `Selamat Datang, ${savedName}`;
+                    greetingDesktop.classList.remove('hidden');
+                }
+                if (btnAuthDesktop) {
+                    btnAuthDesktop.innerText = "Logout";
+                    btnAuthDesktop.onclick = processLogout;
+                    btnAuthDesktop.className = "bg-red-700 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-red-800 transition";
+                }
+
+                if (greetingMobile) {
+                    greetingMobile.innerText = `Halo, ${savedName}`;
+                    greetingMobile.className = "font-black text-blue-950";
+                }
+                if (btnAuthMobile) {
+                    btnAuthMobile.innerText = "Keluar";
+                    btnAuthMobile.onclick = processLogout;
+                    btnAuthMobile.className = "bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-red-800 transition";
+                }
+
+if (floatingBtn && floatingLink && floatingText) {
+    if (savedJabatan === "Pimpinan") {
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "🦁";
+        floatingBtn.classList.remove('hidden');
+    } else if (savedJabatan === "Anggota") { // Perbaikan: else if diletakkan setelah tutup kurung kurawal }
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "😺";
+        floatingBtn.classList.remove('hidden');
+    } else if (savedJabatan === "Pimpinan (Admin)") {
+        floatingLink.href = "dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/dashboard.html";
+        floatingText.innerText = "💻";
+        floatingBtn.classList.remove('hidden');
+    } else {
+        floatingBtn.classList.add('hidden');
+    }
+}
+
+                if (savedPinStatus === "kosong") {
+                    floatingPinWarningBtn.classList.remove('hidden');
+                } else {
+                    floatingPinWarningBtn.classList.add('hidden');
+                }
+                
+                updateRunningTextAnnouncement();
+
+            } else {
+                if (memberAnnouncementBar) memberAnnouncementBar.classList.add('hidden');
+                if (navGaleriDesktop) navGaleriDesktop.classList.add('hidden');
+                if (navGaleriMobile) navGaleriMobile.classList.add('hidden');
+                if (sectionJadwal) sectionJadwal.classList.add('hidden');
+                if (btnCardCreator) btnCardCreator.classList.add('hidden');
+                if (floatingChatBtn) floatingChatBtn.classList.add('hidden'); 
+                document.getElementById('chat-window').classList.add('hidden'); 
+                if (floatingPinWarningBtn) floatingPinWarningBtn.classList.add('hidden');
+                
+                if (greetingDesktop) {
+                    greetingDesktop.innerText = "";
+                    greetingDesktop.classList.add('hidden');
+                }
+                if (btnAuthDesktop) {
+                    btnAuthDesktop.innerText = "Login Anggota";
+                    btnAuthDesktop.onclick = openLoginModal;
+                    btnAuthDesktop.className = "bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-800 transition";
+                }
+
+                if (greetingMobile) {
+                    greetingMobile.innerText = "Menu Khusus Anggota:";
+                    greetingMobile.className = "font-bold text-gray-500 italic";
+                }
+                if (btnAuthMobile) {
+                    btnAuthMobile.innerText = "Login";
+                    btnAuthMobile.onclick = openLoginModal;
+                    btnAuthMobile.className = "bg-blue-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-blue-800 transition";
+                }
+
+                if (floatingBtn) floatingBtn.classList.add('hidden');
+            }
+        }
+
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-error-msg').classList.add('hidden');
+            document.getElementById('input-phone').value = "";
+            document.getElementById('input-login-pin').value = "";
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function openPinSetupModal() {
+            document.getElementById('pin-setup-modal').classList.remove('hidden');
+            document.getElementById('pin-error-msg').classList.add('hidden');
+            document.getElementById('input-new-pin').value = "";
+            document.getElementById('input-confirm-pin').value = "";
+        }
+
+        function closePinSetupModal() {
+            document.getElementById('pin-setup-modal').classList.add('hidden');
+        }
+
+        async function processLogin() {
+            const phoneInput = document.getElementById('input-phone').value.trim();
+            const pinInput = document.getElementById('input-login-pin').value.trim();
+            const errorMsg = document.getElementById('login-error-msg');
+            const btnSubmit = document.getElementById('btn-submit-login');
+            
+            if (!phoneInput) {
+                errorMsg.innerText = "Nomor ponsel tidak boleh kosong.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Memverifikasi...";
+            errorMsg.classList.add('hidden');
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ 
+                        phone: phoneInput,
+                        pin: pinInput 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    localStorage.setItem('soka_user_name', result.nama);
+                    localStorage.setItem('soka_user_jabatan', result.jabatan || ""); 
+                    localStorage.setItem('soka_user_phone', phoneInput); 
+                    localStorage.setItem('soka_user_pin_status', result.pinStatus || ""); 
+                    
+                    closeLoginModal();
+                    checkLoginStatus(); 
+                } else {
+                    errorMsg.innerText = result.message || "Nomor tidak dikenali atau PIN salah.";
+                    errorMsg.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Authentication Error:", error);
+                errorMsg.innerText = "Gagal terhubung ke server verifikasi. Periksa kembali setup URL script Anda.";
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Verifikasi";
+            }
+        }
+
+        async function processCreatePin() {
+            const newPin = document.getElementById('input-new-pin').value.trim();
+            const confirmPin = document.getElementById('input-confirm-pin').value.trim();
+            const errorMsg = document.getElementById('pin-error-msg');
+            const btnSubmit = document.getElementById('btn-submit-pin');
+            const savedPhone = localStorage.getItem('soka_user_phone');
+            const isNumeric = /^\d+$/.test(newPin);
+
+            if (!newPin || newPin.length !== 6 || !isNumeric) {
+                errorMsg.innerText = "PIN harus terdiri dari 6 digit angka murni.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            if (newPin !== confirmPin) {
+                errorMsg.innerText = "Konfirmasi PIN tidak cocok. Silakan isi dengan sama persis.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Menyimpan PIN...";
+            errorMsg.classList.add('hidden');
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ 
+                        action: "updatePin",
+                        phone: savedPhone,
+                        newPin: newPin
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    alert("PIN Keamanan berhasil diaktifkan! Identitas akun Anda sekarang terkunci aman.");
+                    localStorage.setItem('soka_user_pin_status', "aman"); 
+                    closePinSetupModal();
+                    checkLoginStatus(); 
+                } else {
+                    errorMsg.innerText = result.message || "Gagal mengaktifkan PIN.";
+                    errorMsg.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("PIN Setup Error:", error);
+                errorMsg.innerText = "Gangguan koneksi cloud saat menyimpan PIN.";
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Simpan & Aktifkan PIN";
+            }
+        }
+
+        function processLogout() {
+            if (confirm("Apakah Anda yakin ingin keluar dari halaman internal?")) {
+                localStorage.removeItem('soka_user_name');
+                localStorage.removeItem('soka_user_jabatan'); 
+                localStorage.removeItem('soka_user_phone');
+                localStorage.removeItem('soka_user_pin_status');
+                checkLoginStatus(); 
+            }
+        }
+
+        // === LOGIKA SLIDER KEGIATAN TERAKHIR (INFINITE SMOOTH LOOP) ===
+        const slider = document.getElementById('gallery-slider');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let autoScrollInterval;
+        let originalWidth = 0;
+
+        function generateRandomImages() {
+            const totalAvailableImages = 50; 
+            const chosenNumbers = new Set();
+            
+            while(chosenNumbers.size < 5) {
+                const randomNum = Math.floor(Math.random() * totalAvailableImages) + 1;
+                chosenNumbers.add(randomNum);
+            }
+            
+            Array.from(chosenNumbers).forEach((num) => {
+                const padNum = String(num).padStart(3, '0');
+                const itemHTML = `
+                    <div class="flex-none w-72 h-48 md:w-96 md:h-64 overflow-hidden rounded-2xl shadow-md bg-gray-200">
+                        <img src="dashboard-02ba4c4e5f8ecd1877fc52d64d30e37a2d9774fb1e5d026380ae0168e3c5522d/images/foto${padNum}.webp" alt="Kegiatan ${padNum}" class="w-full h-full object-cover pointer-events-none hover:scale-105 transition duration-300">
+                    </div>`;
+                slider.insertAdjacentHTML('beforeend', itemHTML);
+            });
+        }
+
+        function setupInfiniteScroll() {
+            generateRandomImages();
+            const items = Array.from(slider.children);
+            if (items.length === 0) return;
+
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                slider.appendChild(clone);
+            });
+
+            setTimeout(() => {
+                updateSliderWidth();
+            }, 500); 
+        }
+
+        function updateSliderWidth() {
+            const items = Array.from(slider.children);
+            const halfLength = items.length / 2;
+            originalWidth = 0;
+            
+            for (let i = 0; i < halfLength; i++) {
+                originalWidth += items[i].offsetWidth + 16; 
+            }
+        }
+
+        function startAutoScroll() {
+            if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
+            
+            function scrollStep() {
+                if (!isDown) {
+                    slider.scrollLeft += 0.8; 
+                    if (slider.scrollLeft >= originalWidth) {
+                        slider.scrollLeft -= originalWidth;
+                    }
+                }
+                autoScrollInterval = requestAnimationFrame(scrollStep);
+            }
+            autoScrollInterval = requestAnimationFrame(scrollStep);
+        }
+
+        function stopAutoScroll() {
+            cancelAnimationFrame(autoScrollInterval);
+        }
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            stopAutoScroll();
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            if (isDown) {
+                isDown = false;
+                startAutoScroll();
+            }
+        });
+
+        slider.addEventListener('mouseup', (e) => {
+            const endX = e.pageX - slider.offsetLeft;
+            if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+                openGalleryModal(e.target.src);
+            }
+            isDown = false;
+            startAutoScroll();
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.2;
+            let targetScroll = scrollLeft - walk;
+
+            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+            if (targetScroll < 0) targetScroll += originalWidth;
+
+            slider.scrollLeft = targetScroll;
+        });
+
+        slider.addEventListener('touchstart', (e) => {
+            isDown = true;
+            startX = e.touches[0].pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            stopAutoScroll();
+        });
+
+        slider.addEventListener('touchend', () => {
+            isDown = false;
+            startAutoScroll();
+        });
+
+        slider.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            const x = e.touches[0].pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.2;
+            let targetScroll = scrollLeft - walk;
+
+            if (targetScroll >= originalWidth) targetScroll -= originalWidth;
+            if (targetScroll < 0) targetScroll += originalWidth;
+
+            slider.scrollLeft = targetScroll;
+        });
+
+        window.addEventListener('load', () => {
+            setupInfiniteScroll();
+            window.addEventListener('resize', updateSliderWidth);
+            setTimeout(startAutoScroll, 1000);
+            loadPengalamanAnggota(); 
+            fetchMateri(); 
+        });
+
+        function openGalleryModal(imgSrc) {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modalImg.src = imgSrc;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalImg.classList.remove('scale-95');
+            }, 10);
+            stopAutoScroll();
+        }
+
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-zoom-img');
+            modal.classList.add('opacity-0');
+            modalImg.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                startAutoScroll();
+            }, 300);
+        }
+
+        // === MINI CHAT BOX OPERASIONAL ===
+        function toggleChatWindow() {
+            const chatWin = document.getElementById('chat-window');
+            chatWin.classList.toggle('hidden');
+            if (!chatWin.classList.contains('hidden')) {
+                loadChatMessages();
+                setTimeout(() => {
+                    const body = document.getElementById('chat-body');
+                    if(body) body.scrollTop = body.scrollHeight;
+                }, 200);
+            }
+        }
+
+        function updateCharCount() {
+            const input = document.getElementById('input-chat-msg');
+            const counter = document.getElementById('char-counter');
+            if (input.value.length > 160) {
+                input.value = input.value.substring(0, 160);
+            }
+            counter.innerText = `${input.value.length}/160`;
+        }
+
+        function replyToUser(targetName) {
+            const input = document.getElementById('input-chat-msg');
+            input.value = `@${targetName} ${input.value}`;
+            input.focus();
+            updateCharCount();
+        }
+
+        async function loadChatMessages() {
+            const body = document.getElementById('chat-body');
+            body.innerHTML = "<p class='text-center text-gray-400 italic animate-pulse'>Memuat obrolan...</p>";
+            
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=readChat`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const chats = await response.json();
+                
+                if (!chats || chats.length === 0) {
+                    body.innerHTML = "<p class='text-center text-gray-400 italic'>Belum ada pesan. Mulai obrolan pertama!</p>";
+                    return;
+                }
+                
+                body.innerHTML = "";
+                const currentUser = localStorage.getItem('soka_user_name');
+                
+                chats.forEach(c => {
+                    const isMe = c.nama === currentUser;
+                    const chatBubble = document.createElement('div');
+                    
+                    chatBubble.className = `flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm ${
+                        isMe ? 'bg-green-100 text-gray-800 ml-auto rounded-tr-none' : 'bg-white text-gray-800 mr-auto rounded-tl-none border border-gray-100'
+                    }`;
+                    
+                    let waktuTampil = "";
+                    if (c.timestamp) {
+                        const dateObj = new Date(c.timestamp);
+                        const jam = String(dateObj.getHours()).padStart(2, '0');
+                        const menit = String(dateObj.getMinutes()).padStart(2, '0');
+                        waktuTampil = `${jam}:${menit}`;
+                    }
+                    
+                    chatBubble.innerHTML = `
+                        <div class="flex justify-between items-center gap-4 mb-0.5">
+                            <span onclick="replyToUser('${c.nama}')" class="font-black text-[10px] text-blue-900 cursor-pointer hover:underline block">${c.nama}</span>
+                            <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil}</span>
+                        </div>
+                        <p class="leading-relaxed break-words font-medium text-gray-700">${c.pesan}</p>
+                    `;
+                    body.appendChild(chatBubble);
+                });
+                
+                setTimeout(() => {
+                    body.scrollTop = body.scrollHeight;
+                }, 50);
+                
+            } catch (error) {
+                console.error("Gagal memuat chat:", error);
+                body.innerHTML = "<p class='text-center text-red-500 font-bold'>Gagal mengambil data obrolan.</p>";
+            }
+        }
+
+        async function submitChat() {
+            const input = document.getElementById('input-chat-msg');
+            const msg = input.value.trim();
+            const myName = localStorage.getItem('soka_user_name') || "Anggota";
+            
+            if (!msg || msg.length > 160) return;
+            
+            const body = document.getElementById('chat-body');
+            const fakeBubble = document.createElement('div');
+            fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-green-100 text-gray-800 ml-auto rounded-tr-none opacity-70 transition-opacity duration-300";
+            
+            const sekarang = new Date();
+            const jam = String(sekarang.getHours()).padStart(2, '0');
+            const menit = String(sekarang.getMinutes()).padStart(2, '0');
+            const waktuTampil = `${jam}:${menit}`;
+            
+            fakeBubble.innerHTML = `
+                <div class="flex justify-between items-center gap-4 mb-0.5">
+                    <span class="font-black text-[10px] text-blue-900 block">${myName}</span>
+                    <span class="text-[9px] text-gray-400 font-semibold">${waktuTampil} <span class="status-icon">🕒</span></span>
+                </div>
+                <p class="leading-relaxed break-words font-medium text-gray-700">${msg}</p>
+            `;
+            
+            body.appendChild(fakeBubble);
+            body.scrollTop = body.scrollHeight;
+            
+            input.value = "";
+            updateCharCount();
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: "sendChat",
+                        nama: myName,
+                        pesan: msg
+                    })
+                });
+                
+                const res = await response.json();
+                if (res.status === "success") {
+                    fakeBubble.classList.remove('opacity-70');
+                    const iconSpan = fakeBubble.querySelector('.status-icon');
+                    if (iconSpan) iconSpan.innerText = "✓";
+                    await loadChatMessages(); 
+                } else {
+                    throw new Error("Gagal menyimpan di server");
+                }
+            } catch (e) {
+                console.error(e);
+                fakeBubble.className = "flex flex-col max-w-[85%] p-2.5 rounded-2xl shadow-sm text-xs md:text-sm bg-red-100 text-red-800 ml-auto rounded-tr-none border border-red-300 text-left";
+                const iconSpan = fakeBubble.querySelector('.status-icon');
+                if (iconSpan) iconSpan.innerText = "❌";
+                
+                input.value = msg;
+                updateCharCount();
+                alert("Gagal mengirim pesan. Silakan periksa koneksi internet Anda.");
+            }
+        }
+
+        let listPengalamanGlobal = [];
+
+        async function loadPengalamanAnggota() {
+            try {
+                const response = await fetch(CSV_URL_PENGALAMAN);
+                const data = await response.text();
+                
+                const rows = [];
+                let currentRow = [];
+                let currentField = "";
+                let insideQuote = false;
+                const normalizedData = data.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+                for (let i = 0; i < normalizedData.length; i++) {
+                    let char = normalizedData[i];
+                    let nextChar = normalizedData[i + 1];
+
+                    if (char === '"') {
+                        if (insideQuote && nextChar === '"') {
+                            currentField += '"'; 
+                            i++;
+                        } else {
+                            insideQuote = !insideQuote; 
+                        }
+                    } else if (char === ',' && !insideQuote) {
+                        currentRow.push(currentField);
+                        currentField = "";
+                    } else if (char === '\n' && !insideQuote) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = "";
+                    } else {
+                        currentField += char;
+                    }
+                }
+                if (currentField || currentRow.length > 0) {
+                    currentRow.push(currentField);
+                    rows.push(currentRow);
+                }
+
+                const container = document.getElementById('pengalaman-container');
+                container.innerHTML = ""; 
+
+                const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "" && r[5]);
+activeRows.reverse();
+
+// KONTROL DATA: Ubah angka 15 ke jumlah yang diinginkan, atau hapus .slice(0, 15) jika ingin menampilkan SEMUA cerita
+const dataDitampilkan = activeRows.slice(0, 15); 
+
+if (dataDitampilkan.length === 0) {
+    container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada cerita pengalaman.</p>`;
+    return;
+}
+
+listPengalamanGlobal = dataDitampilkan;
+
+dataDitampilkan.forEach((row, index) => {
+    const nama = row[0].trim();
+    const judul = row[1] ? row[1].trim() : "Cerita Kemenangan";
+    const fotoProfil = row[2] ? row[2].trim() : `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff&size=128`;
+    const isiCerita = row[5] ? row[5].trim() : "";
+    const previewCerita = isiCerita.length > 120 ? isiCerita.substring(0, 120) + "..." : isiCerita;
+
+    // Menambahkan class 'flex-none', menentukan lebar kartu 'w-[85vw]' di mobile / 'md:w-[350px]' di desktop, dan 'snap-center'
+    const cardHtml = `
+        <div class="flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-gray-50 rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+            <div>
+                <div class="flex items-center space-x-4 mb-4">
+                    <img src="${fotoProfil}" alt="${nama}" class="w-14 h-14 rounded-full object-cover border-2 border-[#F9A825] shadow-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=002F6C&color=fff'">
+                    <div class="overflow-hidden">
+                        <h3 class="text-base font-bold text-gray-900 leading-tight truncate">${nama}</h3>
+                        <p class="text-xs font-semibold text-[#002F6C] uppercase mt-0.5 tracking-wider truncate">${judul}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm whitespace-pre-line leading-relaxed line-clamp-4">
+                    ${previewCerita}
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end items-center">
+                <button onclick="panggilModalLewatIndex(${index})" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                    Lanjut baca...
+                </button>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', cardHtml);
+});
+setTimeout(() => {
+                // Beri jeda 1 detik setelah data dimuat
+                if (container.scrollLeft === 0) {
+                    // Hanya animasi jika user belum scroll
+                    // Scroll kontainer ke kanan sejauh 60px
+                    container.scroll({ left: 60, behavior: 'smooth' });
+                    
+                    setTimeout(() => {
+                        // Kembali ke kiri setelah 400ms
+                        container.scroll({ left: 0, behavior: 'smooth' });
+                    }, 400); 
+                }
+            }, 1000); // 1 detik setelah dimuat agar tidak mengganggu load awal
+            } catch (error) {
+                console.error("Gagal memuat pengalaman:", error);
+                document.getElementById('pengalaman-container').innerHTML = 
+                    `<p class="text-center text-red-500 col-span-3">Gagal memuat cerita pengalaman.</p>`;
+            }
+        }
+
+        function panggilModalLewatIndex(index) {
+            const data = listPengalamanGlobal[index];
+            if (data) {
+                const nama = data[0].trim();
+                const judul = data[1] ? data[1].trim() : "Cerita Kemenangan";
+                const fotoModal1 = data[3] ? data[3].trim() : "";
+                const fotoModal2 = data[4] ? data[4].trim() : "";
+                const isiCerita = data[5] ? data[5].trim() : "";
+
+                if (typeof bukaDetailPengalaman === "function") {
+                    bukaDetailPengalaman(nama, judul, isiCerita, fotoModal1, fotoModal2);
+                }
+            }
+        }
+
+        function bukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2) {
+            const modal = document.getElementById('modal-pengalaman');
+            const modalNama = document.getElementById('modal-pengalaman-nama');
+            const modalCerita = document.getElementById('modal-pengalaman-cerita');
+            
+            modalNama.innerHTML = `<div>
+                <span class="text-xl font-black text-[#002F6C]">Cerita Kemenangan: ${nama}</span>
+                <span class="block text-xs uppercase text-[#F9A825] tracking-widest font-bold font-sans">${judul}</span>
+            </div>`;
+            
+            let fotoHTML = "";
+            if (foto1 || foto2) {
+                fotoHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 mt-2">`;
+                if (foto1) {
+                    fotoHTML += `<img src="${foto1}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 1" onerror="this.style.display='none'">`;
+                }
+                if (foto2) {
+                    fotoHTML += `<img src="${foto2}" class="w-full h-48 object-cover rounded-xl shadow-sm border border-gray-150" alt="Foto Dokumentasi 2" onerror="this.style.display='none'">`;
+                }
+                fotoHTML += `</div>`;
+            }
+
+            modalCerita.innerHTML = `
+                ${fotoHTML}
+                <p class="text-gray-700 leading-relaxed font-medium mt-2">${isiLengkap}</p>
+            `;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function tutupDetailPengalaman() {
+            const modal = document.getElementById('modal-pengalaman');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        async function fetchMateri() {
+    const container = document.getElementById('materi-container');
+    if (!container) return;
+
+    try {
+        // Ambil data langsung lewat link CSV Publik (Aman dari kendala CORS)
+        const response = await fetch(CSV_URL_MATERI);
+        const csvData = await response.text();
+        
+        // Proses parsing baris CSV manual
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let insideQuote = false;
+
+        for (let i = 0; i < csvData.length; i++) {
+            const char = csvData[i];
+            if (char === '"') {
+                if (insideQuote && csvData[i + 1] === '"') {
+                    currentField += '"';
+                    i++;
+                } else {
+                    insideQuote = !insideQuote;
+                }
+            } else if (char === ',' && !insideQuote) {
+                currentRow.push(currentField);
+                currentField = "";
+            } else if (char === '\n' && !insideQuote) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+            } else {
+                currentField += char;
+            }
+        }
+        if (currentField || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
+        }
+
+        container.innerHTML = "";
+
+        // Lewati baris header indeks ke-0, ambil data yang valid
+        const activeRows = rows.slice(1).filter(r => r[0] && r[0].trim() !== "");
+        
+        if (activeRows.length === 0) {
+            container.innerHTML = `<p class="text-center text-gray-500 w-full">Belum ada materi pelajaran saat ini.</p>`;
+            return;
+        }
+
+        // Tampilkan data materi ke dalam bentuk card komponen
+        activeRows.forEach((row) => {
+            if (row.length < 3) return;
+            const judul = row[0].trim();
+            const kategori = row[1] ? row[1].trim() : 'Umum';
+            const isi = row[2] ? row[2].trim() : '';
+
+            // Escape tanda kutip agar tidak merusak parameter onclick di HTML
+            const safeJudul = judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeKategori = kategori.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const safeIsi = isi.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+
+            const card = document.createElement('div');
+            
+            // --- BAGIAN INI YANG DIUBAH (Ditambah flex-none, lebar terpotong 75vw, dan snap-center) ---
+            card.className = "flex-none w-[75vw] sm:w-[280px] md:w-[350px] snap-center bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group cursor-pointer";
+            
+            card.innerHTML = `
+                <div class="p-5 flex-1" onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700 uppercase tracking-wider">
+                            ${kategori}
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-blue-700 transition-colors duration-200 line-clamp-2">
+                        ${judul}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed text-justify line-clamp-4 whitespace-pre-line">
+                        ${isi}
+                    </p>
+                </div>
+                <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end items-center">
+                    <button onclick="openMateriModal('${safeKategori}', '${safeJudul}', '${safeIsi}')" class="text-sm font-bold text-[#C62828] hover:text-[#002F6C] transition-colors focus:outline-none">
+                        Lanjut baca...
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // --- TAMBAHAN BARU: ANIMASI INTIP OTOMATIS SAAT BERHASIL LOAD ---
+        setTimeout(() => {
+            if (container.scrollLeft === 0) {
+                container.scroll({ left: 60, behavior: 'smooth' });
+                setTimeout(() => {
+                    container.scroll({ left: 0, behavior: 'smooth' });
+                }, 400);
+            }
+        }, 1200); // Dijeda 1.2 detik agar tidak barengan dengan section pengalaman
+
+    } catch (error) {
+        console.error("Error Materi Section:", error);
+        container.innerHTML = `
+            <div class="w-full text-center py-6 text-red-600 text-sm">
+                ⚠️ Gagal memuat Materi & Pelajaran.
+            </div>
+        `;
+    }
+}
+        function openMateriModal(kategori, judul, isi) {
+            const modal = document.getElementById("materiModal");
+            if (!modal) return;
+            
+            document.getElementById("modalKategori").innerText = kategori;
+            document.getElementById("modalJudul").innerText = judul;
+            document.getElementById("modalIsi").innerText = isi;
+            
+            modal.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModalMateri() {
+            const modal = document.getElementById("materiModal");
+            if (!modal) return;
+            
+            modal.classList.add("hidden");
+            document.body.style.overflow = "auto";
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById("materiModal");
+            if (modal && event.target === modal) {
+                closeModalMateri();
+            }
+        });
+        // ==========================================
+// ANTI ACCIDENTALLY SWIPE BACK BROWSER SYSTEM
+// ==========================================
+let isModalActiveInHistory = false;
+
+// Fungsi pembantu untuk mendeteksi apakah ada modal yang sedang terbuka di layar
+function isAnyModalVisible() {
+    const modals = ['login-modal', 'pin-setup-modal', 'gallery-modal', 'modal-pengalaman', 'materiModal'];
+    return modals.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+    });
+}
+
+// Daftarkan state baru ke browser setiap kali ada modal yang memicu pembukaan
+function registerModalState() {
+    if (!isModalActiveInHistory) {
+        window.history.pushState({ modalOpen: true }, "");
+        isModalActiveInHistory = true;
+    }
+}
+
+// Bersihkan state browser jika user menutup modal secara manual (klik tombol X / Batal / Selesai)
+function clearModalState() {
+    if (isModalActiveInHistory && !isAnyModalVisible()) {
+        isModalActiveInHistory = false;
+        window.history.back();
+    }
+}
+
+// Intersepsi tombol Back fisik / Swipe Back Browser
+window.addEventListener('popstate', function(event) {
+    if (isModalActiveInHistory) {
+        isModalActiveInHistory = false;
+        
+        // Paksa tutup semua jenis modal yang ada di index_test3.html tanpa pindah halaman
+        const loginMod = document.getElementById('login-modal');
+        if (loginMod) loginMod.classList.add('hidden');
+
+        const pinMod = document.getElementById('pin-setup-modal');
+        if (pinMod) pinMod.classList.add('hidden');
+
+        if (typeof closeGalleryModal === 'function') closeGalleryModal();
+        if (typeof tutupDetailPengalaman === 'function') tutupDetailPengalaman();
+        if (typeof closeModalMateri === 'function') closeModalMateri();
+    }
+});
+
+// Bungkus fungsi bawaan agar otomatis mencatat riwayat history saat dibuka
+const originalOpenLoginModal = openLoginModal;
+openLoginModal = function() {
+    originalOpenLoginModal();
+    registerModalState();
+};
+
+const originalOpenPinSetupModal = openPinSetupModal;
+openPinSetupModal = function() {
+    originalOpenPinSetupModal();
+    registerModalState();
+};
+
+const originalBukaDetailPengalaman = bukaDetailPengalaman;
+bukaDetailPengalaman = function(nama, judul, isiLengkap, foto1, foto2) {
+    originalBukaDetailPengalaman(nama, judul, isiLengkap, foto1, foto2);
+    registerModalState();
+};
+
+const originalOpenMateriModal = openMateriModal;
+openMateriModal = function(kategori, judul, isi) {
+    originalOpenMateriModal(kategori, judul, isi);
+    registerModalState();
+};
+
+// Modifikasi fungsi galeri slider agar ikut mendaftarkan status history saat gambar dizoom
+slider.addEventListener('mouseup', (e) => {
+    const endX = e.pageX - slider.offsetLeft;
+    if (Math.abs(endX - startX) < 5 && e.target.tagName === 'IMG') {
+        openGalleryModal(e.target.src);
+        registerModalState(); // Catat di sini
+    }
+});
+slider.addEventListener('touchend', (e) => {
+    // Memastikan deteksi ketukan pada mobile juga tercatat aman
+    if (e.target.tagName === 'IMG' && !isDown) {
+        registerModalState();
+    }
+});
+
+// Kaitkan pembersihan riwayat saat tombol penutup bawaan diklik manual
+document.addEventListener('click', function(e) {
+    // Jika yang diklik adalah tombol/elemen penutup, cek apakah perlu membersihkan riwayat browser
+    setTimeout(() => {
+        if (!isAnyModalVisible() && isModalActiveInHistory) {
+            isModalActiveInHistory = false;
+            window.history.back();
+        }
+    }, 350); // Beri delay sedikit mengikuti animasi fade-out modal Anda
+});
+/**
+ * Fungsi Universal untuk Menggeser Kontainer Horizontal secara Halus
+ * @param {string} containerId - ID dari elemen HTML yang ingin di-scroll
+ * @param {string} arah - 'kiri' atau 'kanan'
+ */
+function scrollHorisontal(containerId, arah) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Menghitung jarak geser (mengambil lebar kontainer saat ini agar dinamis)
+    // Dibagi 1.2 supaya geserannya pas dan menyisakan sedikit kartu sebelumnya
+    const jarakGeser = container.clientWidth / 1.2; 
+    
+    if (arah === 'kiri') {
+        container.scrollBy({
+            left: -jarakGeser,
+            behavior: 'smooth'
+        });
+    } else if (arah === 'kanan') {
+        container.scrollBy({
+            left: jarakGeser,
+            behavior: 'smooth'
+        });
+    }
+}
+
+    </script>
+    <script>
+    // Konfigurasi Link Google Sheets Anda (Sudah ditarik otomatis)
+    const CSV_URL_HARI_PENTING = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1886703270&single=true&output=csv';
+
+    const namaBulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    let namaFileDownload = "jadwal_kegiatan";
+
+    // Fungsi Skala Mengikuti Ukuran Layar HP/Tablet agar Tidak Melebar Keluar
+    function adjustCalendarScale() {
+        const container = document.querySelector('.calendar-outer-container');
+        const wrapper = document.getElementById('calendarWrapper');
+        if (!container || !wrapper) return;
+
+        const containerWidth = container.clientWidth;
+        const targetWidth = 1024;
+
+        if (containerWidth < targetWidth) {
+            const scale = containerWidth / targetWidth;
+            wrapper.style.transform = `scale(${scale})`;
+            container.style.height = `${wrapper.offsetHeight * scale}px`;
+        } else {
+            wrapper.style.transform = 'none';
+            container.style.height = 'auto';
+        }
+    }
+    window.addEventListener('resize', adjustCalendarScale);
+
+    // Ambil Data Jadwal Utama Bulanan dari Google Sheet
+    async function initCalendar() {
+        try {
+            const response = await fetch(CSV_URL_JADWAL_BULANAN);
+            const csvData = await response.text();
+            const rows = []; let currentRow = []; let currentField = ""; let insideQuote = false;
+            const normalizedData = csvData.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+            for (let i = 0; i < normalizedData.length; i++) {
+                let char = normalizedData[i]; let nextChar = normalizedData[i + 1];
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') { currentField += '"'; i++; } else { insideQuote = !insideQuote; }
+                } else if (char === ',' && !insideQuote) {
+                    currentRow.push(currentField); currentField = "";
+                } else if (char === '\n' && !insideQuote) {
+                    currentRow.push(currentField); rows.push(currentRow); currentRow = []; currentField = "";
+                } else { currentField += char; }
+            }
+            if (currentField || currentRow.length > 0) { currentRow.push(currentField); rows.push(currentRow); }
+
+            const parsedEvents = {}; const hitungBulanTahun = {};
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i]; if (!row || row.length < 3 || !row[0]) continue;
+                const tglString = row[0].trim(); const jamString = row[1] ? row[1].trim() : ""; const acaraString = row[2] ? row[2].trim() : "";
+                if (!acaraString) continue;
+
+                let eventDate;
+                if (tglString.includes('-')) { eventDate = new Date(tglString); }
+                else if (tglString.includes('/')) { const parts = tglString.split('/'); eventDate = new Date(parts[2], parts[1] - 1, parts[0]); }
+                else { eventDate = new Date(tglString); }
+
+                if (isNaN(eventDate.getTime())) continue;
+                const keyKey = `${eventDate.getFullYear()}-${eventDate.getMonth()}`;
+                hitungBulanTahun[keyKey] = (hitungBulanTahun[keyKey] || 0) + 1;
+
+                const dayNum = eventDate.getDate();
+                if (!parsedEvents[keyKey]) parsedEvents[keyKey] = {};
+                if (!parsedEvents[keyKey][dayNum]) parsedEvents[keyKey][dayNum] = [];
+                parsedEvents[keyKey][dayNum].push({ jam: jamString, acara: acaraString });
+            }
+
+            let targetKey = ""; let maxCount = 0;
+            for (const key in hitungBulanTahun) { if (hitungBulanTahun[key] > maxCount) { maxCount = hitungBulanTahun[key]; targetKey = key; } }
+            if (!targetKey) { const skrg = new Date(); targetKey = `${skrg.getFullYear()}-${skrg.getMonth()}`; }
+
+            const [targetYear, targetMonth] = targetKey.split('-').map(Number);
+            document.getElementById('textHeaderBulan').innerText = `JADWAL ${namaBulanIndo[targetMonth]} ${targetYear}`;
+            namaFileDownload = `jadwal_${namaBulanIndo[targetMonth].toLowerCase()}_${targetYear}`;
+
+            generateCalendar(targetYear, targetMonth, parsedEvents[targetKey] || {});
+            
+            // Panggil filter hari penting dinamis
+            loadHariPenting(targetMonth);
+            
+        } catch (error) { console.error("Gagal menginisiasi kalender index:", error); }
+    }
+
+    // Pembuat Grid Tabel Kalender
+    function generateCalendar(year, month, dynamicEvents) {
+        const calendarBody = document.getElementById('calendarBody'); calendarBody.innerHTML = '';
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        let dateCounter = 1; let htmlRows = '';
+
+        for (let i = 0; i < 6; i++) {
+            let rowCells = '<tr>'; let hasCellsInRow = false;
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDayIndex) { rowCells += '<td></td>'; }
+                else if (dateCounter > totalDays) { rowCells += '<td></td>'; }
+                else {
+                    hasCellsInRow = true; let eventHtml = ''; let dayEvents = [];
+                    if (j === 4) dayEvents.push({ jam: '19.00', acara: 'Shodaikai umum (kaikan)' });
+                    if (dynamicEvents[dateCounter]) {
+                        dynamicEvents[dateCounter].forEach(e => {
+                            if (!(j === 4 && e.acara.toLowerCase().includes('shodaikai'))) dayEvents.push(e);
+                        });
+                    }
+                    if (dayEvents.length > 0) {
+                        eventHtml += '<div class="event-list">';
+                        dayEvents.forEach(e => { eventHtml += `<div class="event-item">${e.jam ? `<b>${e.jam}</b> ` : ""}${e.acara}</div>`; });
+                        eventHtml += '</div>';
+                    }
+                    rowCells += `<td><div class="date-number">${dateCounter}</div>${eventHtml}</td>`;
+                    dateCounter++;
+                }
+            }
+            rowCells += '</tr>';
+            if (hasCellsInRow) htmlRows += rowCells;
+        }
+        calendarBody.innerHTML = htmlRows;
+        setTimeout(adjustCalendarScale, 150);
+    }
+
+    // Penarik Data Hari Penting Dinamis dari tab harisokagakkai[span_4](start_span)[span_4](end_span)
+    async function loadHariPenting(targetMonth) {
+    const container = document.getElementById('containerHariPenting');
+    try {
+        const response = await fetch(CSV_URL_HARI_PENTING);
+        const csvData = await response.text();
+        
+        // Parse CSV manual (Metode yang sama seperti sistem Anda yang lain)
+        const lines = csvData.split("\n");
+        let htmlContent = "";
+        let count = 0;
+
+        // Looping baris data (lewati header baris indeks 0)
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            
+            // Atasi pemisahan kolom koma
+            const columns = lines[i].split(",");
+            if (columns.length < 2) continue;
+
+            const tglRaw = columns[0].trim(); // Contoh: "03/07" atau "03-07"
+            const namaHariBesar = columns[1].replace(/"/g, "").trim(); // Nama acaranya
+
+            if (!tglRaw || !namaHariBesar) continue;
+
+            // Ekstrak hari dan bulan dari sheet (format DD/MM atau DD-MM)
+            const separator = tglRaw.includes('/') ? '/' : '-';
+            const parts = tglRaw.split(separator);
+            
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; // Bulan JS dimulai dari 0 (Januari = 0)
+
+            // Validasi: Hanya tampilkan jika bulannya COCOK dengan bulan kalender yang sedang aktif!
+            if (month === targetMonth) {
+                // Format tanggal agar selalu 2 digit (misal: 3 Juli -> 03 Juli)
+                const displayDay = day < 10 ? '0' + day : day;
+                const namaBulanSaja = namaBulanIndo[targetMonth];
+
+                htmlContent += `${displayDay} ${namaBulanSaja} : ${namaHariBesar}<br>`;
+                count++;
+            }
+        }
+
+        // Jika tidak ada hari penting di bulan tersebut
+        if (count === 0) {
+            container.innerHTML = "Tidak ada hari besar di bulan ini.";
+        } else {
+            container.innerHTML = htmlContent;
+        }
+
+    } catch (error) {
+        console.error("Gagal menyedot data hari penting:", error);
+        container.innerHTML = "Gagal memuat data hari penting.";
+    }
+}
+
+    // Fungsi Pengunduh Gambar Otomatis (Aman dari skala layar rusak)
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+        const container = document.querySelector('.calendar-outer-container');
+        const wrapper = document.getElementById('calendarWrapper');
+        
+        const originalTransform = wrapper.style.transform;
+        const originalHeight = container.style.height;
+        
+        wrapper.style.transform = 'none';
+        container.style.height = 'auto';
+
+        html2canvas(wrapper, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = canvas.toDataURL('image/jpeg', 0.95);
+            downloadLink.download = `${namaFileDownload}.jpg`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            wrapper.style.transform = originalTransform;
+            container.style.height = originalHeight;
+        }).catch(err => {
+            alert("Gagal memproses file gambar.");
+            wrapper.style.transform = originalTransform;
+            container.style.height = originalHeight;
+        });
+    });
+
+    // Jalankan inisialisasi kalender saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', initCalendar);
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
