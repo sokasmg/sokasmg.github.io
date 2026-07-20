@@ -1028,7 +1028,7 @@ function loadBannersFromSheets() {
     fetch(csvUrl)
         .then(response => response.text())
         .then(csvText => {
-            const rows = parseCSV(csvText);
+            const rows = parseCSVBase64(csvText);
             
             // Jika spreadsheet kosong atau hanya ada baris header
             if (rows.length < 2) {
@@ -1076,7 +1076,7 @@ function loadBannersFromSheets() {
 }
 
 // Fungsi parser CSV yang jauh lebih presisi untuk teks Base64 bervolume besar
-function parseCSV(text) {
+function parseCSVBase64(text) {
     let lines = [];
     let row = [""];
     let inQuotes = false;
