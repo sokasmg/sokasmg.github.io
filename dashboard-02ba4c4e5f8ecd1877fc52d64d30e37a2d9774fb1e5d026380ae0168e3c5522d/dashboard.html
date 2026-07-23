@@ -306,6 +306,72 @@ button.btn-submit:hover {
                 display: none !important;
             }
         }
+        @media print {
+    /* 1. Sembunyikan seluruh elemen halaman web utama */
+    body * {
+        visibility: hidden !important;
+    }
+
+    /* 2. Hanya tampilkan kontainer printable modal */
+    #print-materi-area, #print-materi-area * {
+        visibility: visible !important;
+    }
+
+    /* 3. Pengaturan Halaman A4 */
+    @page {
+        size: A4 portrait;
+        margin: 15mm 15mm 15mm 15mm;
+    }
+
+    /* 4. Layout Area Print Utama */
+    #print-materi-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        color: #000 !important;
+        background: transparent !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    /* 5. Judul Besar Ukuran 18pt Bold */
+    #print-materi-area h1 {
+        font-size: 18pt !important;
+        font-weight: bold !important;
+        line-height: 1.3 !important;
+        margin-bottom: 6pt !important;
+        text-align: left !important;
+        text-transform: uppercase;
+        border-b: 2pt solid #000;
+        padding-bottom: 4pt;
+    }
+
+    /* Meta Info (Pengirim & Tanggal) */
+    #print-materi-area .print-meta {
+        font-size: 10pt !important;
+        font-style: italic !important;
+        color: #444 !important;
+        margin-bottom: 14pt !important;
+    }
+
+    /* 6. Layout 2 Kolom Kanan-Kiri & Font 12pt */
+    #print-materi-area .print-content {
+        column-count: 2 !important;
+        column-gap: 20pt !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        text-align: justify !important;
+        hyphens: auto;
+    }
+
+    /* Mencegah paragraf terpotong secara canggung di antar kolom */
+    #print-materi-area .print-content p {
+        margin-bottom: 10pt !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
+
     </style>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen">
@@ -318,7 +384,7 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v4.4</button></span>
+       			v4.5</button></span>
 					</span>
                 </div>
                 
@@ -511,7 +577,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v4.4
+            Shibu Semarang Website & Dashboard v4.5
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -536,7 +602,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v4.4
+            Shibu Semarang Website & Dashboard v4.5
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -961,15 +1027,27 @@ button.btn-submit:hover {
                 <img id="modalMateriAvatar" class="w-12 h-12 rounded-full border bg-slate-100 object-cover" src="">
                 <div>
                     <h3 id="modalMateriTitle" class="text-base font-bold text-slate-900 line-clamp-1"></h3>
-                    <p class="text-xs text-slate-500"><span id="modalMateriAuthor" class="font-semibold"></span> � <span id="modalMateriMeta"></span></p>
+                    <p class="text-xs text-slate-500"><span id="modalMateriAuthor" class="font-semibold"></span> • <span id="modalMateriMeta"></span></p>
                 </div>
             </div>
-            <button onclick="closeDetailMateriModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-50 transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-        <div class="py-4 overflow-y-auto text-base text-slate-600 leading-relaxed whitespace-pre-line text-justify" id="modalMateriContent">
+            
+            <!-- GROUP TOMBOL AKSI MODAL -->
+            <div class="flex items-center gap-2">
+                <!-- TOMBOL PRINT BARU -->
+                <button onclick="printModalMateri()" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Cetak</span>
+                </button>
+                
+                <!-- TOMBOL CLOSE -->
+                <button onclick="closeDetailMateriModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+        </div>
+        
+        <div class="py-4 overflow-y-auto text-base text-slate-600 leading-relaxed whitespace-pre-line text-justify" id="modalMateriContent">
+        </div>
     </div>
 </div>
 
@@ -4617,6 +4695,45 @@ function resetBannerPreviews(text) {
     }
 }
 
+function printModalMateri() {
+    // 1. Ambil data dari elemen modal
+    const judul = document.getElementById('modalMateriTitle').innerText;
+    const author = document.getElementById('modalMateriAuthor').innerText;
+    const meta = document.getElementById('modalMateriMeta').innerText;
+    const isi = document.getElementById('modalMateriContent').innerText;
+
+    // 2. Format isi teks menjadi paragraf-paragraf HTML
+    const formattedContent = isi
+        .split('\n')
+        .filter(p => p.trim() !== '')
+        .map(p => `<p>${p}</p>`)
+        .join('');
+
+    // 3. Buat wrapper sementara khusus cetak
+    let printArea = document.getElementById('print-materi-area');
+    if (!printArea) {
+        printArea = document.createElement('div');
+        printArea.id = 'print-materi-area';
+        document.body.appendChild(printArea);
+    }
+
+    // 4. Masukkan struktur HTML ke dalam area cetak
+    printArea.innerHTML = `
+        <h1>${judul}</h1>
+        <div class="print-meta">Narasumber/Pengirim: <strong>${author}</strong> | ${meta}</div>
+        <div class="print-content">
+            ${formattedContent}
+        </div>
+    `;
+
+    // 5. Panggil dialog cetak browser
+    window.print();
+
+    // 6. Bersihkan elemen sementara setelah dialog print ditutup
+    setTimeout(() => {
+        printArea.innerHTML = '';
+    }, 1000);
+}
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
     <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
