@@ -1054,118 +1054,139 @@ button.btn-submit:hover {
         <!-- ========================================================================= -->
         <!-- TAB 1: LAPORAN KEHADIRAN                                                 -->
         <!-- ========================================================================= -->
-        <div id="tab-kehadiran" class="tab-content hidden space-y-6">
-            <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
-                    LAPORAN KEHADIRAN
-                </h1>
-                <p class="text-sm text-slate-500 mt-1">Sistem pencatatan kehadiran anggota</p>
+<div id="tab-kehadiran" class="tab-content hidden space-y-6">
+    <div class="text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
+            LAPORAN KEHADIRAN
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">Sistem pencatatan kehadiran anggota</p>
+    </div>
+
+    <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 items-end">
+            
+            <!-- Tanggal -->
+            <div class="flex flex-col gap-1.5 lg:col-span-2">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
+                <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <!-- Pertemuan -->
+            <div class="flex flex-col gap-1.5 lg:col-span-2">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
+                <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                    <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
+                    <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
+                    <option value="Chiku Majapahit">Chiku Majapahit</option>
+                    <option value="Salatiga">Salatiga</option>
+                    <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
+                    <option value="Pertemuan Bagian">Pertemuan Bagian</option>
+                    <option value="Shodaikai">Shodaikai</option>
+                    <option value="Pertemuan Belajar Gosho">Pertemuan Belajar Gosho</option>
+                    <option value="Pertemuan Menonton Honbukanbukai">Pertemuan Menonton Honbukanbukai</option>
+                    <option value="Pertemuan Khusus (PFK/Sokai)">Pertemuan Khusus (PFK/Sokai)</option>
+                </select>
+            </div>
+            
+            <!-- Input Angka -->
+            <div class="flex flex-col gap-1.5 lg:col-span-1">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
+                <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <div class="flex flex-col gap-1.5 lg:col-span-1">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
+                <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <div class="flex flex-col gap-1.5 lg:col-span-1">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
+                <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <div class="flex flex-col gap-1.5 lg:col-span-1">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
+                <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <div class="flex flex-col gap-1.5 lg:col-span-1">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
+                <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
+            
+            <!-- Keterangan -->
+            <div class="flex flex-col gap-1.5 lg:col-span-3">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
+                <input type="text" id="inputKeterangan" name="keterangan" placeholder="Isi info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
             </div>
 
-            <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 items-end">
-                    
-                    <!-- Tanggal -->
-                    <div class="flex flex-col gap-1.5 lg:col-span-2">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
-                        <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <!-- Pertemuan -->
-                    <div class="flex flex-col gap-1.5 lg:col-span-2">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
-                        <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                            <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
-                            <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
-                            <option value="Chiku Majapahit">Chiku Majapahit</option>
-                            <option value="Salatiga">Salatiga</option>
-                            <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
-                            <option value="Pertemuan Bagian">Pertemuan Bagian</option>
-                            <option value="Shodaikai">Shodaikai</option>
-                            <option value="Pertemuan Belajar Gosho">Pertemuan Belajar Gosho</option>
-                            <option value="Pertemuan Menonton Honbukanbukai">Pertemuan Menonton Honbukanbukai</option>
-                            <option value="Pertemuan Khusus (PFK/Sokai)">Pertemuan Khusus (PFK/Sokai)</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Input Angka -->
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
-                        <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
-                        <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
-                        <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
-                        <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <div class="flex flex-col gap-1.5 lg:col-span-1">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
-                        <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <!-- Keterangan -->
-                    <div class="flex flex-col gap-1.5 lg:col-span-2">
-                        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
-                        <input type="text" id="inputKeterangan" name="keterangan" placeholder="Isi info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    </div>
-                    
-                    <!-- Pelapor -->
-                        <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                          <button type="submit" id="btnSubmit" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
-                        <span id="btnText">Lapor</span>
-                    </button>
+            <!-- Upload Gambar Kehadiran -->
+            <div class="flex flex-col gap-1.5 lg:col-span-4">
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Foto Dokumentasi</label>
+                    <span id="size-inputFotoKehadiran" class="text-xs font-semibold text-slate-400"></span>
                 </div>
-  
-            </form>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
-                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
-                    <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
-                    <button type="button" id="btnRefresh" onclick="fetchData()" class="relative z-20 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer">
-                        <span id="refreshText"> Refresh Data</span>
-                    </button>
+                <input type="hidden" id="inputFotoKehadiran">
+                <div class="flex items-center gap-3">
+                    <input type="file" id="fileFotoKehadiran" accept="image/*" onchange="prosesFotoKehadiran(this, 'inputFotoKehadiran', 'previewFotoKehadiran')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    <div id="previewFotoKehadiran" class="w-10 h-10 rounded-lg border border-slate-200 bg-slate-50 overflow-hidden flex-shrink-0 flex items-center justify-center text-xs text-slate-400">
+                        No image
+                    </div>
                 </div>
+            </div>
+            
+            <!-- Pelapor & Tombol -->
+            <div class="flex flex-col gap-1.5 lg:col-span-3">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
+                <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+            </div>
 
-                <!-- TAMPILAN TABLE (Desktop) -->
-                <div class="hidden md:block overflow-x-auto w-full">
-                   <table class="w-full border-collapse text-left table-auto">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                                <th class="p-4 w-28">Tanggal</th>
-                                <th class="p-4">Pertemuan</th>
-                                <th class="p-4 w-12 text-center">Bpk</th>
-                                <th class="p-4 w-12 text-center">Ibu</th>
-                                <th class="p-4 w-12 text-center">Pmd</th>
-                                <th class="p-4 w-12 text-center">Pmi</th>
-                                <th class="p-4 w-12 text-center">Anak</th>
-                                <th class="p-4 w-16 text-center bg-indigo-50/50 text-indigo-600 font-bold">Total</th>
-                                <th class="p-4 max-w-xs">Keterangan</th>
-                                <th class="p-4 w-28">Pelapor</th>
-                                <th class="p-4 w-32 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelBody" class="text-sm text-slate-600 divide-y divide-slate-50">
-                            <tr><td colspan="11" class="p-8 text-center text-slate-400">Memuat data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- TAMPILAN CARD LAYOUT (Mobile) -->
-                <div id="tabelCardMobile" class="block md:hidden p-4 space-y-4 bg-slate-50/50 divide-y divide-slate-100">
-                    <div class="text-center py-8 text-slate-400 text-sm">Memuat data...</div>
-                </div>
+            <div class="lg:col-span-1">
+                <button type="submit" id="btnSubmit" class="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
+                    <span id="btnText">Lapor</span>
+                </button>
             </div>
         </div>
+    </form>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
+            <h2 class="text-lg font-semibold text-slate-800">Daftar Kehadiran Terbaru</h2>
+            <button type="button" id="btnRefresh" onclick="fetchData()" class="relative z-20 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer">
+                <span id="refreshText">🔄 Refresh Data</span>
+            </button>
+        </div>
+
+        <!-- TAMPILAN TABLE (Desktop) -->
+        <div class="hidden md:block overflow-x-auto w-full">
+           <table class="w-full border-collapse text-left table-auto">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        <th class="p-4 w-28">Tanggal</th>
+                        <th class="p-4">Pertemuan</th>
+                        <th class="p-4 w-12 text-center">Bpk</th>
+                        <th class="p-4 w-12 text-center">Ibu</th>
+                        <th class="p-4 w-12 text-center">Pmd</th>
+                        <th class="p-4 w-12 text-center">Pmi</th>
+                        <th class="p-4 w-12 text-center">Anak</th>
+                        <th class="p-4 w-16 text-center bg-indigo-50/50 text-indigo-600 font-bold">Total</th>
+                        <th class="p-4 max-w-xs">Keterangan</th>
+                        <th class="p-4 w-28">Pelapor</th>
+                        <th class="p-4 w-32 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelBody" class="text-sm text-slate-600 divide-y divide-slate-50">
+                    <tr><td colspan="11" class="p-8 text-center text-slate-400">Memuat data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAMPILAN CARD LAYOUT (Mobile) -->
+        <div id="tabelCardMobile" class="block md:hidden p-4 space-y-4 bg-slate-50/50 divide-y divide-slate-100">
+            <div class="text-center py-8 text-slate-400 text-sm">Memuat data...</div>
+        </div>
+    </div>
+</div>
         
 <!-- ========================================================================= -->
 <!-- TAB: KUNJUNGAN & SHAKUBUKU                                               -->
@@ -1508,62 +1529,86 @@ button.btn-submit:hover {
 
     </main>
 
-    <!-- MODAL EDIT LAPORAN KEHADIRAN (Wajib dipastikan ada di sini) -->
-    <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 hidden animate-fade-in">
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full mx-4 overflow-hidden transform transition-all">
-            <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-slate-800">Edit Laporan Kehadiran</h3>
-                <button type="button" onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
-            </div>
-            <form id="editLaporanForm" class="p-6 space-y-4">
-                <input type="hidden" id="editRowId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tanggal</label>
-                        <input type="date" id="editTanggal" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pertemuan</label>
-                        <input type="text" id="editPertemuan" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
-                    </div>
-                </div>
-                <div class="grid grid-cols-5 gap-2">
-                    <div>
-                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Bpk</label>
-                        <input type="number" id="editBapak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
-                    </div>
-                    <div>
-                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Ibu</label>
-                        <input type="number" id="editIbu" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
-                    </div>
-                    <div>
-                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmd</label>
-                        <input type="number" id="editPemuda" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
-                    </div>
-                    <div>
-                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmi</label>
-                        <input type="number" id="editPemudi" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
-                    </div>
-                    <div>
-                        <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Anak</label>
-                        <input type="number" id="editAnak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
-                    </div>
+<!-- MODAL EDIT LAPORAN KEHADIRAN -->
+<div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 hidden animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full mx-4 overflow-hidden transform transition-all">
+        <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">Edit Laporan Kehadiran</h3>
+            <button type="button" onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
+        </div>
+        <form id="editLaporanForm" class="p-6 space-y-4">
+            <input type="hidden" id="editRowId">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tanggal</label>
+                    <input type="date" id="editTanggal" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Keterangan</label>
-                    <input type="text" id="editKeterangan" class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pertemuan</label>
+                    <input type="text" id="editPertemuan" required class="w-full rounded-lg border-slate-200 p-2.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 border">
                 </div>
-                <div id="editcontainerPelapor" class="hidden">
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pelapor</label>
-                    <input type="text" id="editPelapor" required readonly class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+            </div>
+            <div class="grid grid-cols-5 gap-2">
+                <div>
+                    <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Bpk</label>
+                    <input type="number" id="editBapak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
                 </div>
-                <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
-                    <button type="button" onclick="tutupModalEdit()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSimpanEdit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs">Simpan Perubahan</button>
+                <div>
+                    <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Ibu</label>
+                    <input type="number" id="editIbu" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
                 </div>
-            </form>
-        </div>
+                <div>
+                    <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmd</label>
+                    <input type="number" id="editPemuda" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                </div>
+                <div>
+                    <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Pmi</label>
+                    <input type="number" id="editPemudi" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                </div>
+                <div>
+                    <label class="block text-center text-xs font-semibold text-slate-500 mb-1">Anak</label>
+                    <input type="number" id="editAnak" min="0" class="w-full text-center rounded-lg border-slate-200 p-2 text-sm border">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Keterangan</label>
+                <input type="text" id="editKeterangan" class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+            </div>
+
+            <!-- Edit Foto Dokumentasi -->
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Ubah Foto Dokumentasi</label>
+                    <span id="size-editFotoKehadiran" class="text-xs font-semibold text-slate-400"></span>
+                </div>
+                <input type="hidden" id="editFotoKehadiran">
+                <div class="flex items-center gap-3">
+                    <input type="file" accept="image/*" onchange="prosesFotoKehadiran(this, 'editFotoKehadiran', 'previewEditFotoKehadiran')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    <div id="previewEditFotoKehadiran" class="w-10 h-10 rounded-lg border border-slate-200 bg-slate-50 overflow-hidden flex-shrink-0 flex items-center justify-center text-xs text-slate-400">
+                        No image
+                    </div>
+                </div>
+            </div>
+
+            <div id="editcontainerPelapor" class="hidden">
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pelapor</label>
+                <input type="text" id="editPelapor" required readonly class="w-full rounded-lg border-slate-200 p-2.5 text-sm border">
+            </div>
+            <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
+                <button type="button" onclick="tutupModalEdit()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
+                <button type="submit" id="btnSimpanEdit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs">Simpan Perubahan</button>
+            </div>
+        </form>
     </div>
+</div>
+
+<!-- MODAL ZOOM FOTO -->
+<div id="zoomModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center z-50 hidden" onclick="tutupZoomModal()">
+    <div class="relative max-w-3xl max-h-[90vh] p-2" onclick="event.stopPropagation()">
+        <button type="button" onclick="tutupZoomModal()" class="absolute -top-3 -right-3 bg-white text-slate-700 w-8 h-8 rounded-full shadow-lg font-bold flex items-center justify-center hover:bg-slate-100">&times;</button>
+        <img id="zoomModalImg" src="" class="max-w-full max-h-[85vh] rounded-xl object-contain shadow-2xl">
+    </div>
+</div>
 
     <!-- ========================================================================= -->
     <!-- JAVASCRIPT ENGINE                                                         -->
@@ -1617,254 +1662,344 @@ button.btn-submit:hover {
 
         window.addEventListener('resize', adjustCalendarScale);
 
-
 // =========================================================================
-// SCRIPTS TAB 1: LAPORAN KEHADIRAN
+// SCRIPTS TAB 1: LAPORAN KEHADIRAN (WITH IMAGE UPLOAD & ZOOM)
 // =========================================================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
-        
-        // Memastikan format YYYY-MM-DD dari server tampil menjadi DD/MM/YYYY di tabel
-        function formatKeTanggalLokal(tanggalInput) {
-            if (!tanggalInput) return '';
-            if (typeof tanggalInput === 'string' && tanggalInput.includes('-')) {
-                const parts = tanggalInput.split('-');
-                if(parts.length === 3) {
-                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
-                }
-            }
-            return tanggalInput;
-        }
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuisjCvuqbKRXTfZbG-V6JMIN8bRuBNwreZFS8F8p99MTGSrEVMPx_ELiDMjuzaulI/exec';
 
-        // Mengambil nama bulan dan tahun murni berdasarkan format YYYY-MM-DD dari server
-        function dapatkanNamaBulanTahun(tanggalStr) {
-            if (!tanggalStr || !tanggalStr.includes('-')) return 'Lainnya';
-            const parts = tanggalStr.split('-'); // parts[0] = YYYY, parts[1] = MM, parts[2] = DD
-            const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            const indexBulan = parseInt(parts[1], 10) - 1;
-            const tahun = parts[0];
-            return (indexBulan >= 0 && indexBulan < 12) ? `${namaBulan[indexBulan]} ${tahun}` : 'Lainnya';
-        }        
+// Fungsi Kompresi Foto khusus Kehadiran
+function prosesFotoKehadiran(inputElement, targetInputId, previewId) {
+    const file = inputElement.files[0];
+    if (!file) return;
 
-        let dataKehadiranCache = [];
+    let sizeLabelId = `size-${targetInputId}`;
 
-        async function fetchData() {
-            const btnRefresh = document.getElementById('btnRefresh');
-            if(btnRefresh) btnRefresh.textContent = ' Memuat...';
-            
-            try {
-                const response = await fetch(GAS_URL);
-                const data = await response.json();
-                
-                dataKehadiranCache = data;
-                
-                // URUTAN DIJAMIN PASTI BENAR & STABIL: Menggunakan format angka murni YYYYMMDD dari string tanggal berstrip (-)
-                data.sort((a, b) => {
-                    const partA = a.tanggal.split('-');
-                    const partB = b.tanggal.split('-');
-                    
-                    const skorA = parseInt(partA[0] + partA[1].padStart(2, '0') + partA[2].padStart(2, '0'), 10);
-                    const skorB = parseInt(partB[0] + partB[1].padStart(2, '0') + partB[2].padStart(2, '0'), 10);
-                    
-                    return skorB - skorA; // Nilai waktu terbesar (terbaru) mutlak di paling atas!
-                });
-                
-                renderTabelKehadiran(data);
-            } catch (error) {
-                console.error("Gagal memuat data kehadiran:", error);
-            } finally {
-                if(btnRefresh) btnRefresh.textContent = ' Refresh Data';
-            }
-        }
-
-        function renderTabelKehadiran(data) {
-            const tbody = document.getElementById('tabelBody');
-            const mobileContainer = document.getElementById('tabelCardMobile');
-            
-            if(!tbody || !mobileContainer) return;
-            
-            tbody.innerHTML = '';
-            mobileContainer.innerHTML = '';
-            
-            if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" class="p-8 text-center text-slate-400">Belum ada data kehadiran terdaftar.</td></tr>`;
-                mobileContainer.innerHTML = `<div class="p-6 text-center text-slate-400 bg-white rounded-xl border">Belum ada data kehadiran terdaftar.</div>`;
-                return;
-            }
-            
-            let bulanTahunTerakhir = ""; 
-
-            data.forEach(item => {
-                // deteksi perpindahan menggunakan data mentah berstrip (item.tanggal = YYYY-MM-DD)
-                const bulanTahunSekarang = dapatkanNamaBulanTahun(item.tanggal);
-                const tanggalIndo = formatKeTanggalLokal(item.tanggal);
-                
-                // JIKA BULAN BERUBAH, SISIPKAN JUDUL SEPARATOR KELOMPOK BULAN
-                if (bulanTahunSekarang !== bulanTahunTerakhir) {
-                    bulanTahunTerakhir = bulanTahunSekarang;
-                    
-                    // 1. Separator Baris untuk Tabel Desktop
-                    const trSeparator = document.createElement('tr');
-                    trSeparator.className = "bg-slate-100/80 border-y border-slate-200 font-bold text-slate-700";
-                    trSeparator.innerHTML = `<td colspan="11" class="p-3 pl-4 text-left tracking-wide">${bulanTahunTerakhir}</td>`;
-                    tbody.appendChild(trSeparator);
-                    
-                    // 2. Separator Judul untuk Tampilan Mobile
-                    const mobileSeparator = document.createElement('div');
-                    mobileSeparator.className = "font-bold text-slate-700 text-sm pt-4 pb-1 pl-1 sticky top-0 bg-slate-50 z-10 border-b border-slate-100";
-                    mobileSeparator.innerHTML = bulanTahunTerakhir;
-                    mobileContainer.appendChild(mobileSeparator);
-                }
-
-                // MERENDER BARIS DATA SEPERTI KODE ASLI KAMU
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/80 transition-colors";
-                tr.innerHTML = `
-                    <td class="p-4 font-medium text-slate-700 whitespace-nowrap">${tanggalIndo}</td>
-                    <td class="p-4 font-medium text-slate-900">${item.pertemuan}</td>
-                    <td class="p-4 text-center">${item.bapak}</td>
-                    <td class="p-4 text-center">${item.ibu}</td>
-                    <td class="p-4 text-center">${item.pemuda}</td>
-                    <td class="p-4 text-center">${item.pemudi}</td>
-                    <td class="p-4 text-center">${item.anak}</td>
-                    <td class="p-4 text-center bg-indigo-50/30 text-indigo-600 font-bold">${item.total}</td>
-                    <td class="p-4 max-w-xs truncate" title="${item.keterangan || '-'}">${item.keterangan || '-'}</td>
-                    <td class="p-4 text-slate-500 whitespace-nowrap">${item.pelapor}</td>
-                    <td class="p-4 text-center whitespace-nowrap">
-                        <div class="flex items-center justify-center gap-1.5">
-                            <button onclick="bukaModalEdit(${item.rowId})" class="px-2 py-1 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded border border-amber-200 transition-all">Edit</button>
-                            <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-2 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-all">Hapus</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-                
-                const card = document.createElement('div');
-                card.className = "bg-white p-4 rounded-xl shadow-xs border border-slate-100 space-y-3";
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-semibold text-slate-400 block">${tanggalIndo}</span>
-                            <h4 class="font-bold text-slate-800">${item.pertemuan}</h4>
-                        </div>
-                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-bold">Total: ${item.total}</span>
-                    </div>
-                    <div class="grid grid-cols-5 text-center text-xs bg-slate-50 p-2 rounded-lg gap-1 border border-slate-100">
-                        <div><span class="block text-slate-400 font-medium">Bpk</span><span class="font-semibold text-slate-700">${item.bapak}</span></div>
-                        <div><span class="block text-slate-400 font-medium">Ibu</span><span class="font-semibold text-slate-700">${item.ibu}</span></div>
-                        <div><span class="block text-slate-400 font-medium">Pmd</span><span class="font-semibold text-slate-700">${item.pemuda}</span></div>
-                        <div><span class="block text-slate-400 font-medium">Pmi</span><span class="font-semibold text-slate-700">${item.pemudi}</span></div>
-                        <div><span class="block text-slate-400 font-medium">Anak</span><span class="font-semibold text-slate-700">${item.anak}</span></div>
-                    </div>
-                    <div class="text-xs text-slate-500">
-                        <p><span class="font-medium text-slate-400">Keterangan:</span> ${item.keterangan || '-'}</p>
-                        <p class="mt-0.5"><span class="font-medium text-slate-400">Pelapor:</span> ${item.pelapor}</p>
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                        <button onclick="bukaModalEdit(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 rounded-lg border border-amber-100 w-1/2">Edit</button>
-                        <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg border border-red-100 w-1/2">Hapus</button>
-                    </div>
-                `;
-                mobileContainer.appendChild(card);
-            });
-        }
-
-        function bukaModalEdit(rowId) {
-            const item = dataKehadiranCache.find(x => x.rowId === rowId);
-            if(!item) return;
-            
-            const elRowId = document.getElementById('editRowId');
-            const elTanggal = document.getElementById('editTanggal');
-            const elPertemuan = document.getElementById('editPertemuan');
-            const elBapak = document.getElementById('editBapak');
-            const elIbu = document.getElementById('editIbu');
-            const elPemuda = document.getElementById('editPemuda');
-            const elPemudi = document.getElementById('editPemudi');
-            const elAnak = document.getElementById('editAnak');
-            const elKeterangan = document.getElementById('editKeterangan');
-            const elPelapor = document.getElementById('editPelapor');
-
-            if(elRowId) elRowId.value = item.rowId;
-            if(elTanggal) elTanggal.value = item.tanggal; // Karena item.tanggal sudah YYYY-MM-DD murni, langsung pasang tanpa parsing ribet
-            if(elPertemuan) elPertemuan.value = item.pertemuan;
-            if(elBapak) elBapak.value = item.bapak;
-            if(elIbu) elIbu.value = item.ibu;
-            if(elPemuda) elPemuda.value = item.pemuda;
-            if(elPemudi) elPemudi.value = item.pemudi;
-            if(elAnak) elAnak.value = item.anak;
-            if(elKeterangan) elKeterangan.value = item.keterangan || "";
-            if(elPelapor) elPelapor.value = item.pelapor;
-            
-            const modal = document.getElementById('editModal');
-            if(modal) modal.classList.remove('hidden');
-        }
-
-        function tutupModalEdit() {
-            const modal = document.getElementById('editModal');
-            if(modal) modal.classList.add('hidden');
-            const form = document.getElementById('editLaporanForm');
-            if(form) form.reset();
-        }
-
-        const editForm = document.getElementById('editLaporanForm');
-        if(editForm) {
-            editForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const btnSimpan = document.getElementById('btnSimpanEdit');
-                if(btnSimpan) {
-                    btnSimpan.disabled = true;
-                    btnSimpan.textContent = 'Menyimpan...';
-                }
-                
-                const payload = {
-                    action: "update",
-                    rowId: document.getElementById('editRowId').value,
-                    tanggal: document.getElementById('editTanggal').value, 
-                    pertemuan: document.getElementById('editPertemuan').value,
-                    bapak: document.getElementById('editBapak').value,
-                    ibu: document.getElementById('editIbu').value,
-                    pemuda: document.getElementById('editPemuda').value,
-                    pemudi: document.getElementById('editPemudi').value,
-                    anak: document.getElementById('editAnak').value,
-                    keterangan: document.getElementById('editKeterangan').value,
-                    pelapor: document.getElementById('editPelapor').value
-                };
-                
+    try {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
                 try {
-                    await fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+                    const maxDimension = 480;
+                    let targetWidth, targetHeight;
 
-// KIRIM LOG UBAH DATA
-kirimLogAktivitas(
-    'UPDATE', 
-    'Laporan Kehadiran', 
-    `${payload.pelapor} mengubah laporan kehadiran "${payload.pertemuan}" tanggal ${formatKeTanggalLokal(payload.tanggal)} (ID: ${payload.rowId})`
-);
-                    alert("Perintah edit data berhasil dikirim ke server!");
-                    tutupModalEdit();
-                    setTimeout(fetchData, 1500); 
-                } catch (err) {
-                    alert("Terjadi masalah saat mengubah data.");
-                    console.error(err);
-                } finally {
-                    if(btnSimpan) {
-                        btnSimpan.disabled = false;
-                        btnSimpan.textContent = 'Simpan Perubahan';
+                    if (img.width > img.height) {
+                        targetWidth = maxDimension;
+                        targetHeight = Math.round((maxDimension / img.width) * img.height);
+                    } else {
+                        targetHeight = maxDimension;
+                        targetWidth = Math.round((maxDimension / img.height) * img.width);
                     }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
+                    const fileSizeInKB = (stringLength * 3 / 4) / 1024;
+
+                    document.getElementById(targetInputId).value = base64Result;
+
+                    const previewContainer = document.getElementById(previewId);
+                    if (previewContainer) {
+                        previewContainer.innerHTML = `<img src="${base64Result}" class="w-full h-full object-cover">`;
+                    }
+                    
+                    const sizeLabel = document.getElementById(sizeLabelId);
+                    if (sizeLabel) {
+                        sizeLabel.innerText = `${fileSizeInKB.toFixed(1)} KB`;
+                        if (fileSizeInKB > 30) {
+                            sizeLabel.className = "text-xs font-semibold text-amber-600";
+                            sizeLabel.innerText += " (>30KB)";
+                        } else {
+                            sizeLabel.className = "text-xs font-semibold text-green-600";
+                        }
+                    }
+                } catch (innerError) {
+                    alert("Gagal memproses gambar: " + innerError.message);
                 }
-            });
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } catch (globalError) {
+        alert("Terjadi masalah sistem: " + globalError.message);
+    }
+}
+
+// Fungsi Zoom Modal Foto
+function bukaZoomModal(src) {
+    const modal = document.getElementById('zoomModal');
+    const img = document.getElementById('zoomModalImg');
+    if (modal && img) {
+        img.src = src;
+        modal.classList.remove('hidden');
+    }
+}
+
+function tutupZoomModal() {
+    const modal = document.getElementById('zoomModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function formatKeTanggalLokal(tanggalInput) {
+    if (!tanggalInput) return '';
+    if (typeof tanggalInput === 'string' && tanggalInput.includes('-')) {
+        const parts = tanggalInput.split('-');
+        if(parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
+    }
+    return tanggalInput;
+}
+
+function dapatkanNamaBulanTahun(tanggalStr) {
+    if (!tanggalStr || !tanggalStr.includes('-')) return 'Lainnya';
+    const parts = tanggalStr.split('-');
+    const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const indexBulan = parseInt(parts[1], 10) - 1;
+    const tahun = parts[0];
+    return (indexBulan >= 0 && indexBulan < 12) ? `${namaBulan[indexBulan]} ${tahun}` : 'Lainnya';
+}        
+
+let dataKehadiranCache = [];
+
+async function fetchData() {
+    const btnRefresh = document.getElementById('btnRefresh');
+    if(btnRefresh) btnRefresh.textContent = '🔄 Memuat...';
+    
+    try {
+        const response = await fetch(GAS_URL);
+        const data = await response.json();
+        
+        dataKehadiranCache = data;
+        
+        data.sort((a, b) => {
+            const partA = a.tanggal.split('-');
+            const partB = b.tanggal.split('-');
+            
+            const skorA = parseInt(partA[0] + partA[1].padStart(2, '0') + partA[2].padStart(2, '0'), 10);
+            const skorB = parseInt(partB[0] + partB[1].padStart(2, '0') + partB[2].padStart(2, '0'), 10);
+            
+            return skorB - skorA;
+        });
+        
+        renderTabelKehadiran(data);
+    } catch (error) {
+        console.error("Gagal memuat data kehadiran:", error);
+    } finally {
+        if(btnRefresh) btnRefresh.textContent = '🔄 Refresh Data';
+    }
+}
+
+function renderTabelKehadiran(data) {
+    const tbody = document.getElementById('tabelBody');
+    const mobileContainer = document.getElementById('tabelCardMobile');
+    
+    if(!tbody || !mobileContainer) return;
+    
+    tbody.innerHTML = '';
+    mobileContainer.innerHTML = '';
+    
+    if(data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" class="p-8 text-center text-slate-400">Belum ada data kehadiran terdaftar.</td></tr>`;
+        mobileContainer.innerHTML = `<div class="p-6 text-center text-slate-400 bg-white rounded-xl border">Belum ada data kehadiran terdaftar.</div>`;
+        return;
+    }
+    
+    let bulanTahunTerakhir = ""; 
+
+    data.forEach(item => {
+        const bulanTahunSekarang = dapatkanNamaBulanTahun(item.tanggal);
+        const tanggalIndo = formatKeTanggalLokal(item.tanggal);
+        
+        // JIKA BULAN BERUBAH, SISIPKAN JUDUL SEPARATOR KELOMPOK BULAN
+        if (bulanTahunSekarang !== bulanTahunTerakhir) {
+            bulanTahunTerakhir = bulanTahunSekarang;
+            
+            // Separator Baris untuk Tabel Desktop
+            const trSeparator = document.createElement('tr');
+            trSeparator.className = "bg-slate-100/80 border-y border-slate-200 font-bold text-slate-700";
+            trSeparator.innerHTML = `<td colspan="11" class="p-3 pl-4 text-left tracking-wide">${bulanTahunTerakhir}</td>`;
+            tbody.appendChild(trSeparator);
+            
+            // Separator Judul untuk Tampilan Mobile
+            const mobileSeparator = document.createElement('div');
+            mobileSeparator.className = "font-bold text-slate-700 text-sm pt-4 pb-1 pl-1 sticky top-0 bg-slate-50 z-10 border-b border-slate-100";
+            mobileSeparator.innerHTML = bulanTahunTerakhir;
+            mobileContainer.appendChild(mobileSeparator);
+        }
+
+        // Komponen Thumbnail Gambar jika ada
+        const thumbnailHtml = item.foto ? 
+            `<img src="${item.foto}" onclick="bukaZoomModal('${item.foto}')" class="inline-block w-8 h-8 rounded ml-2 object-cover border border-slate-200 shadow-xs hover:scale-110 cursor-pointer transition-all align-middle mt-1" title="Klik untuk memperbesar">` : '';
+
+        // ==========================================
+        // PERUBAHAN DI SINI (TAMPILAN DESKTOP)
+        // class "truncate" pada kolom keterangan diganti 
+        // menjadi "break-words whitespace-normal"
+        // ==========================================
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition-colors";
+        tr.innerHTML = `
+            <td class="p-4 font-medium text-slate-700 whitespace-nowrap">${tanggalIndo}</td>
+            <td class="p-4 font-medium text-slate-900">${item.pertemuan}</td>
+            <td class="p-4 text-center">${item.bapak}</td>
+            <td class="p-4 text-center">${item.ibu}</td>
+            <td class="p-4 text-center">${item.pemuda}</td>
+            <td class="p-4 text-center">${item.pemudi}</td>
+            <td class="p-4 text-center">${item.anak}</td>
+            <td class="p-4 text-center bg-indigo-50/30 text-indigo-600 font-bold">${item.total}</td>
+            
+            <!-- Kolom Keterangan Word Wrap -->
+            <td class="p-4 max-w-xs break-words whitespace-normal text-slate-600 align-top">
+                <span>${item.keterangan || '-'}</span>
+                ${thumbnailHtml}
+            </td>
+            
+            <td class="p-4 text-slate-500 whitespace-nowrap align-top">${item.pelapor}</td>
+            <td class="p-4 text-center whitespace-nowrap align-top">
+                <div class="flex items-center justify-center gap-1.5">
+                    <button onclick="bukaModalEdit(${item.rowId})" class="px-2 py-1 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded border border-amber-200 transition-all">Edit</button>
+                    <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-2 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-all">Hapus</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        
+        // Tampilan Mobile Card (Tidak ada perubahan, secara default div ini sudah word-wrap)
+        const card = document.createElement('div');
+        card.className = "bg-white p-4 rounded-xl shadow-xs border border-slate-100 space-y-3";
+        card.innerHTML = `
+            <div class="flex justify-between items-start">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block">${tanggalIndo}</span>
+                    <h4 class="font-bold text-slate-800">${item.pertemuan}</h4>
+                </div>
+                <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-bold">Total: ${item.total}</span>
+            </div>
+            <div class="grid grid-cols-5 text-center text-xs bg-slate-50 p-2 rounded-lg gap-1 border border-slate-100">
+                <div><span class="block text-slate-400 font-medium">Bpk</span><span class="font-semibold text-slate-700">${item.bapak}</span></div>
+                <div><span class="block text-slate-400 font-medium">Ibu</span><span class="font-semibold text-slate-700">${item.ibu}</span></div>
+                <div><span class="block text-slate-400 font-medium">Pmd</span><span class="font-semibold text-slate-700">${item.pemuda}</span></div>
+                <div><span class="block text-slate-400 font-medium">Pmi</span><span class="font-semibold text-slate-700">${item.pemudi}</span></div>
+                <div><span class="block text-slate-400 font-medium">Anak</span><span class="font-semibold text-slate-700">${item.anak}</span></div>
+            </div>
+            <div class="text-xs text-slate-500">
+                <p class="break-words whitespace-normal"><span class="font-medium text-slate-400">Keterangan:</span> ${item.keterangan || '-'} ${thumbnailHtml}</p>
+                <p class="mt-0.5"><span class="font-medium text-slate-400">Pelapor:</span> ${item.pelapor}</p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="bukaModalEdit(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 rounded-lg border border-amber-100 w-1/2">Edit</button>
+                <button onclick="hapusEntryKehadiran(${item.rowId})" class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg border border-red-100 w-1/2">Hapus</button>
+            </div>
+        `;
+        mobileContainer.appendChild(card);
+    });
+}
+
+function bukaModalEdit(rowId) {
+    const item = dataKehadiranCache.find(x => x.rowId === rowId);
+    if(!item) return;
+    
+    document.getElementById('editRowId').value = item.rowId;
+    document.getElementById('editTanggal').value = item.tanggal;
+    document.getElementById('editPertemuan').value = item.pertemuan;
+    document.getElementById('editBapak').value = item.bapak;
+    document.getElementById('editIbu').value = item.ibu;
+    document.getElementById('editPemuda').value = item.pemuda;
+    document.getElementById('editPemudi').value = item.pemudi;
+    document.getElementById('editAnak').value = item.anak;
+    document.getElementById('editKeterangan').value = item.keterangan || "";
+    document.getElementById('editPelapor').value = item.pelapor;
+    
+    // Set foto jika ada
+    document.getElementById('editFotoKehadiran').value = item.foto || "";
+    const previewContainer = document.getElementById('previewEditFotoKehadiran');
+    if (previewContainer) {
+        if(item.foto) {
+            previewContainer.innerHTML = `<img src="${item.foto}" class="w-full h-full object-cover">`;
+        } else {
+            previewContainer.innerHTML = 'No image';
+        }
+    }
+
+    const modal = document.getElementById('editModal');
+    if(modal) modal.classList.remove('hidden');
+}
+
+function tutupModalEdit() {
+    const modal = document.getElementById('editModal');
+    if(modal) modal.classList.add('hidden');
+    const form = document.getElementById('editLaporanForm');
+    if(form) form.reset();
+    document.getElementById('previewEditFotoKehadiran').innerHTML = 'No image';
+    document.getElementById('size-editFotoKehadiran').innerText = '';
+}
+
+// Handler Submit Form Edit
+const editForm = document.getElementById('editLaporanForm');
+if(editForm) {
+    editForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btnSimpan = document.getElementById('btnSimpanEdit');
+        if(btnSimpan) {
+            btnSimpan.disabled = true;
+            btnSimpan.textContent = 'Menyimpan...';
+        }
+        
+        const payload = {
+            action: "update",
+            rowId: document.getElementById('editRowId').value,
+            tanggal: document.getElementById('editTanggal').value, 
+            pertemuan: document.getElementById('editPertemuan').value,
+            bapak: document.getElementById('editBapak').value,
+            ibu: document.getElementById('editIbu').value,
+            pemuda: document.getElementById('editPemuda').value,
+            pemudi: document.getElementById('editPemudi').value,
+            anak: document.getElementById('editAnak').value,
+            keterangan: document.getElementById('editKeterangan').value,
+            pelapor: document.getElementById('editPelapor').value,
+            foto: document.getElementById('editFotoKehadiran').value
+        };
+        
+        try {
+            await fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (typeof kirimLogAktivitas === 'function') {
+                kirimLogAktivitas(
+                    'UPDATE', 
+                    'Laporan Kehadiran', 
+                    `${payload.pelapor} mengubah laporan kehadiran "${payload.pertemuan}" tanggal ${formatKeTanggalLokal(payload.tanggal)} (ID: ${payload.rowId})`
+                );
+            }
+            alert("Perintah edit data berhasil dikirim ke server!");
+            tutupModalEdit();
+            setTimeout(fetchData, 1500); 
+        } catch (err) {
+            alert("Terjadi masalah saat mengubah data.");
+            console.error(err);
+        } finally {
+            if(btnSimpan) {
+                btnSimpan.disabled = false;
+                btnSimpan.textContent = 'Simpan Perubahan';
+            }
+        }
+    });
+}
 
 async function hapusEntryKehadiran(rowId) {
     if(!confirm("Apakah Anda yakin ingin menghapus data laporan kehadiran ini?")) return;
     
-    // 1. CARI DATA NYA DI CACHE TERLEBIH DAHULU BERDASARKAN rowId
     const itemTerpilih = dataKehadiranCache.find(x => x.rowId === rowId);
-    
-    // 2. BUAT TEKS DESKRIPSI LOG JIKA DATA DITEMUKAN
     let detailLog = `dengan ID ${rowId}`;
     if (itemTerpilih) {
         const tanggalIndo = formatKeTanggalLokal(itemTerpilih.tanggal);
@@ -1879,12 +2014,13 @@ async function hapusEntryKehadiran(rowId) {
             body: JSON.stringify({ action: "delete", rowId: rowId })
         });
         
-        // 3. KIRIM LOG MENGGUNAKAN TEKS DESKRIPSI YANG SUDAH JADI
-        kirimLogAktivitas(
-            'DELETE', 
-            'Laporan Kehadiran', 
-            `${namaUserAktif} menghapus data laporan kehadiran ${detailLog}`
-        );
+        if (typeof kirimLogAktivitas === 'function') {
+            kirimLogAktivitas(
+                'DELETE', 
+                'Laporan Kehadiran', 
+                `${typeof namaUserAktif !== 'undefined' ? namaUserAktif : 'User'} menghapus data laporan kehadiran ${detailLog}`
+            );
+        }
         
         alert("Perintah hapus data berhasil dikirim ke server!");
         setTimeout(fetchData, 1500);
@@ -1894,91 +2030,102 @@ async function hapusEntryKehadiran(rowId) {
     }
 }
 
-        const mainForm = document.getElementById('laporanForm');
-        if(mainForm) {
-            mainForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalBtnText = submitBtn ? submitBtn.innerHTML : "Lapor";
-                if(submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = "Mengirim...";
-                }
-
-                const tglInput = document.getElementById('tanggal').value;
-                const pertemuan = document.getElementById('pertemuan').value;
-                const bapak = parseInt(document.getElementById('bapak').value) || 0;
-                const ibu = parseInt(document.getElementById('ibu').value) || 0;
-                const pemuda = document.getElementById('pemuda') ? (parseInt(document.getElementById('pemuda').value) || 0) : 0;
-                const pemudi = document.getElementById('pemudi') ? (parseInt(document.getElementById('pemudi').value) || 0) : 0;
-                const anak = parseInt(document.getElementById('anak').value) || 0;
-                
-                const keteranganEl = document.getElementById('inputKeterangan');
-                const keterangan = keteranganEl ? keteranganEl.value.trim() : '';
-                const pelapor = document.getElementById('pelapor').value.trim();
-
-                const total = bapak + ibu + pemuda + pemudi + anak;
-
-                let tanggalFormatted = "";
-                if (tglInput) {
-                    const parts = tglInput.split('-');
-                    tanggalFormatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                }
-
-                const payload = {
-                    action: "insert",
-                    tanggal: tanggalFormatted,
-                    pertemuan: pertemuan,
-                    bapak: bapak,
-                    ibu: ibu,
-                    pemuda: pemuda,
-                    pemudi: pemudi,
-                    anak: anak,
-                    total: total,
-                    keterangan: keterangan,
-                    pelapor: pelapor
-                };
-
-                try {
-                    await fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-// KIRIM LOG TAMBAH DATA (Menggunakan nama pelapor dari form)
-            kirimLogAktivitas(
-                'INSERT', 
-                'Laporan Kehadiran', 
-                `${pelapor || namaUserAktif} menambahkan laporan kehadiran baru untuk "${pertemuan}" tanggal ${tanggalFormatted} dengan total anggota: ${total}`
-            );
-                    alert(" Laporan kehadiran berhasil dikirim!");
-                    
-                    document.getElementById('bapak').value = 0;
-                    document.getElementById('ibu').value = 0;
-                    if(document.getElementById('pemuda')) document.getElementById('pemuda').value = 0;
-                    if(document.getElementById('pemudi')) document.getElementById('pemudi').value = 0;
-                    document.getElementById('anak').value = 0;
-                    if(keteranganEl) keteranganEl.value = "";
-                    document.getElementById('pelapor').value = ""; 
-                    
-                    // Jeda aman 3 detik dipasang di sini sesuai keinginanmu
-                    setTimeout(fetchData, 3000);
-
-                } catch (error) {
-                    console.error("Error sending data:", error);
-                    alert(" Gagal mengirim laporan. Periksa koneksi internet Anda.");
-                } finally {
-                    if(submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    }
-                }
-            });
+// Handler Submit Form Utama
+const mainForm = document.getElementById('laporanForm');
+if(mainForm) {
+    mainForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : "Lapor";
+        if(submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Mengirim...";
         }
+
+        const tglInput = document.getElementById('tanggal').value;
+        const pertemuan = document.getElementById('pertemuan').value;
+        const bapak = parseInt(document.getElementById('bapak').value) || 0;
+        const ibu = parseInt(document.getElementById('ibu').value) || 0;
+        const pemuda = document.getElementById('pemuda') ? (parseInt(document.getElementById('pemuda').value) || 0) : 0;
+        const pemudi = document.getElementById('pemudi') ? (parseInt(document.getElementById('pemudi').value) || 0) : 0;
+        const anak = parseInt(document.getElementById('anak').value) || 0;
+        
+        const keteranganEl = document.getElementById('inputKeterangan');
+        const keterangan = keteranganEl ? keteranganEl.value.trim() : '';
+        const pelapor = document.getElementById('pelapor').value.trim();
+        const foto = document.getElementById('inputFotoKehadiran').value;
+
+        const total = bapak + ibu + pemuda + pemudi + anak;
+
+        let tanggalFormatted = "";
+        if (tglInput) {
+            const parts = tglInput.split('-');
+            tanggalFormatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        const payload = {
+            action: "insert",
+            tanggal: tanggalFormatted,
+            pertemuan: pertemuan,
+            bapak: bapak,
+            ibu: ibu,
+            pemuda: pemuda,
+            pemudi: pemudi,
+            anak: anak,
+            total: total,
+            keterangan: keterangan,
+            pelapor: pelapor,
+            foto: foto
+        };
+
+        try {
+            await fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (typeof kirimLogAktivitas === 'function') {
+                kirimLogAktivitas(
+                    'INSERT', 
+                    'Laporan Kehadiran', 
+                    `${pelapor || (typeof namaUserAktif !== 'undefined' ? namaUserAktif : 'User')} menambahkan laporan kehadiran baru untuk "${pertemuan}" tanggal ${tanggalFormatted} dengan total anggota: ${total}`
+                );
+            }
+            
+            alert("✅ Laporan kehadiran berhasil dikirim!");
+            
+            // Reset Form & Preview
+            document.getElementById('bapak').value = 0;
+            document.getElementById('ibu').value = 0;
+            if(document.getElementById('pemuda')) document.getElementById('pemuda').value = 0;
+            if(document.getElementById('pemudi')) document.getElementById('pemudi').value = 0;
+            document.getElementById('anak').value = 0;
+            if(keteranganEl) keteranganEl.value = "";
+            document.getElementById('pelapor').value = ""; 
+            document.getElementById('inputFotoKehadiran').value = "";
+            document.getElementById('fileFotoKehadiran').value = "";
+            document.getElementById('previewFotoKehadiran').innerHTML = "No image";
+            document.getElementById('size-inputFotoKehadiran').innerText = "";
+
+            setTimeout(fetchData, 3000);
+
+        } catch (error) {
+            console.error("Error sending data:", error);
+            alert("❌ Gagal mengirim laporan. Periksa koneksi internet Anda.");
+        } finally {
+            if(submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        }
+    });
+}
+
 
         // =========================================================================
         // SCRIPTS TAB 2: KALENDER JADWAL
