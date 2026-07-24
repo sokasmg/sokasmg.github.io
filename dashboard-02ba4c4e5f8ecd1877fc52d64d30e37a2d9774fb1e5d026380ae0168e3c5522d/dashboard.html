@@ -4949,42 +4949,107 @@ function resetBannerPreviews(text) {
 
 function printModalMateri() {
     // 1. Ambil data dari elemen modal
-    const judul = document.getElementById('modalMateriTitle').innerText;
-    const author = document.getElementById('modalMateriAuthor').innerText;
-    const meta = document.getElementById('modalMateriMeta').innerText;
-    const isi = document.getElementById('modalMateriContent').innerText;
+    const judul = document.getElementById('modalMateriTitle')?.innerText || '';
+    const author = document.getElementById('modalMateriAuthor')?.innerText || '';
+    const meta = document.getElementById('modalMateriMeta')?.innerText || '';
+    const isi = document.getElementById('modalMateriContent')?.innerText || '';
 
-    // 2. Format isi teks menjadi paragraf-paragraf HTML
+    // 2. Format isi teks menjadi paragraf-paragraf
     const formattedContent = isi
         .split('\n')
         .filter(p => p.trim() !== '')
         .map(p => `<p>${p}</p>`)
         .join('');
 
-    // 3. Buat wrapper sementara khusus cetak
-    let printArea = document.getElementById('print-materi-area');
-    if (!printArea) {
-        printArea = document.createElement('div');
-        printArea.id = 'print-materi-area';
-        document.body.appendChild(printArea);
+    // 3. Buat Iframe Tersembunyi Khusus Cetak (Anti Popup-Blocker)
+    let iframe = document.getElementById('print-materi-iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'print-materi-iframe';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
     }
 
-    // 4. Masukkan struktur HTML ke dalam area cetak
-    printArea.innerHTML = `
-        <h1>${judul}</h1>
-        <div class="print-meta">Narasumber/Pengirim: <strong>${author}</strong> | ${meta}</div>
-        <div class="print-content">
-            ${formattedContent}
-        </div>
-    `;
+    const doc = iframe.contentWindow.document;
 
-    // 5. Panggil dialog cetak browser
-    window.print();
+    // 4. Tulis Struktur HTML & CSS (A4, 2 Kolom, Font 12pt, Judul Bold 18pt)
+    doc.open();
+    doc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${judul}</title>
+            <style>
+                @page {
+                    size: A4 portrait;
+                    margin: 15mm;
+                }
+                * {
+                    box-sizing: border-box;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                body {
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 12pt;
+                    line-height: 1.5;
+                    color: #000000;
+                    background-color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
+                .header-area {
+                    margin-bottom: 15px;
+                    border-bottom: 2px solid #000000;
+                    padding-bottom: 10px;
+                }
+                h1 {
+                    font-size: 18pt;
+                    font-weight: bold;
+                    margin: 0 0 8px 0;
+                    line-height: 1.2;
+                    color: #000000;
+                }
+                .meta {
+                    font-size: 10pt;
+                    color: #333333;
+                }
+                /* LAYOUT 2 KOLOM */
+                .content-2col {
+                    column-count: 2;
+                    column-gap: 20px;
+                    column-rule: 1px solid #ccc;
+                    text-align: justify;
+                }
+                .content-2col p {
+                    margin: 0 0 10px 0;
+                    word-break: break-word;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header-area">
+                <h1>${judul}</h1>
+                <div class="meta">Narasumber/Pengirim: <strong>${author}</strong> | ${meta}</div>
+            </div>
+            <div class="content-2col">
+                ${formattedContent}
+            </div>
+        </body>
+        </html>
+    `);
+    doc.close();
 
-    // 6. Bersihkan elemen sementara setelah dialog print ditutup
+    // 5. Eksekusi Print setelah Iframe terisi sempurna
     setTimeout(() => {
-        printArea.innerHTML = '';
-    }, 1000);
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+    }, 250);
 }
 
 (function initYangTerkini() {
