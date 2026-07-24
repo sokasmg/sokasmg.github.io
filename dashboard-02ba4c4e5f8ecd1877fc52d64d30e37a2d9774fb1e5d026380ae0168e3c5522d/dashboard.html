@@ -1062,66 +1062,73 @@ button.btn-submit:hover {
         <p class="text-sm text-slate-500 mt-1">Sistem pencatatan kehadiran anggota</p>
     </div>
 
-    <form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 items-end">
-            
+<form id="laporanForm" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+    
+    <!-- BARIS 1: Input Data Utama (12 Kolom) -->
+    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-3 items-end">
             <!-- Tanggal -->
             <div class="flex flex-col gap-1.5 lg:col-span-2">
                 <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tanggal</label>
                 <input type="date" id="tanggal" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
             </div>
-            
-            <!-- Pertemuan -->
-            <div class="flex flex-col gap-1.5 lg:col-span-2">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
-                <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-                    <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
-                    <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
-                    <option value="Chiku Majapahit">Chiku Majapahit</option>
-                    <option value="Salatiga">Salatiga</option>
-                    <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
-                    <option value="Pertemuan Bagian">Pertemuan Bagian</option>
-                    <option value="Shodaikai">Shodaikai</option>
-                    <option value="Pertemuan Belajar Gosho">Pertemuan Belajar Gosho</option>
-                    <option value="Pertemuan Menonton Honbukanbukai">Pertemuan Menonton Honbukanbukai</option>
-                    <option value="Pertemuan Khusus (PFK/Sokai)">Pertemuan Khusus (PFK/Sokai)</option>
-                </select>
-            </div>
-            
-            <!-- Input Angka -->
-            <div class="flex flex-col gap-1.5 lg:col-span-1">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
-                <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
-            
-            <div class="flex flex-col gap-1.5 lg:col-span-1">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
-                <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
-            
-            <div class="flex flex-col gap-1.5 lg:col-span-1">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
-                <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
-            
-            <div class="flex flex-col gap-1.5 lg:col-span-1">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
-                <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
-            
-            <div class="flex flex-col gap-1.5 lg:col-span-1">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
-                <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
-            
-            <!-- Keterangan -->
-            <div class="flex flex-col gap-1.5 lg:col-span-3">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
-                <input type="text" id="inputKeterangan" name="keterangan" placeholder="Isi info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
+        
+        <!-- Pertemuan -->
+        <div class="flex flex-col gap-1.5 lg:col-span-2">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pertemuan</label>
+            <select id="pertemuan" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+                <option value="Chiku Tanah Mas">Chiku Tanah Mas</option>
+                <option value="Chiku Gajah Mada">Chiku Gajah Mada</option>
+                <option value="Chiku Majapahit">Chiku Majapahit</option>
+                <option value="Salatiga">Salatiga</option>
+                <option value="Pertemuan Kemenangan">Pertemuan Kemenangan</option>
+                <option value="Pertemuan Bagian">Pertemuan Bagian</option>
+                <option value="Shodaikai">Shodaikai</option>
+                <option value="Pertemuan Belajar Gosho">Pertemuan Belajar Gosho</option>
+                <option value="Pertemuan Menonton Honbukanbukai">Pertemuan Menonton Honbukanbukai</option>
+                <option value="Pertemuan Khusus (PFK/Sokai)">Pertemuan Khusus (PFK/Sokai)</option>
+            </select>
+        </div>
+        
+        <!-- Angka-angka (5 kolom total) -->
+        <div class="flex flex-col gap-1.5 lg:col-span-1">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Bapak</label>
+            <input type="number" id="bapak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+        
+        <div class="flex flex-col gap-1.5 lg:col-span-1">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Ibu</label>
+            <input type="number" id="ibu" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+        
+        <div class="flex flex-col gap-1.5 lg:col-span-1">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemuda</label>
+            <input type="number" id="pemuda" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+        
+        <div class="flex flex-col gap-1.5 lg:col-span-1">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pemudi</label>
+            <input type="number" id="pemudi" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+        
+        <div class="flex flex-col gap-1.5 lg:col-span-1">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Anak</label>
+            <input type="number" id="anak" min="0" placeholder="0" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+        
+        <!-- Keterangan (3 kolom penutup baris 1: 2+2+5+3 = 12) -->
+        <div class="flex flex-col gap-1.5 lg:col-span-3">
+            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Keterangan</label>
+            <input type="text" id="inputKeterangan" name="keterangan" placeholder="Info tambahan (opsional)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
+        </div>
+    </div>
 
-            <!-- Upload Gambar Kehadiran -->
-            <div class="flex flex-col gap-1.5 lg:col-span-4">
+    <!-- BARIS 2: Foto & Pelapor di Kiri, Tombol Lapor Kanan Pol -->
+    <div class="flex flex-col md:flex-row justify-between items-end gap-4 pt-2">
+        
+        <!-- Sisi Kiri: Foto + Pelapor -->
+        <div class="flex flex-col sm:flex-row items-end gap-4 w-full md:w-auto">
+            <!-- Upload Foto -->
+            <div class="flex flex-col gap-1.5 w-full sm:w-80">
                 <div class="flex justify-between items-center">
                     <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Foto Dokumentasi</label>
                     <span id="size-inputFotoKehadiran" class="text-xs font-semibold text-slate-400"></span>
@@ -1134,20 +1141,23 @@ button.btn-submit:hover {
                     </div>
                 </div>
             </div>
-            
-            <!-- Pelapor & Tombol -->
-            <div class="flex flex-col gap-1.5 lg:col-span-3">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Pelapor</label>
-                <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
-            </div>
 
-            <div class="lg:col-span-1">
-                <button type="submit" id="btnSubmit" class="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed">
-                    <span id="btnText">Lapor</span>
-                </button>
+            <!-- Input Pelapor -->
+            <div class="flex flex-col gap-1.5 w-full sm:w-48">
+                <label class="text-xs font-semibold text-slate-600 hidden uppercase tracking-wider">Pelapor</label>
+                <input type="text" id="pelapor" placeholder="Nama" required class="w-full px-3 py-2 bg-slate-50 border hidden border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-slate-700">
             </div>
         </div>
-    </form>
+
+        <!-- Sisi Kanan: Tombol Lapor -->
+        <div class="w-full md:w-auto flex justify-end">
+            <button type="submit" id="btnSubmit" class="w-full md:w-auto px-8 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                <span id="btnText">Lapor</span>
+            </button>
+        </div>
+
+    </div>
+</form>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
@@ -1680,7 +1690,7 @@ function prosesFotoKehadiran(inputElement, targetInputId, previewId) {
             const img = new Image();
             img.onload = function() {
                 try {
-                    const maxDimension = 480;
+                    const maxDimension = 640;
                     let targetWidth, targetHeight;
 
                     if (img.width > img.height) {
@@ -1697,7 +1707,7 @@ function prosesFotoKehadiran(inputElement, targetInputId, previewId) {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
-                    const base64Result = canvas.toDataURL('image/jpeg', 0.45);
+                    const base64Result = canvas.toDataURL('image/webp', 0.5);
                     const stringLength = base64Result.length - base64Result.indexOf(',') - 1;
                     const fileSizeInKB = (stringLength * 3 / 4) / 1024;
 
