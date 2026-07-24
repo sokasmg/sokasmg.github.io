@@ -612,41 +612,115 @@ button.btn-submit:hover {
 
 
     
-    <!-- ========================================================================= -->
-    <!-- TAB: PROFIL                                         -->
-    <!-- ========================================================================= -->
-    <div id="tab-profil" class="tab-content hidden">
+<!-- ========================================================================= -->
+<!-- TAB: PROFIL & YANG TERKINI                                                -->
+<!-- ========================================================================= -->
+<div id="tab-profil" class="tab-content hidden max-w-6xl mx-auto p-4">
+    <!-- Header Halaman -->
     <div class="text-center mb-6">
-    <h2 class="text-xl font-bold">Profil Anggota</h2>
-    <p class="italic text-gray-500 mt-1">Selamat datang, <span id="p-nama-header">...</span></p>
-</div>
-    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
-        <div id="profil-container" class="space-y-4">
-            <!-- Foto (Bisa Diklik) -->
-            <div class="flex justify-center mb-4 cursor-pointer" onclick="document.getElementById('p-file-input').click()">
-                <div id="p-foto-container" class="w-32 h-32 rounded-full overflow-hidden border border-gray-300">
-                    <img id="p-foto" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
-                </div>
-                <input type="file" id="p-file-input" class="hidden" accept="image/*" onchange="processProfilImage(this)">
-                <!-- Hidden input untuk simpan data base64 -->
-                <input type="hidden" id="p-foto-base64">
-            </div>
-            <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama-detil" class="font-bold"></div></div>
-            <div><label class="block text-gray-500 text-xs">Chiku</label><div id="p-chiku"></div></div>
-            <div><label class="block text-gray-500 text-xs">Bagian</label><div id="p-bagian"></div></div>
-            <div><label class="block text-gray-500 text-xs">Status</label><div id="p-jabatan"></div></div>
-            <div><label class="block text-gray-500 text-xs">Gohonzon</label><div id="p-gohonzon"></div></div>
-            <div><label class="block text-gray-500 text-xs">Keterangan</label><div id="p-keterangan"></div></div>
-            
-            <!-- Editables -->
-            <div><label class="block text-gray-700 text-sm">No Telepon</label>
-                 <input type="text" id="p-telepon" class="w-full border rounded p-2"></div>
-            <div><label class="block text-gray-700 text-sm">Alamat</label>
-                 <textarea id="p-alamat" rows= "4" class="w-full border rounded p-2"></textarea></div>
-            
-            <button onclick="updateProfil()" class="w-full bg-indigo-600 text-white p-2 rounded">Update</button>
-        </div>
+        <h2 class="text-xl font-bold">Profil Anggota</h2>
+        <p class="italic text-gray-500 mt-1">Selamat datang, <span id="p-nama-header">...</span></p>
     </div>
+
+    <!-- WRAPPER UTAMA: Grid 2 Kolom (Bersisian di Layar Besar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- KOLOM KIRI: Profile Container (4 Kolom dari 12) -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-lg shadow-md w-full">
+            <div id="profil-container" class="space-y-4">
+                <!-- Foto (Bisa Diklik) -->
+                <div class="flex justify-center mb-4 cursor-pointer" onclick="document.getElementById('p-file-input').click()">
+                    <div id="p-foto-container" class="w-32 h-32 rounded-full overflow-hidden border border-gray-300">
+                        <img id="p-foto" src="https://via.placeholder.com/150" class="w-full h-full object-cover" alt="Foto Profil">
+                    </div>
+                    <input type="file" id="p-file-input" class="hidden" accept="image/*" onchange="processProfilImage(this)">
+                    <!-- Hidden input untuk simpan data base64 -->
+                    <input type="hidden" id="p-foto-base64">
+                </div>
+
+                <div><label class="block text-gray-500 text-xs">Nama</label><div id="p-nama-detil" class="font-bold"></div></div>
+                <div><label class="block text-gray-500 text-xs">Chiku</label><div id="p-chiku"></div></div>
+                <div><label class="block text-gray-500 text-xs">Bagian</label><div id="p-bagian"></div></div>
+                <div><label class="block text-gray-500 text-xs">Status</label><div id="p-jabatan"></div></div>
+                <div><label class="block text-gray-500 text-xs">Gohonzon</label><div id="p-gohonzon"></div></div>
+                <div><label class="block text-gray-500 text-xs">Keterangan</label><div id="p-keterangan"></div></div>
+                
+                <!-- Editables -->
+                <div>
+                    <label class="block text-gray-700 text-sm">No Telepon</label>
+                    <input type="text" id="p-telepon" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm">Alamat</label>
+                    <textarea id="p-alamat" rows="4" class="w-full border rounded p-2"></textarea>
+                </div>
+                
+                <button onclick="updateProfil()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded font-medium transition-colors">Update</button>
+            </div>
+        </div>
+
+        <!-- KOLOM KANAN: Panel "Yang Terkini" (7 Kolom dari 12) -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-500"></i> Yang Terkini
+                </h3>
+                <span class="text-xs text-slate-400 italic">Aktivitas Terbaru</span>
+            </div>
+
+            <!-- Grid untuk 2 Card Terkini -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="container-terkini">
+                
+                <!-- CARD 1: KEHADIRAN -->
+                <div class="bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex flex-col justify-between shadow-xs">
+                    <div>
+                        <!-- Header Card -->
+                        <div class="bg-indigo-50/70 p-3 border-b border-indigo-100/50 flex items-center justify-between">
+                            <span class="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-check text-indigo-500"></i> Kehadiran
+                            </span>
+                            <span id="kehadiran-tanggal" class="text-[11px] font-medium text-slate-400">Loading...</span>
+                        </div>
+                        
+                        <!-- Foto Card -->
+                        <div class="relative w-full h-40 bg-slate-200 overflow-hidden">
+                            <img id="kehadiran-foto" src="https://via.placeholder.com/400x250?text=No+Image" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" alt="Foto Kehadiran">
+                        </div>
+                        
+                        <!-- Konten Card -->
+                        <div class="p-3">
+                            <div id="kehadiran-pertemuan" class="text-sm font-semibold text-slate-700 line-clamp-2">Memuat data...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: KUNJUNGAN & SHAKUBUKU -->
+                <div class="bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex flex-col justify-between shadow-xs">
+                    <div>
+                        <!-- Header Card -->
+                        <div class="bg-emerald-50/70 p-3 border-b border-emerald-100/50 flex items-center justify-between">
+                            <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-hands-holding-child text-emerald-500"></i> Kunjungan & Shakubuku
+                            </span>
+                            <span id="kunjungan-tanggal" class="text-[11px] font-medium text-slate-400">Loading...</span>
+                        </div>
+                        
+                        <!-- Foto Card -->
+                        <div class="relative w-full h-40 bg-slate-200 overflow-hidden">
+                            <img id="kunjungan-foto" src="https://via.placeholder.com/400x250?text=No+Image" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" alt="Foto Kunjungan">
+                        </div>
+                        
+                        <!-- Konten Card -->
+                        <div class="p-3">
+                            <div id="kunjungan-keterangan" class="text-sm font-semibold text-slate-700 line-clamp-2">Memuat data...</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div> <!-- Akhir Grid Utama -->
 </div>
 
     
@@ -4891,6 +4965,112 @@ function printModalMateri() {
         printArea.innerHTML = '';
     }, 1000);
 }
+
+// Scope terisolasi agar tidak mengganggu fungsi tab lain
+(function initYangTerkini() {
+    const URL_KEHADIRAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv";
+    const URL_KUNJUNGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=41507730&single=true&output=csv";
+
+    // Parser CSV khusus terisolasi
+    function parseCSVData(text) {
+        const lines = [];
+        let field = '';
+        let row = [];
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const c = text[i];
+            const next = text[i + 1];
+
+            if (c === '"') {
+                if (inQuotes && next === '"') {
+                    field += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (c === ',' && !inQuotes) {
+                row.push(field.trim());
+                field = '';
+            } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                if (c === '\r' && next === '\n') i++;
+                row.push(field.trim());
+                if (row.some(cell => cell !== '')) lines.push(row);
+                row = [];
+                field = '';
+            } else {
+                field += c;
+            }
+        }
+        if (field || row.length) {
+            row.push(field.trim());
+            if (row.some(cell => cell !== '')) lines.push(row);
+        }
+        return lines;
+    }
+
+    // Helper URL Foto Google Drive
+    function getDriveImageUrl(url) {
+        if (!url || url.length < 5) return "https://via.placeholder.com/400x250?text=Foto+Tidak+Tersedia";
+        let cleanUrl = url.replace(/["']/g, '').trim();
+
+        if (cleanUrl.includes("drive.google.com") || cleanUrl.includes("docs.google.com")) {
+            const match = cleanUrl.match(/([a-zA-Z0-9_-]{25,})/);
+            if (match && match[0]) {
+                return `https://lh3.googleusercontent.com/d/${match[0]}=s800`;
+            }
+        }
+        return cleanUrl;
+    }
+
+    // Fungsi Utama Mengambil Data Terkini
+    async function loadYangTerkini() {
+        try {
+            // 1. DATA KEHADIRAN (Kolom A=0, B=1, K=10)
+            const resKehadiran = await fetch(URL_KEHADIRAN);
+            const textKehadiran = await resKehadiran.text();
+            const rowsKehadiran = parseCSVData(textKehadiran);
+
+            if (rowsKehadiran.length > 1) {
+                const lastRow = rowsKehadiran[rowsKehadiran.length - 1];
+                const elemTgl = document.getElementById('kehadiran-tanggal');
+                const elemPert = document.getElementById('kehadiran-pertemuan');
+                const elemFoto = document.getElementById('kehadiran-foto');
+
+                if (elemTgl && lastRow[0]) elemTgl.innerText = lastRow[0];
+                if (elemPert && lastRow[1]) elemPert.innerText = lastRow[1];
+                if (elemFoto && lastRow[10]) elemFoto.src = getDriveImageUrl(lastRow[10]);
+            }
+
+            // 2. DATA KUNJUNGAN & SHAKUBUKU (Kolom A=0, C=2, D=3)
+            const resKunjungan = await fetch(URL_KUNJUNGAN);
+            const textKunjungan = await resKunjungan.text();
+            const rowsKunjungan = parseCSVData(textKunjungan);
+
+            if (rowsKunjungan.length > 1) {
+                const lastRow = rowsKunjungan[rowsKunjungan.length - 1];
+                const elemTgl = document.getElementById('kunjungan-tanggal');
+                const elemKet = document.getElementById('kunjungan-keterangan');
+                const elemFoto = document.getElementById('kunjungan-foto');
+
+                if (elemTgl && lastRow[0]) elemTgl.innerText = lastRow[0];
+                if (elemKet && lastRow[2]) elemKet.innerText = lastRow[2];
+                if (elemFoto && lastRow[3]) elemFoto.src = getDriveImageUrl(lastRow[3]);
+            }
+
+        } catch (error) {
+            console.error("Gagal memuat data terkini:", error);
+        }
+    }
+
+    // Jalankan tanpa menimpa event listener utama
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadYangTerkini);
+    } else {
+        loadYangTerkini();
+    }
+})();
+
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
     <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
