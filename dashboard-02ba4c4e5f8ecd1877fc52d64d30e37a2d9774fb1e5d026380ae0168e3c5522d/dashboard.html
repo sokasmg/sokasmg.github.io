@@ -625,7 +625,7 @@ button.btn-submit:hover {
     <!-- WRAPPER UTAMA: Grid 2 Kolom (Bersisian di Layar Besar) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- KOLOM KIRI: Profile Container (4 Kolom dari 12) -->
+        <!-- KOLOM KIRI: Profile Container (5 Kolom dari 12) -->
         <div class="lg:col-span-5 bg-white p-6 rounded-lg shadow-md w-full">
             <div id="profil-container" class="space-y-4">
                 <!-- Foto (Bisa Diklik) -->
@@ -668,7 +668,7 @@ button.btn-submit:hover {
                 <span class="text-xs text-slate-400 italic">Aktivitas Terbaru</span>
             </div>
 
-            <!-- Grid untuk 2 Card Terkini -->
+            <!-- Grid untuk 3 Card Terkini -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="container-terkini">
                 
                 <!-- CARD 1: KEHADIRAN -->
@@ -717,12 +717,33 @@ button.btn-submit:hover {
                     </div>
                 </div>
 
+                <!-- CARD 3: BIMBINGAN HARI INI (Membentang Penuh 2 Kolom) -->
+                <div class="sm:col-span-2 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex flex-col justify-between shadow-xs">
+                    <div>
+                        <!-- Header Card -->
+                        <div class="bg-amber-50/70 p-3 border-b border-amber-100/50 flex items-center justify-between">
+                            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-quote-left text-amber-500"></i> Bimbingan Hari Ini
+                            </span>
+                        </div>
+                        
+                        <!-- Konten Bimbingan -->
+                        <div class="p-4 space-y-2">
+                            <blockquote id="bimbingan-teks" class="text-sm italic text-slate-700 leading-relaxed border-l-4 border-amber-400 pl-3">
+                                "Memuat data bimbingan..."
+                            </blockquote>
+                            <div id="bimbingan-author" class="text-xs font-bold text-slate-500 text-right pr-2">
+                                -
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
     </div> <!-- Akhir Grid Utama -->
 </div>
-
     
     <!-- ========================================================================= -->
     <!-- TAB BARU: CERITA KEMENANGAN                                          -->
@@ -4966,10 +4987,10 @@ function printModalMateri() {
     }, 1000);
 }
 
-// Scope terisolasi agar tidak mengganggu fungsi tab lain
 (function initYangTerkini() {
     const URL_KEHADIRAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv";
     const URL_KUNJUNGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=41507730&single=true&output=csv";
+    const URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
 
     // Parser CSV khusus terisolasi
     function parseCSVData(text) {
@@ -5058,6 +5079,24 @@ function printModalMateri() {
                 if (elemFoto && lastRow[3]) elemFoto.src = getDriveImageUrl(lastRow[3]);
             }
 
+            // 3. DATA BIMBINGAN HARI INI (Kolom A=0 [Text], B=1 [Author])
+            const resBimb = await fetch(URL_BIMBINGAN);
+            const textBimb = await resBimb.text();
+            const rowsBimb = parseCSVData(textBimb);
+
+            if (rowsBimb.length > 1) {
+                const lastRow = rowsBimb[rowsBimb.length - 1]; // Mengambil baris paling bawah/terbaru
+                const elemTeks = document.getElementById('bimbingan-teks');
+                const elemAuthor = document.getElementById('bimbingan-author');
+
+                if (elemTeks && lastRow[0]) {
+                    elemTeks.innerText = `"${lastRow[0]}"`;
+                }
+                if (elemAuthor && lastRow[1]) {
+                    elemAuthor.innerText = `- ${lastRow[1]}`;
+                }
+            }
+
         } catch (error) {
             console.error("Gagal memuat data terkini:", error);
         }
@@ -5070,6 +5109,7 @@ function printModalMateri() {
         loadYangTerkini();
     }
 })();
+
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
