@@ -438,23 +438,18 @@ button.btn-submit:hover {
             </div>
         </div>
     </header>
-
-    <!-- KONTEN UTAMA DENGAN WRAPPER TAB -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6">
+<main class="max-w-7xl mx-auto p-4 md:p-6">
     
 <!-- ========================================================================= -->
 <!-- TAB: SETTINGS                                                             -->
 <!-- ========================================================================= -->
 <div id="tab-settings" class="tab-content hidden p-4">
-    <h1 class="admin-only text-2xl font-bold mb-4 text-slate-800">Website Settings</h1>
-    
-    <div class="admin-only w-full md:max-h-[80vh] border border-slate-200 rounded-lg overflow-y-auto p-4 shadow-sm bg-white">
-        
+    <h1 class="admin-only text-2xl font-bold mb-4 text-slate-800">Website Settings</h1>    
+    <div class="admin-only w-full md:max-h-[80vh] border border-slate-200 rounded-lg overflow-y-auto p-4 shadow-sm bg-white">        
         <!-- SECTION 1: BANNER SETTINGS (Bentuk List Ringkas) -->
         <div class="mb-6">
             <h2 class="text-base font-bold text-slate-700 mb-3 pb-1 border-b border-slate-100">Manajemen Banner Slideshow</h2>
-            <div class="flex flex-col gap-2">
-                
+            <div class="flex flex-col gap-2">                
                 <!-- Baris Banner 1 -->
                 <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
                     <div class="flex items-center gap-3 min-w-[200px] flex-1">
@@ -473,7 +468,6 @@ button.btn-submit:hover {
                     </div>
                     <input type="hidden" id="input-banner-1" name="banner1">
                 </div>
-
                 <!-- Baris Banner 2 -->
                 <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
                     <div class="flex items-center gap-3 min-w-[200px] flex-1">
@@ -491,7 +485,6 @@ button.btn-submit:hover {
                     </div>
                     <input type="hidden" id="input-banner-2" name="banner2">
                 </div>
-
                 <!-- Baris Banner 3 -->
                 <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
                     <div class="flex items-center gap-3 min-w-[200px] flex-1">
@@ -509,7 +502,6 @@ button.btn-submit:hover {
                     </div>
                     <input type="hidden" id="input-banner-3" name="banner3">
                 </div>
-
                 <!-- Baris Banner 4 -->
                 <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
                     <div class="flex items-center gap-3 min-w-[200px] flex-1">
@@ -527,7 +519,6 @@ button.btn-submit:hover {
                     </div>
                     <input type="hidden" id="input-banner-4" name="banner4">
                 </div>
-
                 <!-- Baris Banner 5 -->
                 <div class="flex flex-wrap items-center justify-between gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200/60 hover:border-slate-300 transition-colors">
                     <div class="flex items-center gap-3 min-w-[200px] flex-1">
@@ -545,7 +536,6 @@ button.btn-submit:hover {
                     </div>
                     <input type="hidden" id="input-banner-5" name="banner5">
                 </div>
-
             </div>
         </div>
 
@@ -553,20 +543,12 @@ button.btn-submit:hover {
         <div class="mb-6 pt-2">
             <h2 class="text-base font-bold text-slate-700 mb-3 pb-1 border-b border-slate-100">Pengaturan Umum Lainnya</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Contoh Input Teks Baru -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Aplikasi / Toko</label>
-                    <input type="text" placeholder="Masukkan nama toko..." class="w-full text-sm px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500" />
-                </div>
-                <!-- Contoh Input Teks Baru 2 -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Hot Line</label>
-                    <input type="tel" placeholder="Contoh: 08123456789" class="w-full text-sm px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                    <input type="tel" id="input-text-contactperson" placeholder="Contoh: 08123456789" class="w-full text-sm px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500" />
                 </div>
             </div>
         </div>
-
-        <!-- Tombol Simpan Ke Google Sheet -->
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-4">
             <button onclick="saveSettingsToSheet()" id="btn-save-settings" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs sm:text-sm rounded-lg shadow transition-colors flex items-center gap-2">
                 Simpan Pengaturan
@@ -3173,10 +3155,7 @@ window.deleteArticleDirectMateri = async function(rowIndex) {
                 body: formData.toString()
             });
 
-            // =========================================================================
-            // LOG KHUSUS DELETE DENGAN FORMAT LEBIH MANUSIAWI (Variabel sudah aman)
-            // =========================================================================
-            kirimLogAktivitas(
+kirimLogAktivitas(
                 'DELETE', 
                 'Materi & Pelajaran', 
                 `${pengirimArtikel} Menghapus materi [${kategoriArtikel}] "${judulArtikel}" (Baris: ${rowIndex})`
@@ -4837,11 +4816,10 @@ function processSettingsBanner(inputElement, targetInputId, previewId) {
     }
 }
 
-// Fungsi untuk mengirim data ke Google Apps Script (Google Sheets)
+// Fungsi untuk menyimpan data Banner & Contact Person ke Google Sheets
 function saveSettingsToSheet() {
     toggleSettingsLoading(true, "Menyimpan ke Google Sheet...");
 
-    // Ambil nama user aktif dari localStorage untuk keperluan log
     const namaUser = localStorage.getItem("soka_user_name") || "Anonim";
 
     const payload = {
@@ -4849,7 +4827,8 @@ function saveSettingsToSheet() {
         banner2: document.getElementById('input-banner-2').value || "",
         banner3: document.getElementById('input-banner-3').value || "",
         banner4: document.getElementById('input-banner-4').value || "",
-        banner5: document.getElementById('input-banner-5').value || ""
+        banner5: document.getElementById('input-banner-5').value || "",
+        contactperson: document.getElementById('input-text-contactperson').value || "" // Menambahkan Contact Person
     };
 
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyLeRzVbmSNSW1eRx8NBzHYfIgXvwKJnYLITVjylNa7j5BdS2sS6euOS55btvPf5NneQ/exec"; 
@@ -4867,13 +4846,10 @@ function saveSettingsToSheet() {
         if (result.status === "success") {
             alert("Pengaturan Berhasil Disimpan ke Google Sheet!");
             
-            // ==========================================
-            // KIRIM LOG AKTIVITAS (Ditambahkan di Sini)
-            // ==========================================
             kirimLogAktivitas(
                 'UPDATE', 
                 'Website Settings', 
-                `${namaUser} memperbarui pengaturan banner slideshow`
+                `${namaUser} memperbarui pengaturan website (banner & contact person)`
             );
             
         } else {
@@ -4886,27 +4862,25 @@ function saveSettingsToSheet() {
     });
 }
 
+// Fungsi untuk otomatis membaca data Banner & Contact Person saat aplikasi dibuka
 function autoloadSettingsBanner() {
-    // Gunakan URL yang sama persis dengan fungsi saveSettingsToSheet Anda
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyLeRzVbmSNSW1eRx8NBzHYfIgXvwKJnYLITVjylNa7j5BdS2sS6euOS55btvPf5NneQ/exec"; 
 
-    // Tampilkan indikator loading ringan pada preview box saat data diambil
     for (let i = 1; i <= 5; i++) {
         const previewBox = document.getElementById(`preview-banner-${i}`);
         if (previewBox) previewBox.innerText = "Loading...";
     }
 
-    // Lakukan fetch langsung menggunakan WEB_APP_URL
     fetch(`${WEB_APP_URL}?action=getSettings`)
         .then(res => res.json())
         .then(settings => {
-            // Jika sheet kosong atau respons berupa array kosong [], reset preview ke awal
             if (!settings || settings.error || (Array.isArray(settings) && settings.length === 0)) {
                 console.log("Pengaturan belum ada di spreadsheet atau kosong.");
                 resetBannerPreviews("No Img");
                 return;
             }
             
+            // Loop untuk load Banner (Index 0 - 4)
             for (let i = 0; i < 5; i++) {
                 const bannerNumber = i + 1;
                 const base64Data = settings[i];
@@ -4931,14 +4905,19 @@ function autoloadSettingsBanner() {
                     if (hiddenInput) hiddenInput.value = "";
                 }
             }
+
+            // Load Contact Person (Index 5 / Kolom F)
+            const contactInput = document.getElementById('input-text-contactperson');
+            if (contactInput) {
+                contactInput.value = settings[5] || ""; // Jika kosong, set string kosong
+            }
         })
         .catch(err => {
             console.error("Error load settings banner:", err);
             resetBannerPreviews("Gagal muat");
         });
-        }
+}
 
-// Fungsi pembantu jika fetch gagal agar tampilan kembali bersih
 function resetBannerPreviews(text) {
     for (let i = 1; i <= 5; i++) {
         const previewBox = document.getElementById(`preview-banner-${i}`);
@@ -4949,6 +4928,10 @@ function resetBannerPreviews(text) {
         if (sizeSpan) sizeSpan.innerText = "0 KB";
         if (hiddenInput) hiddenInput.value = "";
     }
+    
+    // Reset input contact person jika gagal load
+    const contactInput = document.getElementById('input-text-contactperson');
+    if (contactInput) contactInput.value = "";
 }
 
 function printModalMateri() {
