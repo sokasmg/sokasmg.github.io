@@ -738,6 +738,23 @@ button.btn-submit:hover {
                         </div>
                     </div>
                 </div>
+                <!-- CARD 4: JADWAL MENDATANG (Membentang Penuh 2 Kolom) -->
+                <div class="sm:col-span-2 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex flex-col justify-between shadow-xs">
+                    <div>
+                        <!-- Header Card -->
+                        <div class="bg-blue-50/70 p-3 border-b border-blue-100/50 flex items-center justify-between">
+                            <span class="text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-regular fa-calendar-check text-blue-500"></i> Agenda Mendatang
+                            </span>
+                            <span class="text-[11px] font-medium text-slate-400">3 Terdekat</span>
+                        </div>
+                        
+                        <!-- Konten Container Jadwal -->
+                        <div id="jadwal-container" class="p-3 space-y-2">
+                            <div class="text-xs text-slate-400 italic text-center py-2">Memuat jadwal...</div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -5052,10 +5069,12 @@ function printModalMateri() {
     }, 250);
 }
 
+
 (function initYangTerkini() {
     const URL_KEHADIRAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=0&single=true&output=csv";
     const URL_KUNJUNGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCimdU6cXnWuKhBdgA3APUip6lLN5taFZJGnAvIbPLY7C7YanhDg9Lq5wbyJ32fnGtY333tQjcrlHW/pub?gid=41507730&single=true&output=csv";
     const URL_BIMBINGAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=0&single=true&output=csv";
+    const URL_JADWAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5FZfLEBFeBOryYt_GzrzjTKh_XcTMtxwOIdW90VmhHTMFklcROcI4Mx8neJSUv6Kq9JZXMr82jiPL/pub?gid=1810431766&single=true&output=csv";
 
     // Parser CSV khusus terisolasi
     function parseCSVData(text) {
@@ -5109,6 +5128,25 @@ function printModalMateri() {
         return cleanUrl;
     }
 
+    // Helper mengubah string tanggal (DD/MM/YYYY atau YYYY-MM-DD) menjadi objek Date JavaScript
+    function parseTanggal(strTanggal) {
+        if (!strTanggal) return null;
+        
+        // Format YYYY-MM-DD
+        if (strTanggal.includes('-')) {
+            const parts = strTanggal.split('-');
+            if (parts.length === 3) return new Date(parts[0], parts[1] - 1, parts[2]);
+        } 
+        // Format DD/MM/YYYY
+        else if (strTanggal.includes('/')) {
+            const parts = strTanggal.split('/');
+            if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+        
+        const fallback = new Date(strTanggal);
+        return isNaN(fallback.getTime()) ? null : fallback;
+    }
+
     // Fungsi Utama Mengambil Data Terkini
     async function loadYangTerkini() {
         try {
@@ -5144,21 +5182,83 @@ function printModalMateri() {
                 if (elemFoto && lastRow[3]) elemFoto.src = getDriveImageUrl(lastRow[3]);
             }
 
-            // 3. DATA BIMBINGAN HARI INI (Kolom A=0 [Text], B=1 [Author])
+            // 3. DATA BIMBINGAN (Random)
             const resBimb = await fetch(URL_BIMBINGAN);
             const textBimb = await resBimb.text();
             const rowsBimb = parseCSVData(textBimb);
 
             if (rowsBimb.length > 1) {
-                const lastRow = rowsBimb[rowsBimb.length - 1]; // Mengambil baris paling bawah/terbaru
+                const randomIndex = Math.floor(Math.random() * (rowsBimb.length - 1)) + 1;
+                const randomRow = rowsBimb[randomIndex];
                 const elemTeks = document.getElementById('bimbingan-teks');
                 const elemAuthor = document.getElementById('bimbingan-author');
 
-                if (elemTeks && lastRow[0]) {
-                    elemTeks.innerText = `"${lastRow[0]}"`;
+                if (elemTeks && randomRow[0]) {
+                    elemTeks.innerText = `"${randomRow[0]}"`;
                 }
-                if (elemAuthor && lastRow[1]) {
-                    elemAuthor.innerText = `- ${lastRow[1]}`;
+                if (elemAuthor && randomRow[1]) {
+                    elemAuthor.innerText = `- ${randomRow[1]}`;
+                }
+            }
+
+            // 4. DATA JADWAL BULANAN (Next 3 Upcoming Schedule)
+            const resJadwal = await fetch(URL_JADWAL);
+            const textJadwal = await resJadwal.text();
+            const rowsJadwal = parseCSVData(textJadwal);
+
+            const containerJadwal = document.getElementById('jadwal-container');
+
+            if (containerJadwal && rowsJadwal.length > 1) {
+                // Set waktu 'hari ini' ke jam 00:00:00 untuk perbandingan akurat
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const dataJadwal = [];
+
+                // Mulai dari baris index 1 (lewati header)
+                for (let i = 1; i < rowsJadwal.length; i++) {
+                    const row = rowsJadwal[i];
+                    const tglRaw = row[0]; // Kolom A
+                    const jam = row[1] || '-'; // Kolom B
+                    const acara = row[2] || '-'; // Kolom C
+
+                    const tglObj = parseTanggal(tglRaw);
+
+                    // Filter hanya yang tanggalnya VALID dan >= HARI INI
+                    if (tglObj && tglObj >= today) {
+                        dataJadwal.push({
+                            tanggalRaw: tglRaw,
+                            tanggalObj: tglObj,
+                            jam: jam,
+                            acara: acara
+                        });
+                    }
+                }
+
+                // Urutkan jadwal terdekat lebih awal
+                dataJadwal.sort((a, b) => a.tanggalObj - b.tanggalObj);
+
+                // Ambil 3 jadwal teratas
+                const upcoming3 = dataJadwal.slice(0, 3);
+
+                if (upcoming3.length > 0) {
+                    containerJadwal.innerHTML = upcoming3.map(j => `
+                        <div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-slate-100 shadow-2xs hover:border-blue-200 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="flex flex-col items-center justify-center bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded border border-blue-100 min-w-[55px]">
+                                    <span class="text-[11px] leading-tight">${j.tanggalRaw}</span>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-semibold text-slate-800 line-clamp-1">${j.acara}</div>
+                                    <div class="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                        <i class="fa-regular fa-clock text-[10px]"></i> ${j.jam}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    containerJadwal.innerHTML = `<div class="text-xs text-slate-400 italic text-center py-2">Tidak ada agenda mendatang.</div>`;
                 }
             }
 
@@ -5174,7 +5274,6 @@ function printModalMateri() {
         loadYangTerkini();
     }
 })();
-
 
     </script>
     <div id="globalPhotoModal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeGlobalPhotoModal()">
