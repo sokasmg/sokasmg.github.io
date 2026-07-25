@@ -417,7 +417,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-quoteoftheday')" id="btn-tab-quoteoftheday" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
         Quote of the Day
     </button>
-    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-kehadiran')" id="btn-tab-kehadiran" class="inti-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Laporan Kehadiran Anggota
     </button>
     <button onclick="switchTab('tab-kunjungan')" id="btn-tab-kunjungan" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
@@ -426,7 +426,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender Bulanan
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="inti-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
         </button>
@@ -610,8 +610,6 @@ button.btn-submit:hover {
     </div>
 </div>
 
-
-    
 <!-- ========================================================================= -->
 <!-- TAB: PROFIL & YANG TERKINI                                                -->
 <!-- ========================================================================= -->
@@ -766,14 +764,14 @@ button.btn-submit:hover {
     <!-- TAB BARU: CERITA KEMENANGAN                                          -->
     <!-- ========================================================================= -->
 <div id="tab-ceritakemenangan" class="tab-content hidden space-y-6">
-    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+    <div class="inti-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase">
              Editor Cerita Kemenangan
         </h1>
         <p class="text-sm text-slate-500 mt-1">Cerita pengalaman anggota (upload maksimal 3 foto)</p>
     </div>
     
-    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+    <section class="inti-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
         <button onclick="toggleFormStory()" class="w-full flex justify-between items-center p-5 font-semibold text-lg text-slate-700 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
             <span id="form-title-status-story"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Cerita Baru</span>
             <i id="collapse-icon-story" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
@@ -947,7 +945,7 @@ button.btn-submit:hover {
 <!-- TAB: QUOTE OF THE DAY                                  -->
 <!-- ========================================================================= -->
 <div id="tab-quoteoftheday" class="tab-content hidden space-y-6">
-    <div class="admin-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
+    <div class="inti-only text-center py-4 border-b border-slate-200 bg-white rounded-2xl shadow-xs">
         <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight uppercase" id="quote-tab-main-title">
              Editor Quote of the Day
         </h1>
@@ -955,7 +953,7 @@ button.btn-submit:hover {
     </div>
     
     <!-- Bagian Form Input (Create/Update) -->
-    <section class="admin-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
+    <section class="inti-only bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-8">
         <div class="p-5 font-semibold text-lg text-slate-700 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
             <span id="form-title-status-quote"><i class="fa-solid fa-plus-circle text-indigo-600 mr-2"></i>Tambah Quote Baru</span>
         </div>
@@ -1029,7 +1027,7 @@ button.btn-submit:hover {
 <!-- ========================================================================= -->
 <div id="tab-materi" class="tab-content hidden space-y-6">
         <!-- Header -->
-        <header class="admin-only mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
+        <header class="inti-only mb-8 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
             <div>
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-3">
                     <span class="p-2 bg-emerald-500 text-white rounded-lg shadow-sm"><i class="fas fa-book-open text-xl"></i></span>
@@ -2815,11 +2813,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (labelElement) {
                     labelElement.classList.add('hidden');
                 }
-
-                // Tambahan opsional: Jika input dibungkus dalam div container (misal pembungkus margin 'mb-4')
-                // Anda juga bisa menyembunyikan div pembungkusnya agar tidak ada jarak kosong aneh di form.
-                // Caranya, aktifkan baris di bawah ini jika struktur HTML Anda memiliki div pembungkus:
-                // if (inputElement.parentElement) { inputElement.parentElement.classList.add('hidden'); }
             }
         });
     } else {
@@ -3006,7 +2999,7 @@ function renderArticlesMateri() {
                     Baca Selengkapnya <i class="fa-solid fa-arrow-right text-3xs ml-1"></i>
                 </button>
                 
-                <div class="admin-only flex space-x-1">
+                <div class="inti-only flex space-x-1">
                     <button type="button" onclick="editArticleDirectMateri('${article.row_index}')" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Ubah data">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -3204,7 +3197,6 @@ window.deleteArticleDirectMateri = async function(rowIndex) {
         }
     }
 };
-
 
 document.addEventListener('DOMContentLoaded', fetchArticlesMateri);
 
@@ -3413,8 +3405,6 @@ async function handleFormSubmitStory(e) {
     }
 }
 
-
-
 function editStory(rowIndex) {
     const story = stories.find(item => item.row_index === rowIndex);
     if (!story) return;
@@ -3503,7 +3493,6 @@ async function deleteStory(rowIndex) {
     }
 }
 
-
 function resetFormStory(closeAfterReset = false) {
     document.getElementById('story-form').reset();
     document.getElementById('edit-row-index-story').value = "";
@@ -3582,7 +3571,7 @@ function renderStoryTable() {
                     Baca Selengkapnya <i class="fa-solid fa-arrow-right text-3xs ml-1"></i>
                 </button>
                 
-                <div class="admin-only flex space-x-1">
+                <div class="inti-only flex space-x-1">
                     <button type="button" onclick="editStory(${story.row_index})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Ubah data">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -4344,7 +4333,7 @@ function renderQuoteListItems() {
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-400">
                 <span class="truncate max-w-[120px] text-[10px] italic"><i class="fa-solid fa-user-edit mr-1 not-italic"></i>${senderVal}</span>
-                <div class="admin-only flex space-x-2">
+                <div class="inti-only flex space-x-2">
                     <button type="button" onclick="prepareEditQuote(${rIndex}, '${encodeURIComponent(textVal)}', '${encodeURIComponent(authorVal)}')" class="text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 font-semibold px-2.5 py-1 rounded transition text-2xs cursor-pointer">
                         <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
                     </button>
@@ -4673,25 +4662,30 @@ function processProfilImage(inputElement) {
 }
 
 function checkPermissions() {
-    // 1. Ambil jabatan
     const savedJabatan = localStorage.getItem("soka_user_jabatan");
-    
-    // 2. Jika bukan Pimpinan, jalankan logika sembunyi
-    if (savedJabatan !== "Pimpinan" && savedJabatan !== "Pimpinan (Admin)") {
-        
-        // A. Sembunyikan tombol (Kode Anda yang lama)
-        const adminButtons = document.querySelectorAll('.admin-only');
-        adminButtons.forEach(btn => {
-            btn.style.display = 'none';
-        });
 
-        // B. Tambahan: Hapus opsi dropdown (Logika baru yang aman)
-        const adminOptions = ['opt-kehadiran', 'opt-database', 'opt-settings'];
-        adminOptions.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.remove();
+    // 1. Jika ANGGOTA BIASA (Bukan Pimpinan & Bukan Inti & Bukan Admin)
+    // Hanya bisa lihat Tab A & B
+    if (savedJabatan !== "Pimpinan" && savedJabatan !=="Inti" && savedJabatan !== "Pimpinan (Admin)") {
+        
+        // Sembunyikan elemen khusus Inti & Admin (Tab C, D, E)
+        document.querySelectorAll('.inti-only, .admin-only').forEach(el => {
+            el.remove(); // Pakai remove() agar lebih bersih dibanding display:none
+        });
+    } 
+    
+    // 2. Jika ANGGOTA INTI (PIMPINAN + INTI)
+    // Bisa lihat Tab A, B, C, D (Hanya terlarang untuk Tab E)
+    else if (savedJabatan === "Pimpinan" || savedJabatan === "Inti") {
+        
+        // Sembunyikan elemen khusus Admin saja (Tab E)
+        document.querySelectorAll('.admin-only').forEach(el => {
+            el.remove();
         });
     }
+
+    // 3. Jika PIMPINAN / ADMIN
+    // Tidak perlu di-hide apa-apa, otomatis bisa lihat A, B, C, D, E
 }
 
 // Panggil fungsi ini saat halaman selesai dimuat
