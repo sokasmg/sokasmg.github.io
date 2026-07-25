@@ -398,7 +398,7 @@ button.btn-submit:hover {
         <option id="opt-kehadiran" class="inti-only" value="tab-kehadiran"> Laporan Kehadiran</option>
         <option id="opt-kunjungan" value="tab-kunjungan"> Laporan Kunjungan/Shakubuku</option>
         <option id="opt-jadwal" value="tab-jadwal"> Jadwal Kalender</option>
-        <option id="opt-database" class="inti-only" value="tab-database"> Database Anggota</option>
+        <option id="opt-database" class="pimpinan-only" value="tab-database"> Database Anggota</option>
         <option id="opt-settings" class="admin-only" value="tab-settings"> Settings</option>
     </select>
 </div>
@@ -426,7 +426,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender Bulanan
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="inti-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="pimpinan-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
         </button>
@@ -1957,12 +1957,7 @@ function renderTabelKehadiran(data) {
         const thumbnailHtml = item.foto ? 
             `<img src="${item.foto}" onclick="bukaZoomModal('${item.foto}')" class="inline-block w-8 h-8 rounded ml-2 object-cover border border-slate-200 shadow-xs hover:scale-110 cursor-pointer transition-all align-middle mt-1" title="Klik untuk memperbesar">` : '';
 
-        // ==========================================
-        // PERUBAHAN DI SINI (TAMPILAN DESKTOP)
-        // class "truncate" pada kolom keterangan diganti 
-        // menjadi "break-words whitespace-normal"
-        // ==========================================
-        const tr = document.createElement('tr');
+       const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50/80 transition-colors";
         tr.innerHTML = `
             <td class="p-4 font-medium text-slate-700 whitespace-nowrap">${tanggalIndo}</td>
@@ -4664,28 +4659,26 @@ function processProfilImage(inputElement) {
 function checkPermissions() {
     const savedJabatan = localStorage.getItem("soka_user_jabatan");
 
-    // 1. Jika ANGGOTA BIASA (Bukan Pimpinan & Bukan Inti & Bukan Admin)
-    // Hanya bisa lihat Tab A & B
-    if (savedJabatan !== "Pimpinan" && savedJabatan !=="Inti" && savedJabatan !== "Pimpinan (Admin)") {
-        
-        // Sembunyikan elemen khusus Inti & Admin (Tab C, D, E)
-        document.querySelectorAll('.inti-only, .admin-only').forEach(el => {
-            el.remove(); // Pakai remove() agar lebih bersih dibanding display:none
-        });
-    } 
-    
-    // 2. Jika ANGGOTA INTI (PIMPINAN + INTI)
-    // Bisa lihat Tab A, B, C, D (Hanya terlarang untuk Tab E)
-    else if (savedJabatan === "Pimpinan" || savedJabatan === "Inti") {
-        
-        // Sembunyikan elemen khusus Admin saja (Tab E)
-        document.querySelectorAll('.admin-only').forEach(el => {
-            el.remove();
-        });
-    }
+    // Peta hirarki level akses
+    const roles = {
+        "Anggota": 1,
+        "Inti": 2,
+        "Pimpinan": 3,
+        "Admin": 4
+    };
 
-    // 3. Jika PIMPINAN / ADMIN
-    // Tidak perlu di-hide apa-apa, otomatis bisa lihat A, B, C, D, E
+    const userLevel = roles[savedJabatan] || 1; // Default ke Anggota jika tidak terdaftar
+
+    // Hapus elemen jika level pengguna lebih rendah dari level yang dibutuhkan
+    if (userLevel < 2) {
+        document.querySelectorAll('.inti-only').forEach(el => el.remove());
+    }
+    if (userLevel < 3) {
+        document.querySelectorAll('.pimpinan-only').forEach(el => el.remove());
+    }
+    if (userLevel < 4) {
+        document.querySelectorAll('.admin-only').forEach(el => el.remove());
+    }
 }
 
 // Panggil fungsi ini saat halaman selesai dimuat
