@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+  tailwind.config = {
+    darkMode: 'class', // Mengaktifkan mode dark berbasis class HTML
+  }
+</script>
     
     <style>
     /* --- Tambahan Style untuk Halaman Laporan Kunjungan --- */
@@ -433,6 +438,16 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-settings');" id="btn-tab-settings" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Website Settings
     </button>
+    <!-- Tombol Dark/Light Mode -->
+<button id="theme-toggle" onclick="toggleDarkMode()" type="button" 
+    class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm transition-colors focus:outline-none"
+    title="Ubah Mode Tampilan">
+    <!-- Icon Bulan (Dark Mode) -->
+    <i id="theme-toggle-dark-icon" class="fas fa-moon text-lg"></i>
+    <!-- Icon Matahari (Light Mode) -->
+    <i id="theme-toggle-light-icon" class="fas fa-sun text-lg hidden"></i>
+</button>
+
 </nav>
 
             </div>
@@ -1746,6 +1761,71 @@ button.btn-submit:hover {
     <!-- JAVASCRIPT ENGINE                                                         -->
     <!-- ========================================================================= -->
     <script>
+    // 1. Cek mode awal saat halaman dimuat
+    function initTheme() {
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        const isDarkMode = localStorage.getItem('color-theme') === 'dark' || 
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            darkIcon?.classList.add('hidden');
+            lightIcon?.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            darkIcon?.classList.remove('hidden');
+            lightIcon?.classList.add('hidden');
+        }
+    }
+
+    // 2. Fungsi Toggle saat tombol diklik
+function toggleDarkMode() {
+    const root = document.documentElement;
+    
+    // Cek apakah mode gelap saat ini aktif (berdasarkan filter invert)
+    const isDarkMode = root.style.filter.includes('invert(1)');
+
+    if (!isDarkMode) {
+        // --- AKTIFKAN DARK MODE ---
+        root.style.filter = 'invert(1) hue-rotate(180deg)';
+
+        // Buat style pengecualian agar gambar, video, dan tombol toggle itu sendiri 
+        // warnanya tidak ikut terbalik secara aneh
+        let styleTag = document.getElementById('auto-dark-exception');
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.id = 'auto-dark-exception';
+            styleTag.innerHTML = `
+                img, video, iframe, #theme-toggle {
+                    filter: invert(1) hue-rotate(180deg);
+                }
+            `;
+            document.head.appendChild(styleTag);
+        }
+
+        // Ubah ikon tombol: Sembunyikan bulan, tampilkan matahari
+        document.getElementById('theme-toggle-dark-icon').classList.add('hidden');
+        document.getElementById('theme-toggle-light-icon').classList.remove('hidden');
+
+    } else {
+        // --- MATIKAN KEMBALI KE LIGHT MODE ---
+        root.style.filter = '';
+
+        // Hapus style pengecualian
+        const styleTag = document.getElementById('auto-dark-exception');
+        if (styleTag) styleTag.remove();
+
+        // Ubah ikon tombol: Tampilkan bulan, sembunyikan matahari
+        document.getElementById('theme-toggle-dark-icon').classList.remove('hidden');
+        document.getElementById('theme-toggle-light-icon').classList.add('hidden');
+    }
+}
+
+    // Jalankan inisialisasi tema saat halaman dimuat
+    initTheme();
+    
     const namaUserAktif = localStorage.getItem('soka_user_name') || "Anonim";
         // --- 0. FUNGSI TAB & RESPONSIVITAS ---
         function switchTab(tabId) {
