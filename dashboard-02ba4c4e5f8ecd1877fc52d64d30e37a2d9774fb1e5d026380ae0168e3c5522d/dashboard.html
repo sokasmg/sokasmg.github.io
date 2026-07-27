@@ -389,7 +389,7 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v4.9</button></span>
+       			v5.0</button></span>
 					</span>
                 </div>
                 
@@ -576,7 +576,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v4.9
+            Shibu Semarang Website & Dashboard v5.0
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -601,7 +601,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v4.9
+            Shibu Semarang Website & Dashboard v5.0
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -2959,12 +2959,9 @@ const DEFAULT_BLANK_FOTO = "images/profileblank.jpg";
  * 1. BUKA MODAL TAMBAH ANGGOTA BARU
  */
 function openAddMemberModal() {
-    isAddMode = true; // Tandai bahwa ini mode Tambah Baru
+    isAddMode = true;
 
-    // Set judul modal
     document.getElementById('modalMemberTitle').innerText = "Tambah Anggota Baru";
-
-    // Kosongkan ID & reset form ke nilai default
     document.getElementById('modalMemberId').value = "";
     document.getElementById('modalInputNama').value = "";
     document.getElementById('modalInputTahunLahir').value = "";
@@ -2973,15 +2970,17 @@ function openAddMemberModal() {
     document.getElementById('modalInputJabatan').value = "Anggota";
     document.getElementById('modalInputStatus').value = "Aktif";
     document.getElementById('modalInputGohonzon').value = "Belum";
+    document.getElementById('modalInputParentId').value = "";
+    document.getElementById('modalInputHubungan').value = ""; // Reset input teks
     document.getElementById('modalInputTelepon').value = "";
     document.getElementById('modalInputAlamat').value = "";
     document.getElementById('modalInputKeterangan').value = "";
 
-    // Set Foto Default ke profileblank.jpg
+    toggleParentFamilyDropdown();
+
     currentSelectedFotoBase64 = DEFAULT_BLANK_FOTO;
     document.getElementById('modalFotoPreview').src = DEFAULT_BLANK_FOTO;
 
-    // Buka akses input (Editable) & tampilkan tombol simpan + upload foto
     const fields = document.querySelectorAll('.modal-field');
     fields.forEach(f => {
         f.removeAttribute('readonly');
@@ -2991,28 +2990,22 @@ function openAddMemberModal() {
 
     document.getElementById('modalSaveBtn').classList.remove('hidden');
     document.getElementById('modalFotoUploadContainer').classList.remove('hidden');
-
-    // Tampilkan Modal
-    document.getElementById('memberDetailModal').classList.remove('hidden');
     document.getElementById('modalDeleteBtn').classList.add('hidden');
+    document.getElementById('memberDetailModal').classList.remove('hidden');
 }
 
 /**
  * 2. BUKA MODAL DETAIL / EDIT ANGGOTA LAMA
  */
 function openMemberModal(memberId) {
-    isAddMode = false; // Tandai mode edit/view
+    isAddMode = false;
 
-    // 1. Cari data anggota
     const member = members.find(m => String(m.id) === String(memberId));
     if (!member) {
         alert("Data anggota tidak ditemukan.");
         return;
     }
 
-    // =========================================================================
-    // STEP 1: POPULATE LENGKAP SELURUH DATA KE MODAL (JANGAN ADA YANG TERLEWAT)
-    // =========================================================================
     document.getElementById('modalMemberId').value = member.id || '';
     document.getElementById('modalInputNama').value = member.nama || '';
     document.getElementById('modalInputTahunLahir').value = member.tahunLahir || '';
@@ -3025,82 +3018,72 @@ function openMemberModal(memberId) {
     document.getElementById('modalInputAlamat').value = member.alamat || '';
     document.getElementById('modalInputKeterangan').value = member.keterangan || '';
 
-    // Render Foto Profile (Fallback ke blank jika kosong)
-    const fotoPreview = document.getElementById('modalFotoPreview');
-    currentSelectedFotoBase64 = member.foto || DEFAULT_BLANK_FOTO;
-    if (fotoPreview) {
-        fotoPreview.src = currentSelectedFotoBase64;
+    // Handle Dropdown Gohonzon & Input Teks Hubungan
+    if (member.gohonzon === 'Keluarga') {
+        populateFamilyHeads(member.parentId, member.id);
+        document.getElementById('containerParentId').classList.remove('hidden');
+        if (document.getElementById('containerHubungan')) {
+            document.getElementById('containerHubungan').classList.remove('hidden');
+            // Isi teks bebas dari data sheet (atau fallback jika kosong)
+            document.getElementById('modalInputHubungan').value = member.hubungan || ''; 
+        }
+    } else {
+        document.getElementById('containerParentId').classList.add('hidden');
+        if (document.getElementById('containerHubungan')) {
+            document.getElementById('containerHubungan').classList.add('hidden');
+            document.getElementById('modalInputHubungan').value = '';
+        }
     }
 
-    // =========================================================================
-    // STEP 2: LOGIKA READONLY & AKSES TOMBOL
-    // =========================================================================
+    const fotoPreview = document.getElementById('modalFotoPreview');
+    currentSelectedFotoBase64 = member.foto || DEFAULT_BLANK_FOTO;
+    if (fotoPreview) fotoPreview.src = currentSelectedFotoBase64;
+
     const fields = document.querySelectorAll('#memberDetailModal input, #memberDetailModal select, #memberDetailModal textarea');
     const saveBtn = document.getElementById('modalSaveBtn');
     const deleteBtn = document.getElementById('modalDeleteBtn');
     const fotoUploadContainer = document.getElementById('modalFotoUploadContainer');
     const modalTitle = document.getElementById('modalMemberTitle');
 
-    // Cek apakah target anggota yang sedang dibuka jabatannya adalah Admin
     const isTargetAdmin = (member.jabatan === "Pimpinan (Admin)");
 
     if (isTargetAdmin) {
-        // --- JIKA DATA YANG DIBUKA ADALAH ADMIN -> READ-ONLY TOTAL ---
         if (modalTitle) modalTitle.innerText = "Detail Data Admin (Read-Only)";
-
-        // Kunci semua field
         fields.forEach(f => {
-            if (f.tagName === 'SELECT') {
-                f.setAttribute('disabled', 'true');
-            } else {
-                f.setAttribute('readonly', 'true');
-            }
+            if (f.tagName === 'SELECT') f.setAttribute('disabled', 'true');
+            else f.setAttribute('readonly', 'true');
             f.classList.add('bg-gray-100', 'cursor-not-allowed');
         });
-
-        // Sembunyikan tombol Simpan, Hapus, dan Upload Foto
         if (saveBtn) saveBtn.classList.add('hidden');
         if (deleteBtn) deleteBtn.classList.add('hidden');
         if (fotoUploadContainer) fotoUploadContainer.classList.add('hidden');
-
     } else {
-        // --- JIKA DATA BUKAN ADMIN -> CEK ROLE USER YANG SEDANG LOGIN ---
         const savedJabatan = localStorage.getItem("soka_user_jabatan");
         const isCurrentActiveUserAdmin = (savedJabatan === "Pimpinan (Admin)");
 
         if (isCurrentActiveUserAdmin) {
-            // Jika user login adalah Admin -> Buka Akses Edit
             if (modalTitle) modalTitle.innerText = "Edit Data Anggota";
-
             fields.forEach(f => {
                 f.removeAttribute('readonly');
                 f.removeAttribute('disabled');
                 f.classList.remove('bg-gray-100', 'cursor-not-allowed');
             });
-
             if (saveBtn) saveBtn.classList.remove('hidden');
             if (deleteBtn) deleteBtn.classList.remove('hidden');
             if (fotoUploadContainer) fotoUploadContainer.classList.remove('hidden');
         } else {
-            // Jika user login Viewer biasa -> Readonly
             if (modalTitle) modalTitle.innerText = "Detail Data Anggota";
-
             fields.forEach(f => {
-                if (f.tagName === 'SELECT') {
-                    f.setAttribute('disabled', 'true');
-                } else {
-                    f.setAttribute('readonly', 'true');
-                }
+                if (f.tagName === 'SELECT') f.setAttribute('disabled', 'true');
+                else f.setAttribute('readonly', 'true');
                 f.classList.add('bg-gray-100', 'cursor-not-allowed');
             });
-
             if (saveBtn) saveBtn.classList.add('hidden');
             if (deleteBtn) deleteBtn.classList.add('hidden');
             if (fotoUploadContainer) fotoUploadContainer.classList.add('hidden');
         }
     }
 
-    // Tampilkan modal
     document.getElementById('memberDetailModal').classList.remove('hidden');
 }
 
@@ -3156,36 +3139,49 @@ async function saveMemberFromModal() {
         return;
     }
 
+    const gohonzonVal = document.getElementById('modalInputGohonzon').value;
+    let selectedParentId = "";
+    let selectedHubungan = "Kepala Keluarga";
+
+    if (gohonzonVal === 'Keluarga') {
+        selectedParentId = document.getElementById('modalInputParentId').value;
+        if (!selectedParentId) {
+            alert("Harap pilih Kepala Keluarga / Naungan terlebih dahulu!");
+            return;
+        }
+        const hubEl = document.getElementById('modalInputHubungan');
+        // Mengambil teks inputan bebas dari user
+        selectedHubungan = hubEl ? hubEl.value.trim() : ""; 
+    } else if (gohonzonVal === 'Sendiri') {
+        selectedHubungan = "Kepala Keluarga";
+    }
+
     let actionType = "";
     let logDetail = "";
 
     if (isAddMode) {
-        // --- LOGIKA A: TAMBAH ANGGOTA BARU ---
         const newMember = {
-            id: "ID_" + Date.now(), // Generate ID unik otomatis
+            id: "ID_" + Date.now(),
             nama: namaInput,
             tahunLahir: document.getElementById('modalInputTahunLahir').value,
             chiku: document.getElementById('modalInputChiku').value,
             bagian: document.getElementById('modalInputBagian').value,
             jabatan: document.getElementById('modalInputJabatan').value,
             status: document.getElementById('modalInputStatus').value,
-            gohonzon: document.getElementById('modalInputGohonzon').value,
+            gohonzon: gohonzonVal,
+            parentId: selectedParentId,
+            hubungan: selectedHubungan, // Tersimpan sesuai teks bebas
             telepon: document.getElementById('modalInputTelepon').value,
             alamat: document.getElementById('modalInputAlamat').value,
             keterangan: document.getElementById('modalInputKeterangan').value,
-            foto: currentSelectedFotoBase64 || DEFAULT_BLANK_FOTO,
-            parentId: "",
-            hubungan: "Kepala Keluarga"
+            foto: currentSelectedFotoBase64 || DEFAULT_BLANK_FOTO
         };
 
         members.push(newMember);
-
-        // Siapkan parameter log untuk Tambah
         actionType = 'CREATE';
         logDetail = `menambahkan anggota baru bernama "${namaInput}"`;
 
     } else {
-        // --- LOGIKA B: EDIT ANGGOTA LAMA ---
         const memberId = document.getElementById('modalMemberId').value;
         const targetIndex = members.findIndex(m => String(m.id) === String(memberId));
 
@@ -3200,22 +3196,21 @@ async function saveMemberFromModal() {
         members[targetIndex].bagian = document.getElementById('modalInputBagian').value;
         members[targetIndex].jabatan = document.getElementById('modalInputJabatan').value;
         members[targetIndex].status = document.getElementById('modalInputStatus').value;
-        members[targetIndex].gohonzon = document.getElementById('modalInputGohonzon').value;
+        members[targetIndex].gohonzon = gohonzonVal;
+        members[targetIndex].parentId = selectedParentId;
+        members[targetIndex].hubungan = selectedHubungan; // Tersimpan sesuai teks bebas
         members[targetIndex].telepon = document.getElementById('modalInputTelepon').value;
         members[targetIndex].alamat = document.getElementById('modalInputAlamat').value;
         members[targetIndex].keterangan = document.getElementById('modalInputKeterangan').value;
         members[targetIndex].foto = currentSelectedFotoBase64;
 
-        // Siapkan parameter log untuk Edit
         actionType = 'UPDATE';
         logDetail = `mengubah data anggota "${namaInput}"`;
     }
 
-    // 1. Simpan ke LocalStorage & Render Ulang UI
     localStorage.setItem('shibuMembersTree', JSON.stringify(members));
     if (typeof renderTable === 'function') renderTable();
 
-    // 2. Kirim ke Google Apps Script (saveAll)
     const saveBtn = document.getElementById('modalSaveBtn');
     saveBtn.innerText = "Menyimpan...";
     saveBtn.disabled = true;
@@ -3232,16 +3227,10 @@ async function saveMemberFromModal() {
         const result = await response.json();
 
         if (result.status === "success") {
-            // === LOG AKTIVITAS (TAMBAH / EDIT) ===
             if (typeof kirimLogAktivitas === 'function') {
                 const userNama = typeof namaUserAktif !== 'undefined' ? namaUserAktif : 'User';
-                kirimLogAktivitas(
-                    actionType, 
-                    'Data Anggota', 
-                    `${userNama} ${logDetail}`
-                );
+                kirimLogAktivitas(actionType, 'Data Anggota', `${userNama} ${logDetail}`);
             }
-
             alert(isAddMode ? "Anggota baru berhasil ditambahkan!" : "Data berhasil diperbarui di Google Sheets!");
             closeMemberModal();
         } else {
@@ -3321,7 +3310,51 @@ async function deleteMemberFromModal() {
     }
 }
 
+function toggleParentFamilyDropdown() {
+    const gohonzonVal = document.getElementById('modalInputGohonzon').value;
+    const containerParent = document.getElementById('containerParentId');
+    const containerHubungan = document.getElementById('containerHubungan');
+    const selectParent = document.getElementById('modalInputParentId');
+    const inputHubungan = document.getElementById('modalInputHubungan');
+
+    if (gohonzonVal === 'Keluarga') {
+        populateFamilyHeads();
+        containerParent.classList.remove('hidden');
+        if (containerHubungan) containerHubungan.classList.remove('hidden');
+    } else {
+        containerParent.classList.add('hidden');
+        if (containerHubungan) containerHubungan.classList.add('hidden');
+        selectParent.value = "";
+        if (inputHubungan) inputHubungan.value = ""; // Reset teks
+    }
+}
+
+function populateFamilyHeads(selectedParentId = "", currentMemberId = "") {
+    const selectParent = document.getElementById('modalInputParentId');
+    selectParent.innerHTML = '<option value="">-- Pilih Kepala Keluarga --</option>';
+
+    // Filter anggota yang memegang Gohonzon 'Sendiri' & bukan diri sendiri saat mode edit
+    const familyHeads = members.filter(m => 
+        (m.gohonzon === 'Sendiri' || m.hubungan === 'Kepala Keluarga') && 
+        String(m.id) !== String(currentMemberId)
+    );
+
+    // Sort nama A-Z
+    familyHeads.sort((a, b) => a.nama.localeCompare(b.nama));
+
+    familyHeads.forEach(head => {
+        const option = document.createElement('option');
+        option.value = head.id;
+        option.textContent = `${head.nama} (${head.chiku})`;
+        if (String(head.id) === String(selectedParentId)) {
+            option.selected = true;
+        }
+        selectParent.appendChild(option);
+    });
+}
+<!-- ================================================== -->
         // --- GLOBAL INITIALIZATION ---
+<!-- ================================================== -->
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Logika pengisian tanggal otomatis (Bawaan Anda)
     const tanggalEl = document.getElementById('tanggal');
@@ -5903,14 +5936,26 @@ function printModalMateri() {
                     </select>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Gohonzon</label>
-                    <select id="modalInputGohonzon" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="Sendiri">Sendiri</option>
-                        <option value="Keluarga">Keluarga</option>
-                        <option value="Belum">Belum</option>
-                    </select>
-                </div>
+<div>
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Gohonzon</label>
+    <select id="modalInputGohonzon" onchange="toggleParentFamilyDropdown()" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <option value="Sendiri">Sendiri</option>
+        <option value="Keluarga">Keluarga</option>
+        <option value="Belum">Belum</option>
+    </select>
+</div>
+
+<div id="containerParentId" class="hidden">
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Naungan / Kepala Keluarga</label>
+    <select id="modalInputParentId" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <option value="">-- Pilih Kepala Keluarga --</option>
+    </select>
+</div>
+
+<div id="containerHubungan" class="hidden">
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Hubungan Keluarga</label>
+    <input type="text" id="modalInputHubungan" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Istri, Anak Pertama, Keponakan, dll.">
+</div>
 
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-semibold text-gray-500 mb-1">No. Telepon</label>
