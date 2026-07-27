@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+  tailwind.config = {
+    darkMode: 'class', // Mengaktifkan mode dark berbasis class HTML
+  }
+</script>
     
     <style>
     /* --- Tambahan Style untuk Halaman Laporan Kunjungan --- */
@@ -384,27 +389,29 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v4.6</button></span>
+       			v5.0</button></span>
 					</span>
                 </div>
                 
 <!-- Menu Tab Button & Tombol Beranda -->
 <div class="block md:hidden w-full px-2">
-    <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
-        <option id="opt-profil" value="tab-profil" selected> Profil</option>
-	    <option id="opt-ceritakemenangan" value="tab-ceritakemenangan"> Cerita Kemenangan</option>
-        <option id="opt-materi" value="tab-materi"> Materi & Pelajaran</option>
-        <option id="opt-quote" value="tab-quoteoftheday"> Quote of the Day</option>
-        <option id="opt-kehadiran" class="inti-only" value="tab-kehadiran"> Laporan Kehadiran</option>
-        <option id="opt-kunjungan" value="tab-kunjungan"> Laporan Kunjungan/Shakubuku</option>
-        <option id="opt-jadwal" value="tab-jadwal"> Jadwal Kalender</option>
-        <option id="opt-database" class="pimpinan-only" value="tab-database"> Database Anggota</option>
-        <option id="opt-settings" class="admin-only" value="tab-settings"> Settings</option>
+    <select id="tabs-select" 
+            onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); if(this.value === 'tab-database') switchViewMode('grid'); }" 
+            class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
+        <option id="opt-profil" value="tab-profil" selected>Profil</option>
+        <option id="opt-ceritakemenangan" value="tab-ceritakemenangan">Cerita Kemenangan</option>
+        <option id="opt-materi" value="tab-materi">Materi & Pelajaran</option>
+        <option id="opt-quote" value="tab-quoteoftheday">Quote of the Day</option>
+        <option id="opt-kehadiran" class="inti-only" value="tab-kehadiran">Laporan Kehadiran</option>
+        <option id="opt-kunjungan" value="tab-kunjungan">Laporan Kunjungan/Shakubuku</option>
+        <option id="opt-jadwal" value="tab-jadwal">Jadwal Kalender</option>
+        <option id="opt-database" value="tab-database">Database Anggota</option>
+        <option id="opt-settings" class="admin-only" value="tab-settings">Settings</option>
     </select>
 </div>
 
 <nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
-    <button onclick="switchTab('tab-profil');" id="btn-tab-profil" 
+    <button onclick="switchTab('tab-profil')" id="btn-tab-profil" 
         class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
     Profil
     </button>
@@ -426,13 +433,23 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender Bulanan
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="pimpinan-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database'); switchViewMode('grid')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
         </button>
     <button onclick="switchTab('tab-settings');" id="btn-tab-settings" class="admin-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Website Settings
     </button>
+    <!-- Tombol Dark/Light Mode -->
+<button id="theme-toggle" onclick="toggleDarkMode()" type="button" 
+    class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm transition-colors focus:outline-none"
+    title="Ubah Mode Tampilan">
+    <!-- Icon Bulan (Dark Mode) -->
+    <i id="theme-toggle-dark-icon" class="fas fa-moon text-lg"></i>
+    <!-- Icon Matahari (Light Mode) -->
+    <i id="theme-toggle-light-icon" class="fas fa-sun text-lg hidden"></i>
+</button>
+
 </nav>
 
             </div>
@@ -559,7 +576,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v4.6
+            Shibu Semarang Website & Dashboard v5.0
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -584,7 +601,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v4.6
+            Shibu Semarang Website & Dashboard v5.0
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -657,7 +674,7 @@ button.btn-submit:hover {
                         <!-- Header Card -->
                         <div class="bg-indigo-50/70 p-3 border-b border-indigo-100/50 flex items-center justify-between">
                             <span class="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-check text-indigo-500"></i> Kehadiran
+                                <i class="fa-solid fa-user-check text-indigo-500"></i> Kegiatan
                             </span>
                             <span id="kehadiran-tanggal" class="text-[11px] font-medium text-slate-400">Loading...</span>
                         </div>
@@ -1471,165 +1488,195 @@ button.btn-submit:hover {
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- TAB 3: DATABASE ANGGOTA                                                  -->
-        <!-- ========================================================================= -->
-        <div id="tab-database" class="tab-content hidden space-y-4 md:space-y-6">
-            <div id="monitorHeader" class="bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Database Anggota Shibu Semarang v2.5</h1>
-                        <p class="text-xs md:text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
-                        <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026 (Viewer Mode)</p>
-                    </div>
-                    <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-                        <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                            </svg>
-                            Print / Cetak (Landscape)
-                        </button>
-                        
-                        <a href="admin.html" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition text-center shadow-xs flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                            Edit Database
-                        </a>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
-                    <div id="box-tanahmas" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
-                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Tanah Mas</h4>
-                        <div id="stat-tanahmas" class="text-xs text-gray-600 space-y-1"></div>
-                    </div>
-                    <div id="box-gajahmada" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
-                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Gajah Mada</h4>
-                        <div id="stat-gajahmada" class="text-xs text-gray-600 space-y-1"></div>
-                    </div>
-                    <div id="box-majapahit" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
-                        <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Majapahit</h4>
-                        <div id="stat-majapahit" class="text-xs text-gray-600 space-y-1"></div>
-                    </div>
-                    <div id="box-total" class="p-3.5 bg-blue-50 rounded-xl border border-blue-100 shadow-2xs">
-                        <h4 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2 pb-1 border-b border-blue-200">Grand Total Shibu</h4>
-                        <div id="stat-shibu-total" class="text-xs text-gray-700 space-y-1"></div>
-                    </div>
-                </div>
+<!-- ========================================================================= -->
+<!-- TAB 3: DATABASE ANGGOTA                                                  -->
+<!-- ========================================================================= -->
+<div id="tab-database" class="tab-content hidden space-y-4 md:space-y-6">
+    <!-- HEADER MONITOR & DOKUMENTASI STATISTIK -->
+    <div id="monitorHeader" class="pimpinan-only bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Daftar Anggota Shibu Semarang</h1>
+                <p class="text-xs md:text-sm text-gray-500">Sistem Filter & Hirarki Berdasarkan Keluarga (Gohonzon/Keluarga)</p>
+                <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026</p>
             </div>
-
-            <div id="filterContainer" class="bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
-                        <input type="text" id="searchFilter" oninput="currentPage=1; renderTable();" placeholder="Ketik untuk mencari..." class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Chiku</label>
-                        <select id="chikuFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Chiku</option>
-                            <option value="Tanah Mas">Tanah Mas</option>
-                            <option value="Gajah Mada">Gajah Mada</option>
-                            <option value="Majapahit">Majapahit</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Bagian</label>
-                        <select id="bagianFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Bagian</option>
-                            <option value="Bapak">Bapak</option>
-                            <option value="Ibu">Ibu</option>
-                            <option value="Pemuda">Pemuda</option>
-                            <option value="Pemudi">Pemudi</option>
-                            <option value="Anak">Anak</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Jabatan</label>
-                        <select id="jabatanFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Jabatan</option>
-                            <option value="Pimpinan_Inti">Pimpinan & Inti (Gabungan)</option>
-                            <option value="Pimpinan">Pimpinan</option>
-                            <option value="Inti">Inti</option>
-                            <option value="Anggota">Anggota</option>
-                            <option value="Calon">Calon</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Filter Status</label>
-                        <select id="statusFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Status</option>
-                            <option value="Aktif">Aktif</option>
-                            <option value="Tidak Aktif">Tidak Aktif</option>
-                            <option value="Luar Kota/LN">Luar Kota/LN</option>
-                            <option value="Meninggal">Meninggal</option>
-                            <option value="Taiten">Taiten</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
-                    <div class="flex flex-wrap gap-x-4 gap-y-2">
-                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                            <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                            Calon
-                        </label>
-                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                            <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                            Luar Kota/LN
-                        </label>
-                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                            <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                            Taiten
-                        </label>
-                        <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
-                            <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
-                            Meninggal
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 class="font-semibold text-gray-700 text-sm md:text-base">Struktur & Daftar Anggota</h3>
-                    <span id="totalData" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">Total: 0 Orang</span>
-                </div>
+            <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+                <button onclick="printData()" class="pimpinan-only w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Print / Cetak (Landscape)
+                </button>
                 
-                <div class="overflow-x-auto hidden md:block">
-                    <table class="w-full text-left text-sm text-gray-600 border-collapse">
-                        <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                            <tr>
-                                <th class="px-4 py-3 w-12 text-center">No</th>
-                                <th class="px-4 py-3 min-w-[180px]">Nama Anggota</th>
-                                <th class="px-4 py-3">Chiku</th>
-                                <th class="px-4 py-3">Bagian</th>
-                                <th class="px-4 py-3">Jabatan</th>
-                                <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Gohonzon</th>
-                                <th class="px-4 py-3">Lahir</th>
-                                <th class="px-4 py-3">Hubungan</th>
-                                <th class="px-4 py-3 text-xs">Telepon</th>
-                                <th class="px-4 py-3 min-w-[150px]">Alamat</th>
-                                <th class="px-4 py-3 min-w-[150px]">Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberTableBody" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-
-                <div id="memberCardContainer" class="block md:hidden p-4 space-y-3 bg-gray-50/50"></div>
-
-                <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col items-center gap-4 bg-gray-50 w-full">
-                    <span id="pageInfo" class="text-xs text-gray-500">Menampilkan 0 - 0 dari 0 data</span>
-                    <div class="flex flex-wrap justify-center gap-1.5 max-w-full" id="paginationButtons"></div>
-                </div>
+                <button onclick="openAddMemberModal()" class="admin-only px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition flex items-center gap-2 cursor-pointer shadow-xs">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah Anggota
+                </button>
             </div>
         </div>
 
-    </main>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
+            <div id="box-tanahmas" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Tanah Mas</h4>
+                <div id="stat-tanahmas" class="text-xs text-gray-600 space-y-1"></div>
+            </div>
+            <div id="box-gajahmada" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Gajah Mada</h4>
+                <div id="stat-gajahmada" class="text-xs text-gray-600 space-y-1"></div>
+            </div>
+            <div id="box-majapahit" class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-100">
+                <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider mb-2 pb-1 border-b border-purple-200/60">Chiku Majapahit</h4>
+                <div id="stat-majapahit" class="text-xs text-gray-600 space-y-1"></div>
+            </div>
+            <div id="box-total" class="p-3.5 bg-blue-50 rounded-xl border border-blue-100 shadow-2xs">
+                <h4 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2 pb-1 border-b border-blue-200">Grand Total Shibu</h4>
+                <div id="stat-shibu-total" class="text-xs text-gray-700 space-y-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTER CONTAINER -->
+    <div id="filterContainer" class="pimpinan-only bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
+                <input type="text" id="searchFilter" oninput="currentPage=1; renderTable();" placeholder="Ketik untuk mencari..." class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Filter Chiku</label>
+                <select id="chikuFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Chiku</option>
+                    <option value="Tanah Mas">Tanah Mas</option>
+                    <option value="Gajah Mada">Gajah Mada</option>
+                    <option value="Majapahit">Majapahit</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Filter Bagian</label>
+                <select id="bagianFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Bagian</option>
+                    <option value="Bapak">Bapak</option>
+                    <option value="Ibu">Ibu</option>
+                    <option value="Pemuda">Pemuda</option>
+                    <option value="Pemudi">Pemudi</option>
+                    <option value="Anak">Anak</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Filter Jabatan</label>
+                <select id="jabatanFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Jabatan</option>
+                    <option value="Pimpinan_Inti">Pimpinan & Inti (Gabungan)</option>
+                    <option value="Pimpinan">Pimpinan</option>
+                    <option value="Inti">Inti</option>
+                    <option value="Anggota">Anggota</option>
+                    <option value="Calon">Calon</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Filter Status</label>
+                <select id="statusFilter" onchange="currentPage=1; renderTable();" class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Semua Status</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Tidak Aktif">Tidak Aktif</option>
+                    <option value="Luar Kota/LN">Luar Kota/LN</option>
+                    <option value="Meninggal">Meninggal</option>
+                    <option value="Taiten">Taiten</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="pimpinan-only pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
+            <div class="flex flex-wrap gap-x-4 gap-y-2">
+                <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showCalon" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Calon
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showLuarKota" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Luar Kota/LN
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showTaiten" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Taiten
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="showMeninggal" onchange="currentPage=1; renderTable();" class="w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500">
+                    Meninggal
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DATA VIEW CONTAINER -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <!-- Sub Header dengan Switcher Mode -->
+        <div class="p-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-3 bg-gray-50">
+            <div class="flex items-center gap-3">
+                <h3 class="font-semibold text-gray-700 text-sm md:text-base">Struktur & Daftar Anggota</h3>
+                <span id="totalData" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">Total: 0 Orang</span>
+            </div>
+
+            <!-- Switch View Mode Buttons -->
+            <div class="flex items-center bg-gray-200 p-1 rounded-lg text-xs font-medium">
+                <button id="btnViewTable" onclick="switchViewMode('table')" class="pimpinan-only px-3 py-1.5 rounded-md flex items-center gap-1.5 transition bg-white text-gray-800 shadow-xs font-semibold cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Tabel</span>
+                </button>
+                <button id="btnViewGrid" onclick="switchViewMode('grid')" class="px-3 py-1.5 rounded-md flex items-center gap-1.5 transition text-gray-600 hover:text-gray-900 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Katalog Grid</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTAINER 1: LIST VIEW (Tabel Desktop + Card Mobile Gabung Disini) -->
+        <div id="memberListView">
+            <!-- Tabel Desktop -->
+            <div class="overflow-x-auto hidden md:block">
+                <table class="w-full text-left text-sm text-gray-600 border-collapse">
+                    <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 w-12 text-center">No</th>
+                            <th class="px-4 py-3 min-w-[180px]">Nama Anggota</th>
+                            <th class="px-4 py-3">Chiku</th>
+                            <th class="px-4 py-3">Bagian</th>
+                            <th class="px-4 py-3">Jabatan</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Gohonzon</th>
+                            <th class="px-4 py-3">Lahir</th>
+                            <th class="px-4 py-3">Hubungan</th>
+                            <th class="px-4 py-3 text-xs">Telepon</th>
+                            <th class="px-4 py-3 min-w-[150px]">Alamat</th>
+                            <th class="px-4 py-3 min-w-[150px]">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+
+            <!-- Card Mobile -->
+            <div id="memberCardContainer" class="block md:hidden p-4 space-y-3 bg-gray-50/50"></div>
+        </div>
+
+        <!-- CONTAINER 2: KATALOG GRID VIEW (6 Kolom Desktop) -->
+        <div id="memberGridView" class="hidden p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5 bg-gray-50/50"></div>
+
+        <!-- FOOTER PAGINASI -->
+        <div id="paginationOuter" class="p-4 border-t border-gray-100 flex flex-col items-center gap-4 bg-gray-50 w-full">
+            <span id="pageInfo" class="text-xs text-gray-500">Menampilkan 0 - 0 dari 0 data</span>
+            <div class="flex flex-wrap justify-center gap-1.5 max-w-full" id="paginationButtons"></div>
+        </div>
+    </div>
+</div>
+</main>
 
 <!-- MODAL EDIT LAPORAN KEHADIRAN -->
 <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 hidden animate-fade-in">
@@ -1716,6 +1763,71 @@ button.btn-submit:hover {
     <!-- JAVASCRIPT ENGINE                                                         -->
     <!-- ========================================================================= -->
     <script>
+    // 1. Cek mode awal saat halaman dimuat
+    function initTheme() {
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        const isDarkMode = localStorage.getItem('color-theme') === 'dark' || 
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            darkIcon?.classList.add('hidden');
+            lightIcon?.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            darkIcon?.classList.remove('hidden');
+            lightIcon?.classList.add('hidden');
+        }
+    }
+
+    // 2. Fungsi Toggle saat tombol diklik
+function toggleDarkMode() {
+    const root = document.documentElement;
+    
+    // Cek apakah mode gelap saat ini aktif (berdasarkan filter invert)
+    const isDarkMode = root.style.filter.includes('invert(1)');
+
+    if (!isDarkMode) {
+        // --- AKTIFKAN DARK MODE ---
+        root.style.filter = 'invert(1) hue-rotate(180deg)';
+
+        // Buat style pengecualian agar gambar, video, dan tombol toggle itu sendiri 
+        // warnanya tidak ikut terbalik secara aneh
+        let styleTag = document.getElementById('auto-dark-exception');
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.id = 'auto-dark-exception';
+            styleTag.innerHTML = `
+                img, video, iframe, #theme-toggle {
+                    filter: invert(1) hue-rotate(180deg);
+                }
+            `;
+            document.head.appendChild(styleTag);
+        }
+
+        // Ubah ikon tombol: Sembunyikan bulan, tampilkan matahari
+        document.getElementById('theme-toggle-dark-icon').classList.add('hidden');
+        document.getElementById('theme-toggle-light-icon').classList.remove('hidden');
+
+    } else {
+        // --- MATIKAN KEMBALI KE LIGHT MODE ---
+        root.style.filter = '';
+
+        // Hapus style pengecualian
+        const styleTag = document.getElementById('auto-dark-exception');
+        if (styleTag) styleTag.remove();
+
+        // Ubah ikon tombol: Tampilkan bulan, sembunyikan matahari
+        document.getElementById('theme-toggle-dark-icon').classList.remove('hidden');
+        document.getElementById('theme-toggle-light-icon').classList.add('hidden');
+    }
+}
+
+    // Jalankan inisialisasi tema saat halaman dimuat
+    initTheme();
+    
     const namaUserAktif = localStorage.getItem('soka_user_name') || "Anonim";
         // --- 0. FUNGSI TAB & RESPONSIVITAS ---
         function switchTab(tabId) {
@@ -2609,105 +2721,190 @@ if(mainForm) {
             return finalOrderedList;
         }
 
-        function renderTable() {
-            updateStatistics();
+// Set variabel global untuk menyimpan mode aktif
+let currentViewMode = 'table'; 
 
-            const tbody = document.getElementById('memberTableBody');
-            const cardContainer = document.getElementById('memberCardContainer');
+function switchViewMode(mode) {
+    currentViewMode = mode;
+    
+    const btnTable = document.getElementById('btnViewTable');
+    const btnGrid = document.getElementById('btnViewGrid');
+    
+    const listViewContainer = document.getElementById('memberListView');
+    const gridViewContainer = document.getElementById('memberGridView');
+
+    if (mode === 'grid') {
+        // Highlight tombol Grid
+        if (btnGrid) btnGrid.className = "px-3 py-1.5 rounded-md flex items-center gap-1.5 transition bg-white text-gray-800 shadow-xs font-semibold cursor-pointer";
+        if (btnTable) btnTable.className = "px-3 py-1.5 rounded-md flex items-center gap-1.5 transition text-gray-600 hover:text-gray-900 cursor-pointer";
+        
+        // Sembunyikan List (Tabel & Card Mobile), Munculkan Grid
+        if (listViewContainer) listViewContainer.classList.add('hidden');
+        if (gridViewContainer) gridViewContainer.classList.remove('hidden');
+    } else {
+        // Highlight tombol Tabel
+        if (btnTable) btnTable.className = "px-3 py-1.5 rounded-md flex items-center gap-1.5 transition bg-white text-gray-800 shadow-xs font-semibold cursor-pointer";
+        if (btnGrid) btnGrid.className = "px-3 py-1.5 rounded-md flex items-center gap-1.5 transition text-gray-600 hover:text-gray-900 cursor-pointer";
+
+        // Munculkan List (Tabel & Card Mobile), Sembunyikan Grid
+        if (listViewContainer) listViewContainer.classList.remove('hidden');
+        if (gridViewContainer) gridViewContainer.classList.add('hidden');
+    }
+
+    // Reset ke halaman 1 dan muat data ulang
+    currentPage = 1;
+    if (typeof renderTable === 'function') {
+        renderTable();
+    }
+}
+
+/**
+ * Update Fungsi renderTable() untuk Mendukung Render Katalog Grid
+ */
+function renderTable() {
+    updateStatistics();
+
+    const tbody = document.getElementById('memberTableBody');
+    const cardContainer = document.getElementById('memberCardContainer');
+    const gridContainer = document.getElementById('memberGridView');
+    
+    if(!tbody || !cardContainer) return;
+    
+    tbody.innerHTML = '';
+    cardContainer.innerHTML = '';
+    if(gridContainer) gridContainer.innerHTML = '';
+
+    const processedData = buildStructuredData(false);
+    const totalDataEl = document.getElementById('totalData');
+    if(totalDataEl) totalDataEl.innerText = `Total Hasil: ${processedData.length} Records`;
+
+    if (processedData.length === 0) {
+        const emptyHTML = `<div class="col-span-full text-center py-8 text-gray-400 text-sm">Tidak ada data anggota yang cocok dengan filter.</div>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
+        cardContainer.innerHTML = emptyHTML;
+        if(gridContainer) gridContainer.innerHTML = emptyHTML;
+        
+        const pageInfo = document.getElementById('pageInfo');
+        if(pageInfo) pageInfo.innerText = "Menampilkan 0 - 0 dari 0 data";
+        const paginationButtons = document.getElementById('paginationButtons');
+        if(paginationButtons) paginationButtons.innerHTML = '';
+        return;
+    }
+
+    // Set Dynamic Pagination Limit: 30 items/page untuk mode Katalog Grid (6 kolom x 5 baris)
+    const effectiveRowsPerPage = (currentViewMode === 'grid') ? 30 : rowsPerPage;
+
+    const totalPages = Math.ceil(processedData.length / effectiveRowsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+
+    const startIndex = (currentPage - 1) * effectiveRowsPerPage;
+    const endIndex = Math.min(startIndex + effectiveRowsPerPage, processedData.length);
+    const paginatedItems = processedData.slice(startIndex, endIndex);
+
+    paginatedItems.forEach((member, index) => {
+        const currentJabatan = member.jabatan || 'Anggota';
+        const currentStatus = member.status || 'Aktif';
+        const fotoProfile = member.foto && member.foto !== "" ? member.foto : DEFAULT_BLANK_FOTO;
+
+        // ---------------------------------------------------------------------
+        // 1. RENDER KANAN/TABLE VIEW (DESKTOP)
+        // ---------------------------------------------------------------------
+        const tr = document.createElement('tr');
+        tr.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
+        tr.innerHTML = `
+            <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
+            <td class="px-4 py-3">
+                <div class="flex items-center">
+                    ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3">↳</span>' : ''}
+                    <span onclick="openMemberModal('${member.id}')" class="${member.isChildRender ? 'text-gray-700 font-normal' : 'text-blue-900 font-bold'} hover:text-blue-600 hover:underline cursor-pointer">
+                        ${member.nama}
+                    </span>
+                </div>
+            </td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">${member.chiku}</span></td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span></td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span></td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${member.gohonzon}</span></td>
+            <td class="px-4 py-3">${member.tahunLahir}</td>
+            <td class="px-4 py-3 text-xs ${member.isChildRender ? 'text-amber-800 font-medium' : ''}">${member.hubungan}</td>
+            <td class="px-4 py-3 text-xs">${member.telepon}</td>
+            <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.alamat}">${member.alamat}</td>
+            <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.keterangan}">${member.keterangan}</td>
+        `;
+        tbody.appendChild(tr);
+
+        // ---------------------------------------------------------------------
+        // 2. RENDER MOBILE CARD VIEW
+        // ---------------------------------------------------------------------
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-xl shadow-xs border transition flex flex-col gap-2.5 ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'}`;
+        card.innerHTML = `
+            <div class="flex justify-between items-start gap-2">
+                <div class="flex items-center gap-1.5">
+                    ${member.isChildRender ? '<span class="text-amber-500 font-bold">↳</span>' : ''}
+                    <h4 onclick="openMemberModal('${member.id}')" class="font-bold text-gray-900 text-base hover:text-blue-600 hover:underline cursor-pointer">
+                        ${member.nama}
+                    </h4>
+                </div>
+                <span class="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">#${startIndex + index + 1}</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-purple-100 text-purple-800">${member.chiku}</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs border-t border-gray-100 pt-2.5 text-gray-600">
+                <div><span class="text-gray-400 block text-[10px] uppercase">Gohonzon</span><span class="font-medium">${member.gohonzon}</span></div>
+                <div><span class="text-gray-400 block text-[10px] uppercase">Thn Lahir</span><span class="font-medium">${member.tahunLahir}</span></div>
+                <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Hub. Keluarga</span><span class="font-medium text-amber-900">${member.hubungan}</span></div>
+                <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="font-medium text-blue-600 underline">${member.telepon}</a></div>
+                <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat || "-"}</p></div>
+                <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan || "-"}</p></div>
+            </div>
+        `;
+        cardContainer.appendChild(card);
+
+        // ---------------------------------------------------------------------
+        // 3. RENDER KATALOG GRID VIEW (Foto Square Rounded, Nama & No. HP)
+        // ---------------------------------------------------------------------
+        if (gridContainer) {
+            const gridItem = document.createElement('div');
+            gridItem.className = "bg-white p-3 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition flex flex-col items-center text-center cursor-pointer group";
+            gridItem.onclick = () => openMemberModal(member.id);
             
-            if(!tbody || !cardContainer) return;
-            
-            tbody.innerHTML = '';
-            cardContainer.innerHTML = '';
-
-            const processedData = buildStructuredData(false);
-            const totalDataEl = document.getElementById('totalData');
-            if(totalDataEl) totalDataEl.innerText = `Total Hasil: ${processedData.length} Records`;
-
-            if (processedData.length === 0) {
-                const emptyHTML = `<div class="text-center py-8 text-gray-400 text-sm">Tidak ada data anggota yang cocok dengan filter.</div>`;
-                tbody.innerHTML = `<tr><td colspan="12" class="px-4 py-8 text-center text-gray-400">Tidak ada data anggota yang cocok dengan filter.</td></tr>`;
-                cardContainer.innerHTML = emptyHTML;
+            gridItem.innerHTML = `
+                <!-- Foto Square Rounded Corner -->
+                <div class="w-full aspect-square rounded-xl overflow-hidden bg-gray-100 border border-gray-100 mb-2.5 relative shadow-inner">
+                    <img src="${fotoProfile}" alt="${member.nama}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='${DEFAULT_BLANK_FOTO}'">
+                    <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-slate-900/70 text-white backdrop-blur-xs">
+                        ${member.chiku}
+                    </span>
+                </div>
                 
-                const pageInfo = document.getElementById('pageInfo');
-                if(pageInfo) pageInfo.innerText = "Menampilkan 0 - 0 dari 0 data";
-                const paginationButtons = document.getElementById('paginationButtons');
-                if(paginationButtons) paginationButtons.innerHTML = '';
-                return;
-            }
+                <!-- Nama Lengkap -->
+                <h4 class="font-bold text-gray-800 text-xs md:text-sm line-clamp-1 group-hover:text-blue-600 transition w-full px-1" title="${member.nama}">
+                    ${member.nama}
+                </h4>
 
-            const totalPages = Math.ceil(processedData.length / rowsPerPage);
-            if (currentPage > totalPages) currentPage = totalPages || 1;
-
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = Math.min(startIndex + rowsPerPage, processedData.length);
-            const paginatedItems = processedData.slice(startIndex, endIndex);
-
-            paginatedItems.forEach((member, index) => {
-                const currentJabatan = member.jabatan || 'Anggota';
-                const currentStatus = member.status || 'Aktif';
-
-                const tr = document.createElement('tr');
-                tr.className = member.isChildRender ? "bg-amber-50/30 hover:bg-amber-100/40 transition text-gray-600" : "bg-white hover:bg-gray-50 transition font-medium";
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-mono text-xs text-gray-400 text-center">${startIndex + index + 1}</td>
-                    <td class="px-4 py-3">
-                        <div class="flex items-center">
-                            ${member.isChildRender ? '<span class="text-amber-400 font-bold mr-1.5 ml-3"></span>' : ''}
-                            <span class="${member.isChildRender ? 'text-gray-700 font-normal' : 'text-gray-900 font-bold'}">${member.nama}</span>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">${member.chiku}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span></td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span></td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-0.5 rounded text-xs font-medium ${member.gohonzon === 'Sendiri' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
-                            ${member.gohonzon}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${member.tahunLahir}</td>
-                    <td class="px-4 py-3 text-xs ${member.isChildRender ? 'text-amber-800 font-medium' : ''}">${member.hubungan}</td>
-                    <td class="px-4 py-3 text-xs">${member.telepon}</td>
-                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.alamat}">${member.alamat}</td>
-                    <td class="px-4 py-3 text-xs whitespace-normal break-words" title="${member.keterangan}">${member.keterangan}</td>
-                `;
-                tbody.appendChild(tr);
-
-                const card = document.createElement('div');
-                card.className = `p-4 rounded-xl shadow-xs border transition flex flex-col gap-2.5 ${member.isChildRender ? 'bg-amber-50/50 border-amber-100 ml-4' : 'bg-white border-gray-200'}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start gap-2">
-                        <div class="flex items-center gap-1.5">
-                            ${member.isChildRender ? '<span class="text-amber-500 font-bold"></span>' : ''}
-                            <h4 class="font-bold text-gray-900 text-base">${member.nama}</h4>
-                        </div>
-                        <span class="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">#${startIndex + index + 1}</span>
-                    </div>
-
-                    <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-purple-100 text-purple-800">${member.chiku}</span>
-                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getBagianClass(member.bagian)}">${member.bagian}</span>
-                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getJabatanClass(currentJabatan)}">${currentJabatan}</span>
-                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${getStatusClass(currentStatus)}">${currentStatus}</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs border-t border-gray-100 pt-2.5 text-gray-600">
-                        <div><span class="text-gray-400 block text-[10px] uppercase">Gohonzon</span><span class="font-medium">${member.gohonzon}</span></div>
-                        <div><span class="text-gray-400 block text-[10px] uppercase">Thn Lahir</span><span class="font-medium">${member.tahunLahir}</span></div>
-                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Hub. Keluarga</span><span class="font-medium text-amber-900">${member.hubungan}</span></div>
-                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">No. Telepon</span><a href="tel:${member.telepon}" class="font-medium text-blue-600 underline">${member.telepon}</a></div>
-                        <div class="col-span-2"><span class="text-gray-400 block text-[10px] uppercase">Alamat</span><p class="text-gray-800">${member.alamat || "-"}</p></div>
-                        <div class="col-span-2 bg-gray-50 p-2 rounded-md border border-gray-100 mt-1"><span class="text-gray-400 block text-[10px] uppercase font-semibold">Keterangan</span><p class="italic text-gray-700">${member.keterangan || "-"}</p></div>
-                    </div>
-                `;
-                cardContainer.appendChild(card);
-            });
-
-            const pageInfo = document.getElementById('pageInfo');
-            if(pageInfo) pageInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
-            renderPaginationControls(totalPages);
+                <!-- No Telepon -->
+                <p class="pimpinan-only text-[11px] text-gray-500 font-mono mt-0.5 line-clamp-1 flex items-center justify-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-500 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    ${member.telepon || '-'}
+                </p>
+            `;
+            gridContainer.appendChild(gridItem);
+            checkPermissions();
         }
+    });
+
+    const pageInfo = document.getElementById('pageInfo');
+    if(pageInfo) pageInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${processedData.length} hasil`;
+    renderPaginationControls(totalPages);
+}
 
         function renderPaginationControls(totalPages) {
             const container = document.getElementById('paginationButtons'); 
@@ -2754,8 +2951,410 @@ if(mainForm) {
             printWindow.document.write(`<html><head><title>Print Landscape</title><style>@page { size: landscape; margin: 10mm; } body { font-family: system-ui, sans-serif; font-size: 9px; } table { width:100%; border-collapse:collapse; margin-top:10px; } th, td { border:1px solid #000; padding:4px; text-align:left; }</style></head><body><h1>Daftar Anggota Shibu Semarang</h1><p>Total Aktif: ${printStats.total} (B: ${printStats.bapak}, I: ${printStats.ibu}, PA: ${printStats.pemuda}, PI: ${printStats.pemudi}, A: ${printStats.anak})</p><table><thead><tr><th>No</th><th>Nama</th><th>Chiku</th><th>Bagian</th><th>Jabatan</th><th>Status</th><th>Gohonzon</th><th>Lahir</th><th>Hubungan</th><th>Telepon</th><th>Alamat</th><th>Keterangan</th></tr></thead><tbody>${tableRowsHtml}</tbody></table><script>setTimeout(function() { window.print(); }, 500);<\/script></body></html>`);
             printWindow.document.close();
         }
+let currentSelectedFotoBase64 = "";
+let isAddMode = false;
+const DEFAULT_BLANK_FOTO = "images/profileblank.jpg";
 
+/**
+ * 1. BUKA MODAL TAMBAH ANGGOTA BARU
+ */
+function openAddMemberModal() {
+    isAddMode = true;
+
+    document.getElementById('modalMemberTitle').innerText = "Tambah Anggota Baru";
+    document.getElementById('modalMemberId').value = "";
+    document.getElementById('modalInputNama').value = "";
+    document.getElementById('modalInputTahunLahir').value = "";
+    document.getElementById('modalInputChiku').value = "Tanah Mas";
+    document.getElementById('modalInputBagian').value = "Bapak";
+    document.getElementById('modalInputJabatan').value = "Anggota";
+    document.getElementById('modalInputStatus').value = "Aktif";
+    document.getElementById('modalInputGohonzon').value = "Belum";
+    document.getElementById('modalInputParentId').value = "";
+    document.getElementById('modalInputHubungan').value = ""; // Reset input teks
+    document.getElementById('modalInputTelepon').value = "";
+    document.getElementById('modalInputAlamat').value = "";
+    document.getElementById('modalInputKeterangan').value = "";
+
+    toggleParentFamilyDropdown();
+
+    currentSelectedFotoBase64 = DEFAULT_BLANK_FOTO;
+    document.getElementById('modalFotoPreview').src = DEFAULT_BLANK_FOTO;
+
+    const fields = document.querySelectorAll('.modal-field');
+    fields.forEach(f => {
+        f.removeAttribute('readonly');
+        f.removeAttribute('disabled');
+        f.classList.remove('bg-gray-100', 'cursor-not-allowed');
+    });
+
+    document.getElementById('modalSaveBtn').classList.remove('hidden');
+    document.getElementById('modalFotoUploadContainer').classList.remove('hidden');
+    document.getElementById('modalDeleteBtn').classList.add('hidden');
+    document.getElementById('memberDetailModal').classList.remove('hidden');
+}
+
+/**
+ * 2. BUKA MODAL DETAIL / EDIT ANGGOTA LAMA
+ */
+function openMemberModal(memberId) {
+    isAddMode = false;
+
+    const member = members.find(m => String(m.id) === String(memberId));
+    if (!member) {
+        alert("Data anggota tidak ditemukan.");
+        return;
+    }
+
+    document.getElementById('modalMemberId').value = member.id || '';
+    document.getElementById('modalInputNama').value = member.nama || '';
+    document.getElementById('modalInputTahunLahir').value = member.tahunLahir || '';
+    document.getElementById('modalInputChiku').value = member.chiku || 'Tanah Mas';
+    document.getElementById('modalInputBagian').value = member.bagian || 'Bapak';
+    document.getElementById('modalInputJabatan').value = member.jabatan || 'Anggota';
+    document.getElementById('modalInputStatus').value = member.status || 'Aktif';
+    document.getElementById('modalInputGohonzon').value = member.gohonzon || 'Belum';
+    document.getElementById('modalInputTelepon').value = member.telepon || '';
+    document.getElementById('modalInputAlamat').value = member.alamat || '';
+    document.getElementById('modalInputKeterangan').value = member.keterangan || '';
+
+    // Handle Dropdown Gohonzon & Input Teks Hubungan
+    if (member.gohonzon === 'Keluarga') {
+        populateFamilyHeads(member.parentId, member.id);
+        document.getElementById('containerParentId').classList.remove('hidden');
+        if (document.getElementById('containerHubungan')) {
+            document.getElementById('containerHubungan').classList.remove('hidden');
+            // Isi teks bebas dari data sheet (atau fallback jika kosong)
+            document.getElementById('modalInputHubungan').value = member.hubungan || ''; 
+        }
+    } else {
+        document.getElementById('containerParentId').classList.add('hidden');
+        if (document.getElementById('containerHubungan')) {
+            document.getElementById('containerHubungan').classList.add('hidden');
+            document.getElementById('modalInputHubungan').value = '';
+        }
+    }
+
+    const fotoPreview = document.getElementById('modalFotoPreview');
+    currentSelectedFotoBase64 = member.foto || DEFAULT_BLANK_FOTO;
+    if (fotoPreview) fotoPreview.src = currentSelectedFotoBase64;
+
+    const fields = document.querySelectorAll('#memberDetailModal input, #memberDetailModal select, #memberDetailModal textarea');
+    const saveBtn = document.getElementById('modalSaveBtn');
+    const deleteBtn = document.getElementById('modalDeleteBtn');
+    const fotoUploadContainer = document.getElementById('modalFotoUploadContainer');
+    const modalTitle = document.getElementById('modalMemberTitle');
+
+    const isTargetAdmin = (member.jabatan === "Pimpinan (Admin)");
+
+    if (isTargetAdmin) {
+        if (modalTitle) modalTitle.innerText = "Detail Data Admin (Read-Only)";
+        fields.forEach(f => {
+            if (f.tagName === 'SELECT') f.setAttribute('disabled', 'true');
+            else f.setAttribute('readonly', 'true');
+            f.classList.add('bg-gray-100', 'cursor-not-allowed');
+        });
+        if (saveBtn) saveBtn.classList.add('hidden');
+        if (deleteBtn) deleteBtn.classList.add('hidden');
+        if (fotoUploadContainer) fotoUploadContainer.classList.add('hidden');
+    } else {
+        const savedJabatan = localStorage.getItem("soka_user_jabatan");
+        const isCurrentActiveUserAdmin = (savedJabatan === "Pimpinan (Admin)");
+
+        if (isCurrentActiveUserAdmin) {
+            if (modalTitle) modalTitle.innerText = "Edit Data Anggota";
+            fields.forEach(f => {
+                f.removeAttribute('readonly');
+                f.removeAttribute('disabled');
+                f.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            });
+            if (saveBtn) saveBtn.classList.remove('hidden');
+            if (deleteBtn) deleteBtn.classList.remove('hidden');
+            if (fotoUploadContainer) fotoUploadContainer.classList.remove('hidden');
+        } else {
+            if (modalTitle) modalTitle.innerText = "Detail Data Anggota";
+            fields.forEach(f => {
+                if (f.tagName === 'SELECT') f.setAttribute('disabled', 'true');
+                else f.setAttribute('readonly', 'true');
+                f.classList.add('bg-gray-100', 'cursor-not-allowed');
+            });
+            if (saveBtn) saveBtn.classList.add('hidden');
+            if (deleteBtn) deleteBtn.classList.add('hidden');
+            if (fotoUploadContainer) fotoUploadContainer.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('memberDetailModal').classList.remove('hidden');
+}
+
+/**
+ * 3. TUTUP MODAL
+ */
+function closeMemberModal() {
+    document.getElementById('memberDetailModal').classList.add('hidden');
+}
+
+/**
+ * 4. PROSES UPLOAD & KOMPRESI FOTO (CROP 1:1, 300x300px, JPEG 0.5)
+ */
+function processModalMemberFoto(inputElement) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const size = 300; // Size 300x300
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            let sourceSize = Math.min(img.width, img.height);
+            let xOffset = (img.width - sourceSize) / 2;
+            let yOffset = (img.height - sourceSize) / 2;
+
+            ctx.drawImage(img, xOffset, yOffset, sourceSize, sourceSize, 0, 0, size, size);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
+            
+            currentSelectedFotoBase64 = compressedBase64;
+            document.getElementById('modalFotoPreview').src = compressedBase64;
+
+            inputElement.value = ''; // Reset input
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+/**
+ * 5. SIMPAN DATA (Mendukung EDIT LAMA maupun TAMBAH BARU)
+ */
+async function saveMemberFromModal() {
+    const namaInput = document.getElementById('modalInputNama').value.trim();
+    if (!namaInput) {
+        alert("Nama lengkap wajib diisi!");
+        return;
+    }
+
+    const gohonzonVal = document.getElementById('modalInputGohonzon').value;
+    let selectedParentId = "";
+    let selectedHubungan = "Kepala Keluarga";
+
+    if (gohonzonVal === 'Keluarga') {
+        selectedParentId = document.getElementById('modalInputParentId').value;
+        if (!selectedParentId) {
+            alert("Harap pilih Kepala Keluarga / Naungan terlebih dahulu!");
+            return;
+        }
+        const hubEl = document.getElementById('modalInputHubungan');
+        // Mengambil teks inputan bebas dari user
+        selectedHubungan = hubEl ? hubEl.value.trim() : ""; 
+    } else if (gohonzonVal === 'Sendiri') {
+        selectedHubungan = "Kepala Keluarga";
+    }
+
+    let actionType = "";
+    let logDetail = "";
+
+    if (isAddMode) {
+        const newMember = {
+            id: "ID_" + Date.now(),
+            nama: namaInput,
+            tahunLahir: document.getElementById('modalInputTahunLahir').value,
+            chiku: document.getElementById('modalInputChiku').value,
+            bagian: document.getElementById('modalInputBagian').value,
+            jabatan: document.getElementById('modalInputJabatan').value,
+            status: document.getElementById('modalInputStatus').value,
+            gohonzon: gohonzonVal,
+            parentId: selectedParentId,
+            hubungan: selectedHubungan, // Tersimpan sesuai teks bebas
+            telepon: document.getElementById('modalInputTelepon').value,
+            alamat: document.getElementById('modalInputAlamat').value,
+            keterangan: document.getElementById('modalInputKeterangan').value,
+            foto: currentSelectedFotoBase64 || DEFAULT_BLANK_FOTO
+        };
+
+        members.push(newMember);
+        actionType = 'CREATE';
+        logDetail = `menambahkan anggota baru bernama "${namaInput}"`;
+
+    } else {
+        const memberId = document.getElementById('modalMemberId').value;
+        const targetIndex = members.findIndex(m => String(m.id) === String(memberId));
+
+        if (targetIndex === -1) {
+            alert("Terjadi kesalahan: ID anggota tidak ditemukan.");
+            return;
+        }
+
+        members[targetIndex].nama = namaInput;
+        members[targetIndex].tahunLahir = document.getElementById('modalInputTahunLahir').value;
+        members[targetIndex].chiku = document.getElementById('modalInputChiku').value;
+        members[targetIndex].bagian = document.getElementById('modalInputBagian').value;
+        members[targetIndex].jabatan = document.getElementById('modalInputJabatan').value;
+        members[targetIndex].status = document.getElementById('modalInputStatus').value;
+        members[targetIndex].gohonzon = gohonzonVal;
+        members[targetIndex].parentId = selectedParentId;
+        members[targetIndex].hubungan = selectedHubungan; // Tersimpan sesuai teks bebas
+        members[targetIndex].telepon = document.getElementById('modalInputTelepon').value;
+        members[targetIndex].alamat = document.getElementById('modalInputAlamat').value;
+        members[targetIndex].keterangan = document.getElementById('modalInputKeterangan').value;
+        members[targetIndex].foto = currentSelectedFotoBase64;
+
+        actionType = 'UPDATE';
+        logDetail = `mengubah data anggota "${namaInput}"`;
+    }
+
+    localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+    if (typeof renderTable === 'function') renderTable();
+
+    const saveBtn = document.getElementById('modalSaveBtn');
+    saveBtn.innerText = "Menyimpan...";
+    saveBtn.disabled = true;
+
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: "saveAll",
+                token: "SokaSemarang2026",
+                data: members
+            })
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+            if (typeof kirimLogAktivitas === 'function') {
+                const userNama = typeof namaUserAktif !== 'undefined' ? namaUserAktif : 'User';
+                kirimLogAktivitas(actionType, 'Data Anggota', `${userNama} ${logDetail}`);
+            }
+            alert(isAddMode ? "Anggota baru berhasil ditambahkan!" : "Data berhasil diperbarui di Google Sheets!");
+            closeMemberModal();
+        } else {
+            alert("Gagal memperbarui data: " + result.message);
+        }
+    } catch (err) {
+        alert("Terjadi kesalahan koneksi saat menyimpan ke server.");
+    } finally {
+        saveBtn.innerText = "Simpan Perubahan";
+        saveBtn.disabled = false;
+    }
+}
+
+async function deleteMemberFromModal() {
+    const memberId = document.getElementById('modalMemberId').value;
+    const namaInput = document.getElementById('modalInputNama').value;
+
+    const targetIndex = members.findIndex(m => String(m.id) === String(memberId));
+
+    if (targetIndex === -1) {
+        alert("Terjadi kesalahan: Data anggota tidak ditemukan.");
+        return;
+    }
+
+    // 1. Konfirmasi Keamanan
+    const isConfirmed = confirm(`Apakah Anda yakin ingin MENGHAPUS data anggota:\n"${namaInput}"?\n\nTindakan ini tidak dapat dibatalkan!`);
+    if (!isConfirmed) return;
+
+    // 2. Hapus data dari array lokal 'members'
+    members.splice(targetIndex, 1);
+
+    // 3. Simpan ke LocalStorage & Render ulang UI
+    localStorage.setItem('shibuMembersTree', JSON.stringify(members));
+    if (typeof renderTable === 'function') renderTable();
+
+    // 4. Sinkronisasi perubahan (hapus baris) ke Google Sheets via saveAll
+    const deleteBtn = document.getElementById('modalDeleteBtn');
+    const saveBtn = document.getElementById('modalSaveBtn');
+    
+    deleteBtn.innerText = "Menghapus...";
+    deleteBtn.disabled = true;
+    saveBtn.disabled = true;
+
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: "saveAll",
+                token: "SokaSemarang2026",
+                data: members
+            })
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+            // === LOG AKTIVITAS (HAPUS) ===
+            if (typeof kirimLogAktivitas === 'function') {
+                const userNama = typeof namaUserAktif !== 'undefined' ? namaUserAktif : 'User';
+                kirimLogAktivitas(
+                    'DELETE', 
+                    'Data Anggota', 
+                    `${userNama} menghapus data anggota "${namaInput}"`
+                );
+            }
+
+            alert(`Data anggota "${namaInput}" berhasil dihapus!`);
+            closeMemberModal();
+        } else {
+            alert("Gagal menghapus data di server: " + result.message);
+        }
+    } catch (err) {
+        alert("Terjadi kesalahan koneksi saat menghapus data di server.");
+    } finally {
+        deleteBtn.innerText = "Hapus";
+        deleteBtn.disabled = false;
+        saveBtn.disabled = false;
+    }
+}
+
+function toggleParentFamilyDropdown() {
+    const gohonzonVal = document.getElementById('modalInputGohonzon').value;
+    const containerParent = document.getElementById('containerParentId');
+    const containerHubungan = document.getElementById('containerHubungan');
+    const selectParent = document.getElementById('modalInputParentId');
+    const inputHubungan = document.getElementById('modalInputHubungan');
+
+    if (gohonzonVal === 'Keluarga') {
+        populateFamilyHeads();
+        containerParent.classList.remove('hidden');
+        if (containerHubungan) containerHubungan.classList.remove('hidden');
+    } else {
+        containerParent.classList.add('hidden');
+        if (containerHubungan) containerHubungan.classList.add('hidden');
+        selectParent.value = "";
+        if (inputHubungan) inputHubungan.value = ""; // Reset teks
+    }
+}
+
+function populateFamilyHeads(selectedParentId = "", currentMemberId = "") {
+    const selectParent = document.getElementById('modalInputParentId');
+    selectParent.innerHTML = '<option value="">-- Pilih Kepala Keluarga --</option>';
+
+    // Filter anggota yang memegang Gohonzon 'Sendiri' & bukan diri sendiri saat mode edit
+    const familyHeads = members.filter(m => 
+        (m.gohonzon === 'Sendiri' || m.hubungan === 'Kepala Keluarga') && 
+        String(m.id) !== String(currentMemberId)
+    );
+
+    // Sort nama A-Z
+    familyHeads.sort((a, b) => a.nama.localeCompare(b.nama));
+
+    familyHeads.forEach(head => {
+        const option = document.createElement('option');
+        option.value = head.id;
+        option.textContent = `${head.nama} (${head.chiku})`;
+        if (String(head.id) === String(selectedParentId)) {
+            option.selected = true;
+        }
+        selectParent.appendChild(option);
+    });
+}
+<!-- ================================================== -->
         // --- GLOBAL INITIALIZATION ---
+<!-- ================================================== -->
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Logika pengisian tanggal otomatis (Bawaan Anda)
     const tanggalEl = document.getElementById('tanggal');
@@ -5254,7 +5853,148 @@ function printModalMateri() {
         <img id="modalTargetImage" src="" alt="Zoom Foto" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl border border-white/10">
     </div>
 </div>
+<!-- ========================================================================= -->
+<!-- MODAL DETAIL / EDIT ANGGOTA                                              -->
+<!-- ========================================================================= -->
+<div id="memberDetailModal" class="pimpinan-only fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+        <!-- Modal Header -->
+        <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
+            <h3 id="modalMemberTitle" class="font-bold text-base md:text-lg">Detail Data Anggota</h3>
+            <button onclick="closeMemberModal()" class="text-slate-400 hover:text-white text-2xl font-bold leading-none cursor-pointer">&times;</button>
+        </div>
 
+        <!-- Modal Body (Scrollable) -->
+        <div class="p-4 md:p-6 space-y-4 overflow-y-auto flex-1 text-sm text-gray-700">
+            <input type="hidden" id="modalMemberId">
+
+            <!-- Display Foto Profile -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100 flex items-center justify-center relative shadow-inner">
+                    <img id="modalFotoPreview" src="https://via.placeholder.com/150?text=No+Photo" alt="Foto Anggota" class="w-full h-full object-cover">
+                </div>
+                <!-- Input Upload Foto (Hanya Tampil Jika Admin) -->
+                <div id="modalFotoUploadContainer" class="hidden">
+                    <label class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-md cursor-pointer border border-slate-300 font-medium">
+                        Ubah Foto
+                        <input type="file" id="modalInputFoto" accept="image/*" onchange="processModalMemberFoto(this)" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Grid Form Data -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lengkap</label>
+                    <input type="text" id="modalInputNama" class="modal-field w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Tahun Lahir</label>
+                    <input type="number" id="modalInputTahunLahir" class="modal-field w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Chiku</label>
+                    <select id="modalInputChiku" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Tanah Mas">Tanah Mas</option>
+                        <option value="Gajah Mada">Gajah Mada</option>
+                        <option value="Majapahit">Majapahit</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Bagian</label>
+                    <select id="modalInputBagian" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Bapak">Bapak</option>
+                        <option value="Ibu">Ibu</option>
+                        <option value="Pemuda">Pemuda</option>
+                        <option value="Pemudi">Pemudi</option>
+                        <option value="Anak">Anak</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Jabatan</label>
+                    <select id="modalInputJabatan" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Pimpinan (Admin)">Pimpinan (Admin)</option>
+                        <option value="Pimpinan">Pimpinan</option>
+                        <option value="Inti">Inti</option>
+                        <option value="Anggota">Anggota</option>
+                        <option value="Calon">Calon</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Status Keberadaan</label>
+                    <select id="modalInputStatus" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Tidak Aktif">Tidak Aktif</option>
+                        <option value="Luar Kota/LN">Luar Kota/LN</option>
+                        <option value="Meninggal">Meninggal</option>
+                        <option value="Taiten">Taiten</option>
+                    </select>
+                </div>
+
+<div>
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Gohonzon</label>
+    <select id="modalInputGohonzon" onchange="toggleParentFamilyDropdown()" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <option value="Sendiri">Sendiri</option>
+        <option value="Keluarga">Keluarga</option>
+        <option value="Belum">Belum</option>
+    </select>
+</div>
+
+<div id="containerParentId" class="hidden">
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Naungan / Kepala Keluarga</label>
+    <select id="modalInputParentId" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <option value="">-- Pilih Kepala Keluarga --</option>
+    </select>
+</div>
+
+<div id="containerHubungan" class="hidden">
+    <label class="block text-xs font-semibold text-gray-500 mb-1">Hubungan Keluarga</label>
+    <input type="text" id="modalInputHubungan" class="modal-field w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Istri, Anak Pertama, Keponakan, dll.">
+</div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">No. Telepon</label>
+                    <input type="text" id="modalInputTelepon" class="modal-field w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Alamat</label>
+                    <textarea id="modalInputAlamat" rows="2" class="modal-field w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Keterangan</label>
+                    <textarea id="modalInputKeterangan" rows="2" class="modal-field w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                </div>
+            </div>
+        </div>
+
+<!-- Modal Footer -->
+<div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+<button id="modalDeleteBtn" onclick="deleteMemberFromModal()" class="admin-only px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+        Hapus
+    </button>
+
+    <!-- Container Tombol Kanan -->
+    <div class="flex items-center gap-2 ml-auto">
+        <button onclick="closeMemberModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-sm font-medium transition cursor-pointer">
+            Tutup
+        </button>
+        <button id="modalSaveBtn" onclick="saveMemberFromModal()" class="hidden px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition cursor-pointer shadow-xs">
+            Simpan Perubahan
+        </button>
+    </div>
+</div>
+    </div>
+</div>
 </body>
 </html>
 <!-- bottom -->
