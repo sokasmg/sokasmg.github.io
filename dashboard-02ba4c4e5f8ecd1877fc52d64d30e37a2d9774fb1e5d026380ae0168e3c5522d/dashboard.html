@@ -3362,11 +3362,10 @@ function populateFamilyHeads(selectedParentId = "", currentMemberId = "") {
 }
 
 /**
- * FUNGSI GENERATE LAPORAN EXCEL PER CHIKU (.XLSX)
- * - Judul A1:J1 di-Merge & Row Height disesuaikan untuk Font 18
- * - Tab terpisah per Chiku (Tanah Mas, Gajah Mada, Majapahit)
- * - Header Kolom Bold & Border
- * - Merge Cell Kolom A (Kel) & Kolom I (Alamat) per keluarga
+ * FUNGSI GENERATE LAPORAN EXCEL (.XLSX)
+ * - Tab Utama per Chiku: Hanya berisi AKTIF & LUAR KOTA/LN
+ * - Tab Terpisah Tambahan: CALON, TAITEN, MENINGGAL
+ * - Formatting: Merge Judul A1:J1 (Height 32pt, Font 18 Bold), Header Green, Merge Kel/Alamat, Thin Borders
  */
 function exportToExcelReport() {
     if (typeof XLSX === 'undefined') {
@@ -3374,16 +3373,18 @@ function exportToExcelReport() {
         return;
     }
 
+    // Ambil data lengkap (isForStatsCompute = true agar tidak terfilter oleh checkbox UI)
     const allStructuredData = buildStructuredData(true);
     if (allStructuredData.length === 0) {
         alert("Tidak ada data anggota untuk diexport.");
         return;
     }
 
-    const chikuList = ["Tanah Mas", "Gajah Mada", "Majapahit"];
     const workbook = XLSX.utils.book_new();
 
-    // Style Definitions
+    // ==========================================
+    // STYLES DEFINITION
+    // ==========================================
     const borderThin = {
         top: { style: "thin", color: { rgb: "000000" } },
         bottom: { style: "thin", color: { rgb: "000000" } },
@@ -3398,7 +3399,7 @@ function exportToExcelReport() {
 
     const headerStyle = {
         font: { name: "Arial", sz: 11, bold: true },
-        fill: { fgColor: { rgb: "E2EFDA" } }, // Warna hijau muda soft
+        fill: { fgColor: { rgb: "E2EFDA" } }, // Hijau muda soft
         alignment: { horizontal: "center", vertical: "center", wrapText: true },
         border: borderThin
     };
@@ -3415,14 +3416,12 @@ function exportToExcelReport() {
         border: borderThin
     };
 
-    chikuList.forEach(chikuName => {
-        const chikuMembers = allStructuredData.filter(m => m.chiku === chikuName);
-        if (chikuMembers.length === 0) return;
-
+    // Helper untuk Membangun Sheet Data
+    function createSheetForMembers(membersList, sheetTitle) {
         const sheetData = [];
 
         // Row 0: Judul Utama
-        sheetData.push([`Daftar Anggota ${chikuName}`]);
+        sheetData.push([sheetTitle]);
         // Row 1: Kosong
         sheetData.push([]);
         // Row 2: Header Kolom
@@ -3431,18 +3430,17 @@ function exportToExcelReport() {
             "Gohonzon", "Hubungan", "Telepon", "Alamat", "Keterangan"
         ]);
 
-        // Inisialisasi Merge: Langsung masukkan Merge Judul A1 sampai J1 (c: 0 sampai c: 9)
+        // Merge Judul A1 sampai J1
         const merges = [
             { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } }
         ];
 
         let familyCounter = 0;
         let globalNo = 0;
-
         let familyStartRowIndex = -1;
         let familySize = 0;
 
-        chikuMembers.forEach((member, index) => {
+        membersList.forEach((member, index) => {
             globalNo++;
             const currentExcelRow = sheetData.length;
 
@@ -3453,7 +3451,7 @@ function exportToExcelReport() {
                         s: { r: familyStartRowIndex, c: 0 },
                         e: { r: familyStartRowIndex + familySize - 1, c: 0 }
                     });
-                    // Merge Kolom I (Alamat -> Index 8)
+                    // Merge Kolom I (Alamat -> Col Index 8)
                     merges.push({
                         s: { r: familyStartRowIndex, c: 8 },
                         e: { r: familyStartRowIndex + familySize - 1, c: 8 }
@@ -3480,7 +3478,8 @@ function exportToExcelReport() {
                 member.keterangan || ""
             ]);
 
-            if (index === chikuMembers.length - 1 && familySize > 1 && familyStartRowIndex !== -1) {
+            // Tutup Merge untuk item terakhir
+            if (index === membersList.length - 1 && familySize > 1 && familyStartRowIndex !== -1) {
                 merges.push({
                     s: { r: familyStartRowIndex, c: 0 },
                     e: { r: familyStartRowIndex + familySize - 1, c: 0 }
@@ -3495,36 +3494,29 @@ function exportToExcelReport() {
         const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
         worksheet['!merges'] = merges;
 
-        // --- MENGATUR TINGGI BARIS (ROW HEIGHT) ---
+        // Setting Row Height
         const rowHeights = [
-            { hpt: 32 }, // Row 0: Height 32pt untuk Judul (pas dengan font size 18)
-            { hpt: 12 }, // Row 1: Baris kosong
-            { hpt: 26 }  // Row 2: Height 26pt untuk Header Table
+            { hpt: 32 }, // Row 0: Title Height 32pt
+            { hpt: 12 }, // Row 1: Spacing
+            { hpt: 26 }  // Row 2: Header Height
         ];
-        // Sisa baris data diberikan height otomatis proporsional (opsional 20pt)
         for (let r = 3; r < sheetData.length; r++) {
             rowHeights.push({ hpt: 20 });
         }
         worksheet['!rows'] = rowHeights;
 
-        // Apply Styles ke Sel
+        // Apply Styles
         const range = XLSX.utils.decode_range(worksheet['!ref']);
-
         for (let R = range.s.r; R <= range.e.r; ++R) {
             for (let C = range.s.c; C <= range.e.c; ++C) {
                 const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
                 if (!worksheet[cellAddress]) worksheet[cellAddress] = { t: "s", v: "" };
 
-                // Row 0: Judul Utama (A1:J1)
                 if (R === 0) {
                     worksheet[cellAddress].s = titleStyle;
-                } 
-                // Row 2: Header Table
-                else if (R === 2) {
+                } else if (R === 2) {
                     worksheet[cellAddress].s = headerStyle;
-                } 
-                // Row >= 3: Data Members
-                else if (R >= 3) {
+                } else if (R >= 3) {
                     if ([0, 1, 3, 4, 5, 7].includes(C)) {
                         worksheet[cellAddress].s = dataStyleCenter;
                     } else {
@@ -3548,12 +3540,59 @@ function exportToExcelReport() {
             { wch: 30 }  // J: Keterangan
         ];
 
-        XLSX.utils.book_append_sheet(workbook, worksheet, chikuName);
+        return worksheet;
+    }
+
+    // ==========================================
+    // 1. GENERATE TAB UTAMA PER CHIKU (Hanya Aktif & Luar Kota/LN)
+    // ==========================================
+    const chikuList = ["Tanah Mas", "Gajah Mada", "Majapahit"];
+
+    chikuList.forEach(chikuName => {
+        const filteredChiku = allStructuredData.filter(m => {
+            const status = (m.status || "aktif").toLowerCase();
+            const jabatan = (m.jabatan || "").toLowerCase();
+
+            // Filter out: Calon, Taiten, Meninggal
+            if (jabatan === "calon" || status === "taiten" || status === "meninggal") {
+                return false;
+            }
+            return m.chiku === chikuName;
+        });
+
+        if (filteredChiku.length > 0) {
+            const sheet = createSheetForMembers(filteredChiku, `Daftar Anggota ${chikuName}`);
+            XLSX.utils.book_append_sheet(workbook, sheet, chikuName);
+        }
     });
 
+    // ==========================================
+    // 2. GENERATE TAB TERPISAH KHUSUS: CALON, TAITEN, MENINGGAL
+    // ==========================================
+    const calonMembers = allStructuredData.filter(m => (m.jabatan || "").toLowerCase() === "calon");
+    const taitenMembers = allStructuredData.filter(m => (m.status || "").toLowerCase() === "taiten");
+    const meninggalMembers = allStructuredData.filter(m => (m.status || "").toLowerCase() === "meninggal");
+
+    if (calonMembers.length > 0) {
+        const sheetCalon = createSheetForMembers(calonMembers, "Daftar Calon Anggota Shibu Semarang");
+        XLSX.utils.book_append_sheet(workbook, sheetCalon, "Calon");
+    }
+
+    if (taitenMembers.length > 0) {
+        const sheetTaiten = createSheetForMembers(taitenMembers, "Daftar Anggota Taiten Shibu Semarang");
+        XLSX.utils.book_append_sheet(workbook, sheetTaiten, "Taiten");
+    }
+
+    if (meninggalMembers.length > 0) {
+        const sheetMeninggal = createSheetForMembers(meninggalMembers, "Daftar Anggota Meninggal Shibu Semarang");
+        XLSX.utils.book_append_sheet(workbook, sheetMeninggal, "Meninggal");
+    }
+
+    // Download File Excel
     const dateStr = new Date().toISOString().split('T')[0];
     XLSX.writeFile(workbook, `Laporan_Anggota_Shibu_Semarang_${dateStr}.xlsx`);
 }
+
 
 <!-- ================================================== -->
         // --- GLOBAL INITIALIZATION ---
