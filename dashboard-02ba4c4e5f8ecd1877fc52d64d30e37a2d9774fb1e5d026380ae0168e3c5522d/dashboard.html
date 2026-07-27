@@ -13,7 +13,8 @@
     darkMode: 'class', // Mengaktifkan mode dark berbasis class HTML
   }
 </script>
-    
+<!-- Gunakan xlsx-js-style untuk mendukung Border, Font Size, dan Bold -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script> 
     <style>
     /* --- Tambahan Style untuk Halaman Laporan Kunjungan --- */
 .collapsible-wrapper {
@@ -389,7 +390,7 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v5.0</button></span>
+       			v5.1</button></span>
 					</span>
                 </div>
                 
@@ -576,7 +577,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v5.0
+            Shibu Semarang Website & Dashboard v5.1
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -601,7 +602,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v5.0
+            Shibu Semarang Website & Dashboard v5.1
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -1501,6 +1502,12 @@ button.btn-submit:hover {
                 <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026</p>
             </div>
             <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+            <button onclick="exportToExcelReport()" class="pimpinan-only w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Buat Laporan (Excel)
+    </button>
                 <button onclick="printData()" class="pimpinan-only w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
@@ -2623,6 +2630,7 @@ if(mainForm) {
                 return matchSearch && matchChiku && matchBagian && matchJabatan && (statusFilter === "" || currentStatus === statusFilter);
             });
 
+<!-- SKOR HIRARKI -->
             filteredRaw.sort((a, b) => {
                 function getHierarchyScore(member, jabatan, ket) {
                     if (jabatan === 'Pimpinan') {
@@ -3352,6 +3360,201 @@ function populateFamilyHeads(selectedParentId = "", currentMemberId = "") {
         selectParent.appendChild(option);
     });
 }
+
+/**
+ * FUNGSI GENERATE LAPORAN EXCEL PER CHIKU (.XLSX)
+ * - Judul A1:J1 di-Merge & Row Height disesuaikan untuk Font 18
+ * - Tab terpisah per Chiku (Tanah Mas, Gajah Mada, Majapahit)
+ * - Header Kolom Bold & Border
+ * - Merge Cell Kolom A (Kel) & Kolom I (Alamat) per keluarga
+ */
+function exportToExcelReport() {
+    if (typeof XLSX === 'undefined') {
+        alert("Library Excel Style belum dimuat. Pastikan CDN xlsx-js-style sudah terpasang.");
+        return;
+    }
+
+    const allStructuredData = buildStructuredData(true);
+    if (allStructuredData.length === 0) {
+        alert("Tidak ada data anggota untuk diexport.");
+        return;
+    }
+
+    const chikuList = ["Tanah Mas", "Gajah Mada", "Majapahit"];
+    const workbook = XLSX.utils.book_new();
+
+    // Style Definitions
+    const borderThin = {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } }
+    };
+
+    const titleStyle = {
+        font: { name: "Arial", sz: 18, bold: true },
+        alignment: { horizontal: "left", vertical: "center" }
+    };
+
+    const headerStyle = {
+        font: { name: "Arial", sz: 11, bold: true },
+        fill: { fgColor: { rgb: "E2EFDA" } }, // Warna hijau muda soft
+        alignment: { horizontal: "center", vertical: "center", wrapText: true },
+        border: borderThin
+    };
+
+    const dataStyleCenter = {
+        font: { name: "Arial", sz: 10 },
+        alignment: { horizontal: "center", vertical: "center" },
+        border: borderThin
+    };
+
+    const dataStyleLeft = {
+        font: { name: "Arial", sz: 10 },
+        alignment: { horizontal: "left", vertical: "center", wrapText: true },
+        border: borderThin
+    };
+
+    chikuList.forEach(chikuName => {
+        const chikuMembers = allStructuredData.filter(m => m.chiku === chikuName);
+        if (chikuMembers.length === 0) return;
+
+        const sheetData = [];
+
+        // Row 0: Judul Utama
+        sheetData.push([`Daftar Anggota ${chikuName}`]);
+        // Row 1: Kosong
+        sheetData.push([]);
+        // Row 2: Header Kolom
+        sheetData.push([
+            "Kel", "No", "Nama", "Tahun Lahir", "Bagian", 
+            "Gohonzon", "Hubungan", "Telepon", "Alamat", "Keterangan"
+        ]);
+
+        // Inisialisasi Merge: Langsung masukkan Merge Judul A1 sampai J1 (c: 0 sampai c: 9)
+        const merges = [
+            { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } }
+        ];
+
+        let familyCounter = 0;
+        let globalNo = 0;
+
+        let familyStartRowIndex = -1;
+        let familySize = 0;
+
+        chikuMembers.forEach((member, index) => {
+            globalNo++;
+            const currentExcelRow = sheetData.length;
+
+            if (!member.isChildRender) {
+                if (familySize > 1 && familyStartRowIndex !== -1) {
+                    // Merge Kolom A (Kel)
+                    merges.push({
+                        s: { r: familyStartRowIndex, c: 0 },
+                        e: { r: familyStartRowIndex + familySize - 1, c: 0 }
+                    });
+                    // Merge Kolom I (Alamat -> Index 8)
+                    merges.push({
+                        s: { r: familyStartRowIndex, c: 8 },
+                        e: { r: familyStartRowIndex + familySize - 1, c: 8 }
+                    });
+                }
+
+                familyCounter++;
+                familyStartRowIndex = currentExcelRow;
+                familySize = 1;
+            } else {
+                familySize++;
+            }
+
+            sheetData.push([
+                familyCounter,
+                globalNo,
+                member.nama || "",
+                member.tahunLahir || "",
+                member.bagian || "",
+                member.gohonzon || "",
+                member.hubungan || "",
+                member.telepon || "",
+                member.alamat || "",
+                member.keterangan || ""
+            ]);
+
+            if (index === chikuMembers.length - 1 && familySize > 1 && familyStartRowIndex !== -1) {
+                merges.push({
+                    s: { r: familyStartRowIndex, c: 0 },
+                    e: { r: familyStartRowIndex + familySize - 1, c: 0 }
+                });
+                merges.push({
+                    s: { r: familyStartRowIndex, c: 8 },
+                    e: { r: familyStartRowIndex + familySize - 1, c: 8 }
+                });
+            }
+        });
+
+        const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+        worksheet['!merges'] = merges;
+
+        // --- MENGATUR TINGGI BARIS (ROW HEIGHT) ---
+        const rowHeights = [
+            { hpt: 32 }, // Row 0: Height 32pt untuk Judul (pas dengan font size 18)
+            { hpt: 12 }, // Row 1: Baris kosong
+            { hpt: 26 }  // Row 2: Height 26pt untuk Header Table
+        ];
+        // Sisa baris data diberikan height otomatis proporsional (opsional 20pt)
+        for (let r = 3; r < sheetData.length; r++) {
+            rowHeights.push({ hpt: 20 });
+        }
+        worksheet['!rows'] = rowHeights;
+
+        // Apply Styles ke Sel
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+                if (!worksheet[cellAddress]) worksheet[cellAddress] = { t: "s", v: "" };
+
+                // Row 0: Judul Utama (A1:J1)
+                if (R === 0) {
+                    worksheet[cellAddress].s = titleStyle;
+                } 
+                // Row 2: Header Table
+                else if (R === 2) {
+                    worksheet[cellAddress].s = headerStyle;
+                } 
+                // Row >= 3: Data Members
+                else if (R >= 3) {
+                    if ([0, 1, 3, 4, 5, 7].includes(C)) {
+                        worksheet[cellAddress].s = dataStyleCenter;
+                    } else {
+                        worksheet[cellAddress].s = dataStyleLeft;
+                    }
+                }
+            }
+        }
+
+        // Setting Lebar Kolom
+        worksheet['!cols'] = [
+            { wch: 6 },  // A: Kel
+            { wch: 6 },  // B: No
+            { wch: 25 }, // C: Nama
+            { wch: 12 }, // D: Thn Lahir
+            { wch: 10 }, // E: Bagian
+            { wch: 12 }, // F: Gohonzon
+            { wch: 18 }, // G: Hubungan
+            { wch: 15 }, // H: Telepon
+            { wch: 35 }, // I: Alamat
+            { wch: 30 }  // J: Keterangan
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, chikuName);
+    });
+
+    const dateStr = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `Laporan_Anggota_Shibu_Semarang_${dateStr}.xlsx`);
+}
+
 <!-- ================================================== -->
         // --- GLOBAL INITIALIZATION ---
 <!-- ================================================== -->
