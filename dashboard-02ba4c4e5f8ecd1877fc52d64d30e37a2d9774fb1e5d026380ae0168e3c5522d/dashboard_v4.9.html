@@ -389,27 +389,29 @@ button.btn-submit:hover {
                 <a href="../index.html" class="inline-block hover:opacity-80 transition"><img src="logo.jpeg" alt="Logo Soka Gakkai Indonesia" class="w-14 h-auto"></a>
                     <span class="text-xl font-bold text-indigo-600 tracking-wider">SHIBU SEMARANG (DASHBOARD)
 					<span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-medium"><button onclick="switchTab('tab-log')" id="btn-tab-log" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
-       			v4.8</button></span>
+       			v4.9</button></span>
 					</span>
                 </div>
                 
 <!-- Menu Tab Button & Tombol Beranda -->
 <div class="block md:hidden w-full px-2">
-    <select id="tabs-select" onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); }" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
-        <option id="opt-profil" value="tab-profil" selected> Profil</option>
-	    <option id="opt-ceritakemenangan" value="tab-ceritakemenangan"> Cerita Kemenangan</option>
-        <option id="opt-materi" value="tab-materi"> Materi & Pelajaran</option>
-        <option id="opt-quote" value="tab-quoteoftheday"> Quote of the Day</option>
-        <option id="opt-kehadiran" class="inti-only" value="tab-kehadiran"> Laporan Kehadiran</option>
-        <option id="opt-kunjungan" value="tab-kunjungan"> Laporan Kunjungan/Shakubuku</option>
-        <option id="opt-jadwal" value="tab-jadwal"> Jadwal Kalender</option>
-        <option id="opt-database" class="pimpinan-only" value="tab-database"> Database Anggota</option>
-        <option id="opt-settings" class="admin-only" value="tab-settings"> Settings</option>
+    <select id="tabs-select" 
+            onchange="if(this.value.startsWith('http')) { window.location.href=this.value; } else { switchTab(this.value); if(this.value === 'tab-database') switchViewMode('grid'); }" 
+            class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-semibold shadow-xs">
+        <option id="opt-profil" value="tab-profil" selected>Profil</option>
+        <option id="opt-ceritakemenangan" value="tab-ceritakemenangan">Cerita Kemenangan</option>
+        <option id="opt-materi" value="tab-materi">Materi & Pelajaran</option>
+        <option id="opt-quote" value="tab-quoteoftheday">Quote of the Day</option>
+        <option id="opt-kehadiran" class="inti-only" value="tab-kehadiran">Laporan Kehadiran</option>
+        <option id="opt-kunjungan" value="tab-kunjungan">Laporan Kunjungan/Shakubuku</option>
+        <option id="opt-jadwal" value="tab-jadwal">Jadwal Kalender</option>
+        <option id="opt-database" value="tab-database">Database Anggota</option>
+        <option id="opt-settings" class="admin-only" value="tab-settings">Settings</option>
     </select>
 </div>
 
 <nav class="hidden md:flex md:items-center gap-2 w-auto" aria-label="Tabs">
-    <button onclick="switchTab('tab-profil');" id="btn-tab-profil" 
+    <button onclick="switchTab('tab-profil')" id="btn-tab-profil" 
         class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100">
     Profil
     </button>
@@ -431,7 +433,7 @@ button.btn-submit:hover {
     <button onclick="switchTab('tab-jadwal')" id="btn-tab-jadwal" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Jadwal Kalender Bulanan
     </button>
-    <button onclick="switchTab('tab-database')" id="btn-tab-database" class="pimpinan-only tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
+    <button onclick="switchTab('tab-database'); switchViewMode('grid')" id="btn-tab-database" class="tab-btn px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent text-slate-600 hover:bg-slate-100 text-center">
         Database Anggota
     </button>
         </button>
@@ -574,7 +576,7 @@ button.btn-submit:hover {
     <!-- Footer -->
     <div class="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-xs sm:text-sm">
-            Shibu Semarang Website & Dashboard v4.8
+            Shibu Semarang Website & Dashboard v4.9
         </p>
         <p class="text-slate-500 text-[10px] sm:text-xs mt-0.5">
             by Didi Chung 2026
@@ -599,7 +601,7 @@ button.btn-submit:hover {
     <!-- KOTAK BARU DI BAWAH EMBED -->
     <div class="mt-4 p-4 bg-slate-100 border border-slate-200 rounded-lg text-center shadow-sm">
         <p class="text-slate-700 font-semibold text-sm sm:text-base">
-            Shibu Semarang Website & Dashboard v4.8
+            Shibu Semarang Website & Dashboard v4.9
         </p>
         <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             by Didi Chung 2026
@@ -1491,7 +1493,7 @@ button.btn-submit:hover {
 <!-- ========================================================================= -->
 <div id="tab-database" class="tab-content hidden space-y-4 md:space-y-6">
     <!-- HEADER MONITOR & DOKUMENTASI STATISTIK -->
-    <div id="monitorHeader" class="bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
+    <div id="monitorHeader" class="pimpinan-only bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col gap-4 md:gap-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
             <div>
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800">Daftar Anggota Shibu Semarang</h1>
@@ -1499,7 +1501,7 @@ button.btn-submit:hover {
                 <p class="text-[10px] md:text-xs text-gray-400">by Didi Chung 2026</p>
             </div>
             <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-                <button onclick="printData()" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                <button onclick="printData()" class="pimpinan-only w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer shadow-xs flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
@@ -1536,7 +1538,7 @@ button.btn-submit:hover {
     </div>
 
     <!-- FILTER CONTAINER -->
-    <div id="filterContainer" class="bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
+    <div id="filterContainer" class="pimpinan-only bg-white p-4 md:p-5 rounded-xl shadow-sm space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1">Cari Nama/Alamat/Ket</label>
@@ -1586,7 +1588,7 @@ button.btn-submit:hover {
             </div>
         </div>
 
-        <div class="pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
+        <div class="pimpinan-only pt-3 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-2 items-center bg-gray-50/50 p-3 rounded-lg">
             <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ikut Tampilkan:</span>
             <div class="flex flex-wrap gap-x-4 gap-y-2">
                 <label class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 cursor-pointer select-none">
@@ -1620,7 +1622,7 @@ button.btn-submit:hover {
 
             <!-- Switch View Mode Buttons -->
             <div class="flex items-center bg-gray-200 p-1 rounded-lg text-xs font-medium">
-                <button id="btnViewTable" onclick="switchViewMode('table')" class="px-3 py-1.5 rounded-md flex items-center gap-1.5 transition bg-white text-gray-800 shadow-xs font-semibold cursor-pointer">
+                <button id="btnViewTable" onclick="switchViewMode('table')" class="pimpinan-only px-3 py-1.5 rounded-md flex items-center gap-1.5 transition bg-white text-gray-800 shadow-xs font-semibold cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                     </svg>
@@ -2887,7 +2889,7 @@ function renderTable() {
                 </h4>
 
                 <!-- No Telepon -->
-                <p class="text-[11px] text-gray-500 font-mono mt-0.5 line-clamp-1 flex items-center justify-center gap-1">
+                <p class="pimpinan-only text-[11px] text-gray-500 font-mono mt-0.5 line-clamp-1 flex items-center justify-center gap-1">
                     <svg class="w-3 h-3 text-emerald-500 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                     </svg>
@@ -2895,6 +2897,7 @@ function renderTable() {
                 </p>
             `;
             gridContainer.appendChild(gridItem);
+            checkPermissions();
         }
     });
 
@@ -5820,7 +5823,7 @@ function printModalMateri() {
 <!-- ========================================================================= -->
 <!-- MODAL DETAIL / EDIT ANGGOTA                                              -->
 <!-- ========================================================================= -->
-<div id="memberDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+<div id="memberDetailModal" class="pimpinan-only fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
         <!-- Modal Header -->
         <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
